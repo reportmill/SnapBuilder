@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VBox PrefWidth="800" PrefHeight="800" GrowWidth="true" FillWidth="true">
+  <Box Padding="4,4,4,4" GrowHeight="true" FillWidth="true" FillHeight="true">
+    <View name="Editor" class="snapbuild.app.Editor">
+      <LineBorder color="#88" />
+    </View>
+  </Box>
+  <HBox Padding="3,4,3,6" Spacing="6">
+    <HBox name="SelPathBox" />
+    <TextField name="CommandText" GrowWidth="true" />
+  </HBox>
+  <HBox Padding="4,4,4,4" Spacing="5" PrefHeight="300" FillHeight="true">
+    <TreeView name="ViewTree" PrefWidth="240" />
+    <BrowserView name="ActionBrowser" GrowWidth="true" PrefColCount="3" />
+  </HBox>
+</VBox>
