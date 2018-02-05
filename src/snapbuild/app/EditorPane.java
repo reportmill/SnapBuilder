@@ -111,6 +111,7 @@ protected void respondUI(ViewEvent anEvent)
         Action act = getSelAction();
         if(act!=null)
             act.invoke();
+        getEditor().repaint();
     }
 }
 

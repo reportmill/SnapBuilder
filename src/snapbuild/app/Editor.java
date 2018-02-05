@@ -27,10 +27,12 @@ public Editor()
     // Configure this view
     setAlign(Pos.CENTER);
     setFill(ViewUtils.getBackDarkFill());
+    enableEvents(MouseRelease);
     
     // Configure ContentBox
     _cbox = new BoxView(); _cbox.setFillWidth(true); _cbox.setFillHeight(true); //_cbox.setMinSize(400,400);
     _cbox.setFill(ViewUtils.getBackFill());
+    _cbox.setPickable(false);
     addChild(_cbox);
     
     // Set default content
@@ -65,6 +67,7 @@ public View getSelView()  { return _selView; }
 public void setSelView(View aView)
 {
     firePropChange(SelView_Prop, _selView, _selView = aView);
+    repaint();
 }
 
 /**
@@ -81,5 +84,46 @@ protected double getPrefHeightImpl(double aW)  { return BoxView.getPrefHeight(th
  * Override.
  */
 protected void layoutImpl()  { BoxView.layout(this, _cbox, null, false, false); }
+
+/**
+ * Override to handle events.
+ */
+protected void processEvent(ViewEvent anEvent)
+{
+    // Handle MouseRelease
+    if(anEvent.isMouseRelease()) mouseRelease(anEvent);
+}
+
+/**
+ * Called when there is a MouseRelease.
+ */
+protected void mouseRelease(ViewEvent anEvent)
+{
+    Point pnt = anEvent.getPoint(_cbox);
+    View view = ViewUtils.getDeepestChildAt(_cbox, pnt.getX(), pnt.getY());
+    while(view!=null && !(view.getParent() instanceof ChildView) && view.getParent()!=_cbox)
+        view = view.getParent();
+    if(view==null || view==_cbox) view = getContent();
+    setSelView(view);
+}
+
+/**
+ * Override to repaint selected view with highlite.
+ */
+protected void paintAbove(Painter aPntr)
+{
+    // Get round rect for selected view
+    View sview = getSelView();
+    Rect bnds = sview.localToParent(this, sview.getBoundsShape()).getBounds();
+    RoundRect rrect = new RoundRect(bnds.x-1, bnds.y-1, bnds.width+2, bnds.height+2, 3);
+    
+    // Set color and draw rect
+    aPntr.setColor(new Color(.3,.3,1,.33)); aPntr.setStroke(new Stroke(3)); aPntr.draw(rrect);
+    
+    // Repaint selected view
+    Point pnt = sview.getParent().localToParent(this, sview.getX(), sview.getY());
+    aPntr.translate(pnt.getX(), pnt.getY());
+    ViewUtils.paintAll(sview, aPntr);
+}
 
 }

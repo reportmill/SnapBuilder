@@ -39,11 +39,16 @@ public void invoke()
     Object sitem = epane.getSelActionItem(); if(!(sitem instanceof String)) return;
     String str = (String)sitem;
     
-    // Get border and set
-    Border border = getBorder(str);
-    
     // Get selected view
     View sview = editor.getSelView();
+    Border bdr = sview.getBorder();
+    
+    // Get border
+    Border border = getBorder(str);
+    if(border instanceof LineBorder && bdr instanceof LineBorder)
+        border = new LineBorder(((LineBorder)border).getColor(), ((LineBorder)bdr).getWidth()+1);
+    
+    // Set border
     sview.setBorder(border);
 }
 
