@@ -1,6 +1,7 @@
 package snapbuild.app;
 import java.util.List;
 import snap.gfx.Color;
+import snap.util.SnapUtils;
 import snap.view.*;
 
 /**
@@ -10,6 +11,9 @@ public class EditorPane extends ViewOwner {
     
     // The Editor
     Editor           _editor;
+    
+    // The XML TextView
+    TextView         _xmlText;
     
     // A box to hold selection path
     RowView          _selPathBox;
@@ -31,6 +35,21 @@ public class EditorPane extends ViewOwner {
  * Returns the editor.
  */
 public Editor getEditor()  { return _editor; }
+
+/**
+ * Returns the Editor.Content.
+ */
+public View getContent()  { return _editor.getContent(); }
+
+/**
+ * Returns the Editor.SelView.
+ */
+public View getSelView()  { return _editor.getSelView(); }
+
+/**
+ * Sets the Editor.SelView.
+ */
+public void setSelView(View aView)  { _editor.setSelView(aView); }
 
 /**
  * Returns the top selected action.
@@ -58,6 +77,10 @@ protected void initUI()
     _editor = getView("Editor", Editor.class);
     _editor.addPropChangeListener(pce -> editorSelViewChange(), Editor.SelView_Prop);
     
+    // Get XMLText TextView
+    _xmlText = getView("XMLText", TextView.class);
+    getView("SplitView", SplitView.class).removeItem(_xmlText);
+    
     // Get SelPathBox
     _selPathBox = getView("SelPathBox", RowView.class);
     updateSelPathBox();
@@ -79,6 +102,9 @@ protected void initUI()
     
     // Set FirstFocus
     setFirstFocus("CommandText");
+    
+    // Add action for Escape key to pop selection
+    addKeyActionFilter("EscapeAction", "ESCAPE");
 }
 
 /**
@@ -90,9 +116,11 @@ protected void resetUI()
     updateSelPathBox();
     
     // Update ViewTree
-    _viewTree.setItems(getEditor().getContent());
-    _viewTree.expandAll();
-    _viewTree.setSelectedItem(getEditor().getSelView());
+    _viewTree.setItems(getContent());
+    _viewTree.expandItem(getContent());
+    _viewTree.setSelectedItem(getSelView());
+    for(View v=getSelView();v!=getContent();v=v.getParent())
+        _viewTree.expandItem(v);
 }
 
 /**
@@ -100,6 +128,10 @@ protected void resetUI()
  */
 protected void respondUI(ViewEvent anEvent)
 {
+    // Handle ShowXMLButton
+    if(anEvent.equals("ShowXMLButton"))
+        toggleShowXML();
+
     // Handle ViewTree
     if(anEvent.equals(_viewTree)) {
         View view = _viewTree.getSelectedItem();
@@ -109,10 +141,26 @@ protected void respondUI(ViewEvent anEvent)
     // Handle ActionBrowser
     if(anEvent.equals(_actBrwsr)) {
         Action act = getSelAction();
-        if(act!=null)
-            act.invoke();
-        getEditor().repaint();
+        if(act!=null) invokeAction(act);
     }
+    
+    // Handle EscapeAction
+    if(anEvent.equals("EscapeAction")) {
+        View sview = getSelView(), par = sview.getParent();
+        if(sview!=getContent())
+            setSelView(par);
+        else beep();
+    }
+}
+
+/**
+ * Invokes the given action.
+ */
+public void invokeAction(Action anAct)
+{
+    anAct.invoke();
+    getEditor().repaint();
+    updateXMLText();
 }
 
 /**
@@ -120,8 +168,8 @@ protected void respondUI(ViewEvent anEvent)
  */
 protected void updateSelPathBox()
 {
-    _selPathBox.removeChildren(); if(_selPathDeep==null) _selPathDeep = getEditor().getSelView();
-    View sview = getEditor().getSelView(), cview = getEditor().getContent(), view = _selPathDeep;
+    _selPathBox.removeChildren(); if(_selPathDeep==null) _selPathDeep = getSelView();
+    View sview = getSelView(), cview = getContent(), view = _selPathDeep;
     while(view!=null) { View view2 = view;
         Label label = new Label(view.getClass().getSimpleName()); label.setPadding(2,2,2,2);
         if(view==sview) label.setFill(Color.LIGHTGRAY);
@@ -137,10 +185,36 @@ protected void updateSelPathBox()
  */
 protected void updateActionBrowser()
 {
-    View sview = _editor.getSelView();
+    View sview = getSelView();
     List <Action> items = getActions(sview);
     _actBrwsr.setItems(items);
     _actBrwsr.setSelectedItem(items.get(0));
+}
+
+/**
+ * Updates the XMLText TextView.
+ */
+protected void updateXMLText()
+{
+    // If not showing, just return
+    if(!_xmlText.isShowing()) return;
+    
+    // Get View
+    View view = getContent();
+    String text = SnapUtils.getText(new ViewArchiver().toXML(view).getBytes());
+    _xmlText.setText(text);
+}
+
+/**
+ * Updates the XMLText TextView.
+ */
+protected void updateXMLTextSel()
+{
+    // If not showing, just return
+    if(!_xmlText.isShowing()) return;
+    
+    // Get View
+    View sview = getSelView();
 }
 
 /**
@@ -149,7 +223,7 @@ protected void updateActionBrowser()
 protected void editorSelViewChange()
 {
     updateActionBrowser();
-    _selPathDeep = getEditor().getSelView();
+    _selPathDeep = getSelView();
     resetLater();
 }
 
@@ -161,6 +235,22 @@ protected void selPathItemClicked(View aView)
     View deep = _selPathDeep;
     getEditor().setSelView(aView);
     _selPathDeep = deep;
+}
+
+/**
+ * Shows/Hides XMLText TextView.
+ */
+protected void toggleShowXML()
+{
+    SplitView split = getView("SplitView", SplitView.class);
+
+    if(_xmlText.getParent()==null) {
+        split.addItemWithAnim(_xmlText, 160);
+        updateXMLText();
+    }
+    else {
+        split.removeItemWithAnim(_xmlText);
+    }
 }
     
 /**
@@ -212,13 +302,14 @@ public class ActionResolver extends TreeResolver {
 public class ViewTreeResolver extends TreeResolver <View> {
     
     /** Returns the parent of given item. */
-    public View getParent(View anItem)  { return anItem!=getEditor().getContent()? anItem.getParent() : null; }
+    public View getParent(View anItem)  { return anItem!=getContent()? anItem.getParent() : null; }
 
     /** Whether given object is a parent (has children). */
     public boolean isParent(View anItem)
     {
         if(!(anItem instanceof ParentView)) return false;
-        if(anItem instanceof Label || anItem instanceof ButtonBase || anItem instanceof Spinner) return false;
+        if(anItem instanceof Label || anItem instanceof ButtonBase || anItem instanceof Spinner ||
+            anItem instanceof TextField) return false;
         if(anItem instanceof ComboBox || anItem instanceof ListView) return false;
         return ((ParentView)anItem).getChildCount()>0;
     }

@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <VBox PrefWidth="800" PrefHeight="800" GrowWidth="true" FillWidth="true">
-  <Box Padding="4,4,4,4" GrowHeight="true" FillWidth="true" FillHeight="true">
-    <View name="Editor" class="snapbuild.app.Editor">
-      <LineBorder color="#88" />
-    </View>
-  </Box>
+  <HBox Padding="4,4,4,4" Spacing="4">
+    <Button name="ShowXMLButton" text="Show XML" LeanX="RIGHT" />
+  </HBox>
+  <SplitView name="SplitView" Vertical="true" GrowHeight="true">
+    <Box Padding="4,4,4,4" GrowHeight="true" FillWidth="true" FillHeight="true">
+      <View name="Editor" class="snapbuild.app.Editor">
+        <LineBorder color="#88" />
+      </View>
+    </Box>
+    <TextView name="XMLText" PrefHeight="160" />
+  </SplitView>
   <HBox Padding="3,4,3,6" Spacing="6">
     <HBox name="SelPathBox" />
     <TextField name="CommandText" GrowWidth="true" />

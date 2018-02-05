@@ -118,7 +118,8 @@ protected void paintAbove(Painter aPntr)
     RoundRect rrect = new RoundRect(bnds.x-1, bnds.y-1, bnds.width+2, bnds.height+2, 3);
     
     // Set color and draw rect
-    aPntr.setColor(new Color(.3,.3,1,.33)); aPntr.setStroke(new Stroke(3)); aPntr.draw(rrect);
+    if(sview!=getContent()) {
+        aPntr.setColor(new Color(.3,.3,1,.33)); aPntr.setStroke(new Stroke(3)); aPntr.draw(rrect); }
     
     // Repaint selected view
     Point pnt = sview.getParent().localToParent(this, sview.getX(), sview.getY());
