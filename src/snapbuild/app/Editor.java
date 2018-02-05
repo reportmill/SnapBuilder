@@ -114,7 +114,7 @@ protected void paintAbove(Painter aPntr)
 {
     // Get round rect for selected view
     View sview = getSelView();
-    Rect bnds = sview.localToParent(this, sview.getBoundsShape()).getBounds();
+    Rect bnds = sview.localToParent(sview.getBoundsShape(), this).getBounds();
     RoundRect rrect = new RoundRect(bnds.x-1, bnds.y-1, bnds.width+2, bnds.height+2, 3);
     
     // Set color and draw rect
@@ -122,7 +122,7 @@ protected void paintAbove(Painter aPntr)
         aPntr.setColor(new Color(.3,.3,1,.33)); aPntr.setStroke(new Stroke(3)); aPntr.draw(rrect); }
     
     // Repaint selected view
-    Point pnt = sview.getParent().localToParent(this, sview.getX(), sview.getY());
+    Point pnt = sview.getParent().localToParent(sview.getX(), sview.getY(), this);
     aPntr.translate(pnt.getX(), pnt.getY());
     ViewUtils.paintAll(sview, aPntr);
 }
