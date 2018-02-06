@@ -16,13 +16,13 @@
     <Button name="ShowXMLButton" text="Show XML" LeanX="RIGHT" />
   </HBox>
   <SplitView name="SplitView" Vertical="true" GrowHeight="true">
-    <SplitView name="EditorSplitView">
+    <SplitView name="EditorSplitView" GrowHeight="true">
       <TreeView name="ViewTree" />
-      <Box Padding="4,4,4,4" GrowWidth="true" GrowHeight="true" FillWidth="true" FillHeight="true">
+      <ScrollView Padding="4,4,4,4" GrowWidth="true" FillWidth="true" FillHeight="true">
         <View name="Editor" class="snapbuild.app.Editor">
           <LineBorder color="#88" />
         </View>
-      </Box>
+      </ScrollView>
     </SplitView>
     <TextView name="XMLText" PrefHeight="160" />
   </SplitView>

@@ -1,12 +1,17 @@
 package snapbuild.app;
 import snap.gfx.*;
+import snap.util.XMLElement;
 import snap.view.*;
+import snap.web.*;
 
 /**
  * A view to hold the UI.
  */
 public class Editor extends ParentView {
     
+    // The Source URL
+    WebURL           _url;
+
     // The content
     View             _content;
     
@@ -43,6 +48,27 @@ public Editor()
 }
 
 /**
+ * Returns the source URL.
+ */
+public WebURL getSourceURL()  { return _url; }
+
+/**
+ * Sets the source URL.
+ */
+public void setSourceURL(WebURL aURL)  { _url = aURL; }
+
+/**
+ * Returns the source URL.
+ */
+public WebFile getSourceFile(boolean doCreate)
+{
+    if(_url==null) return null;
+    WebFile file = _url.getFile();
+    if(file==null && doCreate) file = _url.createFile(false);
+    return file;
+}
+
+/**
  * Returns the content view.
  */
 public View getContent()  { return _cbox.getContent(); }
@@ -71,18 +97,46 @@ public void setSelView(View aView)
 }
 
 /**
- * Override.
+ * Returns the content XML.
  */
+public XMLElement getContentXML()
+{
+    ViewArchiver varch = new ViewArchiver();
+    return varch.writeObject(getContent());
+}
+
+/**
+ * The real save method.
+ */
+public void save() throws Exception
+{
+    // Get source file and save (update file might get called from here)
+    updateFile();
+    WebFile file = getSourceFile(true);
+    file.save();
+    
+    // Clear undoer
+    //getUndoer().reset();
+}
+
+/**
+ * Updates the source file from editor.
+ */
+public void updateFile()
+{
+    WebFile file = getSourceFile(true);
+    XMLElement xml = getContentXML();
+    byte bytes[] = xml.getBytes();
+    file.setBytes(bytes);
+}
+
+/** Override. */
 protected double getPrefWidthImpl(double aH)  { return BoxView.getPrefWidth(this, _cbox, aH); }
 
-/**
- * Override.
- */
+/** Override. */
 protected double getPrefHeightImpl(double aW)  { return BoxView.getPrefHeight(this, _cbox, aW); }
 
-/**
- * Override.
- */
+/** Override. */
 protected void layoutImpl()  { BoxView.layout(this, _cbox, null, false, false); }
 
 /**

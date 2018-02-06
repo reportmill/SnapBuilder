@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VBox PrefWidth="400" PrefHeight="480" Spacing="5" FillWidth="true">
+  <VBox Padding="2,8,8,8" GrowHeight="true" Spacing="5" FillWidth="true">
+    <Label text="Select or Create UI file:">
+      <font name="Arial Bold" size="14" />
+    </Label>
+    <TableView Name="SitesTable" GrowHeight="true">
+      <font name="Arial" size="14" />
+      <binding aspect="Items" key="RecentFiles" />
+      <binding aspect="SelectedItem" key="SelectedFile" />
+      <TableCol PrefWidth="120" ItemKey="Name" Header="Name" />
+    </TableView>
+    <HBox Align="CENTER" Spacing="10">
+      <Button Name="NewButton" PrefWidth="80" PrefHeight="22" text="New" />
+      <Button Name="OpenPanelButton" PrefWidth="80" PrefHeight="22" text="Open..." />
+      <Button Name="OpenButton" PrefWidth="80" PrefHeight="22" text="Open" />
+      <Button Name="QuitButton" PrefWidth="80" PrefHeight="22" text="Quit" />
+    </HBox>
+  </VBox>
+</VBox>
