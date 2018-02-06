@@ -1,8 +1,10 @@
 package snapbuild.app;
 import java.util.List;
 import snap.gfx.Color;
+import snap.gfx.Image;
 import snap.util.SnapUtils;
 import snap.view.*;
+import snap.viewx.TextPane;
 
 /**
  * A class to manage the Editor and controls.
@@ -105,6 +107,17 @@ protected void initUI()
     
     // Add action for Escape key to pop selection
     addKeyActionFilter("EscapeAction", "ESCAPE");
+    
+    // Set Toolbar images
+    getView("SaveButton", ButtonBase.class).setImage(Image.get(TextPane.class, "File_Save.png"));
+    getView("CutButton", ButtonBase.class).setImage(Image.get(TextPane.class, "Edit_Cut.png"));
+    getView("CopyButton", ButtonBase.class).setImage(Image.get(TextPane.class, "Edit_Copy.png"));
+    getView("PasteButton", ButtonBase.class).setImage(Image.get(TextPane.class, "Edit_Paste.png"));
+    getView("DeleteButton", ButtonBase.class).setImage(Image.get(TextPane.class, "Edit_Delete.png"));
+    getView("IncreaseFontButton", ButtonBase.class).setImage(Image.get(TextPane.class, "Font_Increase.png"));
+    getView("DecreaseFontButton", ButtonBase.class).setImage(Image.get(TextPane.class, "Font_Decrease.png"));
+    getView("UndoButton", ButtonBase.class).setImage(Image.get(TextPane.class, "Edit_Undo.png"));
+    getView("RedoButton", ButtonBase.class).setImage(Image.get(TextPane.class, "Edit_Redo.png"));
 }
 
 /**

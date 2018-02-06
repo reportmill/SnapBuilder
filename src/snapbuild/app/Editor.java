@@ -36,7 +36,7 @@ public Editor()
     addChild(_cbox);
     
     // Set default content
-    RowView row = new RowView(); row.setPadding(4,4,4,4); row.setSpacing(4);
+    RowView row = new RowView(); row.setPadding(4,4,4,4); row.setSpacing(4); row.setGrowWidth(true);
     ColView col = new ColView(); col.setPadding(4,4,4,4); col.setSpacing(4); col.addChild(row);
     setContent(col);
     setSelView(row);

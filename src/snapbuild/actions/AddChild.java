@@ -65,10 +65,12 @@ void configure(View aView)
     else if(aView instanceof TextField) aView.setMinWidth(100);
     
     // Handle RowView
-    else if(aView instanceof RowView) { aView.setPadding(4,4,4,4); ((RowView)aView).setSpacing(4); }
+    else if(aView instanceof RowView) {
+        aView.setPadding(4,4,4,4); ((RowView)aView).setSpacing(4); aView.setGrowWidth(true); }
     
     // Handle ColView
-    else if(aView instanceof ColView) { aView.setPadding(4,4,4,4); ((ColView)aView).setSpacing(4); }
+    else if(aView instanceof ColView) {
+        aView.setPadding(4,4,4,4); ((ColView)aView).setSpacing(4); aView.setGrowHeight(true); }
 }
 
 /**
