@@ -1,5 +1,6 @@
 package snapbuild.app;
 import snap.util.Prefs;
+import snap.util.SnapUtils;
 
 /**
  * A custom class.
@@ -7,7 +8,7 @@ import snap.util.Prefs;
 public class App {
     
     // Trigger snaptea
-    //static { snaptea.TV.set(); }
+    static { snaptea.TV.set(); }
 
 /**
  * Standard main implementation.
@@ -21,10 +22,15 @@ public static void main(String args[])
     //ExceptionReporter er = new ExceptionReporter("SnapStudio"); er.setToAddress("support@reportmill.com");
     //er.setInfo("SnapCode Version 1, Build Date: " + SnapUtils.getBuildInfo());
     //Thread.setDefaultUncaughtExceptionHandler(er);
+    
+    if(SnapUtils.isTeaVM)
+        WelcomePanel.getShared().newFile();
 
     // Show open data source panel
-    WelcomePanel.getShared().setOnQuit(() -> quitApp());
-    WelcomePanel.getShared().showPanel();
+    else {
+        WelcomePanel.getShared().setOnQuit(() -> quitApp());
+        WelcomePanel.getShared().showPanel();
+    }
 }
 
 /**
@@ -34,7 +40,7 @@ public static void quitApp()
 {
     //if(AppPane.getOpenAppPane()!=null) AppPane.getOpenAppPane().hide();
     Prefs.get().flush();
-    System.exit(0);
+    //System.exit(0);
 }
 
 }

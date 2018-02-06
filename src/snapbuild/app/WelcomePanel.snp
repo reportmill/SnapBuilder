@@ -6,8 +6,6 @@
     </Label>
     <TableView Name="SitesTable" GrowHeight="true">
       <font name="Arial" size="14" />
-      <binding aspect="Items" key="RecentFiles" />
-      <binding aspect="SelectedItem" key="SelectedFile" />
       <TableCol PrefWidth="120" ItemKey="Name" Header="Name" />
     </TableView>
     <HBox Align="CENTER" Spacing="10">

@@ -127,6 +127,8 @@ protected void initUI()
 public void resetUI()
 {
     //setViewEnabled("OpenButton", getSelectedFile()!=null);
+    setViewItems("SitesTable", getRecentFiles());
+    setViewSelectedItem("SitesTable", getSelectedFile());
 }
 
 /**
