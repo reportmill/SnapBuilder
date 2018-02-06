@@ -27,11 +27,10 @@ public List getItems()
 /**
  * Adds a child view to current view.
  */
-public void invoke()
+public void invoke(EditorPane epane)
 {
     // Get editor, editorpane
-    Editor editor = getEditor();
-    EditorPane epane = getEditorPane();
+    Editor editor = epane.getEditor();
     
     // Get selected item
     Object sitem = epane.getSelActionItem(); if(!(sitem instanceof Class)) return;

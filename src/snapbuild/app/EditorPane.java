@@ -1,5 +1,4 @@
 package snapbuild.app;
-import java.util.List;
 import snap.gfx.Color;
 import snap.gfx.Image;
 import snap.util.SnapUtils;
@@ -22,6 +21,9 @@ public class EditorPane extends ViewOwner {
     
     // The deepest view to show in the SelPathBox
     View             _selPathDeep;
+    
+    // The command textfield
+    TextField        _cmdText;
 
     // The ViewTree
     TreeView <View>  _viewTree;
@@ -29,10 +31,6 @@ public class EditorPane extends ViewOwner {
     // The ActionBrowser
     BrowserView      _actBrwsr;
     
-    // The Top level actions
-    List <Action>    _viewActions;
-    List <Action>    _childViewActions;
-
 /**
  * Returns the editor.
  */
@@ -87,6 +85,9 @@ protected void initUI()
     _selPathBox = getView("SelPathBox", RowView.class);
     updateSelPathBox();
     
+    // Get CommandText TextField
+    _cmdText = getView("CommandText", TextField.class);
+    
     // Get/configure ViewTree
     _viewTree = getView("ViewTree", TreeView.class);
     _viewTree.setResolver(new ViewTreeResolver());
@@ -98,10 +99,9 @@ protected void initUI()
     _actBrwsr.setFocusWhenPressed(false);
     _actBrwsr.setFireActionOnRelease(true);
     _actBrwsr.setResolver(new ActionResolver());
+    enableEvents(_actBrwsr, MouseRelease);
     
     // Set default actions
-    _viewActions = snapbuild.app.Action.getViewActions(this);
-    _childViewActions = snapbuild.app.Action.getChildViewActions(this);
     updateActionBrowser();
     
     // Set FirstFocus
@@ -163,8 +163,18 @@ protected void respondUI(ViewEvent anEvent)
     
     // Handle ActionBrowser
     if(anEvent.equals(_actBrwsr)) {
-        Action act = getSelAction();
-        if(act!=null) invokeAction(act);
+        
+        // Handle MouseClick double-click: Invoke action
+        if(anEvent.isMouseClick() && anEvent.getClickCount()==2) {
+            Action act = getSelAction();
+            if(act!=null) invokeAction(act);
+        }
+        
+        // Handle Action: Update CommandText
+        else if(anEvent.isActionEvent()) {
+            _cmdText.setText(_actBrwsr.getPath(" "));
+            _cmdText.setSel(_cmdText.length());
+        }
     }
     
     // Handle EscapeAction
@@ -181,7 +191,7 @@ protected void respondUI(ViewEvent anEvent)
  */
 public void invokeAction(Action anAct)
 {
-    anAct.invoke();
+    anAct.invoke(this);
     getEditor().repaint();
     updateXMLText();
 }
@@ -209,9 +219,9 @@ protected void updateSelPathBox()
 protected void updateActionBrowser()
 {
     View sview = getSelView();
-    List <Action> items = getActions(sview);
-    _actBrwsr.setItems(items);
-    _actBrwsr.setSelectedItem(items.get(0));
+    Action items[] = getActions(sview);
+    _actBrwsr.setItems((Object[])items);
+    _actBrwsr.setSelectedItem(items[0]);
 }
 
 /**
@@ -295,11 +305,7 @@ protected void toggleShowXML()
 /**
  * Returns the actions for given view.
  */
-protected List <Action> getActions(View aView)
-{
-    if(aView instanceof ChildView) return _childViewActions;
-    return _viewActions;
-}
+protected Action[] getActions(View aView)  { return ViewHpr.getHpr(aView).getActions(); }
 
 /**
  * ActionResolver.

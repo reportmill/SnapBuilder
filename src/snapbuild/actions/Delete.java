@@ -15,11 +15,10 @@ public boolean hasItems()  { return false; }
 /**
  * Adds a child view to current view.
  */
-public void invoke()
+public void invoke(EditorPane epane)
 {
     // Get editor, editorpane
-    Editor editor = getEditor();
-    EditorPane epane = getEditorPane();
+    Editor editor = epane.getEditor();
     
     // Get selected view
     View sview = editor.getSelView();
@@ -28,8 +27,8 @@ public void invoke()
     if(par instanceof ChildView) { ChildView cview = (ChildView)par;
         cview.removeChild(sview);
         if(cview.getChildCount()>0)
-            getEditor().setSelView(ind<cview.getChildCount()? cview.getChild(ind) : cview.getChild(ind-1));
-        else getEditor().setSelView(cview);
+            editor.setSelView(ind<cview.getChildCount()? cview.getChild(ind) : cview.getChild(ind-1));
+        else editor.setSelView(cview);
     }
 }
 
