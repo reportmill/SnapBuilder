@@ -109,15 +109,15 @@ protected void initUI()
     addKeyActionFilter("EscapeAction", "ESCAPE");
     
     // Set Toolbar images
-    getView("SaveButton", ButtonBase.class).setImage(Image.get(TextPane.class, "File_Save.png"));
-    getView("CutButton", ButtonBase.class).setImage(Image.get(TextPane.class, "Edit_Cut.png"));
-    getView("CopyButton", ButtonBase.class).setImage(Image.get(TextPane.class, "Edit_Copy.png"));
-    getView("PasteButton", ButtonBase.class).setImage(Image.get(TextPane.class, "Edit_Paste.png"));
-    getView("DeleteButton", ButtonBase.class).setImage(Image.get(TextPane.class, "Edit_Delete.png"));
-    getView("IncreaseFontButton", ButtonBase.class).setImage(Image.get(TextPane.class, "Font_Increase.png"));
-    getView("DecreaseFontButton", ButtonBase.class).setImage(Image.get(TextPane.class, "Font_Decrease.png"));
-    getView("UndoButton", ButtonBase.class).setImage(Image.get(TextPane.class, "Edit_Undo.png"));
-    getView("RedoButton", ButtonBase.class).setImage(Image.get(TextPane.class, "Edit_Redo.png"));
+    getView("SaveButton", ButtonBase.class).setImage(Image.get(TextPane.class, "pkg.images/File_Save.png"));
+    getView("CutButton", ButtonBase.class).setImage(Image.get(TextPane.class, "pkg.images/Edit_Cut.png"));
+    getView("CopyButton", ButtonBase.class).setImage(Image.get(TextPane.class, "pkg.images/Edit_Copy.png"));
+    getView("PasteButton", ButtonBase.class).setImage(Image.get(TextPane.class, "pkg.images/Edit_Paste.png"));
+    getView("DeleteButton", ButtonBase.class).setImage(Image.get(TextPane.class, "pkg.images/Edit_Delete.png"));
+    getView("IncreaseFontButton", ButtonBase.class).setImage(Image.get(TextPane.class, "pkg.images/Font_Increase.png"));
+    getView("DecreaseFontButton", ButtonBase.class).setImage(Image.get(TextPane.class, "pkg.images/Font_Decrease.png"));
+    getView("UndoButton", ButtonBase.class).setImage(Image.get(TextPane.class, "pkg.images/Edit_Undo.png"));
+    getView("RedoButton", ButtonBase.class).setImage(Image.get(TextPane.class, "pkg.images/Edit_Redo.png"));
 }
 
 /**
