@@ -16,19 +16,23 @@
     <Button name="ShowXMLButton" text="Show XML" LeanX="RIGHT" />
   </HBox>
   <SplitView name="SplitView" Vertical="true" GrowHeight="true">
-    <Box Padding="4,4,4,4" GrowHeight="true" FillWidth="true" FillHeight="true">
-      <View name="Editor" class="snapbuild.app.Editor">
-        <LineBorder color="#88" />
-      </View>
-    </Box>
+    <SplitView name="EditorSplitView">
+      <TreeView name="ViewTree" />
+      <Box Padding="4,4,4,4" GrowWidth="true" GrowHeight="true" FillWidth="true" FillHeight="true">
+        <View name="Editor" class="snapbuild.app.Editor">
+          <LineBorder color="#88" />
+        </View>
+      </Box>
+    </SplitView>
     <TextView name="XMLText" PrefHeight="160" />
   </SplitView>
-  <HBox Padding="3,4,3,6" Spacing="6">
+  <HBox Padding="3,4,3,4" Spacing="6">
+    <Button name="ShowViewTreeButton" PrefWidth="22" PrefHeight="22" ToolTip="Show View Tree" image="FilesTree.png" />
     <HBox name="SelPathBox" />
     <TextField name="CommandText" GrowWidth="true" />
   </HBox>
   <HBox Padding="4,4,4,4" Spacing="5" PrefHeight="300" FillHeight="true">
-    <TreeView name="ViewTree" PrefWidth="240" />
-    <BrowserView name="ActionBrowser" GrowWidth="true" PrefColCount="3" />
+    <Font Name="Arial" Size="14" />
+    <BrowserView name="ActionBrowser" GrowWidth="true" PrefColCount="4" />
   </HBox>
 </VBox>

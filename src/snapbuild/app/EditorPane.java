@@ -90,9 +90,11 @@ protected void initUI()
     // Get/configure ViewTree
     _viewTree = getView("ViewTree", TreeView.class);
     _viewTree.setResolver(new ViewTreeResolver());
+    _viewTree.setOwner(this);
+    getView("EditorSplitView", SplitView.class).removeItem(_viewTree);
     
     // Get ActionBrowser
-    _actBrwsr = getView("ActionBrowser", BrowserView.class); _actBrwsr.setPrefColCount(3);
+    _actBrwsr = getView("ActionBrowser", BrowserView.class); _actBrwsr.setPrefColCount(3); _actBrwsr.setRowHeight(25);
     _actBrwsr.setFocusWhenPressed(false);
     _actBrwsr.setFireActionOnRelease(true);
     _actBrwsr.setResolver(new ActionResolver());
@@ -129,11 +131,15 @@ protected void resetUI()
     updateSelPathBox();
     
     // Update ViewTree
-    _viewTree.setItems(getContent());
-    _viewTree.expandItem(getContent());
-    _viewTree.setSelectedItem(getSelView());
-    for(View v=getSelView();v!=getContent();v=v.getParent())
-        _viewTree.expandItem(v);
+    if(_viewTree.isShowing()) {
+        _viewTree.setItems(getContent());
+        _viewTree.setSelectedItem(null);
+        _viewTree.collapseItem(getContent());
+        _viewTree.expandItem(getContent());
+        for(View v=getSelView();v!=getContent();v=v.getParent())
+            _viewTree.expandItem(v);
+        _viewTree.setSelectedItem(getSelView());
+    }
 }
 
 /**
@@ -144,6 +150,10 @@ protected void respondUI(ViewEvent anEvent)
     // Handle ShowXMLButton
     if(anEvent.equals("ShowXMLButton"))
         toggleShowXML();
+
+    // Handle ShowViewTreeButton
+    if(anEvent.equals("ShowViewTreeButton"))
+        toggleShowViewTree();
 
     // Handle ViewTree
     if(anEvent.equals(_viewTree)) {
@@ -251,6 +261,22 @@ protected void selPathItemClicked(View aView)
 }
 
 /**
+ * Shows/Hides ViewTree.
+ */
+protected void toggleShowViewTree()
+{
+    SplitView split = getView("EditorSplitView", SplitView.class);
+
+    if(_viewTree.getParent()==null) {
+        split.addItemWithAnim(_viewTree, 160, 0);
+        updateXMLText();
+    }
+    else {
+        split.removeItemWithAnim(_viewTree);
+    }
+}
+    
+/**
  * Shows/Hides XMLText TextView.
  */
 protected void toggleShowXML()
@@ -340,8 +366,8 @@ public class ViewTreeResolver extends TreeResolver <View> {
     public String getText(View anItem)
     {
         String str = anItem.getClass().getSimpleName();
-        String name = anItem.getName(); if(name!=null) str += " - " + name;
-        String text = anItem.getText(); if(text!=null) str += " \"" + text + "\" ";
+        //String name = anItem.getName(); if(name!=null) str += " - " + name;
+        //String text = anItem.getText(); if(text!=null) str += " \"" + text + "\" ";
         return str;
     }
 
