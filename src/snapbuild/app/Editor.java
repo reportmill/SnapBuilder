@@ -30,21 +30,18 @@ public class Editor extends ParentView {
 public Editor()
 {
     // Configure this view
-    setAlign(Pos.CENTER);
+    setAlign(Pos.CENTER); setPadding(15,15,15,15);
     setFill(ViewUtils.getBackDarkFill());
     enableEvents(MouseRelease);
     
     // Configure ContentBox
     _cbox = new BoxView(); _cbox.setFillWidth(true); _cbox.setFillHeight(true); //_cbox.setMinSize(400,400);
-    _cbox.setFill(ViewUtils.getBackFill());
+    _cbox.setFill(ViewUtils.getBackFill()); _cbox.setBorder(new Color("#99"),1);
     _cbox.setPickable(false);
     addChild(_cbox);
     
     // Set default content
-    RowView row = new RowView(); row.setPadding(4,4,4,4); row.setSpacing(4); row.setGrowWidth(true);
-    ColView col = new ColView(); col.setPadding(4,4,4,4); col.setSpacing(4); col.addChild(row);
-    setContent(col);
-    setSelView(row);
+    setContent(new ColView());
 }
 
 /**

@@ -18,22 +18,29 @@
   <SplitView Name="SplitView" Vertical="true" GrowHeight="true">
     <SplitView Name="EditorSplitView" GrowHeight="true">
       <TreeView Name="ViewTree" />
-      <ScrollView Padding="4" GrowWidth="true">
-        <View Name="Editor" Class="snapbuild.app.Editor">
-          <LineBorder Color="#888888" />
-        </View>
+      <ScrollView GrowWidth="true">
+        <LineBorder Color="#AA" />
+        <View Name="Editor" Class="snapbuild.app.Editor" />
       </ScrollView>
     </SplitView>
     <TextView Name="XMLText" PrefHeight="160" />
   </SplitView>
   <RowView Padding="3,5,3,4" Spacing="4">
-    <Button Name="ShowViewTreeButton" PrefWidth="22" PrefHeight="22" ToolTip="Show View Tree" image="FilesTree.png" />
+    <Button Name="ShowViewTreeButton" PrefWidth="22" PrefHeight="22" ToolTip="Show View Tree" image="pkg.images/FilesTree.png" />
     <RowView Name="SelPathBox" Padding="0,2,0,0" />
     <TextField Name="CommandText" GrowWidth="true" />
     <Button Name="CommandButton" PrefWidth="22" PrefHeight="22" text="Act" />
   </RowView>
-  <RowView PrefHeight="300" Padding="4" Spacing="5" FillHeight="true">
+  <RowView PrefHeight="300" Padding="4" Spacing="6" FillHeight="true">
     <font name="Arial" size="14" />
+    <ColView Padding="8,10,5,10" GrowHeight="true" Spacing="10">
+      <EtchBorder />
+      <ToggleButton Name="AddViewsButton" PrefWidth="110" PrefHeight="26" text="Add Views" Selected="true" ToggleGroup="TG1" />
+      <ToggleButton PrefWidth="110" PrefHeight="26" text="Position/Size" ToggleGroup="TG1" />
+      <ToggleButton PrefWidth="110" PrefHeight="26" text="Fill/Style" ToggleGroup="TG1" />
+      <ToggleButton PrefWidth="110" PrefHeight="26" text="Other" ToggleGroup="TG1" />
+      <ToggleButton PrefWidth="110" PrefHeight="26" text="Properties" ToggleGroup="TG1" />
+    </ColView>
     <BrowserView Name="ActionBrowser" GrowWidth="true" PrefColCount="4" />
   </RowView>
 </ColView>

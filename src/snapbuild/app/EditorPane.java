@@ -277,6 +277,7 @@ protected void initUI()
     
     // Get XMLText TextView
     _xmlText = getView("XMLText", TextView.class);
+    getView("SplitView").setBorder(null);
     getView("SplitView", SplitView.class).removeItem(_xmlText);
     
     // Get SelPathBox
@@ -292,6 +293,7 @@ protected void initUI()
     _viewTree = getView("ViewTree", TreeView.class);
     _viewTree.setResolver(new ViewTreeResolver());
     _viewTree.setOwner(this);
+    getView("EditorSplitView").setBorder(null);
     getView("EditorSplitView", SplitView.class).removeItem(_viewTree);
     
     // Get ActionBrowser
@@ -375,7 +377,7 @@ protected void respondUI(ViewEvent anEvent)
     if(anEvent.equals(_actBrwsr)) {
         
         // Handle MouseClick double-click: Invoke action
-        if(anEvent.isMouseClick() && anEvent.getClickCount()==2) {
+        if(anEvent.isMouseClick()) {
             Action act = getSelAction();
             if(act!=null && (act.invokeOnClick() || anEvent.getClickCount()==2))
                 invokeAction(act);
@@ -407,6 +409,10 @@ protected void respondUI(ViewEvent anEvent)
     if(anEvent.equals("SaveMenuItem") || anEvent.equals("SaveButton")) save();
     if(anEvent.equals("SaveAsMenuItem")) saveAs();
     if(anEvent.equals("RevertMenuItem")) revert();
+    
+    // Handle WinClosing
+    if(anEvent.isWinClose()) {
+        close(); anEvent.consume(); }
 }
 
 /**
