@@ -31,4 +31,9 @@ public Object[] getItemArray()  { return getItems().toArray(new Object[0]); }
  */
 public void invoke(EditorPane epane)  { }
 
+/**
+ * Whether to invoke action on single click.
+ */
+public boolean invokeOnClick()  { return true; }
+
 }

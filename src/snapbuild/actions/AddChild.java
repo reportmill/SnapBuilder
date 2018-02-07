@@ -77,4 +77,7 @@ void configure(View aView)
  */
 public String toString()  { return "Add Child"; }
 
+/** Override to invoke action on single click. */
+public boolean invokeOnClick()  { return false; }
+
 }

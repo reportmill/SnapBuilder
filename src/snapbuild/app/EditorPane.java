@@ -285,6 +285,8 @@ protected void initUI()
     
     // Get CommandText TextField
     _cmdText = getView("CommandText", TextField.class);
+    setViewText("CommandButton", "\u23CE");
+    getView("CommandButton", Button.class).setDefaultButton(true);
     
     // Get/configure ViewTree
     _viewTree = getView("ViewTree", TreeView.class);
@@ -305,8 +307,9 @@ protected void initUI()
     // Set FirstFocus
     setFirstFocus("CommandText");
     
-    // Add action for Escape key to pop selection
+    // Add action for ESCAPE key to pop selection and for ENTER key to invoke action
     addKeyActionFilter("EscapeAction", "ESCAPE");
+    addKeyActionFilter("EnterAction", "ENTER");
     
     // Set Toolbar images
     getView("SaveButton", ButtonBase.class).setImage(Image.get(TextPane.class, "pkg.images/File_Save.png"));
@@ -318,6 +321,10 @@ protected void initUI()
     getView("DecreaseFontButton", ButtonBase.class).setImage(Image.get(TextPane.class, "pkg.images/Font_Decrease.png"));
     getView("UndoButton", ButtonBase.class).setImage(Image.get(TextPane.class, "pkg.images/Edit_Undo.png"));
     getView("RedoButton", ButtonBase.class).setImage(Image.get(TextPane.class, "pkg.images/Edit_Redo.png"));
+    
+    // Configure window
+    WindowView win = getWindow();
+    enableEvents(win, WinClose);
 }
 
 /**
@@ -340,14 +347,9 @@ protected void resetUI()
     }
     
     // If title has changed, update window title
-    if(isWindowVisible()) {
-        String title = getWindowTitle();
-        WindowView win = getWindow();
-        if(!SnapUtils.equals(title, win.getTitle())) {
-            win.setTitle(title);
-            win.setDocURL(getSourceURL());
-        }
-    }
+    String title = getWindowTitle();
+    getWindow().setTitle(title);
+    getWindow().setDocURL(getSourceURL());
 }
 
 /**
@@ -375,7 +377,8 @@ protected void respondUI(ViewEvent anEvent)
         // Handle MouseClick double-click: Invoke action
         if(anEvent.isMouseClick() && anEvent.getClickCount()==2) {
             Action act = getSelAction();
-            if(act!=null) invokeAction(act);
+            if(act!=null && (act.invokeOnClick() || anEvent.getClickCount()==2))
+                invokeAction(act);
         }
         
         // Handle Action: Update CommandText
@@ -393,6 +396,13 @@ protected void respondUI(ViewEvent anEvent)
         else beep();
     }
     
+    // Handle EnterAction
+    if(anEvent.equals("EnterAction")) {
+        Action act = getSelAction();
+        if(act!=null)
+            invokeAction(act);
+    }
+    
     // Handle SaveMenuItem, SaveButton, SaveAsMenuItem, SaveAsPDFMenuItem, RevertMenuItem
     if(anEvent.equals("SaveMenuItem") || anEvent.equals("SaveButton")) save();
     if(anEvent.equals("SaveAsMenuItem")) saveAs();
@@ -407,6 +417,7 @@ public void invokeAction(Action anAct)
     anAct.invoke(this);
     getEditor().repaint();
     updateXMLText();
+    _cmdText.setText(null);
 }
 
 /**

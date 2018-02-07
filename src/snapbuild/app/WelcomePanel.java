@@ -126,7 +126,7 @@ protected void initUI()
  */
 public void resetUI()
 {
-    //setViewEnabled("OpenButton", getSelectedFile()!=null);
+    setViewEnabled("OpenButton", getSelectedFile()!=null);
     setViewItems("SitesTable", getRecentFiles());
     setViewSelectedItem("SitesTable", getSelectedFile());
 }
@@ -136,6 +136,10 @@ public void resetUI()
  */
 public void respondUI(ViewEvent anEvent)
 {
+    // Handle SitesTable
+    if(anEvent.equals("SitesTable"))
+        setSelectedFile((WebFile)anEvent.getSelectedItem());
+
     // Handle NewButton
     if(anEvent.equals("NewButton")) {
         newFile();
