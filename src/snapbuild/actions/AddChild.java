@@ -42,7 +42,7 @@ public void invoke(EditorPane epane)
     // Create new view
     Class <View> cls = (Class)sitem;
     View view = null; try { view = cls.newInstance(); } catch(Exception e) { }
-    configure(view);
+    ViewHpr.getHpr(view).configure(view);
     
     // Get selected view
     View sview = editor.getSelView();
@@ -51,33 +51,6 @@ public void invoke(EditorPane epane)
         
     // Select view
     editor.setSelView(view);
-}
-
-/**
- * Configure new view.
- */
-void configure(View aView)
-{
-    // Handle Label
-    if(aView instanceof Label) aView.setText("Label");
-    
-    // Handle Button
-    else if(aView instanceof ButtonBase) aView.setText("Button");
-    
-    // Handle TextField
-    else if(aView instanceof TextField) aView.setMinWidth(100);
-    
-    // Handle RowView
-    else if(aView instanceof RowView) {
-        aView.setPadding(4,4,4,4); ((RowView)aView).setSpacing(4); aView.setGrowWidth(true); }
-    
-    // Handle ColView
-    else if(aView instanceof ColView) {
-        aView.setPadding(4,4,4,4); ((ColView)aView).setSpacing(4); aView.setGrowHeight(true); }
-        
-    // Handle ThumbWheel
-    else if(aView instanceof ThumbWheel) { aView.setPrefSize(120,16);
-        ((ThumbWheel)aView).setType(ThumbWheel.TYPE_RADIAL); }
 }
 
 /**

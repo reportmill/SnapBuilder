@@ -5,7 +5,7 @@ import snap.view.*;
 /**
  * A custom class.
  */
-public class AddPeer extends AddChild {
+public class AddAfter extends AddChild {
 
 /**
  * Adds a child view to current view.
@@ -21,12 +21,13 @@ public void invoke(EditorPane epane)
     // Create new view
     Class <View> cls = (Class)sitem;
     View view = null; try { view = cls.newInstance(); } catch(Exception e) { }
-    configure(view);
+    ViewHpr.getHpr(view).configure(view);
     
     // Get selected view
-    View sview = editor.getSelView().getParent();
-    if(sview instanceof ChildView)
-        ((ChildView)sview).addChild(view);
+    View sview = editor.getSelView();
+    View par = sview.getParent();
+    int ind = sview.indexInParent();
+    ViewHpr.getHpr(par).addChild(view, ind+1);
         
     // Select view
     editor.setSelView(view);

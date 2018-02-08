@@ -7,7 +7,7 @@ import snapbuild.actions.*;
 /**
  * A class to provide extra functionality for specific classes.
  */
-public class ViewHpr {
+public class ViewHpr <T extends View> {
     
     // The Array of actions
     Action      _actions[];
@@ -53,12 +53,23 @@ public Action[] getActions()
  */
 public Class[] getActionClasses()
 {
-    return new Class[] { AddPeer.class,
-        SetFill.class, SetBorder.class,
+    return new Class[] {
+        AddAfter.class, AddBefore.class,
+        SetFill.class, SetBorder.class, SetText.class,
         SetPrefWidth.class, SetPrefHeight.class,
         SetGrowWidth.class, SetGrowHeight.class, SetLeanX.class, SetLeanY.class,
         Delete.class, Duplicate.class };
 }
+
+/**
+ * Configures a new View.
+ */
+public void configure(T aView)  { }
+
+/**
+ * Adds a child view at given index.
+ */
+public boolean addChild(T aView, int anIndex)  { ViewUtils.beep(); return false; }
 
 /**
  * Returns a ViewHpr subclass for given class.
@@ -79,7 +90,14 @@ public static ViewHpr getHpr(Object anObj)
 public static ViewHpr createHpr(Class aCls)
 {
     if(aCls==View.class) return new ViewHpr();
+    if(aCls==Label.class) return new LabelHpr();
+    if(aCls==ButtonBase.class) return new ButtonBaseHpr();
+    if(aCls==TextField.class) return new TextFieldHpr();
+    if(aCls==ThumbWheel.class) return new ThumbWheelHpr();
+    if(aCls==ParentView.class) return new ParentViewHpr();
     if(aCls==ChildView.class) return new ChildViewHpr();
+    if(aCls==ColView.class) return new ColViewHpr();
+    if(aCls==RowView.class) return new RowViewHpr();
     return createHpr(aCls.getSuperclass());
 }
 

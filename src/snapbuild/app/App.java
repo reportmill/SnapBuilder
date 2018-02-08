@@ -24,7 +24,7 @@ public static void main(String args[])
     //Thread.setDefaultUncaughtExceptionHandler(er);
     
     if(SnapUtils.isTeaVM)
-        WelcomePanel.getShared().newFile();
+        new EditorPane().newDocument().setWindowVisible(true);
 
     // Show open data source panel
     else {
