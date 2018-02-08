@@ -33,4 +33,7 @@ public void invoke(EditorPane epane)
     editor.setSelView(dup);
 }
 
+/** Returns the category of action. */
+public Type getType()  { return Type.Child; }
+
 }

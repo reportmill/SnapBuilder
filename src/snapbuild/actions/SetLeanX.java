@@ -40,4 +40,7 @@ public void invoke(EditorPane epane)
     sview.setLeanX(lean);
 }
 
+/** Returns the category of action. */
+public Type getType()  { return Type.Bounds; }
+
 }

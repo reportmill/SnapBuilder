@@ -7,7 +7,7 @@ import snap.view.View;
 /**
  * A custom class.
  */
-public class SetGrowWidth extends Action {
+public class SetPrefWidth extends Action {
 
 /**
  * Returns list of View classes to add.
@@ -15,8 +15,15 @@ public class SetGrowWidth extends Action {
 public List getItems()
 {
     List items = new ArrayList();
-    items.add("true");
-    items.add("false");
+    items.add(" +1");
+    items.add(" +2");
+    items.add(" +5");
+    items.add("  ");
+    items.add(" -1");
+    items.add(" -2");
+    items.add(" -5");
+    items.add("  ");
+    items.add("Clear");
     return items;
 }
 
@@ -30,11 +37,16 @@ public void invoke(EditorPane epane)
     
     // Get selected item
     Object sitem = epane.getSelActionItem(); if(!(sitem instanceof String)) return;
-    boolean val = SnapUtils.boolValue(sitem);
+    String str = (String)sitem;
+    
+    // Get amount and fix
+    int amt = SnapUtils.intValue(str);
+    if(str.equals("Clear")) amt = -9999;
     
     // Get selected view
     View sview = editor.getSelView();
-    sview.setGrowWidth(val);
+    double pw = sview.getPrefWidth() + amt;
+    sview.setPrefWidth(pw>=0? pw : -1);
 }
 
 /** Returns the category of action. */

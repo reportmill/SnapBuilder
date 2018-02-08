@@ -6,6 +6,9 @@ import java.util.*;
  */
 public abstract class Action {
     
+    // The category of action
+    public enum Type { Bounds, Child, Style, Misc, Prop };
+    
 /**
  * Returns the action name.
  */
@@ -35,5 +38,10 @@ public void invoke(EditorPane epane)  { }
  * Whether to invoke action on single click.
  */
 public boolean invokeOnClick()  { return true; }
+
+/**
+ * Returns the category of action.
+ */
+public Type getType()  { return Type.Misc; }
 
 }

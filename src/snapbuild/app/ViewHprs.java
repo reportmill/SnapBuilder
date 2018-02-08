@@ -21,8 +21,12 @@ public static class ChildViewHpr extends ParentViewHpr {
     /** Returns actions for View. */
     public Class[] getActionClasses()
     {
-        return new Class[] { AddChild.class, AddPeer.class, SetPadding.class, SetSpacing.class, SetBorder.class,
-            SetGrowWidth.class, SetGrowHeight.class, Delete.class, Duplicate.class };
+        return new Class[] { AddChild.class, AddPeer.class,
+            SetPadding.class, SetSpacing.class,
+            SetFill.class, SetBorder.class,
+            SetPrefWidth.class, SetPrefHeight.class,
+            SetGrowWidth.class, SetGrowHeight.class, SetLeanX.class, SetLeanY.class,
+            Delete.class, Duplicate.class };
     }
 }
 

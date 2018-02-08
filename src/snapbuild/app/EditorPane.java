@@ -32,6 +32,9 @@ public class EditorPane extends ViewOwner {
     
     // The ActionBrowser
     BrowserView      _actBrwsr;
+    
+    // The current action type
+    Action.Type      _actType = snapbuild.app.Action.Type.Child;
 
 /**
  * Creates a new EditorPane.
@@ -410,6 +413,13 @@ protected void respondUI(ViewEvent anEvent)
     if(anEvent.equals("SaveAsMenuItem")) saveAs();
     if(anEvent.equals("RevertMenuItem")) revert();
     
+    // Handle Action type buttons
+    if(anEvent.equals("AddViewsButton")) { _actType = snapbuild.app.Action.Type.Child; updateActionBrowser(); }
+    if(anEvent.equals("PosSizeButton")) { _actType = snapbuild.app.Action.Type.Bounds; updateActionBrowser(); }
+    if(anEvent.equals("FillStyleButton")) { _actType = snapbuild.app.Action.Type.Style; updateActionBrowser(); }
+    if(anEvent.equals("OtherButton")) { _actType = snapbuild.app.Action.Type.Misc; updateActionBrowser(); }
+    if(anEvent.equals("PropsButton")) { _actType = snapbuild.app.Action.Type.Prop; updateActionBrowser(); }
+    
     // Handle WinClosing
     if(anEvent.isWinClose()) {
         close(); anEvent.consume(); }
@@ -451,7 +461,7 @@ protected void updateActionBrowser()
     View sview = getSelView();
     Action items[] = getActions(sview);
     _actBrwsr.setItems((Object[])items);
-    _actBrwsr.setSelectedItem(items[0]);
+    if(items.length>0) _actBrwsr.setSelectedItem(items[0]);
 }
 
 /**
@@ -548,7 +558,7 @@ public String getWindowTitle()
 /**
  * Returns the actions for given view.
  */
-protected Action[] getActions(View aView)  { return ViewHpr.getHpr(aView).getActions(); }
+protected Action[] getActions(View aView)  { return ViewHpr.getHpr(aView).getActions(_actType); }
 
 /**
  * ActionResolver.

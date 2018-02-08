@@ -32,4 +32,7 @@ public void invoke(EditorPane epane)
     }
 }
 
+/** Returns the category of action. */
+public Type getType()  { return Type.Child; }
+
 }

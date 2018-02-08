@@ -2,13 +2,12 @@ package snapbuild.actions;
 import snapbuild.app.*;
 import java.util.*;
 import snap.gfx.*;
-import snap.gfx.Border.*;
 import snap.view.*;
 
 /**
  * A custom class.
  */
-public class SetBorder extends Action {
+public class SetFill extends Action {
 
 /**
  * Returns list of View classes to add.
@@ -19,9 +18,9 @@ public List getItems()
     items.add("White");
     items.add("Gray");
     items.add("Black");
-    items.add("Bevel Raised");
-    items.add("Bevel Lowered");
-    items.add("Etched");
+    items.add("Red");
+    items.add("Green");
+    items.add("Blue");
     items.add("None");
     return items;
 }
@@ -42,27 +41,25 @@ public void invoke(EditorPane epane)
     View sview = editor.getSelView();
     Border bdr = sview.getBorder();
     
-    // Get border
-    Border border = getBorder(str);
-    if(border instanceof LineBorder && bdr instanceof LineBorder)
-        border = new LineBorder(((LineBorder)border).getColor(), ((LineBorder)bdr).getWidth()+1);
+    // Get paint
+    Paint paint = getFill(str);
     
     // Set border
-    sview.setBorder(border);
+    sview.setFill(paint);
 }
 
 /**
  * Returns border for string.
  */
-Border getBorder(String aStr)
+Paint getFill(String aStr)
 {
     switch(aStr) {
-        case "White": return new LineBorder(Color.WHITE, 1);
-        case "Gray": return new LineBorder(Color.GRAY, 1);
-        case "Black": return new LineBorder(Color.BLACK, 1);
-        case "Bevel Raised": return new BevelBorder(1);
-        case "Bevel Lowered": return new BevelBorder(0);
-        case "Etched": return new EtchBorder();
+        case "White": return Color.WHITE;
+        case "Gray": return Color.GRAY;
+        case "Black": return Color.BLACK;
+        case "Red": return new Color(1,.6,.6);
+        case "Green": return new Color(.6,1,.6);
+        case "Blue": return new Color(.6,.6,1);
         default: return null;
     }
 }

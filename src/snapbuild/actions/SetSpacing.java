@@ -46,4 +46,7 @@ public void invoke(EditorPane epane)
     if(sview instanceof ColView) ((ColView)sview).setSpacing(((ColView)sview).getSpacing()+amt);
 }
 
+/** Returns the category of action. */
+public Type getType()  { return Type.Bounds; }
+
 }

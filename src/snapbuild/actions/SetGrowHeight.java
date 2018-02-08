@@ -37,4 +37,7 @@ public void invoke(EditorPane epane)
     sview.setGrowHeight(val);
 }
 
+/** Returns the category of action. */
+public Type getType()  { return Type.Bounds; }
+
 }

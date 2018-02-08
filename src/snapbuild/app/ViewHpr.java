@@ -16,6 +16,23 @@ public class ViewHpr {
     static Map <Class,ViewHpr>   _hprs = new HashMap();
 
 /**
+ * Returns actions for View for given category.
+ */
+public Action[] getActions(Action.Type aType)
+{
+    List <Action> list = new ArrayList();
+    for(Action a : getActions()) if(isType(aType, a.getType())) list.add(a);
+    return list.toArray(new Action[list.size()]);
+}
+
+boolean isType(Action.Type t0, Action.Type t1)
+{
+    if(t0==t1) return true;
+    if(t0==Action.Type.Prop && t1!=Action.Type.Child) return true;
+    return false;
+}
+
+/**
  * Returns actions for View.
  */
 public Action[] getActions()
@@ -36,8 +53,11 @@ public Action[] getActions()
  */
 public Class[] getActionClasses()
 {
-    return new Class[] { AddPeer.class, SetGrowWidth.class, SetGrowHeight.class, SetLeanX.class, Delete.class,
-        Duplicate.class };
+    return new Class[] { AddPeer.class,
+        SetFill.class, SetBorder.class,
+        SetPrefWidth.class, SetPrefHeight.class,
+        SetGrowWidth.class, SetGrowHeight.class, SetLeanX.class, SetLeanY.class,
+        Delete.class, Duplicate.class };
 }
 
 /**

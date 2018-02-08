@@ -21,6 +21,10 @@ public List getItems()
     items.add(Button.class);
     items.add(TextField.class);
     items.add(Slider.class);
+    items.add(CheckBox.class);
+    items.add(RadioButton.class);
+    items.add(ComboBox.class);
+    items.add(ThumbWheel.class);
     return items;
 }
 
@@ -58,7 +62,7 @@ void configure(View aView)
     if(aView instanceof Label) aView.setText("Label");
     
     // Handle Button
-    else if(aView instanceof Button) aView.setText("Button");
+    else if(aView instanceof ButtonBase) aView.setText("Button");
     
     // Handle TextField
     else if(aView instanceof TextField) aView.setMinWidth(100);
@@ -70,6 +74,10 @@ void configure(View aView)
     // Handle ColView
     else if(aView instanceof ColView) {
         aView.setPadding(4,4,4,4); ((ColView)aView).setSpacing(4); aView.setGrowHeight(true); }
+        
+    // Handle ThumbWheel
+    else if(aView instanceof ThumbWheel) { aView.setPrefSize(120,16);
+        ((ThumbWheel)aView).setType(ThumbWheel.TYPE_RADIAL); }
 }
 
 /**
@@ -79,5 +87,8 @@ public String toString()  { return "Add Child"; }
 
 /** Override to invoke action on single click. */
 public boolean invokeOnClick()  { return false; }
+
+/** Returns the category of action. */
+public Type getType()  { return Type.Child; }
 
 }

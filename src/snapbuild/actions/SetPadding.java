@@ -47,4 +47,7 @@ public void invoke(EditorPane epane)
     sview.setPadding(ins2);
 }
 
+/** Returns the category of action. */
+public Type getType()  { return Type.Bounds; }
+
 }

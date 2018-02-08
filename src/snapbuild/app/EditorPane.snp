@@ -36,10 +36,10 @@
     <ColView Padding="8,10,5,10" GrowHeight="true" Spacing="10">
       <EtchBorder />
       <ToggleButton Name="AddViewsButton" PrefWidth="110" PrefHeight="26" text="Add Views" Selected="true" ToggleGroup="TG1" />
-      <ToggleButton PrefWidth="110" PrefHeight="26" text="Position/Size" ToggleGroup="TG1" />
-      <ToggleButton PrefWidth="110" PrefHeight="26" text="Fill/Style" ToggleGroup="TG1" />
-      <ToggleButton PrefWidth="110" PrefHeight="26" text="Other" ToggleGroup="TG1" />
-      <ToggleButton PrefWidth="110" PrefHeight="26" text="Properties" ToggleGroup="TG1" />
+      <ToggleButton Name="PosSizeButton" PrefWidth="110" PrefHeight="26" text="Position/Size" ToggleGroup="TG1" />
+      <ToggleButton Name="FillStyleButton" PrefWidth="110" PrefHeight="26" text="Fill/Style" ToggleGroup="TG1" />
+      <ToggleButton Name="OtherButton" PrefWidth="110" PrefHeight="26" text="Other" ToggleGroup="TG1" />
+      <ToggleButton Name="PropsButton" PrefWidth="110" PrefHeight="26" text="Properties" ToggleGroup="TG1" />
     </ColView>
     <BrowserView Name="ActionBrowser" GrowWidth="true" PrefColCount="4" />
   </RowView>

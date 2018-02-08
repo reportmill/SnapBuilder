@@ -1,13 +1,13 @@
 package snapbuild.actions;
 import snapbuild.app.*;
 import java.util.*;
-import snap.util.SnapUtils;
+import snap.gfx.VPos;
 import snap.view.View;
 
 /**
  * A custom class.
  */
-public class SetGrowWidth extends Action {
+public class SetLeanY extends Action {
 
 /**
  * Returns list of View classes to add.
@@ -15,8 +15,10 @@ public class SetGrowWidth extends Action {
 public List getItems()
 {
     List items = new ArrayList();
-    items.add("true");
-    items.add("false");
+    items.add("TOP");
+    items.add("CENTER");
+    items.add("BOTTOM");
+    items.add("None");
     return items;
 }
 
@@ -30,11 +32,12 @@ public void invoke(EditorPane epane)
     
     // Get selected item
     Object sitem = epane.getSelActionItem(); if(!(sitem instanceof String)) return;
-    boolean val = SnapUtils.boolValue(sitem);
+    String str = (String)sitem;
+    VPos lean = !str.equals("None")? VPos.valueOf(str) : null;
     
     // Get selected view
     View sview = editor.getSelView();
-    sview.setGrowWidth(val);
+    sview.setLeanY(lean);
 }
 
 /** Returns the category of action. */
