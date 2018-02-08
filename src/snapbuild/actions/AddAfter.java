@@ -27,7 +27,7 @@ public void invoke(EditorPane epane)
     View sview = editor.getSelView();
     View par = sview.getParent();
     int ind = sview.indexInParent();
-    ViewHpr.getHpr(par).addChild(view, ind+1);
+    ViewHpr.getHpr(par).addChild(par, view, ind+1);
         
     // Select view
     editor.setSelView(view);

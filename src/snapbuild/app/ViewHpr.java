@@ -55,6 +55,7 @@ public Class[] getActionClasses()
 {
     return new Class[] {
         AddAfter.class, AddBefore.class,
+        SetName.class,
         SetFill.class, SetBorder.class, SetText.class,
         SetPrefWidth.class, SetPrefHeight.class,
         SetGrowWidth.class, SetGrowHeight.class, SetLeanX.class, SetLeanY.class,
@@ -69,7 +70,7 @@ public void configure(T aView)  { }
 /**
  * Adds a child view at given index.
  */
-public boolean addChild(T aView, int anIndex)  { ViewUtils.beep(); return false; }
+public boolean addChild(T aView, View aChild, int anIndex)  { ViewUtils.beep(); return false; }
 
 /**
  * Returns a ViewHpr subclass for given class.

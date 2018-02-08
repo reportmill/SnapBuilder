@@ -40,7 +40,7 @@ public static class TextFieldHpr <T extends TextField> extends ParentViewHpr <T>
 public static class ThumbWheelHpr <T extends ThumbWheel> extends ViewHpr <T> {
     
     /** Configures a new View. */
-    public void configure(T aView)  { aView.setType(ThumbWheel.TYPE_RADIAL); }
+    public void configure(T aView)  { aView.setType(ThumbWheel.TYPE_RADIAL); aView.setPrefSize(120,16); }
 }
 
 /**
@@ -60,6 +60,7 @@ public static class ChildViewHpr <T extends ChildView> extends ParentViewHpr <T>
     {
         return new Class[] {
             AddChild.class, AddAfter.class, AddBefore.class,
+            SetName.class,
             SetPadding.class, SetSpacing.class,
             SetFill.class, SetBorder.class,
             SetPrefWidth.class, SetPrefHeight.class,
@@ -68,9 +69,9 @@ public static class ChildViewHpr <T extends ChildView> extends ParentViewHpr <T>
     }
     
     /** Adds a child view at given index. */
-    public boolean addChild(T aView, int anIndex)
+    public boolean addChild(T aView, View aChild, int anIndex)
     {
-        aView.addChild(aView, anIndex);
+        aView.addChild(aChild, anIndex);
         return true;
     }
 }

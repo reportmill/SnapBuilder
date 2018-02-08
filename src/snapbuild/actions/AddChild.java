@@ -59,7 +59,7 @@ public void invoke(EditorPane epane)
 public String toString()  { return "Add Child"; }
 
 /** Override to invoke action on single click. */
-public boolean invokeOnClick()  { return false; }
+//public boolean invokeOnClick()  { return false; }
 
 /** Returns the category of action. */
 public Type getType()  { return Type.Child; }

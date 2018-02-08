@@ -13,7 +13,7 @@ import snap.web.WebURL;
 public class EditorPane extends ViewOwner {
     
     // The Editor
-    Editor           _editor;
+    Editor           _editor, _realEditor;
     
     // The XML TextView
     TextView         _xmlText;
@@ -48,6 +48,23 @@ public EditorPane()
  * Returns the editor.
  */
 public Editor getEditor()  { return _editor; }
+
+/**
+ * Sets the viewer for this viewer pane.
+ */
+protected void setEditor(Editor anEditor)
+{
+    // Stop listening to PropChanges on old
+    //if(_editor!=null) _editor.removePropChangeListener(_editerLsnr);
+    
+    // Set Viewer
+    _editor = anEditor;
+    ScrollView scroll = getView("EditorScrollView", ScrollView.class);
+    scroll.setContent(_editor);
+    
+    // Start listening to PropChanges
+    //_editor.addPropChangeListener(_editerLsnr);
+}
 
 /**
  * Returns the document source.
@@ -270,6 +287,48 @@ protected void editorClosed()
 }
 
 /**
+ * Returns whether editor is really doing editing.
+ */
+public boolean isEditing()  { return _realEditor==null; } //getEditor().isEditing(); }
+
+/**
+ * Sets whether editor is really doing editing.
+ */
+public void setEditing(boolean aValue)
+{
+    // If already set, just return
+    if(aValue==isEditing()) return;
+    
+    // If not yet previewing, store current template then generate report and swap it in
+    if(!aValue) {
+                
+        // Cache current editor and flush any current editing
+        _realEditor = getEditor(); //_realEditor.flushEditingChanges();
+        
+        // Reload content
+        //XMLElement xml = getEditor().getContentXML();
+        //ParentView content = new ViewArchiver().getParentView(xml.getBytes());
+        View content = new ViewArchiver().copy(getContent());
+        
+        // Create new editor, set editing to false and set report document
+        Editor editor = new Editor(); editor.setEditing(false);
+        //editor.getContentBox().removeDeepChangeListener(editor);
+        editor.setContent(content);
+        editor.setSize(_realEditor.getSize());
+        
+        // Set new editor
+        setEditor(editor);
+    }
+
+    // If turning preview off, restore real editor
+    else { setEditor(_realEditor); _realEditor = null; }
+    
+    // Focus on editor
+    requestFocus(getEditor());
+    resetLater();
+}
+
+/**
  * Initialize UI.
  */
 protected void initUI()
@@ -337,6 +396,10 @@ protected void initUI()
  */
 protected void resetUI()
 {
+    // Reset PreviewEditButton state if out of sync
+    if(getViewBoolValue("PreviewButton")==isEditing())
+        setViewValue("PreviewButton", !isEditing());
+
     // Update SelPathBox
     updateSelPathBox();
     
@@ -365,6 +428,10 @@ protected void respondUI(ViewEvent anEvent)
     // Handle ShowXMLButton
     if(anEvent.equals("ShowXMLButton"))
         toggleShowXML();
+
+    // Handle PreviewButton
+    if(anEvent.equals("PreviewButton"))
+        setEditing(!isEditing());
 
     // Handle ShowViewTreeButton
     if(anEvent.equals("ShowViewTreeButton"))

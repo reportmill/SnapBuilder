@@ -13,13 +13,14 @@
     <Separator PrefHeight="18" Vertical="true" />
     <Button Name="UndoButton" PrefWidth="22" PrefHeight="22" ToolTip="Undo" image="Edit_Undo.png" ShowBorder="false" />
     <Button Name="RedoButton" PrefWidth="22" PrefHeight="22" ToolTip="Redo" image="Edit_Redo.png" ShowBorder="false" />
-    <Button Name="ShowXMLButton" LeanX="RIGHT" text="Show XML" />
+    <Button Name="ShowXMLButton" PrefWidth="64" PrefHeight="20" LeanX="RIGHT" text="Show XML" />
+    <ToggleButton Name="PreviewButton" PrefWidth="64" PrefHeight="20" text="Preview" />
   </RowView>
   <SplitView Name="SplitView" Vertical="true" GrowHeight="true">
     <SplitView Name="EditorSplitView" GrowHeight="true">
       <TreeView Name="ViewTree" />
-      <ScrollView GrowWidth="true">
-        <LineBorder Color="#AA" />
+      <ScrollView Name="EditorScrollView" GrowWidth="true">
+        <LineBorder Color="#aaaaaa" />
         <View Name="Editor" Class="snapbuild.app.Editor" />
       </ScrollView>
     </SplitView>

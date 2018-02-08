@@ -66,6 +66,11 @@ public WebFile getSourceFile(boolean doCreate)
 }
 
 /**
+ * Returns the content box.
+ */
+public View getContentBox()  { return _cbox; }
+
+/**
  * Returns the content view.
  */
 public View getContent()  { return _cbox.getContent(); }
@@ -91,6 +96,15 @@ public void setSelView(View aView)
 {
     firePropChange(SelView_Prop, _selView, _selView = aView);
     repaint();
+}
+
+/**
+ * Sets whether editor is really doing editing.
+ */
+public void setEditing(boolean aValue)
+{
+    getContentBox().setPickable(true);
+    disableEvents(MouseRelease);
 }
 
 /**
