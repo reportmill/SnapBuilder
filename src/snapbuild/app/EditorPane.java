@@ -306,13 +306,10 @@ public void setEditing(boolean aValue)
         _realEditor = getEditor(); //_realEditor.flushEditingChanges();
         
         // Reload content
-        //XMLElement xml = getEditor().getContentXML();
-        //ParentView content = new ViewArchiver().getParentView(xml.getBytes());
         View content = new ViewArchiver().copy(getContent());
         
         // Create new editor, set editing to false and set report document
         Editor editor = new Editor(); editor.setEditing(false);
-        //editor.getContentBox().removeDeepChangeListener(editor);
         editor.setContent(content);
         editor.setSize(_realEditor.getSize());
         
@@ -396,6 +393,11 @@ protected void initUI()
  */
 protected void resetUI()
 {
+    // Update UndoButton, RedoButton
+    Undoer undoer = _editor.getUndoer();
+    setViewEnabled("UndoButton", undoer!=null && undoer.hasUndos()); //undoer.getUndoSetLast()!=null
+    setViewEnabled("RedoButton", undoer!=null && undoer.hasRedos()); //undoer.getRedoSetLast()!=null
+    
     // Reset PreviewEditButton state if out of sync
     if(getViewBoolValue("PreviewButton")==isEditing())
         setViewValue("PreviewButton", !isEditing());
@@ -425,6 +427,16 @@ protected void resetUI()
  */
 protected void respondUI(ViewEvent anEvent)
 {
+    // Handle Edit CutButton, CopyButton, PasteButton, DeleteButton
+    if(anEvent.equals("CutButton")) _editor.cut();
+    if(anEvent.equals("CopyButton")) _editor.copy();
+    if(anEvent.equals("PasteButton")) _editor.paste();
+    if(anEvent.equals("DeleteButton")) _editor.delete();
+    
+    // Handle Edit UndoButton, RedoButton
+    if(anEvent.equals("UndoButton")) _editor.undo();
+    if(anEvent.equals("RedoButton")) _editor.redo();
+    
     // Handle ShowXMLButton
     if(anEvent.equals("ShowXMLButton"))
         toggleShowXML();
@@ -618,7 +630,8 @@ public String getWindowTitle()
     String title = getSourceURL()!=null? getSourceURL().getPath() : null; if(title==null) title = "Untitled";
 
     // If has undos, add asterisk. If zoomed, add ZoomFactor
-    //if(getEditor().getUndoer()!=null && getEditor().getUndoer().hasUndos()) title = "* " + title;
+    if(!isEditing()) title += "(preview)";
+    else if(getEditor().getUndoer()!=null && getEditor().getUndoer().hasUndos()) title = "* " + title;
     return title;
 }
 
