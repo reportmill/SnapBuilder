@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<RowView Padding="4" GrowWidth="true" Spacing="4" FillHeight="true">
+<RowView Padding="10,5,5,5" GrowWidth="true" Spacing="5" FillHeight="true">
   <font name="Arial" size="12" />
+  <ColView Padding="4" PrefWidth="110" Spacing="8">
+    <EtchBorder />
+    <ToggleButton PrefHeight="50" GrowWidth="true" text="Add Child" ToggleGroup="g0" Selected="true" />
+    <ToggleButton PrefHeight="50" GrowWidth="true" text="Add After" ToggleGroup="g0" />
+    <ToggleButton PrefHeight="50" GrowWidth="true" text="Add Before" ToggleGroup="g0" />
+  </ColView>
   <ScrollView GrowWidth="true">
     <View Name="GalleryView" Class="snapbuild.app.GalleryView" />
   </ScrollView>
-  <ColView Padding="4" PrefWidth="180" Spacing="10">
-    <EtchBorder />
-    <Button PrefHeight="30" GrowWidth="true" text="Add After" />
-    <Button PrefHeight="30" GrowWidth="true" text="Add Before" />
-    <Button PrefHeight="30" GrowWidth="true" text="Add Child" />
-    <CheckBox LeanX="CENTER" text="Add Quick" />
-    <RowView Padding="4" GrowWidth="true" Spacing="4">
-      <Label text="Find:" />
-      <TextField GrowWidth="true" />
-    </RowView>
-  </ColView>
 </RowView>

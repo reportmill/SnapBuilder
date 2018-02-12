@@ -38,6 +38,9 @@ public class EditorPane extends ViewOwner {
     
     // The GalleryPane
     GalleryPane      _gallery = new GalleryPane(this);
+    
+    // The ViewInsp
+    ViewInsp         _viewInsp = new ViewInsp(this);
 
 /**
  * Creates a new EditorPane.
@@ -373,7 +376,7 @@ protected void initUI()
     
     // Add action for ESCAPE key to pop selection and for ENTER key to invoke action
     addKeyActionFilter("EscapeAction", "ESCAPE");
-    addKeyActionFilter("EnterAction", "ENTER");
+    //addKeyActionFilter("EnterAction", "ENTER");
     
     // Set Toolbar images
     getView("SaveButton", ButtonBase.class).setImage(Image.get(TextPane.class, "pkg.images/File_Save.png"));
@@ -393,7 +396,9 @@ protected void initUI()
     // Add GalleryPane
     TabView tabView = getView("MainTabView", TabView.class);
     tabView.addTab("Add Views", _gallery.getUI(), 0);
+    tabView.addTab("View Props", _viewInsp.getUI(), 1);
     tabView.setSelectedIndex(0);
+    tabView.removeTab(2);
 }
 
 /**
@@ -428,6 +433,9 @@ protected void resetUI()
     String title = getWindowTitle();
     getWindow().setTitle(title);
     getWindow().setDocURL(getSourceURL());
+    
+    // Reset ViewUI
+    if(_viewInsp.getUI().isShowing()) _viewInsp.resetLater();
 }
 
 /**

@@ -409,16 +409,10 @@ public static class BrowserViewHpr <T extends BrowserView> extends ParentViewHpr
         public String getParent(String anItem)  { return null; }
     
         /** Whether given object is a parent (has children). */
-        public boolean isParent(String anItem)
-        {
-            return anItem.equals("BrowserView");
-        }
+        public boolean isParent(String anItem)  { return anItem.equals("BrowserView"); }
 
         /** Returns the children. */
-        public String[] getChildren(String aParent)
-        {
-            return new String[] { "Item two", "Item three" };
-        }
+        public String[] getChildren(String aParent)  { return new String[] { "Item two", "Item three" }; }
     }
 }
 

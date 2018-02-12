@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ColView Padding="10" Spacing="4">
+  <font Name="Arial" Size="12" />
+  <RowView GrowWidth="true" Spacing="4">
+    <ColView GrowHeight="true" Spacing="8">
+      <RowView GrowWidth="true" Spacing="4">
+        <Label text="Name:" />
+        <TextField Name="NameText" GrowWidth="true" />
+      </RowView>
+      <RowView GrowWidth="true" Spacing="4">
+        <Label text="Text:" />
+        <TextField Name="TextText" GrowWidth="true" />
+      </RowView>
+      <RowView GrowWidth="true" Spacing="4">
+        <Label PrefWidth="60" text="Pref Width:" />
+        <Spinner Name="PrefWidthSpinner" PrefWidth="100" />
+      </RowView>
+      <RowView GrowWidth="true" Spacing="4">
+        <Label PrefWidth="60" text="Pref Height:" />
+        <Spinner Name="PrefHeightSpinner" PrefWidth="100" PrefHeight="22" />
+      </RowView>
+    </ColView>
+  </RowView>
+</ColView>
