@@ -1,4 +1,5 @@
 package snapbuild.app;
+import java.util.function.Consumer;
 import snap.gfx.*;
 import snap.view.*;
 import snapbuild.actions.*;
@@ -27,12 +28,39 @@ public static class ButtonBaseHpr <T extends ButtonBase> extends ParentViewHpr <
 }
 
 /**
+ * A ViewHpr for Button.
+ */
+public static class ButtonHpr <T extends Button> extends ButtonBaseHpr <T> {
+    
+    /** Configures a new View. */
+    public void configure(T aView)  { aView.setText("Button"); aView.setPadding(2,2,2,2); }
+}
+
+/**
  * A ViewHpr for ToggleButton.
  */
 public static class ToggleButtonHpr <T extends ToggleButton> extends ButtonBaseHpr <T> {
     
     /** Configures a new View. */
-    public void configure(T aView)  { aView.setText("Toggle"); }
+    public void configure(T aView)  { aView.setText("ToggleButton"); aView.setPadding(2,2,2,2); }
+}
+
+/**
+ * A ViewHpr for CheckBox.
+ */
+public static class CheckBoxHpr <T extends CheckBox> extends ToggleButtonHpr <T> {
+    
+    /** Configures a new View. */
+    public void configure(T aView)  { aView.setText("CheckBox"); }
+}
+
+/**
+ * A ViewHpr for RadioButton.
+ */
+public static class RadioButtonHpr <T extends RadioButton> extends ToggleButtonHpr <T> {
+    
+    /** Configures a new View. */
+    public void configure(T aView)  { aView.setText("RadioButton"); }
 }
 
 /**
@@ -57,6 +85,19 @@ public static class ProgressBarHpr <T extends ProgressBar> extends ViewHpr <T> {
     
     /** Configures a new View. */
     public void configure(T aView)  { aView.setPrefSize(110,20); }
+}
+
+/**
+ * A ViewHpr for Spinner.
+ */
+public static class SpinnerHpr <T extends Spinner> extends ViewHpr <T> {
+    
+    /** Configures a new View. */
+    public void configure(T aView)
+    {
+        aView.setPrefSize(120,22);
+        aView.getTextField().setPromptText("Spinner");
+    }
 }
 
 /**
@@ -142,6 +183,35 @@ public static class RowViewHpr <T extends RowView> extends ChildViewHpr <T> {
 }
 
 /**
+ * A ViewHpr for BorderView.
+ */
+public static class BorderViewHpr <T extends BorderView> extends ParentViewHpr <T> {
+
+    /** Configures a new View. */
+    public void configure(T aView)  { }
+    
+    /** Configures a new View. */
+    public void configureGallery(T aView)
+    {
+        aView.setBorder(Color.LIGHTGRAY, 1);
+        aView.setFont(Font.Arial10.deriveFont(7));
+        
+        Label label = new Label("BorderView"); label.setTextFill(Color.GRAY); label.setFont(Font.Arial11);
+        label.setFont(Font.Arial11); label.setPadding(5,5,5,5); label.setBorder(Color.LIGHTGRAY,1);
+        aView.setCenter(label);
+        
+        Label tl = new Label("top"); aView.setTop(tl);
+        Label bl = new Label("bottom"); aView.setBottom(bl);
+        Label ll = new Label("left"); aView.setLeft(ll);
+        Label rl = new Label("right"); aView.setRight(rl);
+        
+        Color c = Color.GRAY; Insets i = new Insets(3);
+        for(Label lb : new Label[] { tl,bl,ll,rl }) {
+             lb.setAlign(Pos.CENTER); lb.setTextFill(c); lb.setPadding(i); }
+    }
+}
+
+/**
  * A ViewHpr for TitleView.
  */
 public static class TitleViewHpr <T extends TitleView> extends ParentViewHpr <T> {
@@ -216,6 +286,139 @@ public static class SplitViewHpr <T extends SplitView> extends ParentViewHpr <T>
         Label label0 = new Label("Split"); label0.setPadding(10,20,10,20); label0.setTextFill(Color.GRAY);
         Label label1 = new Label("View"); label1.setPadding(10,20,10,20); label1.setTextFill(Color.GRAY);
         aView.setItems(label0,label1);
+    }
+}
+
+/**
+ * A ViewHpr for ListView.
+ */
+public static class ListViewHpr <T extends ListView> extends ParentViewHpr <T> {
+
+    /** Configures a new View. */
+    public void configure(T aView)  { }
+    
+    /** Configures a new View. */
+    public void configureGallery(T aView)
+    {
+        aView.setFont(Font.Arial10);
+        aView.setMinWidth(120);
+        aView.getScrollView().setShowVBar(true); aView.getScrollView().setBarSize(10);
+        
+        aView.setItems("ListView", "Item two", "Item three");
+        aView.setCellConfigure(c -> configureCell(c));
+    }
+    
+    void configureCell(Object lc)  { ((ListCell)lc).setTextFill(Color.GRAY); }
+}
+
+/**
+ * A ViewHpr for TableView.
+ */
+public static class TableViewHpr <T extends TableView> extends ParentViewHpr <T> {
+
+    /** Configures a new View. */
+    public void configure(T aView)  { }
+    
+    /** Configures a new View. */
+    public void configureGallery(T aView)
+    {
+        aView.setFont(Font.Arial10);
+        aView.setRowHeight(17); aView.setPrefWidth(120);
+        
+        TableCol col = new TableCol();
+        aView.addCol(col); col.setGrowWidth(true);
+        aView.getScrollView().setShowVBar(true); aView.getScrollView().setBarSize(10);
+        
+        aView.setItems("TableView", "Item two", "Item three");
+        aView.setCellConfigure(c -> configureCell(c));
+    }
+    
+    void configureCell(Object lc)  { ((ListCell)lc).setTextFill(Color.GRAY); }
+}
+
+/**
+ * A ViewHpr for TreeView.
+ */
+public static class TreeViewHpr <T extends TreeView> extends ParentViewHpr <T> {
+
+    /** Configures a new View. */
+    public void configure(T aView)  { }
+    
+    /** Configures a new View. */
+    public void configureGallery(T aView)
+    {
+        aView.setFont(Font.Arial10);
+        aView.setRowHeight(15); aView.setPrefWidth(120);
+        
+        aView.getScrollView().setShowVBar(true); aView.getScrollView().setBarSize(10);
+        
+        aView.setItems("TreeView");
+        aView.setResolver(new TR());
+        aView.setCellConfigure(c -> configureCell(c));
+        aView.expandAll();
+    }
+    
+    void configureCell(Object lc)  { ((ListCell)lc).setTextFill(Color.GRAY); }
+    
+    private static class TR extends TreeResolver <String> {
+        
+        /** Returns the parent of given item. */
+        public String getParent(String anItem)  { return null; }
+    
+        /** Whether given object is a parent (has children). */
+        public boolean isParent(String anItem)  { return anItem.equals("TreeView"); }
+
+        /** Returns the children. */
+        public String[] getChildren(String aParent)  { return new String[] { "     Item two", "     Item three" }; }
+    }
+}
+
+/**
+ * A ViewHpr for BrowserView.
+ */
+public static class BrowserViewHpr <T extends BrowserView> extends ParentViewHpr <T> {
+
+    /** Configures a new View. */
+    public void configure(T aView)  { }
+    
+    /** Configures a new View. */
+    public void configureGallery(T aView)
+    {
+        aView.setFont(Font.Arial10);
+        aView.setRowHeight(15); aView.setPrefSize(160,50);
+        
+        aView.setResolver(new BR());
+        aView.setItems("BrowserView");
+        aView.setCellConfigure((Consumer <ListCell>)c -> configureCell(c));
+        aView.setSelectedItem("BrowserView");
+        
+        aView.getScrollView().setShowHBar(true); aView.getScrollView().setBarSize(10);
+        aView.getCol(0).getScrollView().setShowVBar(true); aView.getCol(0).getScrollView().setBarSize(10);
+        aView.getCol(1).getScrollView().setShowVBar(true); aView.getCol(1).getScrollView().setBarSize(10);
+    }
+    
+    void configureCell(ListCell lc)
+    {
+        lc.setTextFill(Color.GRAY);
+        if(lc.isSelected()) { lc.setFill(Color.GRAY); lc.setTextFill(Color.WHITE); }
+    }
+    
+    private static class BR extends TreeResolver <String> {
+        
+        /** Returns the parent of given item. */
+        public String getParent(String anItem)  { return null; }
+    
+        /** Whether given object is a parent (has children). */
+        public boolean isParent(String anItem)
+        {
+            return anItem.equals("BrowserView");
+        }
+
+        /** Returns the children. */
+        public String[] getChildren(String aParent)
+        {
+            return new String[] { "Item two", "Item three" };
+        }
     }
 }
 

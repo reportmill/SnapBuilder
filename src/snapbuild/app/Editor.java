@@ -215,7 +215,9 @@ protected void paintAbove(Painter aPntr)
     
     // Set color and draw rect
     if(sview!=getContent()) {
-        aPntr.setColor(new Color(.3,.3,1,.33)); aPntr.setStroke(new Stroke(3)); aPntr.draw(rrect); }
+        aPntr.setColor(new Color(.3,.3,1,.33)); aPntr.setStroke(new Stroke(3)); aPntr.draw(rrect);
+        aPntr.setStroke(Stroke.Stroke1);
+    }
     
     // Repaint selected view
     Point pnt = sview.getParent().localToParent(sview.getX(), sview.getY(), this);

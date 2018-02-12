@@ -95,21 +95,30 @@ public static ViewHpr getHpr(Object anObj)
  */
 public static ViewHpr createHpr(Class aCls)
 {
-    if(aCls==View.class) return new ViewHpr();
-    if(aCls==Label.class) return new LabelHpr();
+    if(aCls==Button.class) return new ButtonHpr();
     if(aCls==ButtonBase.class) return new ButtonBaseHpr();
-    if(aCls==TextField.class) return new TextFieldHpr();
-    if(aCls==ThumbWheel.class) return new ThumbWheelHpr();
-    if(aCls==ToggleButton.class) return new ToggleButtonHpr();
-    if(aCls==TabView.class) return new TabViewHpr();
+    if(aCls==BrowserView.class) return new BrowserViewHpr();
+    if(aCls==BorderView.class) return new BorderViewHpr();
+    if(aCls==ChildView.class) return new ChildViewHpr();
+    if(aCls==CheckBox.class) return new CheckBoxHpr();
+    if(aCls==ColView.class) return new ColViewHpr();
+    if(aCls==Label.class) return new LabelHpr();
+    if(aCls==ListView.class) return new ListViewHpr();
     if(aCls==ParentView.class) return new ParentViewHpr();
     if(aCls==ProgressBar.class) return new ProgressBarHpr();
-    if(aCls==ChildView.class) return new ChildViewHpr();
-    if(aCls==ColView.class) return new ColViewHpr();
+    if(aCls==RadioButton.class) return new RadioButtonHpr();
     if(aCls==RowView.class) return new RowViewHpr();
-    if(aCls==TitleView.class) return new TitleViewHpr();
     if(aCls==ScrollView.class) return new ScrollViewHpr();
+    if(aCls==Spinner.class) return new SpinnerHpr();
     if(aCls==SplitView.class) return new SplitViewHpr();
+    if(aCls==TabView.class) return new TabViewHpr();
+    if(aCls==TableView.class) return new TableViewHpr();
+    if(aCls==TextField.class) return new TextFieldHpr();
+    if(aCls==ThumbWheel.class) return new ThumbWheelHpr();
+    if(aCls==TitleView.class) return new TitleViewHpr();
+    if(aCls==TreeView.class) return new TreeViewHpr();
+    if(aCls==ToggleButton.class) return new ToggleButtonHpr();
+    if(aCls==View.class) return new ViewHpr();
     return createHpr(aCls.getSuperclass());
 }
 

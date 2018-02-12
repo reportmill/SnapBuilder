@@ -30,7 +30,7 @@ public GalleryView()
         ListView.class, TableView.class, TreeView.class, BrowserView.class,
             
         // Graphics
-        ImageView.class, RectView.class, PathView.class, ArcView.class, StringView.class //DocView.class, PageView.class
+        //ImageView.class, RectView.class, PathView.class, ArcView.class, StringView.class DocView.class, PageView.class
     };
     
     for(Class cls : classes)
