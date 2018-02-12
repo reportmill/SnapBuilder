@@ -32,16 +32,18 @@
     <TextField Name="CommandText" GrowWidth="true" />
     <Button Name="CommandButton" PrefWidth="22" PrefHeight="22" text="Act" />
   </RowView>
-  <RowView PrefHeight="300" Padding="4" Spacing="6" FillHeight="true">
+  <TabView Name="MainTabView" PrefHeight="300">
     <font name="Arial" size="14" />
-    <ColView Padding="8,10,5,10" GrowHeight="true" Spacing="10">
-      <EtchBorder />
-      <ToggleButton Name="AddViewsButton" PrefWidth="110" PrefHeight="26" text="Add Views" Selected="true" ToggleGroup="TG1" />
-      <ToggleButton Name="PosSizeButton" PrefWidth="110" PrefHeight="26" text="Position/Size" ToggleGroup="TG1" />
-      <ToggleButton Name="FillStyleButton" PrefWidth="110" PrefHeight="26" text="Fill/Style" ToggleGroup="TG1" />
-      <ToggleButton Name="OtherButton" PrefWidth="110" PrefHeight="26" text="Other" ToggleGroup="TG1" />
-      <ToggleButton Name="PropsButton" PrefWidth="110" PrefHeight="26" text="Properties" ToggleGroup="TG1" />
-    </ColView>
-    <BrowserView Name="ActionBrowser" GrowWidth="true" PrefColCount="4" />
-  </RowView>
+    <RowView Padding="4" Spacing="6" FillHeight="true" Title="Legacy">
+      <ColView Padding="8,10,5,10" GrowHeight="true" Spacing="10">
+        <EtchBorder />
+        <ToggleButton Name="AddViewsButton" PrefWidth="110" PrefHeight="26" text="Add Views" Selected="true" ToggleGroup="TG1" />
+        <ToggleButton Name="PosSizeButton" PrefWidth="110" PrefHeight="26" text="Position/Size" ToggleGroup="TG1" />
+        <ToggleButton Name="FillStyleButton" PrefWidth="110" PrefHeight="26" text="Fill/Style" ToggleGroup="TG1" />
+        <ToggleButton Name="OtherButton" PrefWidth="110" PrefHeight="26" text="Other" ToggleGroup="TG1" />
+        <ToggleButton Name="PropsButton" PrefWidth="110" PrefHeight="26" text="Properties" ToggleGroup="TG1" />
+      </ColView>
+      <BrowserView Name="ActionBrowser" GrowWidth="true" PrefColCount="4" />
+    </RowView>
+  </TabView>
 </ColView>

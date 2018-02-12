@@ -35,6 +35,9 @@ public class EditorPane extends ViewOwner {
     
     // The current action type
     Action.Type      _actType = snapbuild.app.Action.Type.Child;
+    
+    // The GalleryPane
+    GalleryPane      _gallery = new GalleryPane(this);
 
 /**
  * Creates a new EditorPane.
@@ -386,6 +389,11 @@ protected void initUI()
     // Configure window
     WindowView win = getWindow();
     enableEvents(win, WinClose);
+    
+    // Add GalleryPane
+    TabView tabView = getView("MainTabView", TabView.class);
+    tabView.addTab("Add Views", _gallery.getUI(), 0);
+    tabView.setSelectedIndex(0);
 }
 
 /**

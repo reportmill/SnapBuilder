@@ -19,6 +19,7 @@ public List getItems()
     items.add(RowView.class);
     items.add(Label.class);
     items.add(Button.class);
+    items.add(ToggleButton.class);
     items.add(TextField.class);
     items.add(Slider.class);
     items.add(CheckBox.class);

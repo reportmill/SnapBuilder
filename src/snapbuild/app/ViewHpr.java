@@ -68,6 +68,11 @@ public Class[] getActionClasses()
 public void configure(T aView)  { }
 
 /**
+ * Configures a new View for Gallery.
+ */
+public void configureGallery(T aView)  { configure(aView); }
+
+/**
  * Adds a child view at given index.
  */
 public boolean addChild(T aView, View aChild, int anIndex)  { ViewUtils.beep(); return false; }
@@ -95,10 +100,16 @@ public static ViewHpr createHpr(Class aCls)
     if(aCls==ButtonBase.class) return new ButtonBaseHpr();
     if(aCls==TextField.class) return new TextFieldHpr();
     if(aCls==ThumbWheel.class) return new ThumbWheelHpr();
+    if(aCls==ToggleButton.class) return new ToggleButtonHpr();
+    if(aCls==TabView.class) return new TabViewHpr();
     if(aCls==ParentView.class) return new ParentViewHpr();
+    if(aCls==ProgressBar.class) return new ProgressBarHpr();
     if(aCls==ChildView.class) return new ChildViewHpr();
     if(aCls==ColView.class) return new ColViewHpr();
     if(aCls==RowView.class) return new RowViewHpr();
+    if(aCls==TitleView.class) return new TitleViewHpr();
+    if(aCls==ScrollView.class) return new ScrollViewHpr();
+    if(aCls==SplitView.class) return new SplitViewHpr();
     return createHpr(aCls.getSuperclass());
 }
 

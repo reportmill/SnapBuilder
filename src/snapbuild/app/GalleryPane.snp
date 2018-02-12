@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RowView Padding="4" GrowWidth="true" Spacing="4" FillHeight="true">
+  <font name="Arial" size="12" />
+  <ScrollView GrowWidth="true">
+    <View Name="GalleryView" Class="snapbuild.app.GalleryView" />
+  </ScrollView>
+  <ColView Padding="4" PrefWidth="180" Spacing="10">
+    <EtchBorder />
+    <Button PrefHeight="30" GrowWidth="true" text="Add After" />
+    <Button PrefHeight="30" GrowWidth="true" text="Add Before" />
+    <Button PrefHeight="30" GrowWidth="true" text="Add Child" />
+    <CheckBox LeanX="CENTER" text="Add Quick" />
+    <RowView Padding="4" GrowWidth="true" Spacing="4">
+      <Label text="Find:" />
+      <TextField GrowWidth="true" />
+    </RowView>
+  </ColView>
+</RowView>

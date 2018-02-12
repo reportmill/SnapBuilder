@@ -109,6 +109,26 @@ public void setSelView(View aView)
 }
 
 /**
+ * Adds a view to content.
+ */
+public void addView(Class <? extends View> aCls)
+{
+    // Create new view
+    View view = null; try { view = aCls.newInstance(); } catch(Exception e) { }
+    ViewHpr.getHpr(view).configure(view);
+    
+    // Get selected view
+    View sview = getSelView();
+    if(sview instanceof ChildView)
+        ((ChildView)sview).addChild(view);
+    else if(sview.getParent() instanceof ChildView)
+        ((ChildView)sview.getParent()).addChild(view);
+        
+    // Select view
+    setSelView(view);
+}
+
+/**
  * Sets whether editor is really doing editing.
  */
 public void setEditing(boolean aValue)
