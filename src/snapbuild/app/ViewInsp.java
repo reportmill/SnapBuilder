@@ -1,5 +1,6 @@
 package snapbuild.app;
 import snap.gfx.*;
+import snap.util.StringUtils;
 import snap.view.*;
 
 /**
@@ -67,6 +68,10 @@ protected void resetUI()
     // Update GrowWidthCheckBox, GrowHeightCheckBox
     setViewValue("GrowWidthCheckBox", selView.isGrowWidth());
     setViewValue("GrowHeightCheckBox", selView.isGrowHeight());
+    
+    // Update Align
+    Pos align = selView.getAlign();
+    setViewValue("Align" + align.ordinal(), true);
 }
 
 /**
@@ -105,6 +110,14 @@ protected void respondUI(ViewEvent anEvent)
     // Handle GrowWidthCheckBox, GrowHeightCheckBox
     if(anEvent.equals("GrowWidthCheckBox")) selView.setGrowWidth(anEvent.getBoolValue());
     if(anEvent.equals("GrowHeightCheckBox")) selView.setGrowHeight(anEvent.getBoolValue());
+    
+    // Handle AlignX
+    String name = anEvent.getName();
+    if(name.startsWith("Align")) {
+        int val = StringUtils.intValue(name);
+        Pos pos = Pos.values()[val];
+        selView.setAlign(pos);
+    }
 }
 
 }

@@ -38,19 +38,39 @@
     </RowView>
     <RowView GrowWidth="true">
       <Label text="LeanX: " />
-      <ToggleButton Name="LeanX0" PrefWidth="22" PrefHeight="22" Padding="2" image="AlignLeft.png" ShowBorder="false" />
-      <ToggleButton Name="LeanX1" PrefWidth="22" PrefHeight="22" Padding="2" image="AlignCenter.png" ShowBorder="false" />
-      <ToggleButton Name="LeanX2" PrefWidth="22" PrefHeight="22" Padding="2" image="AlignRight.png" ShowBorder="false" />
-      <ToggleButton Name="LeanX3" PrefWidth="22" PrefHeight="22" Padding="2" ShowBorder="false" Selected="true" />
+      <ToggleButton Name="LeanX0" PrefWidth="22" PrefHeight="22" Padding="2" image="pkg.images/AlignLeft.png" ShowBorder="false" />
+      <ToggleButton Name="LeanX1" PrefWidth="22" PrefHeight="22" Padding="2" image="pkg.images/AlignCenter.png" ShowBorder="false" />
+      <ToggleButton Name="LeanX2" PrefWidth="22" PrefHeight="22" Padding="2" image="pkg.images/AlignRight.png" ShowBorder="false" />
+      <ToggleButton Name="LeanX3" PrefWidth="22" PrefHeight="22" Padding="2" text="&#10226;" ShowBorder="false" Selected="true" />
     </RowView>
     <RowView GrowWidth="true">
       <Label text="LeanY: " />
-      <ToggleButton Name="LeanY0" PrefWidth="22" PrefHeight="22" Padding="2" image="AlignTop.png" ShowBorder="false" />
-      <ToggleButton Name="LeanY1" PrefWidth="22" PrefHeight="22" Padding="2" image="AlignMiddle.png" ShowBorder="false" />
-      <ToggleButton Name="LeanY2" PrefWidth="22" PrefHeight="22" Padding="2" image="AlignBottom.png" ShowBorder="false" />
-      <ToggleButton Name="LeanY3" PrefWidth="22" PrefHeight="22" Padding="2" ShowBorder="false" Selected="true" />
+      <ToggleButton Name="LeanY0" PrefWidth="22" PrefHeight="22" Padding="2" image="pkg.images/AlignTop.png" ShowBorder="false" />
+      <ToggleButton Name="LeanY1" PrefWidth="22" PrefHeight="22" Padding="2" image="pkg.images/AlignMiddle.png" ShowBorder="false" />
+      <ToggleButton Name="LeanY2" PrefWidth="22" PrefHeight="22" Padding="2" image="pkg.images/AlignBottom.png" ShowBorder="false" />
+      <ToggleButton Name="LeanY3" PrefWidth="22" PrefHeight="22" Padding="2" text="&#10226;" ShowBorder="false" Selected="true" />
     </RowView>
     <CheckBox Name="GrowWidthCheckBox" text="Grow Width" />
     <CheckBox Name="GrowHeightCheckBox" text="Grow Height" />
+  </ColView>
+  <ColView GrowHeight="true">
+    <RowView Padding="0,0,4,0" GrowWidth="true">
+      <Label text="Align:" />
+    </RowView>
+    <RowView GrowWidth="true">
+      <ToggleButton Name="Align0" PrefWidth="22" PrefHeight="22" Padding="2" text="&#8598;" Position="TOP_LEFT" Group="tga" />
+      <ToggleButton Name="Align1" PrefWidth="22" PrefHeight="22" Padding="2" text="&#8593;" Position="CENTER" Group="tga" />
+      <ToggleButton Name="Align2" PrefWidth="22" PrefHeight="22" Padding="2" text="&#8599;" Position="TOP_RIGHT" Group="tga" />
+    </RowView>
+    <RowView GrowWidth="true">
+      <ToggleButton Name="Align3" PrefWidth="22" PrefHeight="22" Padding="2" text="&#8592;" Position="CENTER" Group="tga" />
+      <ToggleButton Name="Align4" PrefWidth="22" PrefHeight="22" Padding="2" text="&#8596;" Position="CENTER" Group="tga" />
+      <ToggleButton Name="Align5" PrefWidth="22" PrefHeight="22" Padding="2" text="&#8594;" Position="CENTER" Group="tga" />
+    </RowView>
+    <RowView GrowWidth="true">
+      <ToggleButton Name="Align6" PrefWidth="22" PrefHeight="22" Padding="2" text="&#8601;" Position="BOTTOM_LEFT" Group="tga" />
+      <ToggleButton Name="Align7" PrefWidth="22" PrefHeight="22" Padding="2" text="&#8595;" Position="CENTER" Group="tga" />
+      <ToggleButton Name="Align8" PrefWidth="22" PrefHeight="22" Padding="2" text="&#8600;" Position="BOTTOM_RIGHT" Group="tga" />
+    </RowView>
   </ColView>
 </RowView>
