@@ -31,6 +31,8 @@
     <RowView Name="SelPathBox" Padding="0,2,0,0">
       <font name="Arial" size="12" />
     </RowView>
+    <Button Name="AddRowButton" PrefWidth="38" Padding="2" LeanX="RIGHT" text="+Row" />
+    <Button Name="AddColButton" PrefWidth="38" Padding="2" text="+Col" />
   </RowView>
   <TabView Name="MainTabView" PrefHeight="300">
     <font name="Arial" size="14" />

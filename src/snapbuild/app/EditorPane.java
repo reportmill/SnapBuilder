@@ -417,6 +417,10 @@ protected void respondUI(ViewEvent anEvent)
     // Handle ShowViewTreeButton
     if(anEvent.equals("ShowViewTreeButton"))
         toggleShowViewTree();
+        
+    // Handle AddRowButton, AddColButton
+    if(anEvent.equals("AddRowButton")) addRowView();
+    if(anEvent.equals("AddColButton")) addColView();
 
     // Handle ViewTree
     if(anEvent.equals(_viewTree)) {
@@ -534,6 +538,36 @@ protected void toggleShowXML()
     else {
         split.removeItemWithAnim(_xmlText);
     }
+}
+
+/**
+ * Adds a new row view.
+ */
+public void addRowView()
+{
+    View view = getSelView();
+    while(view!=getContent() && !(view instanceof ColView)) view = view.getParent();
+    if(!(view instanceof ColView)) return;
+    
+    ColView cview = (ColView)view;
+    RowView nrv = new RowView(); ViewHpr.getHpr(nrv).configure(nrv);
+    cview.addChild(nrv);
+    setSelView(nrv);
+}
+    
+/**
+ * Adds a new col view.
+ */
+public void addColView()
+{
+    View view = getSelView();
+    while(view!=getContent() && !(view instanceof RowView)) view = view.getParent();
+    if(!(view instanceof RowView)) return;
+    
+    RowView rview = (RowView)view;
+    ColView ncv = new ColView(); ViewHpr.getHpr(ncv).configure(ncv);
+    rview.addChild(ncv);
+    setSelView(ncv);
 }
     
 /**
