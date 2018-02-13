@@ -74,7 +74,7 @@ public static class TextFieldHpr <T extends TextField> extends ParentViewHpr <T>
     /** Configures a new View. */
     public void configureGallery(T aView)
     {
-        aView.setColumnCount(14); aView.setPromptText("TextField");
+        aView.setColCount(14); aView.setPromptText("TextField");
     }
 }
 

@@ -1,24 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ColView Padding="10" Spacing="4">
-  <font Name="Arial" Size="12" />
-  <RowView GrowWidth="true" Spacing="4">
-    <ColView GrowHeight="true" Spacing="8">
-      <RowView GrowWidth="true" Spacing="4">
-        <Label text="Name:" />
-        <TextField Name="NameText" GrowWidth="true" />
-      </RowView>
-      <RowView GrowWidth="true" Spacing="4">
-        <Label text="Text:" />
-        <TextField Name="TextText" GrowWidth="true" />
-      </RowView>
-      <RowView GrowWidth="true" Spacing="4">
-        <Label PrefWidth="60" text="Pref Width:" />
-        <Spinner Name="PrefWidthSpinner" PrefWidth="100" />
-      </RowView>
-      <RowView GrowWidth="true" Spacing="4">
-        <Label PrefWidth="60" text="Pref Height:" />
-        <Spinner Name="PrefHeightSpinner" PrefWidth="100" PrefHeight="22" />
-      </RowView>
-    </ColView>
-  </RowView>
-</ColView>
+<RowView Padding="10" GrowWidth="true" Spacing="20">
+  <font name="Arial" size="12" />
+  <ColView GrowHeight="true" Spacing="8">
+    <RowView GrowWidth="true" Spacing="4">
+      <Label text="Name:" />
+      <TextField Name="NameText" GrowWidth="true" />
+    </RowView>
+    <RowView GrowWidth="true" Spacing="4">
+      <Label text="Text:" />
+      <TextField Name="TextText" GrowWidth="true" />
+    </RowView>
+    <RowView GrowWidth="true" Spacing="4">
+      <Label PrefWidth="64" text="Pref Width:" />
+      <Spinner Name="PrefWidthSpinner" PrefWidth="80" />
+    </RowView>
+    <RowView GrowWidth="true" Spacing="4">
+      <Label PrefWidth="64" text="Pref Height:" />
+      <Spinner Name="PrefHeightSpinner" PrefWidth="80" />
+    </RowView>
+    <RowView GrowWidth="true" Spacing="4">
+      <Label PrefWidth="64" PrefHeight="14" text="Min Width:" />
+      <Spinner Name="MinWidthSpinner" PrefWidth="80" />
+    </RowView>
+    <RowView GrowWidth="true" Spacing="4">
+      <Label PrefWidth="64" text="Min Height:" />
+      <Spinner Name="MinHeightSpinner" PrefWidth="80" />
+    </RowView>
+  </ColView>
+  <ColView GrowHeight="true" Spacing="4">
+    <RowView GrowWidth="true" Spacing="4">
+      <Label text="Padding:" />
+      <TextField Name="PaddingText" PrefWidth="100" />
+    </RowView>
+    <RowView GrowWidth="true" Spacing="4">
+      <Label PrefWidth="48" text="Spacing:" />
+      <Spinner Name="SpacingSpinner" PrefWidth="64" PrefHeight="22" />
+    </RowView>
+    <RowView GrowWidth="true">
+      <Label text="LeanX: " />
+      <ToggleButton Name="LeanX0" PrefWidth="22" PrefHeight="22" Padding="2" image="AlignLeft.png" ShowBorder="false" />
+      <ToggleButton Name="LeanX1" PrefWidth="22" PrefHeight="22" Padding="2" image="AlignCenter.png" ShowBorder="false" />
+      <ToggleButton Name="LeanX2" PrefWidth="22" PrefHeight="22" Padding="2" image="AlignRight.png" ShowBorder="false" />
+      <ToggleButton Name="LeanX3" PrefWidth="22" PrefHeight="22" Padding="2" ShowBorder="false" Selected="true" />
+    </RowView>
+    <RowView GrowWidth="true">
+      <Label text="LeanY: " />
+      <ToggleButton Name="LeanY0" PrefWidth="22" PrefHeight="22" Padding="2" image="AlignTop.png" ShowBorder="false" />
+      <ToggleButton Name="LeanY1" PrefWidth="22" PrefHeight="22" Padding="2" image="AlignMiddle.png" ShowBorder="false" />
+      <ToggleButton Name="LeanY2" PrefWidth="22" PrefHeight="22" Padding="2" image="AlignBottom.png" ShowBorder="false" />
+      <ToggleButton Name="LeanY3" PrefWidth="22" PrefHeight="22" Padding="2" ShowBorder="false" Selected="true" />
+    </RowView>
+    <CheckBox Name="GrowWidthCheckBox" text="Grow Width" />
+    <CheckBox Name="GrowHeightCheckBox" text="Grow Height" />
+  </ColView>
+</RowView>

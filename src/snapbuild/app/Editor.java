@@ -375,6 +375,7 @@ protected void contentDidDeepChange(Object aView, PropChange anEvent)
     
     // Forward DeepChanges to EditorPane. Should have add/removeDeepChagneLister methods for this.
     //EditorPane ep = getEditorPane(); if(ep!=null) ep.resetLater();
+    repaint();
 }
 
 // A Shared updater to kick off save
