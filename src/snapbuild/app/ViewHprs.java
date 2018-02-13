@@ -2,7 +2,6 @@ package snapbuild.app;
 import java.util.function.Consumer;
 import snap.gfx.*;
 import snap.view.*;
-import snapbuild.actions.*;
 
 /**
  * A class to hold ViewHpr implementation for standard views.
@@ -120,19 +119,6 @@ public static class ParentViewHpr <T extends ParentView> extends ViewHpr <T> {
  * A ViewHpr for ChildView.
  */
 public static class ChildViewHpr <T extends ChildView> extends ParentViewHpr <T> {
-    
-    /** Returns actions for View. */
-    public Class[] getActionClasses()
-    {
-        return new Class[] {
-            AddChild.class, AddAfter.class, AddBefore.class,
-            SetName.class,
-            SetPadding.class, SetSpacing.class,
-            SetFill.class, SetBorder.class,
-            SetPrefWidth.class, SetPrefHeight.class,
-            SetGrowWidth.class, SetGrowHeight.class, SetLeanX.class, SetLeanY.class,
-            Delete.class, Duplicate.class };
-    }
     
     /** Adds a child view at given index. */
     public boolean addChild(T aView, View aChild, int anIndex)

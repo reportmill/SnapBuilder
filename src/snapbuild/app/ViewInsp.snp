@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<RowView Padding="10" GrowWidth="true" Spacing="20">
+<RowView Padding="14" GrowWidth="true" Spacing="20">
   <font name="Arial" size="12" />
   <ColView GrowHeight="true" Spacing="8">
     <RowView GrowWidth="true" Spacing="4">

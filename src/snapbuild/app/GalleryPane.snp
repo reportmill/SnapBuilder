@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<RowView Padding="10,5,5,5" GrowWidth="true" Spacing="5" FillHeight="true">
+<RowView Padding="12,8,8,8" GrowWidth="true" Spacing="5" FillHeight="true">
   <font name="Arial" size="12" />
   <ColView Padding="4" PrefWidth="110" Spacing="8">
     <EtchBorder />

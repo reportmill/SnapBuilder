@@ -2,7 +2,6 @@ package snapbuild.app;
 import java.util.*;
 import snap.view.*;
 import snapbuild.app.ViewHprs.*;
-import snapbuild.actions.*;
 
 /**
  * A class to provide extra functionality for specific classes.
@@ -14,53 +13,6 @@ public class ViewHpr <T extends View> {
     
     // A map of class to helper instance
     static Map <Class,ViewHpr>   _hprs = new HashMap();
-
-/**
- * Returns actions for View for given category.
- */
-public Action[] getActions(Action.Type aType)
-{
-    List <Action> list = new ArrayList();
-    for(Action a : getActions()) if(isType(aType, a.getType())) list.add(a);
-    return list.toArray(new Action[list.size()]);
-}
-
-boolean isType(Action.Type t0, Action.Type t1)
-{
-    if(t0==t1) return true;
-    if(t0==Action.Type.Prop && t1!=Action.Type.Child) return true;
-    return false;
-}
-
-/**
- * Returns actions for View.
- */
-public Action[] getActions()
-{
-    if(_actions!=null) return _actions;
-    Class <? extends Action> classes[] = getActionClasses();
-    Action acts[] = new Action[classes.length];
-    for(int i=0;i<classes.length;i++) {
-         try { acts[i] = classes[i].newInstance(); }
-         catch(IllegalAccessException e) { throw new RuntimeException(e); }
-         catch(InstantiationException e) { throw new RuntimeException(e); }
-    }
-    return _actions = acts;
-}
-
-/**
- * Returns actions for View.
- */
-public Class[] getActionClasses()
-{
-    return new Class[] {
-        AddAfter.class, AddBefore.class,
-        SetName.class,
-        SetFill.class, SetBorder.class, SetText.class,
-        SetPrefWidth.class, SetPrefHeight.class,
-        SetGrowWidth.class, SetGrowHeight.class, SetLeanX.class, SetLeanY.class,
-        Delete.class, Duplicate.class };
-}
 
 /**
  * Configures a new View.

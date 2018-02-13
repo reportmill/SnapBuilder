@@ -24,17 +24,8 @@ public class EditorPane extends ViewOwner {
     // The deepest view to show in the SelPathBox
     View             _selPathDeep;
     
-    // The command textfield
-    TextField        _cmdText;
-
     // The ViewTree
     TreeView <View>  _viewTree;
-    
-    // The ActionBrowser
-    BrowserView      _actBrwsr;
-    
-    // The current action type
-    Action.Type      _actType = snapbuild.app.Action.Type.Child;
     
     // The GalleryPane
     GalleryPane      _gallery = new GalleryPane(this);
@@ -96,23 +87,6 @@ public View getSelView()  { return _editor.getSelView(); }
  * Sets the Editor.SelView.
  */
 public void setSelView(View aView)  { _editor.setSelView(aView); }
-
-/**
- * Returns the top selected action.
- */
-public Action getSelAction()
-{
-    int cind = _actBrwsr.getSelColIndex();
-    for(int i=cind;i>=0;i--) { Object sitem = _actBrwsr.getCol(i).getSelectedItem();
-        if(sitem instanceof Action)
-            return (Action)sitem; }
-    return null;
-}
-
-/**
- * Returns the top selected action.
- */
-public Object getSelActionItem()  { return _actBrwsr.getSelectedItem(); }
 
 /**
  * Creates a new default editor pane.
@@ -349,11 +323,6 @@ protected void initUI()
     _selPathBox = getView("SelPathBox", RowView.class);
     updateSelPathBox();
     
-    // Get CommandText TextField
-    _cmdText = getView("CommandText", TextField.class);
-    setViewText("CommandButton", "\u23CE");
-    getView("CommandButton", Button.class).setDefaultButton(true);
-    
     // Get/configure ViewTree
     _viewTree = getView("ViewTree", TreeView.class);
     _viewTree.setResolver(new ViewTreeResolver());
@@ -361,22 +330,8 @@ protected void initUI()
     getView("EditorSplitView").setBorder(null);
     getView("EditorSplitView", SplitView.class).removeItem(_viewTree);
     
-    // Get ActionBrowser
-    _actBrwsr = getView("ActionBrowser", BrowserView.class); _actBrwsr.setPrefColCount(3); _actBrwsr.setRowHeight(25);
-    _actBrwsr.setFocusWhenPressed(false);
-    _actBrwsr.setFireActionOnRelease(true);
-    _actBrwsr.setResolver(new ActionResolver());
-    enableEvents(_actBrwsr, MouseRelease);
-    
-    // Set default actions
-    updateActionBrowser();
-    
-    // Set FirstFocus
-    setFirstFocus("CommandText");
-    
-    // Add action for ESCAPE key to pop selection and for ENTER key to invoke action
+    // Add action for ESCAPE key to pop selection
     addKeyActionFilter("EscapeAction", "ESCAPE");
-    //addKeyActionFilter("EnterAction", "ENTER");
     
     // Set Toolbar images
     getView("SaveButton", ButtonBase.class).setImage(Image.get(TextPane.class, "pkg.images/File_Save.png"));
@@ -397,8 +352,6 @@ protected void initUI()
     TabView tabView = getView("MainTabView", TabView.class);
     tabView.addTab("Add Views", _gallery.getUI(), 0);
     tabView.addTab("View Props", _viewInsp.getUI(), 1);
-    tabView.setSelectedIndex(0);
-    tabView.removeTab(2);
 }
 
 /**
@@ -471,23 +424,6 @@ protected void respondUI(ViewEvent anEvent)
         getEditor().setSelView(view);
     }
     
-    // Handle ActionBrowser
-    if(anEvent.equals(_actBrwsr)) {
-        
-        // Handle MouseClick double-click: Invoke action
-        if(anEvent.isMouseClick()) {
-            Action act = getSelAction();
-            if(act!=null && (act.invokeOnClick() || anEvent.getClickCount()==2))
-                invokeAction(act);
-        }
-        
-        // Handle Action: Update CommandText
-        else if(anEvent.isActionEvent()) {
-            _cmdText.setText(_actBrwsr.getPath(" "));
-            _cmdText.setSel(_cmdText.length());
-        }
-    }
-    
     // Handle EscapeAction
     if(anEvent.equals("EscapeAction")) {
         View sview = getSelView(), par = sview.getParent();
@@ -496,39 +432,14 @@ protected void respondUI(ViewEvent anEvent)
         else beep();
     }
     
-    // Handle EnterAction
-    if(anEvent.equals("EnterAction")) {
-        Action act = getSelAction();
-        if(act!=null)
-            invokeAction(act);
-    }
-    
     // Handle SaveMenuItem, SaveButton, SaveAsMenuItem, SaveAsPDFMenuItem, RevertMenuItem
     if(anEvent.equals("SaveMenuItem") || anEvent.equals("SaveButton")) save();
     if(anEvent.equals("SaveAsMenuItem")) saveAs();
     if(anEvent.equals("RevertMenuItem")) revert();
     
-    // Handle Action type buttons
-    if(anEvent.equals("AddViewsButton")) { _actType = snapbuild.app.Action.Type.Child; updateActionBrowser(); }
-    if(anEvent.equals("PosSizeButton")) { _actType = snapbuild.app.Action.Type.Bounds; updateActionBrowser(); }
-    if(anEvent.equals("FillStyleButton")) { _actType = snapbuild.app.Action.Type.Style; updateActionBrowser(); }
-    if(anEvent.equals("OtherButton")) { _actType = snapbuild.app.Action.Type.Misc; updateActionBrowser(); }
-    if(anEvent.equals("PropsButton")) { _actType = snapbuild.app.Action.Type.Prop; updateActionBrowser(); }
-    
     // Handle WinClosing
     if(anEvent.isWinClose()) {
         close(); anEvent.consume(); }
-}
-
-/**
- * Invokes the given action.
- */
-public void invokeAction(Action anAct)
-{
-    anAct.invoke(this);
-    getEditor().repaint();
-    updateXMLText();
-    _cmdText.setText(null);
 }
 
 /**
@@ -546,17 +457,6 @@ protected void updateSelPathBox()
         if(_selPathBox.getChildCount()>1) _selPathBox.addChild(new Label(" \u2022 "),1);
         if(view==cview) break; view = view.getParent();
     }
-}
-
-/**
- * Called to update ActionBrowser.
- */
-protected void updateActionBrowser()
-{
-    View sview = getSelView();
-    Action items[] = getActions(sview);
-    _actBrwsr.setItems((Object[])items);
-    if(items.length>0) _actBrwsr.setSelectedItem(items[0]);
 }
 
 /**
@@ -590,7 +490,6 @@ protected void updateXMLTextSel()
  */
 protected void editorSelViewChange()
 {
-    updateActionBrowser();
     _selPathDeep = getSelView();
     resetLater();
 }
@@ -649,45 +548,6 @@ public String getWindowTitle()
     if(!isEditing()) title += "(preview)";
     else if(getEditor().getUndoer()!=null && getEditor().getUndoer().hasUndos()) title = "* " + title;
     return title;
-}
-
-/**
- * Returns the actions for given view.
- */
-protected Action[] getActions(View aView)  { return ViewHpr.getHpr(aView).getActions(_actType); }
-
-/**
- * ActionResolver.
- */
-public class ActionResolver extends TreeResolver {
-    
-    /** Returns the parent of given item. */
-    public Object getParent(Object anItem)  { return null; }
-    
-    /** Whether given object is a parent (has children). */
-    public boolean isParent(Object anItem)
-    {
-        if(anItem instanceof Action) return ((Action)anItem).hasItems();
-        return false;
-    }
-    
-    /** Returns the children. */
-    public Object[] getChildren(Object aPar)
-    {
-        if(aPar instanceof Action)
-            return ((Action)aPar).getItemArray();
-        return null;
-    }
-    
-    /**
-     * Returns the text to be used for given item.
-     */
-    public String getText(Object anItem)
-    {
-        if(anItem instanceof Action) return ((Action)anItem).getName();
-        if(anItem instanceof Class) return ((Class)anItem).getSimpleName();
-        return anItem.toString();
-    }
 }
 
 /**
