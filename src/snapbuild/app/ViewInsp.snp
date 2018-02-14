@@ -98,8 +98,11 @@
     </RowView>
     <RowView PrefHeight="24" GrowWidth="true" Spacing="4">
       <Label PrefWidth="32" text="Font:" />
-      <ComboBox Name="FontCombo" MinWidth="80" MinHeight="22" />
-      <Separator PrefHeight="18" Vertical="true" />
+      <ComboBox Name="FontCombo" MinWidth="100" MinHeight="22" />
+      <Button Name="FontResetButton" PrefWidth="22" PrefHeight="22" ToolTip="Clear Font Size" ShowBorder="false" text="&#10226;" />
+    </RowView>
+    <RowView PrefHeight="24" GrowWidth="true" Spacing="4">
+      <Label PrefWidth="54" text="Font Size:" />
       <TextField Name="FontSizeText" PrefWidth="40" />
       <Button Name="FontPlusButton" PrefWidth="22" PrefHeight="22" ToolTip="Increase Font Size" ShowBorder="false" />
       <Button Name="FontMinusButton" PrefWidth="22" PrefHeight="22" ToolTip="Decrease Font Size" ShowBorder="false" />

@@ -164,6 +164,7 @@ protected void respondUI(ViewEvent anEvent)
         selView.setFont(font.deriveFont(font.getSize()+1)); }
     if(anEvent.equals("FontMinusButton")) { Font font = selView.getFont();
         selView.setFont(font.deriveFont(font.getSize()-1)); }
+    if(anEvent.equals("FontResetButton")) selView.setFont(null);
     
     // Handle NoBdrButton, LineBdrButton, LowerBdrButton, RaiseBdrButton, EtchBdrButton
     if(anEvent.equals("NoBdrButton")) selView.setBorder(null);

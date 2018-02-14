@@ -543,14 +543,21 @@ protected void toggleShowXML()
  */
 public void addRowView()
 {
+    // Get parent ColView
     View view = getSelView();
-    while(view!=getContent() && !(view instanceof ColView)) view = view.getParent();
-    if(!(view instanceof ColView)) return;
+    ColView colView = null; if(view instanceof ColView) { colView = (ColView)view; view = null; }
+    while(colView==null) {
+        if(view.getParent() instanceof ColView) colView = (ColView)view.getParent();
+        else if(view==getContent()) return;
+        else view = view.getParent();
+    }
     
-    ColView cview = (ColView)view;
-    RowView nrv = new RowView(); ViewHpr.getHpr(nrv).configure(nrv);
-    cview.addChild(nrv);
-    setSelView(nrv);
+    // Create/configure RowView
+    RowView newRow = new RowView(); ViewHpr.getHpr(newRow).configure(newRow);
+    
+    // Add new row to ColView and select it
+    colView.addChild(newRow, view!=null? view.indexInParent()+1 : colView.getChildCount());
+    setSelView(newRow);
 }
     
 /**
@@ -558,14 +565,21 @@ public void addRowView()
  */
 public void addColView()
 {
+    // Get parent RowView
     View view = getSelView();
-    while(view!=getContent() && !(view instanceof RowView)) view = view.getParent();
-    if(!(view instanceof RowView)) return;
+    RowView rowView = null; if(view instanceof RowView) { rowView = (RowView)view; view = null; }
+    while(rowView==null) {
+        if(view==getContent()) return;
+        if(view.getParent() instanceof RowView) rowView = (RowView)view.getParent();
+        else view = view.getParent();
+    }
     
-    RowView rview = (RowView)view;
-    ColView ncv = new ColView(); ViewHpr.getHpr(ncv).configure(ncv);
-    rview.addChild(ncv);
-    setSelView(ncv);
+    // Create/configure RowView
+    ColView newCol = new ColView(); ViewHpr.getHpr(newCol).configure(newCol);
+    
+    // Add new col to RowView and select it
+    rowView.addChild(newCol, view!=null? view.indexInParent()+1 : rowView.getChildCount());
+    setSelView(newCol);
 }
     
 /**
