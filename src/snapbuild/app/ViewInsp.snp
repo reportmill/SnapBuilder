@@ -90,7 +90,7 @@
     <RowView PrefHeight="22" GrowWidth="true" Spacing="4">
       <Label text="Border Stroke:" />
       <ColorButton Name="BorderColorButton" PrefWidth="32" PrefHeight="22" Title="Stroke" />
-      <Spinner Name="BorderWidthSpinner" PrefWidth="46" PrefHeight="22" />
+      <Spinner Name="BorderWidthSpinner" PrefWidth="56" PrefHeight="22" />
     </RowView>
     <RowView PrefHeight="22" GrowWidth="true" Spacing="4">
       <Label ToolTip="" text="Fill:" />
