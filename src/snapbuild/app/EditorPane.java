@@ -350,8 +350,8 @@ protected void initUI()
     
     // Add GalleryPane
     TabView tabView = getView("MainTabView", TabView.class);
-    tabView.addTab("Add Views", _gallery.getUI(), 0);
-    tabView.addTab("View Props", _viewInsp.getUI(), 1);
+    tabView.addTab(" Add Views ", _gallery.getUI(), 0);
+    tabView.addTab(" Properties ", _viewInsp.getUI(), 1);
 }
 
 /**

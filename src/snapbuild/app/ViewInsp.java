@@ -1,7 +1,9 @@
 package snapbuild.app;
 import snap.gfx.*;
+import snap.gfx.Border.*;
 import snap.util.StringUtils;
 import snap.view.*;
+import snap.viewx.ColorButton;
 
 /**
  * An inspector for View properties.
@@ -22,6 +24,18 @@ public ViewInsp(EditorPane anEP)  { _epane = anEP; }
 protected void initUI()
 {
     //Spinner pws = getView("PrefWidthSpinner", Spinner.class), phs = getView("PrefHeightSpinner", Spinner.class);
+    
+    // Configure Borders
+    Label l0 = getView("NoBdrButton", ButtonBase.class).getLabel(); l0.setPrefSize(16,16);
+    l0.setBorder(Color.LIGHTGRAY,1);
+    Label l1 = getView("LineBdrButton", ButtonBase.class).getLabel(); l1.setPrefSize(16,16);
+    l1.setBorder(Color.BLACK,1);
+    Label l2 = getView("LowerBdrButton", ButtonBase.class).getLabel(); l2.setPrefSize(16,16);
+    l2.setBorder(new BevelBorder(0));
+    Label l3 = getView("RaiseBdrButton", ButtonBase.class).getLabel(); l3.setPrefSize(16,16);
+    l3.setBorder(new BevelBorder(1));
+    Label l4 = getView("EtchBdrButton", ButtonBase.class).getLabel(); l4.setPrefSize(16,16);
+    l4.setBorder(new EtchBorder());
 }
 
 /**
@@ -33,9 +47,10 @@ protected void resetUI()
     Editor editor = _epane.getEditor();
     View selView = editor.getSelView();
     
-    // Update NameText, TextText
+    // Update NameText, TextText, ToolTipText
     setViewText("NameText", selView.getName());
     setViewText("TextText", selView.getText());
+    setViewText("ToolTipText", selView.getToolTip());
     
     // Update PrefWidthSpinner, PrefHeightSpinner
     Spinner pws = getView("PrefWidthSpinner", Spinner.class), phs = getView("PrefHeightSpinner", Spinner.class);
@@ -72,6 +87,17 @@ protected void resetUI()
     // Update Align
     Pos align = selView.getAlign();
     setViewValue("Align" + align.ordinal(), true);
+    
+    // Update Border Buttons
+    Border bdr = selView.getBorder();
+    setViewValue("NoBdrButton", bdr==null);
+    setViewValue("LineBdrButton", bdr instanceof LineBorder);
+    setViewValue("LowerBdrButton", bdr instanceof BevelBorder && ((BevelBorder)bdr).getType()==0);
+    setViewValue("RaiseBdrButton", bdr instanceof BevelBorder && ((BevelBorder)bdr).getType()==1);
+    setViewValue("EtchBdrButton", bdr instanceof EtchBorder);
+    
+    // Update OpacitySlider
+    setViewValue("OpacitySlider", selView.getOpacity());
 }
 
 /**
@@ -83,9 +109,10 @@ protected void respondUI(ViewEvent anEvent)
     Editor editor = _epane.getEditor();
     View selView = editor.getSelView();
     
-    // Handle NameText, TextText
+    // Handle NameText, TextText, ToolTipText
     if(anEvent.equals("NameText")) selView.setName(anEvent.getStringValue());
     if(anEvent.equals("TextText")) selView.setText(anEvent.getStringValue());
+    if(anEvent.equals("ToolTipText")) selView.setToolTip(anEvent.getStringValue());
     
     // Handle PrefWidthSpinner, PrefHeightSpinner, MinWidthSpinner, MinHeightSpinner
     if(anEvent.equals("PrefWidthSpinner")) selView.setPrefWidth(anEvent.getFloatValue());
@@ -118,6 +145,28 @@ protected void respondUI(ViewEvent anEvent)
         Pos pos = Pos.values()[val];
         selView.setAlign(pos);
     }
+    
+    // Handle NoBdrButton, LineBdrButton, LowerBdrButton, RaiseBdrButton, EtchBdrButton
+    if(anEvent.equals("NoBdrButton")) selView.setBorder(null);
+    if(anEvent.equals("LineBdrButton")) selView.setBorder(Color.BLACK, 1);
+    if(anEvent.equals("LowerBdrButton")) selView.setBorder(new BevelBorder(0));
+    if(anEvent.equals("RaiseBdrButton")) selView.setBorder(new BevelBorder(1));
+    if(anEvent.equals("EtchBdrButton")) selView.setBorder(new EtchBorder());
+    
+    // Handle BorderColorButton
+    if(anEvent.equals("BorderColorButton")) {
+        Border bdr = selView.getBorder();
+        Color color = getView("BorderColorButton", ColorButton.class).getColor();
+        double w = bdr instanceof LineBorder? ((LineBorder)bdr).getWidth() : 1;
+        selView.setBorder(color, w);
+    }
+    
+    // Handle FillColorButton
+    if(anEvent.equals("FillColorButton"))
+        selView.setFill(getView("FillColorButton", ColorButton.class).getColor());
+    
+    // Handle OpacitySlider
+    if(anEvent.equals("OpacitySlider")) selView.setOpacity(anEvent.getFloatValue());
 }
 
 }
