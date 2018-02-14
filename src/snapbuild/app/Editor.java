@@ -220,9 +220,11 @@ protected void paintAbove(Painter aPntr)
     }
     
     // Repaint selected view
-    Point pnt = sview.getParent().localToParent(sview.getX(), sview.getY(), this);
-    aPntr.translate(pnt.getX(), pnt.getY());
-    ViewUtils.paintAll(sview, aPntr);
+    if(sview.getRotate()==0) {
+        Point pnt = sview.getParent().localToParent(sview.getX(), sview.getY(), this);
+        aPntr.translate(pnt.getX(), pnt.getY());
+        ViewUtils.paintAll(sview, aPntr);
+    }
 }
 
 /**

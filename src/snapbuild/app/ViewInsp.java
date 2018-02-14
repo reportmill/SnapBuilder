@@ -96,8 +96,12 @@ protected void resetUI()
     setViewValue("RaiseBdrButton", bdr instanceof BevelBorder && ((BevelBorder)bdr).getType()==1);
     setViewValue("EtchBdrButton", bdr instanceof EtchBorder);
     
-    // Update OpacitySlider
+    // Update BorderWidthSpinner
+    setViewValue("BorderWidthSpinner", bdr!=null? bdr.getWidth() : 0);
+    
+    // Update OpacitySlider, RotationThumb
     setViewValue("OpacitySlider", selView.getOpacity());
+    setViewValue("RotationThumb", selView.getRotate());
 }
 
 /**
@@ -161,12 +165,20 @@ protected void respondUI(ViewEvent anEvent)
         selView.setBorder(color, w);
     }
     
+    // Handle BorderWidthSpinner
+    if(anEvent.equals("BorderWidthSpinner")) {
+        Border bdr = selView.getBorder();
+        Color color = bdr!=null? bdr.getColor() : Color.BLACK;
+        selView.setBorder(color, anEvent.getFloatValue());
+    }
+    
     // Handle FillColorButton
     if(anEvent.equals("FillColorButton"))
         selView.setFill(getView("FillColorButton", ColorButton.class).getColor());
     
     // Handle OpacitySlider
     if(anEvent.equals("OpacitySlider")) selView.setOpacity(anEvent.getFloatValue());
+    if(anEvent.equals("RotationThumb")) selView.setRotate(anEvent.getFloatValue());
 }
 
 }

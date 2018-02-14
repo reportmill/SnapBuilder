@@ -78,23 +78,28 @@
     </RowView>
   </ColView>
   <ColView GrowHeight="true" />
-  <ColView Padding="4" GrowHeight="true" Spacing="4">
-    <RowView Padding="4" GrowWidth="true" Spacing="4">
+  <ColView GrowHeight="true" Spacing="4">
+    <RowView PrefHeight="24" GrowWidth="true" Spacing="4">
       <Label text="Border:" />
       <ToggleButton Name="NoBdrButton" Padding="2" ToolTip="No Border" />
       <ToggleButton Name="LowerBdrButton" Padding="2" ToolTip="RaisedBorder" />
       <ToggleButton Name="RaiseBdrButton" Padding="2" ToolTip="Lowered Border" />
       <ToggleButton Name="EtchBdrButton" Padding="2" ToolTip="Etched Border" />
       <ToggleButton Name="LineBdrButton" Padding="2" ToolTip="Line Border" />
-      <ColorButton Name="BorderColorButton" Title="Stroke" />
+      <ColorButton Name="BorderColorButton" PrefWidth="32" PrefHeight="22" Title="Stroke" />
+      <Spinner Name="BorderWidthSpinner" PrefWidth="46" PrefHeight="22" />
     </RowView>
-    <RowView Padding="4" GrowWidth="true" Spacing="4">
+    <RowView PrefHeight="22" GrowWidth="true" Spacing="4">
       <Label ToolTip="" text="Fill:" />
-      <ColorButton Name="FillColorButton" Title="ViewFill" />
+      <ColorButton Name="FillColorButton" PrefWidth="32" PrefHeight="22" Title="ViewFill" />
     </RowView>
-    <RowView Padding="4" GrowWidth="true" Spacing="4">
+    <RowView PrefHeight="22" GrowWidth="true" Spacing="4">
       <Label text="Opacity:" />
       <Slider Name="OpacitySlider" Max="1" Value="0" />
+    </RowView>
+    <RowView PrefHeight="22" GrowWidth="true" Spacing="4">
+      <Label text="Rotation:" />
+      <ThumbWheel Name="RotationThumb" PrefWidth="120" PrefHeight="18" />
     </RowView>
   </ColView>
 </RowView>
