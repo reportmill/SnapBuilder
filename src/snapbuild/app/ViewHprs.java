@@ -78,6 +78,22 @@ public static class TextFieldHpr <T extends TextField> extends ParentViewHpr <T>
 }
 
 /**
+ * A ViewHpr for ComboBox.
+ */
+public static class ComboBoxHpr <T extends ComboBox> extends ParentViewHpr <T> {
+    
+    /** Configures a new View. */
+    public void configure(T aView)  { aView.setMinSize(80,22); }
+    
+    /** Configures a new View. */
+    public void configureGallery(T aView)
+    {
+        aView.setMinSize(80,22);
+        aView.setItems("ComboBox" ); aView.setSelectedItem("ComboBox");
+    }
+}
+
+/**
  * A ViewHpr for ProgressBar.
  */
 public static class ProgressBarHpr <T extends ProgressBar> extends ViewHpr <T> {

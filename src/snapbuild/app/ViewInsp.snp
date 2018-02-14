@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<RowView Padding="20" GrowWidth="true" Spacing="20">
+<RowView Padding="20,20,5,20" GrowWidth="true" Spacing="20">
   <font name="Arial" size="12" />
-  <ColView GrowHeight="true" Spacing="8">
+  <ColView GrowHeight="true" Spacing="6">
     <RowView GrowWidth="true" Spacing="4">
       <Label text="Name:" />
       <TextField Name="NameText" GrowWidth="true" />
@@ -31,12 +31,12 @@
       <Spinner Name="MinHeightSpinner" PrefWidth="80" />
     </RowView>
   </ColView>
-  <ColView GrowHeight="true" Spacing="4">
+  <ColView GrowHeight="true" Spacing="6">
     <RowView GrowWidth="true" Spacing="4">
       <Label text="Padding:" />
       <TextField Name="PaddingText" PrefWidth="100" />
     </RowView>
-    <RowView GrowWidth="true" Spacing="4">
+    <RowView PrefHeight="24" GrowWidth="true" Spacing="4">
       <Label PrefWidth="48" text="Spacing:" />
       <Spinner Name="SpacingSpinner" PrefWidth="64" PrefHeight="22" />
     </RowView>
@@ -78,14 +78,17 @@
     </RowView>
   </ColView>
   <ColView GrowHeight="true" />
-  <ColView GrowHeight="true" Spacing="4">
+  <ColView GrowHeight="true" Spacing="6">
     <RowView PrefHeight="24" GrowWidth="true" Spacing="4">
-      <Label text="Border:" />
+      <Label PrefWidth="42" text="Border:" />
       <ToggleButton Name="NoBdrButton" Padding="2" ToolTip="No Border" />
       <ToggleButton Name="LowerBdrButton" Padding="2" ToolTip="RaisedBorder" />
       <ToggleButton Name="RaiseBdrButton" Padding="2" ToolTip="Lowered Border" />
       <ToggleButton Name="EtchBdrButton" Padding="2" ToolTip="Etched Border" />
       <ToggleButton Name="LineBdrButton" Padding="2" ToolTip="Line Border" />
+    </RowView>
+    <RowView PrefHeight="22" GrowWidth="true" Spacing="4">
+      <Label text="Border Stroke:" />
       <ColorButton Name="BorderColorButton" PrefWidth="32" PrefHeight="22" Title="Stroke" />
       <Spinner Name="BorderWidthSpinner" PrefWidth="46" PrefHeight="22" />
     </RowView>
@@ -93,12 +96,20 @@
       <Label ToolTip="" text="Fill:" />
       <ColorButton Name="FillColorButton" PrefWidth="32" PrefHeight="22" Title="ViewFill" />
     </RowView>
-    <RowView PrefHeight="22" GrowWidth="true" Spacing="4">
-      <Label text="Opacity:" />
-      <Slider Name="OpacitySlider" Max="1" Value="0" />
+    <RowView PrefHeight="24" GrowWidth="true" Spacing="4">
+      <Label PrefWidth="32" text="Font:" />
+      <ComboBox Name="FontCombo" MinWidth="80" MinHeight="22" />
+      <Separator PrefHeight="18" Vertical="true" />
+      <TextField Name="FontSizeText" PrefWidth="40" />
+      <Button Name="FontPlusButton" PrefWidth="22" PrefHeight="22" ToolTip="Increase Font Size" ShowBorder="false" />
+      <Button Name="FontMinusButton" PrefWidth="22" PrefHeight="22" ToolTip="Decrease Font Size" ShowBorder="false" />
     </RowView>
     <RowView PrefHeight="22" GrowWidth="true" Spacing="4">
-      <Label text="Rotation:" />
+      <Label PrefWidth="50" text="Opacity:" />
+      <Slider Name="OpacitySlider" PrefWidth="120" Max="1" Value="0" />
+    </RowView>
+    <RowView PrefHeight="22" GrowWidth="true" Spacing="4">
+      <Label PrefWidth="50" text="Rotation:" />
       <ThumbWheel Name="RotationThumb" PrefWidth="120" PrefHeight="18" />
     </RowView>
   </ColView>

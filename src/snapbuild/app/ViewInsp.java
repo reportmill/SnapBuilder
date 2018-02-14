@@ -3,7 +3,7 @@ import snap.gfx.*;
 import snap.gfx.Border.*;
 import snap.util.StringUtils;
 import snap.view.*;
-import snap.viewx.ColorButton;
+import snap.viewx.*;
 
 /**
  * An inspector for View properties.
@@ -23,7 +23,11 @@ public ViewInsp(EditorPane anEP)  { _epane = anEP; }
  */
 protected void initUI()
 {
-    //Spinner pws = getView("PrefWidthSpinner", Spinner.class), phs = getView("PrefHeightSpinner", Spinner.class);
+    // Set Font button images
+    setViewItems("FontCombo", new String[] { "Arial", "ArialBold"});
+    setViewSelectedItem("FontCombo", "Arial");
+    getView("FontPlusButton", ButtonBase.class).setImage(Image.get(TextPane.class, "pkg.images/Font_Increase.png"));
+    getView("FontMinusButton", ButtonBase.class).setImage(Image.get(TextPane.class, "pkg.images/Font_Decrease.png"));
     
     // Configure Borders
     Label l0 = getView("NoBdrButton", ButtonBase.class).getLabel(); l0.setPrefSize(16,16);
@@ -88,6 +92,9 @@ protected void resetUI()
     Pos align = selView.getAlign();
     setViewValue("Align" + align.ordinal(), true);
     
+    // Update FontSizeText
+    setViewValue("FontSizeText", selView.getFont().getSize());
+    
     // Update Border Buttons
     Border bdr = selView.getBorder();
     setViewValue("NoBdrButton", bdr==null);
@@ -149,6 +156,14 @@ protected void respondUI(ViewEvent anEvent)
         Pos pos = Pos.values()[val];
         selView.setAlign(pos);
     }
+    
+    // Handle FontSizeText, FontPlusButton, FontMinusButton
+    if(anEvent.equals("FontSizeText")) { Font font = selView.getFont();
+        selView.setFont(font.deriveFont(anEvent.getFloatValue())); }
+    if(anEvent.equals("FontPlusButton")) { Font font = selView.getFont();
+        selView.setFont(font.deriveFont(font.getSize()+1)); }
+    if(anEvent.equals("FontMinusButton")) { Font font = selView.getFont();
+        selView.setFont(font.deriveFont(font.getSize()-1)); }
     
     // Handle NoBdrButton, LineBdrButton, LowerBdrButton, RaiseBdrButton, EtchBdrButton
     if(anEvent.equals("NoBdrButton")) selView.setBorder(null);
