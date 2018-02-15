@@ -30,6 +30,15 @@ public void configureGallery(T aView)  { configure(aView); }
 public boolean addChild(T aView, View aChild, int anIndex)  { ViewUtils.beep(); return false; }
 
 /**
+ * Adds a view relative to given view.
+ */
+public boolean addView(T aView, View aView2)
+{
+    ParentView par = aView.getParent();
+    return getHpr(par).addChild(par, aView2, aView.indexInParent()+1);
+}
+
+/**
  * Returns a ViewHpr subclass for given class.
  */
 public static ViewHpr getHpr(Object anObj)
@@ -67,6 +76,7 @@ public static ViewHpr createHpr(Class aCls)
     if(aCls==TabView.class) return new TabViewHpr();
     if(aCls==TableView.class) return new TableViewHpr();
     if(aCls==TextField.class) return new TextFieldHpr();
+    if(aCls==TextView.class) return new TextViewHpr();
     if(aCls==ThumbWheel.class) return new ThumbWheelHpr();
     if(aCls==TitleView.class) return new TitleViewHpr();
     if(aCls==TreeView.class) return new TreeViewHpr();

@@ -131,9 +131,15 @@ protected void respondUI(ViewEvent anEvent)
     if(anEvent.equals("MinWidthSpinner")) selView.setMinWidth(anEvent.getFloatValue());
     if(anEvent.equals("MinHeightSpinner")) selView.setMinHeight(anEvent.getFloatValue());
     
-    // Handle PaddingText, SpacingSpinner
+    // Handle PWAdd10Button, PHAdd10Button
+    if(anEvent.equals("PWAdd10Button")) selView.setPrefWidth(selView.getPrefWidth()+10);
+    if(anEvent.equals("PHAdd10Button")) selView.setPrefHeight(selView.getPrefHeight()+10);
+    
+    // Handle PaddingText, SpacingSpinner, PadAdd5Button, SpaceAdd5Button
     if(anEvent.equals("PaddingText")) selView.setPadding(Insets.get(anEvent.getStringValue()));
     if(anEvent.equals("SpacingSpinner")) selView.setSpacing(anEvent.getFloatValue());
+    if(anEvent.equals("PadAdd5Button")) selView.setPadding(Insets.add(selView.getPadding(), 5, 5, 5, 5));
+    if(anEvent.equals("SpaceAdd5Button")) selView.setSpacing(selView.getSpacing()+5);
     
     // Handle LeanX, LeanY
     if(anEvent.equals("LeanX0")) selView.setLeanX(HPos.LEFT);

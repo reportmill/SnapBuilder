@@ -1,44 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <RowView Padding="20,20,5,20" GrowWidth="true" Spacing="20">
-  <font name="Arial" size="12" />
+  <Font Name="Arial" Size="12" />
   <ColView GrowHeight="true" Spacing="6">
     <RowView GrowWidth="true" Spacing="4">
       <Label text="Name:" />
-      <TextField Name="NameText" GrowWidth="true" />
+      <TextField Name="NameText" PrefWidth="160" GrowWidth="true" ColCount="12" />
     </RowView>
     <RowView GrowWidth="true" Spacing="4">
       <Label text="Text:" />
-      <TextField Name="TextText" GrowWidth="true" />
+      <TextField Name="TextText" GrowWidth="true" ColCount="12" />
     </RowView>
     <RowView GrowWidth="true" Spacing="4">
       <Label text="ToolTip:" />
-      <TextField Name="ToolTipText" GrowWidth="true" />
+      <TextField Name="ToolTipText" GrowWidth="true" ColCount="12" />
     </RowView>
-    <RowView GrowWidth="true" Spacing="4">
+    <RowView PrefWidth="148" GrowWidth="true" Spacing="4">
       <Label PrefWidth="64" text="Pref Width:" />
-      <Spinner Name="PrefWidthSpinner" PrefWidth="80" />
+      <Spinner Name="PrefWidthSpinner" PrefWidth="75" />
+      <Button Name="PWAdd10Button" PrefWidth="22" PrefHeight="22" Padding="2" text="+10" ShowBorder="false" />
     </RowView>
     <RowView GrowWidth="true" Spacing="4">
       <Label PrefWidth="64" text="Pref Height:" />
-      <Spinner Name="PrefHeightSpinner" PrefWidth="80" />
+      <Spinner Name="PrefHeightSpinner" PrefWidth="75" />
+      <Button Name="PHAdd10Button" Padding="2" text="+10" ShowBorder="false" />
     </RowView>
     <RowView GrowWidth="true" Spacing="4">
       <Label PrefWidth="64" PrefHeight="14" text="Min Width:" />
-      <Spinner Name="MinWidthSpinner" PrefWidth="80" />
+      <Spinner Name="MinWidthSpinner" PrefWidth="75" />
     </RowView>
     <RowView GrowWidth="true" Spacing="4">
       <Label PrefWidth="64" text="Min Height:" />
-      <Spinner Name="MinHeightSpinner" PrefWidth="80" />
+      <Spinner Name="MinHeightSpinner" PrefWidth="75" />
     </RowView>
   </ColView>
   <ColView GrowHeight="true" Spacing="6">
     <RowView GrowWidth="true" Spacing="4">
       <Label text="Padding:" />
-      <TextField Name="PaddingText" PrefWidth="100" />
+      <TextField Name="PaddingText" PrefWidth="100" ColCount="12" />
+      <Button Name="PadAdd5Button" PrefWidth="22" PrefHeight="22" Padding="2" text="+5" ShowBorder="false" />
     </RowView>
     <RowView PrefHeight="24" GrowWidth="true" Spacing="4">
       <Label PrefWidth="48" text="Spacing:" />
       <Spinner Name="SpacingSpinner" PrefWidth="64" PrefHeight="22" />
+      <Button Name="SpaceAdd5Button" PrefWidth="22" PrefHeight="22" Padding="2" text="+5" ShowBorder="false" />
     </RowView>
     <RowView GrowWidth="true">
       <Label text="LeanX: " />
@@ -99,11 +103,11 @@
     <RowView PrefHeight="24" GrowWidth="true" Spacing="4">
       <Label PrefWidth="32" text="Font:" />
       <ComboBox Name="FontCombo" MinWidth="100" MinHeight="22" />
-      <Button Name="FontResetButton" PrefWidth="22" PrefHeight="22" ToolTip="Clear Font Size" ShowBorder="false" text="&#10226;" />
+      <Button Name="FontResetButton" PrefWidth="22" PrefHeight="22" ToolTip="Clear Font Size" text="&#10226;" ShowBorder="false" />
     </RowView>
     <RowView PrefHeight="24" GrowWidth="true" Spacing="4">
       <Label PrefWidth="54" text="Font Size:" />
-      <TextField Name="FontSizeText" PrefWidth="40" />
+      <TextField Name="FontSizeText" PrefWidth="40" ColCount="12" />
       <Button Name="FontPlusButton" PrefWidth="22" PrefHeight="22" ToolTip="Increase Font Size" ShowBorder="false" />
       <Button Name="FontMinusButton" PrefWidth="22" PrefHeight="22" ToolTip="Decrease Font Size" ShowBorder="false" />
     </RowView>

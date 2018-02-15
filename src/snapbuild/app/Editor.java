@@ -117,14 +117,9 @@ public void addView(Class <? extends View> aCls)
     View view = null; try { view = aCls.newInstance(); } catch(Exception e) { }
     ViewHpr.getHpr(view).configure(view);
     
-    // Get selected view
+    // Get selected view, have helper add view and select view
     View sview = getSelView();
-    if(sview instanceof ChildView)
-        ((ChildView)sview).addChild(view);
-    else if(sview.getParent() instanceof ChildView)
-        ((ChildView)sview.getParent()).addChild(view);
-        
-    // Select view
+    ViewHpr.getHpr(sview).addView(sview, view);
     setSelView(view);
 }
 
@@ -263,13 +258,9 @@ public void paste()
         byte bytes[] = cb.getDataBytes(SNAP_XML_TYPE);
         View view = new ViewArchiver().getView(bytes);
         
-        // Get selected view
+        // Get selected view, add new view and select it
         View sview = getSelView();
-        ParentView par = sview.getParent();
-        int ind = sview.indexInParent();
-        
-        // Add view and select it
-        ViewHpr.getHpr(par).addChild(par, view, ind+1);
+        ViewHpr.getHpr(sview).addView(sview, view);
         setSelView(view);
     }
 }

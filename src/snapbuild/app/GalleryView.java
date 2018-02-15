@@ -24,11 +24,13 @@ public GalleryView()
         ProgressBar.class, Spinner.class,
             
         // Containers
-        ColView.class, RowView.class, TitleView.class, TabView.class, ScrollView.class, SplitView.class,
-        BorderView.class,
+        TextView.class, TitleView.class, TabView.class, ScrollView.class, SplitView.class,
             
         // Lists
         ListView.class, TableView.class, TreeView.class, BrowserView.class,
+            
+        // Simple containers
+        ColView.class, RowView.class, BorderView.class,
             
         // Graphics
         //ImageView.class, RectView.class, PathView.class, ArcView.class, StringView.class DocView.class, PageView.class

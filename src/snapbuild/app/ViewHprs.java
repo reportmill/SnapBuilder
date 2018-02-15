@@ -68,12 +68,12 @@ public static class RadioButtonHpr <T extends RadioButton> extends ToggleButtonH
 public static class TextFieldHpr <T extends TextField> extends ParentViewHpr <T> {
     
     /** Configures a new View. */
-    public void configure(T aView)  { aView.setMinWidth(80); }
+    public void configure(T aView)  { } //aView.setMinWidth(80);
     
     /** Configures a new View. */
     public void configureGallery(T aView)
     {
-        aView.setColCount(14); aView.setPromptText("TextField");
+        aView.setColCount(12); aView.setPromptText("TextField");
     }
 }
 
@@ -142,6 +142,271 @@ public static class ChildViewHpr <T extends ChildView> extends ParentViewHpr <T>
         aView.addChild(aChild, anIndex);
         return true;
     }
+    
+    /** Adds a view relative to given view. */
+    public boolean addView(T aView, View aView2)
+    {
+        aView.addChild(aView2);
+        return true;
+    }
+}
+
+/**
+ * A ViewHpr for TextView.
+ */
+public static class TextViewHpr <T extends TextView> extends ParentViewHpr <T> {
+
+    /** Configures a new View. */
+    public void configure(T aView)  { aView.setMinSize(120,60); }
+    
+    /** Configures a new View. */
+    public void configureGallery(T aView)
+    {
+        aView.setFont(Font.Arial10);
+        aView.setMinSize(140,40); aView.setMaxSize(140,40);
+        aView.getScrollView().setShowVBar(true); aView.getScrollView().setBarSize(10);
+        aView.getTextArea().setMinHeight(300);
+        
+        aView.setText("TextView"); aView.setTextFill(Color.GRAY);
+    }
+}
+
+/**
+ * A ViewHpr for TitleView.
+ */
+public static class TitleViewHpr <T extends TitleView> extends ParentViewHpr <T> {
+
+    /** Configures a new View. */
+    public void configure(T aView)
+    {
+        aView.setMinSize(120,60);
+        aView.setTitle("Title");
+    }
+    
+    /** Configures a new View. */
+    public void configureGallery(T aView)
+    {
+        aView.setTitle("Title"); aView.setFont(Font.Arial10);
+        Label label = new Label("TitleView"); label.setPadding(0,40,8,40); label.setTextFill(Color.GRAY);
+        aView.setContent(label);
+    }
+    
+    /** Adds a view relative to given view. */
+    public boolean addView(T aView, View aView2)
+    {
+        aView.setContent(aView2);
+        return true;
+    }
+}
+
+/**
+ * A ViewHpr for TabView.
+ */
+public static class TabViewHpr <T extends TabView> extends ParentViewHpr <T> {
+
+    /** Configures a new View. */
+    public void configure(T aView)
+    {
+        aView.setMinSize(120,60);
+        aView.addTab("One", new BoxView());
+    }
+    
+    /** Configures a new View. */
+    public void configureGallery(T aView)
+    {
+        aView.setFont(Font.Arial10);
+        Label label = new Label("TabView"); label.setPadding(4,40,4,40); label.setTextFill(Color.GRAY);
+        aView.addTab("  One  ", label);
+        aView.addTab("  Two  ", new BoxView());
+    }
+    
+    /** Adds a view relative to given view. */
+    public boolean addView(T aView, View aView2)
+    {
+        int c = aView.getTabCount()-1;
+        if(c>=0 && aView.getTabContent(c) instanceof Label)
+            aView.setTabContent(aView2, c);
+        else aView.addTab("New Tab", aView2);
+        return true;
+    }
+}
+
+/**
+ * A ViewHpr for ScrollView.
+ */
+public static class ScrollViewHpr <T extends ScrollView> extends ParentViewHpr <T> {
+
+    /** Configures a new View. */
+    public void configure(T aView)  { aView.setMinSize(120,60); }
+    
+    /** Configures a new View. */
+    public void configureGallery(T aView)
+    {
+        aView.setPrefSize(140,40); aView.setFont(Font.Arial10);
+        aView.setShowVBar(true); aView.setShowHBar(true); aView.setBarSize(10);
+        Label label = new Label("ScrollView"); label.setPadding(8,35,8,45); label.setTextFill(Color.GRAY);
+        label.setAlign(Pos.TOP_LEFT);
+        aView.setContent(label); label.setFill(Color.WHITE); label.setMinSize(600,600);
+    }
+    
+    /** Adds a view relative to given view. */
+    public boolean addView(T aView, View aView2)
+    {
+        aView.setContent(aView2);
+        return true;
+    }
+}
+
+/**
+ * A ViewHpr for SplitView.
+ */
+public static class SplitViewHpr <T extends SplitView> extends ParentViewHpr <T> {
+
+    /** Configures a new View. */
+    public void configure(T aView)  { aView.setMinSize(120,60); }
+    
+    /** Configures a new View. */
+    public void configureGallery(T aView)
+    {
+        aView.setFont(Font.Arial10); aView.setBorder(new Border.BevelBorder(0));
+        Label label0 = new Label("Split"); label0.setPadding(10,20,10,20); label0.setTextFill(Color.GRAY);
+        Label label1 = new Label("View"); label1.setPadding(10,20,10,20); label1.setTextFill(Color.GRAY);
+        aView.setItems(label0,label1);
+    }
+    
+    /** Adds a view relative to given view. */
+    public boolean addView(T aView, View aView2)
+    {
+        aView.addItem(aView2);
+        return true;
+    }
+}
+
+/**
+ * A ViewHpr for ListView.
+ */
+public static class ListViewHpr <T extends ListView> extends ParentViewHpr <T> {
+
+    /** Configures a new View. */
+    public void configure(T aView)  { aView.setMinSize(120,60); }
+    
+    /** Configures a new View. */
+    public void configureGallery(T aView)
+    {
+        aView.setFont(Font.Arial10);
+        aView.setMinWidth(120);
+        aView.getScrollView().setShowVBar(true); aView.getScrollView().setBarSize(10);
+        
+        aView.setItems("ListView", "Item two", "Item three");
+        aView.setCellConfigure(c -> configureCell(c));
+    }
+    
+    void configureCell(Object lc)  { ((ListCell)lc).setTextFill(Color.GRAY); }
+}
+
+/**
+ * A ViewHpr for TableView.
+ */
+public static class TableViewHpr <T extends TableView> extends ParentViewHpr <T> {
+
+    /** Configures a new View. */
+    public void configure(T aView)  { aView.setMinSize(100,60); }
+    
+    /** Configures a new View. */
+    public void configureGallery(T aView)
+    {
+        aView.setFont(Font.Arial10);
+        aView.setRowHeight(17); aView.setPrefWidth(120);
+        
+        TableCol col = new TableCol();
+        aView.addCol(col); col.setGrowWidth(true);
+        aView.getScrollView().setShowVBar(true); aView.getScrollView().setBarSize(10);
+        
+        aView.setItems("TableView", "Item two", "Item three");
+        aView.setCellConfigure(c -> configureCell(c));
+    }
+    
+    void configureCell(Object lc)  { ((ListCell)lc).setTextFill(Color.GRAY); }
+}
+
+/**
+ * A ViewHpr for TreeView.
+ */
+public static class TreeViewHpr <T extends TreeView> extends ParentViewHpr <T> {
+
+    /** Configures a new View. */
+    public void configure(T aView)  { aView.setMinSize(100,60); }
+    
+    /** Configures a new View. */
+    public void configureGallery(T aView)
+    {
+        aView.setFont(Font.Arial10);
+        aView.setRowHeight(15); aView.setPrefWidth(120);
+        
+        aView.getScrollView().setShowVBar(true); aView.getScrollView().setBarSize(10);
+        
+        aView.setItems("TreeView");
+        aView.setResolver(new TR());
+        aView.setCellConfigure(c -> configureCell(c));
+        aView.expandAll();
+    }
+    
+    void configureCell(Object lc)  { ((ListCell)lc).setTextFill(Color.GRAY); }
+    
+    private static class TR extends TreeResolver <String> {
+        
+        /** Returns the parent of given item. */
+        public String getParent(String anItem)  { return null; }
+    
+        /** Whether given object is a parent (has children). */
+        public boolean isParent(String anItem)  { return anItem.equals("TreeView"); }
+
+        /** Returns the children. */
+        public String[] getChildren(String aParent)  { return new String[] { "     Item two", "     Item three" }; }
+    }
+}
+
+/**
+ * A ViewHpr for BrowserView.
+ */
+public static class BrowserViewHpr <T extends BrowserView> extends ParentViewHpr <T> {
+
+    /** Configures a new View. */
+    public void configure(T aView)  { aView.setMinSize(120,60); }
+    
+    /** Configures a new View. */
+    public void configureGallery(T aView)
+    {
+        aView.setFont(Font.Arial10);
+        aView.setRowHeight(15); aView.setPrefSize(160,50);
+        
+        aView.setResolver(new BR());
+        aView.setItems("BrowserView");
+        aView.setCellConfigure((Consumer <ListCell>)c -> configureCell(c));
+        aView.setSelectedItem("BrowserView");
+        
+        aView.getScrollView().setShowHBar(true); aView.getScrollView().setBarSize(10);
+        aView.getCol(0).getScrollView().setShowVBar(true); aView.getCol(0).getScrollView().setBarSize(10);
+        aView.getCol(1).getScrollView().setShowVBar(true); aView.getCol(1).getScrollView().setBarSize(10);
+    }
+    
+    void configureCell(ListCell lc)
+    {
+        lc.setTextFill(Color.GRAY);
+        if(lc.isSelected()) { lc.setFill(Color.GRAY); lc.setTextFill(Color.WHITE); }
+    }
+    
+    private static class BR extends TreeResolver <String> {
+        
+        /** Returns the parent of given item. */
+        public String getParent(String anItem)  { return null; }
+    
+        /** Whether given object is a parent (has children). */
+        public boolean isParent(String anItem)  { return anItem.equals("BrowserView"); }
+
+        /** Returns the children. */
+        public String[] getChildren(String aParent)  { return new String[] { "Item two", "Item three" }; }
+    }
 }
 
 /**
@@ -190,7 +455,7 @@ public static class RowViewHpr <T extends RowView> extends ChildViewHpr <T> {
 public static class BorderViewHpr <T extends BorderView> extends ParentViewHpr <T> {
 
     /** Configures a new View. */
-    public void configure(T aView)  { }
+    public void configure(T aView)  { aView.setMinSize(120,60); }
     
     /** Configures a new View. */
     public void configureGallery(T aView)
@@ -211,210 +476,12 @@ public static class BorderViewHpr <T extends BorderView> extends ParentViewHpr <
         for(Label lb : new Label[] { tl,bl,ll,rl }) {
              lb.setAlign(Pos.CENTER); lb.setTextFill(c); lb.setPadding(i); }
     }
-}
-
-/**
- * A ViewHpr for TitleView.
- */
-public static class TitleViewHpr <T extends TitleView> extends ParentViewHpr <T> {
-
-    /** Configures a new View. */
-    public void configure(T aView)
+    
+    /** Adds a view relative to given view. */
+    public boolean addView(T aView, View aView2)
     {
-        aView.setTitle("Title");
-    }
-    
-    /** Configures a new View. */
-    public void configureGallery(T aView)
-    {
-        aView.setTitle("Title"); aView.setFont(Font.Arial10);
-        Label label = new Label("TitleView"); label.setPadding(0,40,8,40); label.setTextFill(Color.GRAY);
-        aView.setContent(label);
-    }
-}
-
-/**
- * A ViewHpr for TabView.
- */
-public static class TabViewHpr <T extends TabView> extends ParentViewHpr <T> {
-
-    /** Configures a new View. */
-    public void configure(T aView)
-    {
-        aView.addTab("One", new BoxView());
-    }
-    
-    /** Configures a new View. */
-    public void configureGallery(T aView)
-    {
-        aView.setFont(Font.Arial10);
-        Label label = new Label("TabView"); label.setPadding(4,40,4,40); label.setTextFill(Color.GRAY);
-        aView.addTab("  One  ", label);
-        aView.addTab("  Two  ", new BoxView());
-    }
-}
-
-/**
- * A ViewHpr for ScrollView.
- */
-public static class ScrollViewHpr <T extends ScrollView> extends ParentViewHpr <T> {
-
-    /** Configures a new View. */
-    public void configure(T aView)  { }
-    
-    /** Configures a new View. */
-    public void configureGallery(T aView)
-    {
-        aView.setPrefSize(140,40); aView.setFont(Font.Arial10);
-        aView.setShowVBar(true); aView.setShowHBar(true); aView.setBarSize(10);
-        Label label = new Label("ScrollView"); label.setPadding(8,35,8,45); label.setTextFill(Color.GRAY);
-        label.setAlign(Pos.TOP_LEFT);
-        aView.setContent(label); label.setFill(Color.WHITE); label.setMinSize(600,600);
-    }
-}
-
-/**
- * A ViewHpr for SplitView.
- */
-public static class SplitViewHpr <T extends SplitView> extends ParentViewHpr <T> {
-
-    /** Configures a new View. */
-    public void configure(T aView)  { }
-    
-    /** Configures a new View. */
-    public void configureGallery(T aView)
-    {
-        aView.setFont(Font.Arial10); aView.setBorder(new Border.BevelBorder(0));
-        Label label0 = new Label("Split"); label0.setPadding(10,20,10,20); label0.setTextFill(Color.GRAY);
-        Label label1 = new Label("View"); label1.setPadding(10,20,10,20); label1.setTextFill(Color.GRAY);
-        aView.setItems(label0,label1);
-    }
-}
-
-/**
- * A ViewHpr for ListView.
- */
-public static class ListViewHpr <T extends ListView> extends ParentViewHpr <T> {
-
-    /** Configures a new View. */
-    public void configure(T aView)  { }
-    
-    /** Configures a new View. */
-    public void configureGallery(T aView)
-    {
-        aView.setFont(Font.Arial10);
-        aView.setMinWidth(120);
-        aView.getScrollView().setShowVBar(true); aView.getScrollView().setBarSize(10);
-        
-        aView.setItems("ListView", "Item two", "Item three");
-        aView.setCellConfigure(c -> configureCell(c));
-    }
-    
-    void configureCell(Object lc)  { ((ListCell)lc).setTextFill(Color.GRAY); }
-}
-
-/**
- * A ViewHpr for TableView.
- */
-public static class TableViewHpr <T extends TableView> extends ParentViewHpr <T> {
-
-    /** Configures a new View. */
-    public void configure(T aView)  { }
-    
-    /** Configures a new View. */
-    public void configureGallery(T aView)
-    {
-        aView.setFont(Font.Arial10);
-        aView.setRowHeight(17); aView.setPrefWidth(120);
-        
-        TableCol col = new TableCol();
-        aView.addCol(col); col.setGrowWidth(true);
-        aView.getScrollView().setShowVBar(true); aView.getScrollView().setBarSize(10);
-        
-        aView.setItems("TableView", "Item two", "Item three");
-        aView.setCellConfigure(c -> configureCell(c));
-    }
-    
-    void configureCell(Object lc)  { ((ListCell)lc).setTextFill(Color.GRAY); }
-}
-
-/**
- * A ViewHpr for TreeView.
- */
-public static class TreeViewHpr <T extends TreeView> extends ParentViewHpr <T> {
-
-    /** Configures a new View. */
-    public void configure(T aView)  { }
-    
-    /** Configures a new View. */
-    public void configureGallery(T aView)
-    {
-        aView.setFont(Font.Arial10);
-        aView.setRowHeight(15); aView.setPrefWidth(120);
-        
-        aView.getScrollView().setShowVBar(true); aView.getScrollView().setBarSize(10);
-        
-        aView.setItems("TreeView");
-        aView.setResolver(new TR());
-        aView.setCellConfigure(c -> configureCell(c));
-        aView.expandAll();
-    }
-    
-    void configureCell(Object lc)  { ((ListCell)lc).setTextFill(Color.GRAY); }
-    
-    private static class TR extends TreeResolver <String> {
-        
-        /** Returns the parent of given item. */
-        public String getParent(String anItem)  { return null; }
-    
-        /** Whether given object is a parent (has children). */
-        public boolean isParent(String anItem)  { return anItem.equals("TreeView"); }
-
-        /** Returns the children. */
-        public String[] getChildren(String aParent)  { return new String[] { "     Item two", "     Item three" }; }
-    }
-}
-
-/**
- * A ViewHpr for BrowserView.
- */
-public static class BrowserViewHpr <T extends BrowserView> extends ParentViewHpr <T> {
-
-    /** Configures a new View. */
-    public void configure(T aView)  { }
-    
-    /** Configures a new View. */
-    public void configureGallery(T aView)
-    {
-        aView.setFont(Font.Arial10);
-        aView.setRowHeight(15); aView.setPrefSize(160,50);
-        
-        aView.setResolver(new BR());
-        aView.setItems("BrowserView");
-        aView.setCellConfigure((Consumer <ListCell>)c -> configureCell(c));
-        aView.setSelectedItem("BrowserView");
-        
-        aView.getScrollView().setShowHBar(true); aView.getScrollView().setBarSize(10);
-        aView.getCol(0).getScrollView().setShowVBar(true); aView.getCol(0).getScrollView().setBarSize(10);
-        aView.getCol(1).getScrollView().setShowVBar(true); aView.getCol(1).getScrollView().setBarSize(10);
-    }
-    
-    void configureCell(ListCell lc)
-    {
-        lc.setTextFill(Color.GRAY);
-        if(lc.isSelected()) { lc.setFill(Color.GRAY); lc.setTextFill(Color.WHITE); }
-    }
-    
-    private static class BR extends TreeResolver <String> {
-        
-        /** Returns the parent of given item. */
-        public String getParent(String anItem)  { return null; }
-    
-        /** Whether given object is a parent (has children). */
-        public boolean isParent(String anItem)  { return anItem.equals("BrowserView"); }
-
-        /** Returns the children. */
-        public String[] getChildren(String aParent)  { return new String[] { "Item two", "Item three" }; }
+        aView.setCenter(aView2);
+        return true;
     }
 }
 
