@@ -1,7 +1,6 @@
 package snapbuild.app;
 import java.util.*;
-import snap.gfx.Color;
-import snap.gfx.Image;
+import snap.gfx.*;
 import snap.util.*;
 import snap.view.*;
 import snap.viewx.*;
@@ -11,6 +10,12 @@ import snap.web.WebURL;
  * A class to manage the Editor and controls.
  */
 public class EditorPane extends ViewOwner {
+    
+    // The Transform Pane
+    TransitionPane   _transPane;
+    
+    // The Editor SplitView
+    SplitView        _editorSplit;
     
     // The Editor
     Editor           _editor, _realEditor;
@@ -310,25 +315,30 @@ public void setEditing(boolean aValue)
  */
 protected void initUI()
 {
+    // Get TransPane
+    _transPane = getView("TransPane", TransitionPane.class);
+    
     // Get editor
     _editor = getView("Editor", Editor.class);
     _editor.addPropChangeListener(pce -> editorSelViewChange(), Editor.SelView_Prop);
     
-    // Get XMLText TextView
-    _xmlText = getView("XMLText", TextView.class);
-    getView("SplitView").setBorder(null);
-    getView("SplitView", SplitView.class).removeItem(_xmlText);
-    
-    // Get SelPathBox
-    _selPathBox = getView("SelPathBox", RowView.class);
-    updateSelPathBox();
+    // Get Editor SplitView and add to TransPane
+    _editorSplit = getView("SplitView", SplitView.class);
+    _editorSplit.setBorder(null);
+    _transPane.setContent(_editorSplit);
     
     // Get/configure ViewTree
     _viewTree = getView("ViewTree", TreeView.class);
     _viewTree.setResolver(new ViewTreeResolver());
     _viewTree.setOwner(this);
-    getView("EditorSplitView").setBorder(null);
-    getView("EditorSplitView", SplitView.class).removeItem(_viewTree);
+    _editorSplit.removeItem(_viewTree);
+    
+    // Create XMLText
+    _xmlText = new TextView(); _xmlText.setName("XMLText"); _xmlText.setFont(Font.Arial14);
+    
+    // Get SelPathBox
+    _selPathBox = getView("SelPathBox", RowView.class);
+    updateSelPathBox();
     
     // Add action for ESCAPE key to pop selection
     addKeyActionFilter("EscapeAction", "ESCAPE");
@@ -362,10 +372,6 @@ protected void resetUI()
     setViewEnabled("UndoButton", undoer!=null && undoer.hasUndos()); //undoer.getUndoSetLast()!=null
     setViewEnabled("RedoButton", undoer!=null && undoer.hasRedos()); //undoer.getRedoSetLast()!=null
     
-    // Reset PreviewEditButton state if out of sync
-    if(getViewBoolValue("PreviewButton")==isEditing())
-        setViewValue("PreviewButton", !isEditing());
-
     // Update SelPathBox
     updateSelPathBox();
     
@@ -404,13 +410,34 @@ protected void respondUI(ViewEvent anEvent)
     if(anEvent.equals("UndoButton")) _editor.undo();
     if(anEvent.equals("RedoButton")) _editor.redo();
     
-    // Handle ShowXMLButton
-    if(anEvent.equals("ShowXMLButton"))
-        toggleShowXML();
+    // Handle EditButton
+    if(anEvent.equals("EditButton")) {
+        _transPane.setTransition(TransitionPane.MoveLeft);
+        _transPane.setContent(_editorSplit);
+    }
+    
+    // Handle XMLButton
+    if(anEvent.equals("XMLButton")) {
+        if(_transPane.getContent()==_editorSplit) _transPane.setTransition(TransitionPane.MoveRight);
+        else _transPane.setTransition(TransitionPane.MoveLeft);
+        _transPane.setContent(_xmlText);
+        updateXMLText();
+     }
 
     // Handle PreviewButton
-    if(anEvent.equals("PreviewButton"))
-        setEditing(!isEditing());
+    if(anEvent.equals("PreviewButton")) {
+        
+        // Create copy of content
+        View content = new ViewArchiver().copy(getContent()); content.setGrowWidth(false); content.setGrowHeight(false);
+        if(content.getFill()==null) content.setFill(ViewUtils.getBackFill());
+        
+        // Create BoxView
+        BoxView box = new BoxView(content, false, false); box.setFill(ViewUtils.getBackDarkFill());
+        
+        // Add to TransPane
+        _transPane.setTransition(TransitionPane.MoveRight);
+        _transPane.setContent(box);
+    }
 
     // Handle ShowViewTreeButton
     if(anEvent.equals("ShowViewTreeButton"))
@@ -522,22 +549,6 @@ protected void toggleShowViewTree()
     }
 }
     
-/**
- * Shows/Hides XMLText TextView.
- */
-protected void toggleShowXML()
-{
-    SplitView split = getView("SplitView", SplitView.class);
-
-    if(_xmlText.getParent()==null) {
-        split.addItemWithAnim(_xmlText, 160);
-        updateXMLText();
-    }
-    else {
-        split.removeItemWithAnim(_xmlText);
-    }
-}
-
 /**
  * Adds a new row view.
  */

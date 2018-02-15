@@ -10,18 +10,19 @@
     <Separator PrefHeight="18" Vertical="true" />
     <Button Name="UndoButton" PrefWidth="22" PrefHeight="22" ToolTip="Undo" image="Edit_Undo.png" ShowBorder="false" />
     <Button Name="RedoButton" PrefWidth="22" PrefHeight="22" ToolTip="Redo" image="Edit_Redo.png" ShowBorder="false" />
-    <Button Name="ShowXMLButton" PrefWidth="64" PrefHeight="20" LeanX="RIGHT" text="Show XML" />
-    <ToggleButton Name="PreviewButton" PrefWidth="64" PrefHeight="20" text="Preview" />
+    <RowView LeanX="RIGHT">
+      <ToggleButton Name="EditButton" PrefWidth="52" PrefHeight="20" text="Edit" Position="CENTER_LEFT" Selected="true" Group="tge" />
+      <ToggleButton Name="XMLButton" PrefWidth="52" PrefHeight="20" LeanX="RIGHT" text="XML" Position="CENTER" Group="tge" />
+      <ToggleButton Name="PreviewButton" PrefWidth="52" PrefHeight="20" text="Run" Position="CENTER_RIGHT" Group="tge" />
+    </RowView>
   </RowView>
-  <SplitView Name="SplitView" Vertical="true" GrowHeight="true">
-    <SplitView Name="EditorSplitView" GrowHeight="true">
-      <TreeView Name="ViewTree" />
-      <ScrollView Name="EditorScrollView" GrowWidth="true">
-        <LineBorder Color="#aaaaaa" />
-        <View Name="Editor" Class="snapbuild.app.Editor" />
-      </ScrollView>
-    </SplitView>
-    <TextView Name="XMLText" PrefHeight="160" />
+  <View Name="TransPane" Class="snap.viewx.TransitionPane" GrowHeight="true" />
+  <SplitView Name="SplitView" GrowHeight="true">
+    <TreeView Name="ViewTree" />
+    <ScrollView Name="EditorScrollView" GrowWidth="true">
+      <LineBorder Color="#aaaaaa" />
+      <View Name="Editor" Class="snapbuild.app.Editor" />
+    </ScrollView>
   </SplitView>
   <RowView Padding="3,5,3,4" Spacing="4">
     <Button Name="ShowViewTreeButton" PrefWidth="22" PrefHeight="22" ToolTip="Show View Tree" image="pkg.images/FilesTree.png" />
