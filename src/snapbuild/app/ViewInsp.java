@@ -131,9 +131,17 @@ protected void respondUI(ViewEvent anEvent)
     if(anEvent.equals("MinWidthSpinner")) selView.setMinWidth(anEvent.getFloatValue());
     if(anEvent.equals("MinHeightSpinner")) selView.setMinHeight(anEvent.getFloatValue());
     
-    // Handle PWAdd10Button, PHAdd10Button
-    if(anEvent.equals("PWAdd10Button")) selView.setPrefWidth(selView.getPrefWidth()+10);
-    if(anEvent.equals("PHAdd10Button")) selView.setPrefHeight(selView.getPrefHeight()+10);
+    // Handle PWAdd10Button, PHAdd10Button, PWResetButton, PHResetButton
+    if(anEvent.equals("PWAdd10Button")) selView.setPrefWidth(Math.max(selView.getMinWidth(),selView.getPrefWidth())+10);
+    if(anEvent.equals("PHAdd10Button")) selView.setPrefHeight(Math.max(selView.getMinHeight(),selView.getPrefHeight())+10);
+    if(anEvent.equals("PWResetButton")) selView.setPrefWidth(-1);
+    if(anEvent.equals("PHResetButton")) selView.setPrefHeight(-1);
+    
+    // Handle MWAdd10Button, MHAdd10Button, MWResetButton, MHResetButton
+    if(anEvent.equals("MWAdd10Button")) selView.setMinWidth(Math.max(selView.getMinWidth(),selView.getPrefWidth())+10);
+    if(anEvent.equals("MHAdd10Button")) selView.setMinHeight(Math.max(selView.getMinHeight(),selView.getPrefHeight())+10);
+    if(anEvent.equals("MWResetButton")) selView.setMinWidth(-1);
+    if(anEvent.equals("MHResetButton")) selView.setMinHeight(-1);
     
     // Handle PaddingText, SpacingSpinner, PadAdd5Button, SpaceAdd5Button
     if(anEvent.equals("PaddingText")) selView.setPadding(Insets.get(anEvent.getStringValue()));

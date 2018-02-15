@@ -17,7 +17,10 @@ public class ViewHpr <T extends View> {
 /**
  * Configures a new View.
  */
-public void configure(T aView)  { }
+public void configure(T aView)
+{
+    if(aView.getClass()==View.class) aView.setMinSize(120,40);
+}
 
 /**
  * Configures a new View for Gallery.

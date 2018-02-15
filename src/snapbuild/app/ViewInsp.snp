@@ -14,23 +14,29 @@
       <Label text="ToolTip:" />
       <TextField Name="ToolTipText" GrowWidth="true" ColCount="12" />
     </RowView>
-    <RowView PrefWidth="148" GrowWidth="true" Spacing="4">
+    <RowView PrefWidth="148" GrowWidth="true" Spacing="3">
       <Label PrefWidth="64" text="Pref Width:" />
       <Spinner Name="PrefWidthSpinner" PrefWidth="75" />
-      <Button Name="PWAdd10Button" PrefWidth="22" PrefHeight="22" Padding="2" text="+10" ShowBorder="false" />
+      <Button Name="PWAdd10Button" PrefWidth="24" PrefHeight="22" Padding="2" text="+10" ShowBorder="false" />
+      <Button Name="PWResetButton" PrefWidth="20" PrefHeight="20" ToolTip="Clear Font Size" text="&#10226;" ShowBorder="false" />
     </RowView>
-    <RowView GrowWidth="true" Spacing="4">
+    <RowView GrowWidth="true" Spacing="3">
       <Label PrefWidth="64" text="Pref Height:" />
       <Spinner Name="PrefHeightSpinner" PrefWidth="75" />
-      <Button Name="PHAdd10Button" Padding="2" text="+10" ShowBorder="false" />
+      <Button Name="PHAdd10Button" PrefWidth="24" PrefHeight="22" Padding="2" text="+10" ShowBorder="false" />
+      <Button Name="PHResetButton" PrefWidth="20" PrefHeight="20" ToolTip="Clear Font Size" text="&#10226;" ShowBorder="false" />
     </RowView>
-    <RowView GrowWidth="true" Spacing="4">
+    <RowView GrowWidth="true" Spacing="3">
       <Label PrefWidth="64" PrefHeight="14" text="Min Width:" />
       <Spinner Name="MinWidthSpinner" PrefWidth="75" />
+      <Button Name="MWAdd10Button" PrefWidth="24" PrefHeight="22" Padding="2" text="+10" ShowBorder="false" />
+      <Button Name="MWResetButton" PrefWidth="20" PrefHeight="20" ToolTip="Clear Font Size" text="&#10226;" ShowBorder="false" />
     </RowView>
-    <RowView GrowWidth="true" Spacing="4">
+    <RowView GrowWidth="true" Spacing="3">
       <Label PrefWidth="64" text="Min Height:" />
       <Spinner Name="MinHeightSpinner" PrefWidth="75" />
+      <Button Name="MHAdd10Button" PrefWidth="24" PrefHeight="22" Padding="2" text="+10" ShowBorder="false" />
+      <Button Name="MHResetButton" PrefWidth="20" PrefHeight="20" ToolTip="Clear Font Size" text="&#10226;" ShowBorder="false" />
     </RowView>
   </ColView>
   <ColView GrowHeight="true" Spacing="6">
