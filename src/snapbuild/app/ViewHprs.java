@@ -180,13 +180,13 @@ public static class TitleViewHpr <T extends TitleView> extends ParentViewHpr <T>
     public void configure(T aView)
     {
         aView.setMinSize(120,60);
-        aView.setTitle("Title");
+        aView.setText("Title");
     }
     
     /** Configures a new View. */
     public void configureGallery(T aView)
     {
-        aView.setTitle("Title"); aView.setFont(Font.Arial10);
+        aView.setText("Title"); aView.setFont(Font.Arial10);
         Label label = new Label("TitleView"); label.setPadding(0,40,8,40); label.setTextFill(Color.GRAY);
         aView.setContent(label);
     }
@@ -197,6 +197,9 @@ public static class TitleViewHpr <T extends TitleView> extends ParentViewHpr <T>
         aView.setContent(aView2);
         return true;
     }
+    
+    /** Override to say empty TitleView definitely wants view. */
+    public boolean wantsView(T aView, View aView2)  { return aView.getContent()==null; }
 }
 
 /**
@@ -229,6 +232,9 @@ public static class TabViewHpr <T extends TabView> extends ParentViewHpr <T> {
         else aView.addTab("New Tab", aView2);
         return true;
     }
+    
+    /** Override to say SplitView definitely wants view. */
+    public boolean wantsView(T aView, View aView2)  { return true; }
 }
 
 /**
@@ -255,6 +261,9 @@ public static class ScrollViewHpr <T extends ScrollView> extends ParentViewHpr <
         aView.setContent(aView2);
         return true;
     }
+    
+    /** Override to say empty ScrollView definitely wants view. */
+    public boolean wantsView(T aView, View aView2)  { return aView.getContent()==null; }
 }
 
 /**
@@ -280,6 +289,9 @@ public static class SplitViewHpr <T extends SplitView> extends ParentViewHpr <T>
         aView.addItem(aView2);
         return true;
     }
+    
+    /** Override to say SplitView definitely wants view. */
+    public boolean wantsView(T aView, View aView2)  { return true; }
 }
 
 /**
@@ -427,6 +439,9 @@ public static class ColViewHpr <T extends ColView> extends ChildViewHpr <T> {
         Label label = new Label("ColView"); label.setTextFill(Color.GRAY); label.setFont(Font.Arial11);
         aView.addChild(label);
     }
+    
+    /** Override to say ColView always wants a RowView. */
+    public boolean wantsView(T aView, View aView2)  { return aView2 instanceof RowView; }
 }
 
 /**
@@ -447,6 +462,9 @@ public static class RowViewHpr <T extends RowView> extends ChildViewHpr <T> {
         Label label = new Label("RowView"); label.setTextFill(Color.GRAY); label.setFont(Font.Arial11);
         aView.addChild(label);
     }
+    
+    /** Override to say RowView always wants a ColView. */
+    public boolean wantsView(T aView, View aView2)  { return aView2 instanceof ColView; }
 }
 
 /**

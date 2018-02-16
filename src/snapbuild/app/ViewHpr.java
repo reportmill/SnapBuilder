@@ -42,6 +42,11 @@ public boolean addView(T aView, View aView2)
 }
 
 /**
+ * Returns whether view wants to add given view. E.g.: Empty TitleView, empty ScrollView, TabView or SplitView.
+ */
+public boolean wantsView(T aView, View aView2)  { return false; }
+
+/**
  * Returns a ViewHpr subclass for given class.
  */
 public static ViewHpr getHpr(Object anObj)

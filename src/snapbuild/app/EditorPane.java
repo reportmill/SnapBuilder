@@ -538,15 +538,9 @@ protected void selPathItemClicked(View aView)
  */
 protected void toggleShowViewTree()
 {
-    SplitView split = getView("EditorSplitView", SplitView.class);
-
-    if(_viewTree.getParent()==null) {
-        split.addItemWithAnim(_viewTree, 160, 0);
-        updateXMLText();
-    }
-    else {
-        split.removeItemWithAnim(_viewTree);
-    }
+    if(_viewTree.getParent()==null)
+        _editorSplit.addItemWithAnim(_viewTree, 160, 0);
+    else _editorSplit.removeItemWithAnim(_viewTree);
 }
     
 /**
@@ -554,17 +548,21 @@ protected void toggleShowViewTree()
  */
 public void addRowView()
 {
-    // Get parent ColView
+    // Create/configure RowView and get selected view
+    RowView newRow = new RowView(); ViewHpr.getHpr(newRow).configure(newRow);
     View view = getSelView();
-    ColView colView = null; if(view instanceof ColView) { colView = (ColView)view; view = null; }
+    
+    // Handle special cases: Empty TitleView, Empty ScrollView, TabView, SplitView
+    if(ViewHpr.getHpr(view).wantsView(view, newRow)) {
+        ViewHpr.getHpr(view).addView(view, newRow); setSelView(newRow); return; }
+    
+    // Get parent ColView
+    ColView colView = null;
     while(colView==null) {
         if(view.getParent() instanceof ColView) colView = (ColView)view.getParent();
         else if(view==getContent()) return;
         else view = view.getParent();
     }
-    
-    // Create/configure RowView
-    RowView newRow = new RowView(); ViewHpr.getHpr(newRow).configure(newRow);
     
     // Add new row to ColView and select it
     colView.addChild(newRow, view!=null? view.indexInParent()+1 : colView.getChildCount());
@@ -576,17 +574,21 @@ public void addRowView()
  */
 public void addColView()
 {
-    // Get parent RowView
+    // Create/configure RowView and get selected view
+    ColView newCol = new ColView(); ViewHpr.getHpr(newCol).configure(newCol);
     View view = getSelView();
-    RowView rowView = null; if(view instanceof RowView) { rowView = (RowView)view; view = null; }
+    
+    // Handle special cases: Empty TitleView, Empty ScrollView, TabView, SplitView
+    if(ViewHpr.getHpr(view).wantsView(view, newCol)) {
+        ViewHpr.getHpr(view).addView(view, newCol); setSelView(newCol); return; }
+    
+    // Get parent RowView
+    RowView rowView = null;
     while(rowView==null) {
         if(view==getContent()) return;
         if(view.getParent() instanceof RowView) rowView = (RowView)view.getParent();
         else view = view.getParent();
     }
-    
-    // Create/configure RowView
-    ColView newCol = new ColView(); ViewHpr.getHpr(newCol).configure(newCol);
     
     // Add new col to RowView and select it
     rowView.addChild(newCol, view!=null? view.indexInParent()+1 : rowView.getChildCount());
