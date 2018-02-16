@@ -192,11 +192,7 @@ public static class TitleViewHpr <T extends TitleView> extends ParentViewHpr <T>
     }
     
     /** Adds a view relative to given view. */
-    public boolean addView(T aView, View aView2)
-    {
-        aView.setContent(aView2);
-        return true;
-    }
+    public boolean addView(T aView, View aView2)  { aView.setContent(aView2); return true; }
     
     /** Override to say empty TitleView definitely wants view. */
     public boolean wantsView(T aView, View aView2)  { return aView.getContent()==null; }
@@ -256,11 +252,7 @@ public static class ScrollViewHpr <T extends ScrollView> extends ParentViewHpr <
     }
     
     /** Adds a view relative to given view. */
-    public boolean addView(T aView, View aView2)
-    {
-        aView.setContent(aView2);
-        return true;
-    }
+    public boolean addView(T aView, View aView2)  { aView.setContent(aView2); return true; }
     
     /** Override to say empty ScrollView definitely wants view. */
     public boolean wantsView(T aView, View aView2)  { return aView.getContent()==null; }
@@ -284,11 +276,7 @@ public static class SplitViewHpr <T extends SplitView> extends ParentViewHpr <T>
     }
     
     /** Adds a view relative to given view. */
-    public boolean addView(T aView, View aView2)
-    {
-        aView.addItem(aView2);
-        return true;
-    }
+    public boolean addView(T aView, View aView2)  { aView.addItem(aView2); return true; }
     
     /** Override to say SplitView definitely wants view. */
     public boolean wantsView(T aView, View aView2)  { return true; }
@@ -419,6 +407,32 @@ public static class BrowserViewHpr <T extends BrowserView> extends ParentViewHpr
         /** Returns the children. */
         public String[] getChildren(String aParent)  { return new String[] { "Item two", "Item three" }; }
     }
+}
+
+/**
+ * A ViewHpr for BoxView.
+ */
+public static class BoxViewHpr <T extends BoxView> extends ParentViewHpr <T> {
+    
+    /** Configures a new View. */
+    public void configure(T aView)
+    {
+        aView.setPadding(4,4,4,4); aView.setSpacing(4); aView.setGrowHeight(true);
+    }
+    
+    /** Configures a new View. */
+    public void configureGallery(T aView)
+    {
+        aView.setPadding(8,30,8,30); aView.setBorder(Color.LIGHTGRAY, 1);
+        Label label = new Label("BoxView"); label.setTextFill(Color.GRAY); label.setFont(Font.Arial11);
+        aView.setContent(label);
+    }
+    
+    /** Adds a view relative to given view. */
+    public boolean addView(T aView, View aView2)  { aView.setContent(aView2); return true; }
+    
+    /** Override to say ColView always wants a RowView. */
+    public boolean wantsView(T aView, View aView2)  { return true; }
 }
 
 /**

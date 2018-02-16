@@ -68,6 +68,7 @@ public static ViewHpr createHpr(Class aCls)
     if(aCls==ButtonBase.class) return new ButtonBaseHpr();
     if(aCls==BrowserView.class) return new BrowserViewHpr();
     if(aCls==BorderView.class) return new BorderViewHpr();
+    if(aCls==BoxView.class) return new BoxViewHpr();
     if(aCls==ChildView.class) return new ChildViewHpr();
     if(aCls==CheckBox.class) return new CheckBoxHpr();
     if(aCls==ColView.class) return new ColViewHpr();

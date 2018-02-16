@@ -30,7 +30,7 @@ public GalleryView()
         ListView.class, TableView.class, TreeView.class, BrowserView.class,
             
         // Simple containers
-        ColView.class, RowView.class, BorderView.class, View.class
+        BoxView.class, ColView.class, RowView.class, BorderView.class, View.class
             
         // Graphics
         //ImageView.class, RectView.class, PathView.class, ArcView.class, StringView.class DocView.class, PageView.class
