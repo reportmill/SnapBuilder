@@ -2,15 +2,13 @@ package snapbuild.app;
 import java.util.*;
 import snap.util.*;
 import snap.view.*;
+import snap.viewx.RecentFiles;
 import snap.web.*;
 
 /**
  * An implementation of a panel to manage/open user Snap sites (projects).
  */
 public class WelcomePanel extends ViewOwner {
-
-    // The list of files
-    List <WebFile>          _files;
 
     // The selected file
     WebFile                 _selFile;
@@ -58,29 +56,14 @@ public void hide()
 }
 
 /**
- * Returns the number of files.
- */
-public int getFileCount()  { return getFiles().size(); }
-
-/**
- * Returns the file at given index.
- */
-public WebFile getFile(int anIndex)  { return getFiles().get(anIndex); }
-
-/**
- * Returns the list of files.
- */
-public List <WebFile> getFiles()  { return _files!=null? _files : (_files=new ArrayList()); }
-
-/**
  * Returns the selected file.
  */
-public WebFile getSelectedFile()  { return _selFile; }
+public WebFile getSelFile()  { return _selFile; }
 
 /**
  * Sets the selected file.
  */
-public void setSelectedFile(WebFile aFile)  { _selFile = aFile; }
+public void setSelFile(WebFile aFile)  { _selFile = aFile; }
 
 /**
  * Returns the Runnable to be called to quit app.
@@ -109,7 +92,7 @@ protected void initUI()
     // Enable SitesTable MouseReleased
     TableView sitesTable = getView("SitesTable", TableView.class);
     sitesTable.setRowHeight(24);
-    if(getRecentFiles().size()>0) _selFile = getRecentFiles().get(0);
+    List <WebFile> rfiles = getRecentFiles(); if(rfiles.size()>0) _selFile = rfiles.get(0);
     enableEvents(sitesTable, MouseRelease);
     
     // Set preferred size
@@ -126,9 +109,9 @@ protected void initUI()
  */
 public void resetUI()
 {
-    setViewEnabled("OpenButton", getSelectedFile()!=null);
+    setViewEnabled("OpenButton", getSelFile()!=null);
     setViewItems("SitesTable", getRecentFiles());
-    setViewSelectedItem("SitesTable", getSelectedFile());
+    setViewSelectedItem("SitesTable", getSelFile());
 }
 
 /**
@@ -138,7 +121,7 @@ public void respondUI(ViewEvent anEvent)
 {
     // Handle SitesTable
     if(anEvent.equals("SitesTable"))
-        setSelectedFile((WebFile)anEvent.getSelectedItem());
+        setSelFile((WebFile)anEvent.getSelectedItem());
 
     // Handle NewButton
     if(anEvent.equals("NewButton")) {
@@ -182,10 +165,12 @@ public void showOpenPanel()
     // Have editor run open panel (if no document opened, just return)
     EditorPane epane = new EditorPane().showOpenPanel(getUI()); if(epane==null) return;
     
-    // Make editor window visible, show doc inspector, and order front after delay to get focus back from inspector
+    // Make editor window visible and hide welcome panel
     epane.setWindowVisible(true);
     hide();
-    addRecentFile(epane.getSourceURL().getPath());
+    
+    // Add path to RecentFiles
+    RecentFiles.addPath("RecentDocuments", epane.getSourceURL().getPath(), 99);
 }
 
 /**
@@ -196,53 +181,18 @@ public void openFile(Object aSource)
     // Have editor run open panel (if no document opened, just return)
     EditorPane epane = new EditorPane().open(aSource); if(epane==null) return;
     
-    // Make editor window visible, show doc inspector, and order front after delay to get focus back from inspector
+    // Make editor window visible and hide welcome panel
     epane.setWindowVisible(true);
     hide();
-    addRecentFile(epane.getSourceURL().getPath());
+    
+    // Add path to RecentFiles
+    RecentFiles.addPath("RecentDocuments", epane.getSourceURL().getPath(), 99);
 }
 
 /**
  * Returns the list of the recent documents as a list of strings.
  */
-public static List <WebFile> getRecentFiles()
-{
-    // Get prefs for RecentDocuments (just return if missing)
-    Prefs prefs = Prefs.get().getChild("RecentDocuments");
-    
-    // Add to the list only if the file is around and readable
-    List list = new ArrayList();
-    for(int i=0; ; i++) {
-        String fname = prefs.get("index"+i, null); if(fname==null) break;
-        WebURL url = WebURL.getURL(fname);
-        WebFile file = url.getFile();
-        if(file!=null)
-            list.add(file);
-    }
-    
-    // Return list
-    return list;
-}
-
-/**
- * Adds a new file to the list and updates the users preferences.
- */
-public static void addRecentFile(String aPath)
-{
-    // Get the doc list from the preferences
-    WebURL url = WebURL.getURL(aPath);
-    WebFile file = url.getFile(); if(file==null) return;
-    List <WebFile> docs = getRecentFiles();
-    
-    // Remove the path (if it was there) and add to front of list
-    docs.remove(file); docs.add(0, file);
-    
-    // Add at most 10 files to the preferences list
-    Prefs prefs = Prefs.get().getChild("RecentDocuments");
-    for(int i=0; i<docs.size() && i<10; i++) 
-        prefs.set("index"+i, docs.get(i).getPath());
-    try { prefs.flush(); } catch(Exception e)  { System.err.println(e); }
-}
+public static List <WebFile> getRecentFiles()  { return RecentFiles.getFiles("RecentDocuments"); }
 
 /**
  * Clears recent documents from preferences.

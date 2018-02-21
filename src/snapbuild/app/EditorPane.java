@@ -111,7 +111,7 @@ public EditorPane newDocument()
 public EditorPane showOpenPanel(View aView)
 {
     // Get path from open panel for supported file extensions
-    String path = FileChooser.showOpenPanel(aView, "Snap UI File", "snp");
+    String path = FilePanel.showOpenPanel(aView, "Snap UI File", "snp");
     return open(path);
 }
 
@@ -181,7 +181,7 @@ public void saveAs()
     }
     
     // Run save panel, set Document.Source to path and re-save (or just return if cancelled)
-    String path = FileChooser.showSavePanel(getEditor(), "SnapKit UI file", exts); if(path==null) return;
+    String path = FilePanel.showSavePanel(getEditor(), "SnapKit UI file", exts); if(path==null) return;
     setSourceURL(WebURL.getURL(path));
     save();
 }
