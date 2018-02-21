@@ -52,13 +52,11 @@ protected void respondUI(ViewEvent anEvent)
 public void moveViewUp()
 {
     View sview = getEditor().getSelView();
-    ParentView par = sview.getParent();
+    HostView par = sview.getHost(); if(par==null) { beep(); return; }
     
-    if(par instanceof ChildView) { ChildView cview = (ChildView)par;
-        int ind = sview.indexInParent(); if(ind==0) { beep(); return; }
-        cview.removeChild(sview);
-        cview.addChild(sview, ind-1);
-    }
+    int ind = sview.indexInParent(); if(ind==0) { beep(); return; }
+    par.removeGuest(sview);
+    par.addGuest(sview, ind-1);
 }
 
 /**
@@ -67,13 +65,11 @@ public void moveViewUp()
 public void moveViewDown()
 {
     View sview = getEditor().getSelView();
-    ParentView par = sview.getParent();
+    HostView par = sview.getHost(); if(par==null) { beep(); return; }
     
-    if(par instanceof ChildView) { ChildView cview = (ChildView)par;
-        int ind = sview.indexInParent(); if(ind+1>=cview.getChildCount()) { beep(); return; }
-        cview.removeChild(sview);
-        cview.addChild(sview, ind+1);
-    }
+    int ind = sview.indexInHost(); if(ind+1>=par.getGuestCount()) { beep(); return; }
+    par.removeGuest(sview);
+    par.addGuest(sview, ind+1);
 }
 
 /**
@@ -102,15 +98,15 @@ public void groupView()
     Class cls = opts[ind];
     
     // Create group view
-    ParentView group = null; try { group = (ParentView)cls.newInstance(); }
+    HostView group = null; try { group = (HostView)cls.newInstance(); }
     catch(Exception e) { throw new RuntimeException(e); }
     ViewHpr.getHpr(group).configure(group);
     
     // Add group view to view parent
     View sview = getEditor().getSelView();
-    ParentView par = sview.getParent();
-    ViewHpr.getHpr(par).addChild(par, group, sview.indexInParent());
-    ViewHpr.getHpr(group).addView(group, sview);
+    HostView par = sview.getHost(); if(par==null) { beep(); return; }
+    par.addGuest(group, sview.indexInHost());
+    group.addGuest(sview);
     getEditor().setSelView(group);
 }
 
@@ -121,15 +117,13 @@ public void ungroupView()
 {
     // Get View
     View view = getEditor().getSelView();
-    ParentView par = view.getParent();
+    HostView group = view instanceof HostView? (HostView)view : null; if(group==null) { beep(); return; }
+    HostView par = group.getHost(); if(par==null) { beep(); return; }
     
-    if(view instanceof ParentView) { ParentView group = (ParentView)view;
-        for(View child : group.getChildren())
-            ViewHpr.getHpr(par).addView(par, child);
-        if(par instanceof ChildView)
-            ((ChildView)par).removeChild(group);
-        getEditor().setSelView(par);
-    }
+    for(View child : group.getGuests())
+        par.addGuest(child);
+    par.removeGuest(group);
+    getEditor().setSelView(par);
 }
 
 }

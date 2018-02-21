@@ -28,20 +28,6 @@ public void configure(T aView)
 public void configureGallery(T aView)  { configure(aView); }
 
 /**
- * Adds a child view at given index.
- */
-public boolean addChild(T aView, View aChild, int anIndex)  { ViewUtils.beep(); return false; }
-
-/**
- * Adds a view relative to given view.
- */
-public boolean addView(T aView, View aView2)
-{
-    ParentView par = aView.getParent();
-    return getHpr(par).addChild(par, aView2, aView.indexInParent()+1);
-}
-
-/**
  * Returns whether view wants to add given view. E.g.: Empty TitleView, empty ScrollView, TabView or SplitView.
  */
 public boolean wantsView(T aView, View aView2)  { return false; }
@@ -73,6 +59,7 @@ public static ViewHpr createHpr(Class aCls)
     if(aCls==CheckBox.class) return new CheckBoxHpr();
     if(aCls==ColView.class) return new ColViewHpr();
     if(aCls==ComboBox.class) return new ComboBoxHpr();
+    if(aCls==HostView.class) return new HostViewHpr();
     if(aCls==Label.class) return new LabelHpr();
     if(aCls==ListView.class) return new ListViewHpr();
     if(aCls==ParentView.class) return new ParentViewHpr();

@@ -554,7 +554,7 @@ public void addRowView()
     
     // Handle special cases: Empty TitleView, Empty ScrollView, TabView, SplitView
     if(ViewHpr.getHpr(view).wantsView(view, newRow)) {
-        ViewHpr.getHpr(view).addView(view, newRow); setSelView(newRow); return; }
+        ((HostView)view).addGuest(newRow); setSelView(newRow); return; }
     
     // Get parent ColView
     ColView colView = null;
@@ -580,7 +580,7 @@ public void addColView()
     
     // Handle special cases: Empty TitleView, Empty ScrollView, TabView, SplitView
     if(ViewHpr.getHpr(view).wantsView(view, newCol)) {
-        ViewHpr.getHpr(view).addView(view, newCol); setSelView(newCol); return; }
+        ((HostView)view).addGuest(newCol); setSelView(newCol); return; }
     
     // Get parent RowView
     RowView rowView = null;

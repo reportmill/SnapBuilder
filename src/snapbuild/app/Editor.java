@@ -113,14 +113,33 @@ public void setSelView(View aView)
  */
 public void addView(Class <? extends View> aCls)
 {
-    // Create new view
+    // Create view from class, configure, add
     View view = null; try { view = aCls.newInstance(); } catch(Exception e) { }
     ViewHpr.getHpr(view).configure(view);
-    
-    // Get selected view, have helper add view and select view
+    addView(view);
+}
+
+/**
+ * Adds a view to content.
+ */
+public void addView(View aView)
+{
+    // Get selected view
     View sview = getSelView();
-    ViewHpr.getHpr(sview).addView(sview, view);
-    setSelView(view);
+    
+    // If selected view is host, add to it
+    if(sview instanceof HostView)       //ViewHpr.getHpr(sview).addView(sview, view);
+        ((HostView)sview).addGuest(aView);
+        
+    // If selected view parent is host, add to it
+    else if(sview.getHost()!=null)
+        sview.getHost().addGuest(aView, sview.indexInHost()+1);
+        
+    // Otherwise bail and complain
+    else { ViewUtils.beep(); return; }
+        
+    // Select view
+    setSelView(aView);
 }
 
 /**
@@ -192,7 +211,7 @@ protected void mouseRelease(ViewEvent anEvent)
 {
     Point pnt = anEvent.getPoint(_cbox);
     View view = ViewUtils.getDeepestChildAt(_cbox, pnt.getX(), pnt.getY());
-    while(view!=null && !(view.getParent() instanceof ChildView) && view.getParent()!=_cbox)
+    while(view!=null && !view.isGuest() && view.getParent()!=_cbox)
         view = view.getParent();
     if(view==null || view==_cbox) view = getContent();
     setSelView(view);
@@ -254,14 +273,10 @@ public void paste()
     Clipboard cb = Clipboard.get();
     if(cb.hasData(SNAP_XML_TYPE)) {
         
-        // Get bytes and view
+        // Get bytes, unarchive view and add
         byte bytes[] = cb.getDataBytes(SNAP_XML_TYPE);
         View view = new ViewArchiver().getView(bytes);
-        
-        // Get selected view, add new view and select it
-        View sview = getSelView();
-        ViewHpr.getHpr(sview).addView(sview, view);
-        setSelView(view);
+        addView(view);
     }
 }
 
@@ -271,14 +286,21 @@ public void paste()
 public void delete()
 {
     View sview = getSelView();
-    ParentView par = sview.getParent();
+    HostView host = sview.getHost(); if(host==null) { ViewUtils.beep(); return; }
+    int ind = sview.indexInHost();
+    host.removeGuest(sview);
+    if(host.getGuestCount()>0)
+        setSelView(host.getGuest(ind<host.getGuestCount()? ind : ind -1));
+    else setSelView(host);
+
+    /*ParentView par = sview.getParent();
     int ind = sview.indexInParent();
     if(par instanceof ChildView) { ChildView cview = (ChildView)par;
         cview.removeChild(sview);
         if(cview.getChildCount()>0)
             setSelView(ind<cview.getChildCount()? cview.getChild(ind) : cview.getChild(ind-1));
         else setSelView(cview);
-    }
+    }*/
 }
 
 /**
@@ -342,6 +364,7 @@ protected void contentDidDeepChange(Object aView, PropChange anEvent)
     if(pname==Parent_Prop) return;
     if(pname==Showing_Prop) return;
     if(pname==NeedsLayout_Prop) return;
+    if(pname==ParentView.Child_Prop) return;
     
     // Ignore layout changes
     if(view instanceof ParentView && ((ParentView)view).isInLayout()) return;

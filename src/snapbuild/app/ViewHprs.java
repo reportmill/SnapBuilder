@@ -132,23 +132,17 @@ public static class ParentViewHpr <T extends ParentView> extends ViewHpr <T> {
 }
 
 /**
+ * A ViewHpr for HostView.
+ */
+public static class HostViewHpr <T extends HostView> extends ParentViewHpr <T> {
+    
+}
+
+/**
  * A ViewHpr for ChildView.
  */
-public static class ChildViewHpr <T extends ChildView> extends ParentViewHpr <T> {
+public static class ChildViewHpr <T extends ChildView> extends HostViewHpr <T> {
     
-    /** Adds a child view at given index. */
-    public boolean addChild(T aView, View aChild, int anIndex)
-    {
-        aView.addChild(aChild, anIndex);
-        return true;
-    }
-    
-    /** Adds a view relative to given view. */
-    public boolean addView(T aView, View aView2)
-    {
-        aView.addChild(aView2);
-        return true;
-    }
 }
 
 /**
@@ -191,9 +185,6 @@ public static class TitleViewHpr <T extends TitleView> extends ParentViewHpr <T>
         aView.setContent(label);
     }
     
-    /** Adds a view relative to given view. */
-    public boolean addView(T aView, View aView2)  { aView.setContent(aView2); return true; }
-    
     /** Override to say empty TitleView definitely wants view. */
     public boolean wantsView(T aView, View aView2)  { return aView.getContent()==null; }
 }
@@ -219,16 +210,6 @@ public static class TabViewHpr <T extends TabView> extends ParentViewHpr <T> {
         aView.addTab("  Two  ", new BoxView());
     }
     
-    /** Adds a view relative to given view. */
-    public boolean addView(T aView, View aView2)
-    {
-        int c = aView.getTabCount()-1;
-        if(c>=0 && aView.getTabContent(c) instanceof Label)
-            aView.setTabContent(aView2, c);
-        else aView.addTab("New Tab", aView2);
-        return true;
-    }
-    
     /** Override to say SplitView definitely wants view. */
     public boolean wantsView(T aView, View aView2)  { return true; }
 }
@@ -251,9 +232,6 @@ public static class ScrollViewHpr <T extends ScrollView> extends ParentViewHpr <
         aView.setContent(label); label.setFill(Color.WHITE); label.setMinSize(600,600);
     }
     
-    /** Adds a view relative to given view. */
-    public boolean addView(T aView, View aView2)  { aView.setContent(aView2); return true; }
-    
     /** Override to say empty ScrollView definitely wants view. */
     public boolean wantsView(T aView, View aView2)  { return aView.getContent()==null; }
 }
@@ -274,9 +252,6 @@ public static class SplitViewHpr <T extends SplitView> extends ParentViewHpr <T>
         Label label1 = new Label("View"); label1.setPadding(10,20,10,20); label1.setTextFill(Color.GRAY);
         aView.setItems(label0,label1);
     }
-    
-    /** Adds a view relative to given view. */
-    public boolean addView(T aView, View aView2)  { aView.addItem(aView2); return true; }
     
     /** Override to say SplitView definitely wants view. */
     public boolean wantsView(T aView, View aView2)  { return true; }
@@ -428,11 +403,8 @@ public static class BoxViewHpr <T extends BoxView> extends ParentViewHpr <T> {
         aView.setContent(label);
     }
     
-    /** Adds a view relative to given view. */
-    public boolean addView(T aView, View aView2)  { aView.setContent(aView2); return true; }
-    
     /** Override to say ColView always wants a RowView. */
-    public boolean wantsView(T aView, View aView2)  { return true; }
+    public boolean wantsView(T aView, View aView2)  { return aView.getContent()==null; }
 }
 
 /**
@@ -507,13 +479,6 @@ public static class BorderViewHpr <T extends BorderView> extends ParentViewHpr <
         Color c = Color.GRAY; Insets i = new Insets(3);
         for(Label lb : new Label[] { tl,bl,ll,rl }) {
              lb.setAlign(Pos.CENTER); lb.setTextFill(c); lb.setPadding(i); }
-    }
-    
-    /** Adds a view relative to given view. */
-    public boolean addView(T aView, View aView2)
-    {
-        aView.setCenter(aView2);
-        return true;
     }
 }
 
