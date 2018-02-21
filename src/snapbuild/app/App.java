@@ -1,6 +1,5 @@
 package snapbuild.app;
 import snap.util.Prefs;
-import snap.util.SnapUtils;
 
 /**
  * A custom class.
@@ -23,14 +22,11 @@ public static void main(String args[])
     //er.setInfo("SnapCode Version 1, Build Date: " + SnapUtils.getBuildInfo());
     //Thread.setDefaultUncaughtExceptionHandler(er);
     
-    if(SnapUtils.isTeaVM)
-        new EditorPane().newDocument().setWindowVisible(true);
+    if(snap.util.SnapUtils.isTeaVM) { new EditorPane().newDocument().setWindowVisible(true); return; }
 
     // Show open data source panel
-    else {
-        WelcomePanel.getShared().setOnQuit(() -> quitApp());
-        WelcomePanel.getShared().showPanel();
-    }
+    WelcomePanel.getShared().setOnQuit(() -> quitApp());
+    WelcomePanel.getShared().showPanel();
 }
 
 /**

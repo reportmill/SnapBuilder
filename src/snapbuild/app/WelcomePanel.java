@@ -102,9 +102,9 @@ public void quitApp()  { _onQuit.run(); }
  */
 protected void initUI()
 {
-    // Add WelcomePaneAnim node
-    WelcomePanelAnim anim = new WelcomePanelAnim();
-    getUI(ChildView.class).addChild(anim.getUI(), 0); anim.getUI().playAnimDeep();
+    // Add WelcomePaneAnim view
+    DocView anim = getAnimView();
+    getUI(ChildView.class).addChild(anim, 0); anim.playAnimDeep();
     
     // Enable SitesTable MouseReleased
     TableView sitesTable = getView("SitesTable", TableView.class);
@@ -249,20 +249,20 @@ public static void addRecentFile(String aPath)
  */
 public void clearRecentFiles()  { Prefs.get().getChild("RecentDocuments").clear(); }
 
-/**
- * A viewer owner to load/view WelcomePanel animation from WelcomePanelAnim.snp.
- */
-private static class WelcomePanelAnim extends ViewOwner {
-
-    /** Initialize some fields. */
-    protected void initUI()
-    {
-        setViewText("BuildText", "Build: " + SnapUtils.getBuildInfo());
-        setViewText("JVMText", "JVM: " + System.getProperty("java.runtime.version"));
-        DocView doc = getUI(DocView.class);
-        PageView page = doc.getPage();
-        page.setEffect(null); page.setBorder(null);
-    }
+/** Loads the WelcomePaneAnim.snp DocView. */
+DocView getAnimView()
+{
+    // Unarchive WelcomePaneAnim.snp as DocView
+    WebURL url = WebURL.getURL(getClass(), "WelcomePanelAnim.snp");
+    DocView doc = (DocView)new ViewArchiver().getView(url);
+    
+    // Set BuildText and JavaText
+    View bt = doc.getChild("BuildText"); bt.setText("Build: " + SnapUtils.getBuildInfo());
+    View jt = doc.getChild("JVMText"); jt.setText("JVM: " + System.getProperty("java.runtime.version"));
+    
+    // Clear Effects and return doc
+    PageView page = doc.getPage(); page.setEffect(null); page.setBorder(null);
+    return doc;
 }
 
 }

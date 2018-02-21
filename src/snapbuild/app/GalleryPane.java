@@ -1,8 +1,9 @@
 package snapbuild.app;
 import snap.view.*;
+import snap.viewx.*;
 
 /**
- * A custom class.
+ * Manages the UI for Gallery of views and arrange controls (move up/down, group/ungroup).
  */
 public class GalleryPane extends ViewOwner {
 
