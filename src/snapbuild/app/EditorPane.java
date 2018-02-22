@@ -452,8 +452,9 @@ public ViewTool getTool(Class aClass)
  */
 protected ViewTool createTool(Class aClass)
 {
-    if(aClass==Label.class) return new LabelTool();
     if(aClass==ButtonBase.class) return new ButtonBaseTool();
+    if(aClass==Label.class) return new LabelTool();
+    if(aClass==TabView.class) return new TabViewTool();
     return new ViewTool();
 }
 
