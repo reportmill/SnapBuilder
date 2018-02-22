@@ -5,6 +5,7 @@ import snap.util.*;
 import snap.view.*;
 import snap.viewx.*;
 import snap.web.WebURL;
+import snapbuild.apptools.*;
 
 /**
  * A class to manage the Editor and controls.
@@ -32,11 +33,14 @@ public class EditorPane extends ViewOwner {
     // The ViewTree
     TreeView <View>  _viewTree;
     
+    // The TabView
+    TabView          _tabView;
+    
     // The GalleryPane
     GalleryPane      _gallery = new GalleryPane(this);
     
-    // The ViewInsp
-    ViewInsp         _viewInsp = new ViewInsp(this);
+    // The ViewTool
+    ViewTool         _viewTool = new ViewToolImpl();
 
 /**
  * Creates a new EditorPane.
@@ -44,6 +48,7 @@ public class EditorPane extends ViewOwner {
 public EditorPane()
 {
     getUI();
+    _viewTool._epane = this;
 }
 
 /**
@@ -357,9 +362,9 @@ protected void initUI()
     enableEvents(win, WinClose);
     
     // Add GalleryPane
-    TabView tabView = getView("MainTabView", TabView.class);
-    tabView.addTab(" Add Views ", _gallery.getUI(), 0);
-    tabView.addTab(" Properties ", _viewInsp.getUI(), 1);
+    _tabView = getView("MainTabView", TabView.class);
+    _tabView.addTab(" Add Views ", _gallery.getUI(), 0);
+    _tabView.addTab(" View Props ", _viewTool.getUI(), 1);
 }
 
 /**
@@ -392,7 +397,64 @@ protected void resetUI()
     getWindow().setDocURL(getSourceURL());
     
     // Reset ViewUI
-    if(_viewInsp.getUI().isShowing()) _viewInsp.resetLater();
+    //if(_viewInsp.getUI().isShowing()) _viewInsp.resetLater();
+    
+    // Reset TabView
+    resetTabView();
+}
+
+/**
+ * Resets the tab view.
+ */
+protected void resetTabView()
+{
+    // Get sel view and tools list
+    View selView = getSelView();
+    List <ViewTool> tools = new ArrayList();
+    for(Class c=selView.getClass();c!=View.class;c=c.getSuperclass()) {
+        ViewTool tool = getTool(c);
+        if(tool!=null) tools.add(0, tool);
+    }
+    
+    // Iterate over tabs and update if not matching
+    int buildInCount = 2;
+    for(int i=0;i<tools.size();i++) { ViewTool tool = tools.get(i);
+        if(i+buildInCount>=_tabView.getTabCount())
+            _tabView.addTab(tool.getName(), tool.getUI());
+        else if(_tabView.getTabContent(i+buildInCount)!=tool.getUI()) {
+            _tabView.addTab(tool.getName(), tool.getUI(), i+2);
+            _tabView.removeTab(i+2+1);
+        }
+    }
+    
+    // Remove extra tabs
+    while(_tabView.getTabCount()>tools.size()+2) _tabView.removeTab(_tabView.getTabCount()-1);
+    
+    // Update current tab
+    _tabView.getContent().getOwner().resetLater();
+}
+
+    // Map of tools
+    Map <Class,ViewTool>  _tools = new HashMap();
+
+/**
+ * Returns the tool for given class.
+ */
+public ViewTool getTool(Class aClass)
+{
+    ViewTool tool = _tools.get(aClass);
+    if(tool==null) { _tools.put(aClass, tool=createTool(aClass)); tool._epane = this; }
+    return tool.getClass()!=ViewTool.class? tool : null;
+}
+
+/**
+ * Creates the tool for given class.
+ */
+protected ViewTool createTool(Class aClass)
+{
+    if(aClass==Label.class) return new LabelTool();
+    if(aClass==ButtonBase.class) return new ButtonBaseTool();
+    return new ViewTool();
 }
 
 /**
