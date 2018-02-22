@@ -12,7 +12,7 @@ public class ViewTool <T extends View> extends ViewOwner {
 /**
  * Returns the name.
  */
-public String getName()  { return "View Props"; }
+public String getName()  { return getClass().getSimpleName() + " Props"; }
 
 /**
  * Returns the editor pane.

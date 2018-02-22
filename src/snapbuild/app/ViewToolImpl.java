@@ -203,4 +203,7 @@ protected void respondUI(ViewEvent anEvent)
     if(anEvent.equals("RotationThumb")) selView.setRotate(anEvent.getFloatValue());
 }
 
+/** Returns the name. */
+public String getName()  { return "View Props"; }
+
 }

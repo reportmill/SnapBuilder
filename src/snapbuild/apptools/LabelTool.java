@@ -8,8 +8,28 @@ import snap.view.*;
 public class LabelTool <T extends Label> extends ViewTool <T> {
 
 /**
- * Returns the name.
+ * Reset UI.
  */
-public String getName()  { return "Label Props"; }
+protected void resetUI()
+{
+    // Get selected view
+    T selView = getSelView();
+
+    // Update ImageNameText
+    setViewValue("ImageNameText", selView.getImageName());
+}
+
+/**
+ * Respond to UI.
+ */
+protected void respondUI(ViewEvent anEvent)
+{
+    // Get selected view
+    T selView = getSelView();
+
+    // Handle ImageNameText
+    if(anEvent.equals("ImageNameText"))
+        selView.setImageName(anEvent.getStringValue());
+}
 
 }
