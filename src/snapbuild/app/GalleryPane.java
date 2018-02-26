@@ -36,15 +36,24 @@ protected void initUI()
 }
 
 /**
+ * Reset UI.
+ */
+protected void resetUI()
+{
+    setViewEnabled("ChangeHostButton", getEditor().getSelView() instanceof HostView);
+}
+
+/**
  * Respond to UI.
  */
 protected void respondUI(ViewEvent anEvent)
 {
-    // Handle MoveUpButton, MoveDownButton, GroupInButton, UngroupButton
+    // Handle MoveUpButton, MoveDownButton, GroupInButton, UngroupButton, ChangeHostButton
     if(anEvent.equals("MoveUpButton")) moveViewUp();
     if(anEvent.equals("MoveDownButton")) moveViewDown();
     if(anEvent.equals("GroupInButton")) groupView();
     if(anEvent.equals("UngroupButton")) ungroupView();
+    if(anEvent.equals("ChangeHostButton")) changeHost();
 }
 
 /**
@@ -125,6 +134,48 @@ public void ungroupView()
         par.addGuest(child);
     par.removeGuest(group);
     getEditor().setSelView(par);
+}
+
+/**
+ * Changes the selected HostView to another HostView view.
+ */
+public void changeHost()
+{
+    // Get new FormBuilder and configure
+    FormBuilder form = new FormBuilder(); form.setPadding(20, 5, 15, 5); form.setSpacing(10);
+    form.addLabel("Select new host view class:").setFont(new snap.gfx.Font("Arial", 24));
+    
+    // Define options
+    Class opts[] = { TitleView.class, TabView.class, SplitView.class, ScrollView.class, BoxView.class,
+        ColView.class, RowView.class, BorderView.class };
+    
+    // Add and configure radio buttons
+    for(int i=0; i<opts.length; i++) { Class opt = opts[i];
+        form.addRadioButton("ViewClass", opt.getSimpleName(), i==0); }
+
+    // Run dialog panel (just return if cancelled)
+    if(!form.showPanel(_epane.getUI(), "Group in View", DialogBox.infoImage)) return;
+    
+    // Get select class string, and class
+    String cstr = form.getStringValue("ViewClass");
+    int ind = 0; for(int i=0; i<opts.length; i++) if(cstr.equals(opts[i].getSimpleName())) ind = i;
+    Class cls = opts[ind];
+    
+    // Create new HostView view
+    HostView hostNew = null; try { hostNew = (HostView)cls.newInstance(); }
+    catch(Exception e) { throw new RuntimeException(e); }
+    ViewHpr.getHpr(hostNew).configure(hostNew);
+    
+    // Get old host and parent
+    View sview = getEditor().getSelView();
+    HostView hostOld = sview instanceof HostView? (HostView)sview : null; if(hostOld==null) { beep(); return; }
+    HostView par = sview.getHost(); if(par==null) { beep(); return; }
+    
+    // Add new host
+    par.addGuest(hostNew, sview.indexInHost());
+    for(View guest : hostOld.getGuests()) hostNew.addGuest(guest);
+    par.removeGuest(hostOld);
+    getEditor().setSelView(hostNew);
 }
 
 }

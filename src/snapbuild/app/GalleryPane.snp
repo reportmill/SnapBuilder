@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <RowView MinHeight="0" Padding="12,8,8,8" GrowWidth="true" Spacing="5" FillHeight="true">
-  <Font Name="Arial" Size="12" />
+  <font name="Arial" size="12" />
   <TitleView MinWidth="120" MinHeight="60" Padding="2" Text="Arrange Views">
     <ColView Padding="12" GrowHeight="true" Spacing="9">
       <Button Name="MoveUpButton" PrefWidth="100" Padding="2" LeanX="CENTER" text="Move Up" />
       <Button Name="MoveDownButton" PrefWidth="100" Padding="2" LeanX="CENTER" text="Move Down" />
       <Button Name="GroupInButton" PrefWidth="100" Padding="2" LeanX="CENTER" text="Group in..." />
       <Button Name="UngroupButton" PrefWidth="100" Padding="2" LeanX="CENTER" text="Ungroup" />
+      <Button Name="ChangeHostButton" PrefWidth="100" Padding="2" LeanX="CENTER" text="Change to..." />
     </ColView>
   </TitleView>
   <ScrollView GrowWidth="true">

@@ -105,8 +105,10 @@ public EditorPane newDocument()
 {
     RowView row = new RowView(); row.setPadding(4,4,4,4); row.setSpacing(4); row.setGrowWidth(true);
     ColView col = new ColView(); col.setPadding(4,4,4,4); col.setSpacing(4); col.addChild(row);
-    getEditor().setContent(col);
-    setSelView(row);
+    getEditor().setContent(col); setSelView(row);
+    //BoxView box0 = new BoxView(); box0.setPadding(4,4,4,4); box0.setSpacing(4); box0.setVertical(true);
+    //BoxView box1 = new BoxView(); box1.setPadding(4,4,4,4); box1.setSpacing(4); box1.setGrowWidth(true);
+    //box0.addGuest(box1); getEditor().setContent(box0); getEditor().setSelView(box1);
     return this;
 }
 

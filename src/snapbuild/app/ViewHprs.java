@@ -404,7 +404,7 @@ public static class BoxViewHpr <T extends BoxView> extends ParentViewHpr <T> {
     }
     
     /** Override to say ColView always wants a RowView. */
-    public boolean wantsView(T aView, View aView2)  { return aView.getContent()==null; }
+    public boolean wantsView(T aView, View aView2)  { return true; }
 }
 
 /**

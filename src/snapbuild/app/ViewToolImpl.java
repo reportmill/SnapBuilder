@@ -98,9 +98,10 @@ protected void resetUI()
     // Update BorderWidthSpinner
     setViewValue("BorderWidthSpinner", bdr!=null? bdr.getWidth() : 0);
     
-    // Update OpacitySlider, RotationThumb
+    // Update OpacitySlider, RotationThumb, VerticalCheckBox
     setViewValue("OpacitySlider", selView.getOpacity());
     setViewValue("RotationThumb", selView.getRotate());
+    setViewValue("VerticalCheckBox", selView.isVertical());
 }
 
 /**
@@ -198,9 +199,10 @@ protected void respondUI(ViewEvent anEvent)
     if(anEvent.equals("FillColorButton"))
         selView.setFill(getView("FillColorButton", ColorButton.class).getColor());
     
-    // Handle OpacitySlider
+    // Handle OpacitySlider, RotationThumb, VerticalCheckBox
     if(anEvent.equals("OpacitySlider")) selView.setOpacity(anEvent.getFloatValue());
     if(anEvent.equals("RotationThumb")) selView.setRotate(anEvent.getFloatValue());
+    if(anEvent.equals("VerticalCheckBox")) selView.setVertical(anEvent.getBoolValue());
 }
 
 /** Returns the name. */

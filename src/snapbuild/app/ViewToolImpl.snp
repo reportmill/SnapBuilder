@@ -125,5 +125,6 @@
       <Label PrefWidth="50" text="Rotation:" />
       <ThumbWheel Name="RotationThumb" PrefWidth="120" PrefHeight="18" />
     </RowView>
+    <CheckBox Name="VerticalCheckBox" text="Vertical" />
   </ColView>
 </RowView>
