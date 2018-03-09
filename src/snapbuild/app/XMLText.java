@@ -1,5 +1,6 @@
 package snapbuild.app;
-import snap.gfx.Font;
+import snap.gfx.*;
+import snap.parse.*;
 import snap.util.SnapUtils;
 import snap.view.*;
 
@@ -9,20 +10,25 @@ import snap.view.*;
 public class XMLText extends ViewOwner {
     
     // The EditorPane
-    EditorPane      _epane;
+    EditorPane       _epane;
     
     // The View
-    View            _content;
+    View             _content;
 
     // The XML string
-    String          _xmlStr;
+    String           _xmlStr;
     
     // The TextView
-    TextView        _xmlText;
+    static TextView  _xmlText;
 
     // 
     boolean         _xmlTextSelChanging;
 
+    // Colors
+    static Color      NAME_COLOR = new Color("#7D1F7C"); //336633
+    static Color      KEY_COLOR = new Color("#8F4A19");
+    static Color      VALUE_COLOR = new Color("#5E1B9F"); // CC0000
+    
 /**
  * Creates new XMLText for EditorPane.
  */
@@ -126,7 +132,7 @@ View getViewInCharRange(int aStart, int aEnd, View aView)
 protected View createUI()
 {
     // Create XMLText TextView
-    _xmlText = new TextView(); _xmlText.setFont(Font.Arial14);
+    _xmlText = new TextView(); _xmlText.setFont(Font.Arial14.deriveFont(15)); _xmlText.setRich(true);
     _xmlText.getTextArea().addPropChangeListener(pc -> xmlTextSelDidChange(), TextView.Selection_Prop);
     return _xmlText;
 }
@@ -142,6 +148,7 @@ protected void updateXMLText()
     // Get View
     String text = getXMLString(false);
     _xmlText.setText(text);
+    new XMLParser().parse(text);
     runLaterDelayed(200, () -> updateXMLTextSel());
 }
 
@@ -173,6 +180,69 @@ protected void xmlTextSelDidChange()
     _xmlTextSelChanging = true;
     _epane.setSelViewKeepPath(view);
     _xmlTextSelChanging = false;
+}
+
+/**
+ * Sets the text color for a range.
+ */
+static void setColor(Color aColor, int aStart, int aEnd)
+{
+    _xmlText.getTextBox().setStyleValue(TextStyle.COLOR_KEY, aColor, aStart, aEnd);
+}
+
+/**
+ * A class to parse XML.
+ */
+public class XMLParser extends Parser {
+    
+    /** Override to set simple rule handlers. */
+    public XMLParser()
+    {
+        getRule("Element").setHandler(new ElementHandler());
+        getRule("Attribute").setHandler(new AttributeHandler());
+    }
+    
+    /** Override to load rules from /snap/util/XMLParser.txt. */
+    protected ParseRule createRule()  { return ParseUtils.loadRule(snap.util.XMLParser.class, null); }
+    
+    /** Override to return XMLTokenizer. */
+    protected Tokenizer createTokenizerImpl()  { return new snap.util.XMLParser.XMLTokenizer(); }
+}
+
+/**
+ * Element Handler: Element { "<" Name Attribute* ("/>" | (">" Content "</" Name ">")) }
+ */
+public static class ElementHandler extends ParseHandler {
+    
+    /** ParseHandler method. */
+    public void parsedOne(ParseNode aNode, String anId)
+    {
+        // Handle Name
+        if(anId=="Name") setColor(NAME_COLOR, aNode.getStart(), aNode.getEnd());
+            
+        // Handle close: On first close, check for content
+        else if(anId=="<"|| anId==">" || anId=="</" || anId=="/>")
+            setColor(NAME_COLOR, aNode.getStart(), aNode.getEnd());
+    }
+}
+
+/**
+ * Attribute Handler: Attribute { Name "=" String }
+ */
+public static class AttributeHandler extends ParseHandler {
+    
+    /** ParseHandler method. */
+    public void parsedOne(ParseNode aNode, String anId)
+    {
+        // Handle Name
+        if(anId=="Name") setColor(KEY_COLOR, aNode.getStart(), aNode.getEnd());
+            
+        // Handle String
+        else if(anId=="String") setColor(VALUE_COLOR, aNode.getStart(), aNode.getEnd());
+        
+        // Handle "="
+        else if(anId=="=") setColor(NAME_COLOR, aNode.getStart(), aNode.getEnd());
+    }
 }
 
 }
