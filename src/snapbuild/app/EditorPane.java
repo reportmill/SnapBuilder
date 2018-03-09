@@ -21,9 +21,6 @@ public class EditorPane extends ViewOwner {
     // The Editor
     Editor           _editor, _realEditor;
     
-    // The XML TextView
-    TextView         _xmlText;
-    
     // A box to hold selection path
     RowView          _selPathBox;
     
@@ -42,6 +39,9 @@ public class EditorPane extends ViewOwner {
     // The ViewTool
     ViewTool         _viewTool = new ViewToolImpl();
 
+    // The XML TextView
+    XMLText          _xmlText = new XMLText(this);
+    
 /**
  * Creates a new EditorPane.
  */
@@ -97,6 +97,21 @@ public View getSelView()  { return _editor.getSelView(); }
  * Sets the Editor.SelView.
  */
 public void setSelView(View aView)  { _editor.setSelView(aView); }
+
+/**
+ * Called when SelPath is clicked.
+ */
+protected void setSelViewKeepPath(View aView)
+{
+    // Get whether given view is in current path
+    boolean inPath = false;
+    for(View v=_selPathDeep;v!=null && v!=getEditor().getContentBox();v=v.getParent()) if(v==aView) inPath = true;
+    
+    // Set SelView and restore SelPathDeep if view was in path
+    View deep = _selPathDeep;
+    getEditor().setSelView(aView);
+    if(inPath) _selPathDeep = deep;
+}
 
 /**
  * Creates a new default editor pane.
@@ -340,9 +355,6 @@ protected void initUI()
     _viewTree.setOwner(this);
     _editorSplit.removeItem(_viewTree);
     
-    // Create XMLText
-    _xmlText = new TextView(); _xmlText.setName("XMLText"); _xmlText.setFont(Font.Arial14);
-    
     // Get SelPathBox
     _selPathBox = getView("SelPathBox", RowView.class);
     updateSelPathBox();
@@ -485,8 +497,8 @@ protected void respondUI(ViewEvent anEvent)
     if(anEvent.equals("XMLButton")) {
         if(_transPane.getContent()==_editorSplit) _transPane.setTransition(TransitionPane.MoveRight);
         else _transPane.setTransition(TransitionPane.MoveLeft);
-        _transPane.setContent(_xmlText);
-        updateXMLText();
+        _transPane.setContent(_xmlText.getUI());
+        _xmlText.updateXMLText();
      }
 
     // Handle PreviewButton
@@ -554,38 +566,13 @@ protected void updateSelPathBox()
 }
 
 /**
- * Updates the XMLText TextView.
- */
-protected void updateXMLText()
-{
-    // If not showing, just return
-    if(!_xmlText.isShowing()) return;
-    
-    // Get View
-    View view = getContent();
-    String text = SnapUtils.getText(new ViewArchiver().toXML(view).getBytes());
-    _xmlText.setText(text);
-}
-
-/**
- * Updates the XMLText TextView.
- */
-protected void updateXMLTextSel()
-{
-    // If not showing, just return
-    if(!_xmlText.isShowing()) return;
-    
-    // Get View
-    View sview = getSelView();
-}
-
-/**
  * Called when Editor.SelView changes.
  */
 protected void editorSelViewChange()
 {
     _selPathDeep = getSelView();
     resetLater();
+    _xmlText.updateXMLTextSel();
 }
 
 /**
