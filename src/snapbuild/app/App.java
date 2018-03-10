@@ -7,7 +7,7 @@ import snap.util.Prefs;
 public class App {
     
     // Trigger snaptea
-    static { snaptea.TV.set(); }
+    //static { snaptea.TV.set(); }
 
 /**
  * Standard main implementation.
