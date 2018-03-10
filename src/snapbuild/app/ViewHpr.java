@@ -8,9 +8,6 @@ import snapbuild.app.ViewHprs.*;
  */
 public class ViewHpr <T extends View> {
     
-    // The Array of actions
-    Action      _actions[];
-    
     // A map of class to helper instance
     static Map <Class,ViewHpr>   _hprs = new HashMap();
 
