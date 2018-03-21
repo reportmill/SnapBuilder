@@ -111,7 +111,7 @@ public void resetUI()
 {
     setViewEnabled("OpenButton", getSelFile()!=null);
     setViewItems("SitesTable", getRecentFiles());
-    setViewSelectedItem("SitesTable", getSelFile());
+    setViewSelItem("SitesTable", getSelFile());
 }
 
 /**
@@ -121,7 +121,7 @@ public void respondUI(ViewEvent anEvent)
 {
     // Handle SitesTable
     if(anEvent.equals("SitesTable"))
-        setSelFile((WebFile)anEvent.getSelectedItem());
+        setSelFile((WebFile)anEvent.getSelItem());
 
     // Handle NewButton
     if(anEvent.equals("NewButton")) {
@@ -134,7 +134,7 @@ public void respondUI(ViewEvent anEvent)
     
     // Handle OpenButton or SitesTable double-click
     if(anEvent.equals("OpenButton") || anEvent.equals("SitesTable") && anEvent.getClickCount()>1) {
-        WebFile file = (WebFile)getViewSelectedItem("SitesTable");
+        WebFile file = (WebFile)getViewSelItem("SitesTable");
         openFile(file);
     }
     

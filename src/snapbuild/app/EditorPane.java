@@ -397,12 +397,12 @@ protected void resetUI()
     // Update ViewTree
     if(_viewTree.isShowing()) {
         _viewTree.setItems(getContent());
-        _viewTree.setSelectedItem(null);
+        _viewTree.setSelItem(null);
         _viewTree.collapseItem(getContent());
         _viewTree.expandItem(getContent());
         for(View v=getSelView();v!=getContent();v=v.getParent())
             _viewTree.expandItem(v);
-        _viewTree.setSelectedItem(getSelView());
+        _viewTree.setSelItem(getSelView());
     }
     
     // If title has changed, update window title
@@ -526,7 +526,7 @@ protected void respondUI(ViewEvent anEvent)
 
     // Handle ViewTree
     if(anEvent.equals(_viewTree)) {
-        View view = _viewTree.getSelectedItem();
+        View view = _viewTree.getSelItem();
         getEditor().setSelView(view);
     }
     

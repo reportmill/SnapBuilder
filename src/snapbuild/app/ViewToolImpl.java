@@ -17,7 +17,7 @@ protected void initUI()
 {
     // Set Font button images
     setViewItems("FontCombo", new String[] { "Arial", "ArialBold"});
-    setViewSelectedItem("FontCombo", "Arial");
+    setViewSelItem("FontCombo", "Arial");
     getView("FontPlusButton", ButtonBase.class).setImage(Image.get(TextPane.class, "pkg.images/Font_Increase.png"));
     getView("FontMinusButton", ButtonBase.class).setImage(Image.get(TextPane.class, "pkg.images/Font_Decrease.png"));
     

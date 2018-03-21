@@ -89,7 +89,7 @@ public static class ComboBoxHpr <T extends ComboBox> extends ParentViewHpr <T> {
     public void configureGallery(T aView)
     {
         aView.setMinSize(80,22);
-        aView.setItems("ComboBox" ); aView.setSelectedItem("ComboBox");
+        aView.setItems("ComboBox" ); aView.setSelItem("ComboBox");
     }
 }
 
@@ -358,7 +358,7 @@ public static class BrowserViewHpr <T extends BrowserView> extends ParentViewHpr
         aView.setResolver(new BR());
         aView.setItems("BrowserView");
         aView.setCellConfigure((Consumer <ListCell>)c -> configureCell(c));
-        aView.setSelectedItem("BrowserView");
+        aView.setSelItem("BrowserView");
         
         aView.getScrollView().setShowHBar(true); aView.getScrollView().setBarSize(10);
         aView.getCol(0).getScrollView().setShowVBar(true); aView.getCol(0).getScrollView().setBarSize(10);

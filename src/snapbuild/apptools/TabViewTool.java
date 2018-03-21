@@ -22,7 +22,7 @@ protected void resetUI()
 
     // Update TabList
     setViewItems("TabList", names);
-    setViewSelectedIndex("TabList", selView.getSelectedIndex());
+    setViewSelIndex("TabList", selView.getSelIndex());
 }
 
 /**
@@ -41,13 +41,13 @@ protected void respondUI(ViewEvent anEvent)
     
     // Handle RemoveButton
     if(anEvent.equals("RemoveButton")) {
-        int ind = anEvent.getSelectedIndex();
+        int ind = anEvent.getSelIndex();
         selView.removeTab(ind);
     }
 
     // Handle TabList
     if(anEvent.equals("TabList"))
-        selView.setSelectedIndex(anEvent.getSelectedIndex());
+        selView.setSelIndex(anEvent.getSelIndex());
 }
 
 }
