@@ -62,9 +62,9 @@ protected void resetUI()
     mws.getTextField().setTextFill(selView.isMinWidthSet()? Color.BLACK : Color.GRAY);
     mhs.getTextField().setTextFill(selView.isMinHeightSet()? Color.BLACK : Color.GRAY);
     
-    // Update PaddingText, SpacingSpinner
+    // Update PaddingText, SpaceSpinner
     setViewValue("PaddingText", selView.getPadding().getString());
-    setViewValue("SpacingSpinner", selView.getSpacing());
+    setViewValue("SpaceSpinner", selView.getSpacing());
     
     // Update LeanX, LeanY
     setViewValue("LeanX0", selView.getLeanX()==HPos.LEFT);
@@ -136,11 +136,20 @@ protected void respondUI(ViewEvent anEvent)
     if(anEvent.equals("MWResetButton")) selView.setMinWidth(-1);
     if(anEvent.equals("MHResetButton")) selView.setMinHeight(-1);
     
-    // Handle PaddingText, SpacingSpinner, PadAdd5Button, SpaceAdd5Button
+    // Handle PaddingText, PadArrowView, PadAdd5Button, PadResetButton
     if(anEvent.equals("PaddingText")) selView.setPadding(Insets.get(anEvent.getStringValue()));
-    if(anEvent.equals("SpacingSpinner")) selView.setSpacing(anEvent.getFloatValue());
     if(anEvent.equals("PadAdd5Button")) selView.setPadding(Insets.add(selView.getPadding(), 5, 5, 5, 5));
+    if(anEvent.equals("PadResetButton")) selView.setPadding(selView.getDefaultPadding());
+    if(anEvent.equals("PadArrowView")) { ArrowView av = anEvent.getView(ArrowView.class);
+        Insets ins = selView.getPadding();
+        Insets ins2 = Insets.add(ins, av.isUp()? 5 : 0, av.isRight()? 5 : 0, av.isDown()? 5 : 0, av.isLeft()? 5: 0);
+        selView.setPadding(ins2);
+    }
+    
+    // Handle SpaceSpinner, SpaceAdd5Button, SpaceResetButton
+    if(anEvent.equals("SpaceSpinner")) selView.setSpacing(anEvent.getFloatValue());
     if(anEvent.equals("SpaceAdd5Button")) selView.setSpacing(selView.getSpacing()+5);
+    if(anEvent.equals("SpaceResetButton")) selView.setSpacing(0);
     
     // Handle LeanX, LeanY
     if(anEvent.equals("LeanX0")) selView.setLeanX(HPos.LEFT);

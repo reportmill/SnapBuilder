@@ -674,7 +674,7 @@ public class ViewTreeResolver extends TreeResolver <View> {
     {
         if(!(anItem instanceof ParentView)) return false;
         if(anItem instanceof Label || anItem instanceof ButtonBase || anItem instanceof Spinner ||
-            anItem instanceof TextField) return false;
+            anItem instanceof ArrowView || anItem instanceof TextField) return false;
         if(anItem instanceof ComboBox || anItem instanceof ListView) return false;
         return ((ParentView)anItem).getChildCount()>0;
     }

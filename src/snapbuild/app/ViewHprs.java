@@ -116,6 +116,15 @@ public static class SpinnerHpr <T extends Spinner> extends ViewHpr <T> {
 }
 
 /**
+ * A ViewHpr for ArrowView.
+ */
+public static class ArrowViewHpr <T extends ArrowView> extends ViewHpr <T> {
+    
+    /** Configures a new View. */
+    public void configure(T aView)  { aView.setShowLeft(true); aView.setShowRight(true); }
+}
+
+/**
  * A ViewHpr for ThumbWheel.
  */
 public static class ThumbWheelHpr <T extends ThumbWheel> extends ViewHpr <T> {

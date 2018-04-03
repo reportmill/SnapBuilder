@@ -47,6 +47,7 @@ public static ViewHpr getHpr(Object anObj)
  */
 public static ViewHpr createHpr(Class aCls)
 {
+    if(aCls==ArrowView.class) return new ArrowViewHpr();
     if(aCls==Button.class) return new ButtonHpr();
     if(aCls==ButtonBase.class) return new ButtonBaseHpr();
     if(aCls==BrowserView.class) return new BrowserViewHpr();

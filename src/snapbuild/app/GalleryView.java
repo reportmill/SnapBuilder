@@ -21,7 +21,7 @@ public GalleryView()
     // Basic Classes
     Class <? extends View> classes[] = new Class[] { Label.class, Button.class, ToggleButton.class, CheckBox.class,
         RadioButton.class, TextField.class, ComboBox.class, Slider.class, ThumbWheel.class,
-        ProgressBar.class, Spinner.class,
+        ProgressBar.class, Spinner.class, ArrowView.class,
             
         // Containers
         TextView.class, TitleView.class, TabView.class, ScrollView.class, SplitView.class,

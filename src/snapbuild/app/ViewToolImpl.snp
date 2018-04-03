@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <RowView Padding="20,20,5,20" GrowWidth="true" Spacing="20">
-  <Font Name="Arial" Size="12" />
+  <font name="Arial" size="12" />
   <ColView GrowHeight="true" Spacing="6">
     <RowView GrowWidth="true" Spacing="4">
       <Label text="Name:" />
@@ -40,15 +40,18 @@
     </RowView>
   </ColView>
   <ColView GrowHeight="true" Spacing="6">
-    <RowView GrowWidth="true" Spacing="4">
+    <RowView GrowWidth="true" Spacing="2">
       <Label text="Padding:" />
-      <TextField Name="PaddingText" PrefWidth="100" ColCount="12" />
-      <Button Name="PadAdd5Button" PrefWidth="22" PrefHeight="22" Padding="2" text="+5" ShowBorder="false" />
+      <TextField Name="PaddingText" PrefWidth="80" ColCount="12" />
+      <ArrowView Name="PadArrowView" PrefWidth="36" ShowLeft="true" ShowRight="true" />
+      <Button Name="PadAdd5Button" PrefWidth="20" PrefHeight="20" Padding="2" text="+5" ShowBorder="false" />
+      <Button Name="PadResetButton" PrefWidth="20" PrefHeight="20" ToolTip="Clear Font Size" text="&#10226;" ShowBorder="false" />
     </RowView>
     <RowView PrefHeight="24" GrowWidth="true" Spacing="4">
       <Label PrefWidth="48" text="Spacing:" />
-      <Spinner Name="SpacingSpinner" PrefWidth="64" PrefHeight="22" />
-      <Button Name="SpaceAdd5Button" PrefWidth="22" PrefHeight="22" Padding="2" text="+5" ShowBorder="false" />
+      <Spinner Name="SpaceSpinner" PrefWidth="64" PrefHeight="22" />
+      <Button Name="SpaceAdd5Button" PrefWidth="20" PrefHeight="22" Padding="2" text="+5" ShowBorder="false" />
+      <Button Name="SpaceResetButton" PrefWidth="20" PrefHeight="20" ToolTip="Clear Font Size" text="&#10226;" ShowBorder="false" />
     </RowView>
     <RowView GrowWidth="true">
       <Label text="LeanX: " />
