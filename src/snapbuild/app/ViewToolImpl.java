@@ -1,4 +1,5 @@
 package snapbuild.app;
+import java.text.DecimalFormat;
 import snap.gfx.*;
 import snap.gfx.Border.*;
 import snap.util.StringUtils;
@@ -62,6 +63,10 @@ protected void resetUI()
     mws.getTextField().setTextFill(selView.isMinWidthSet()? Color.BLACK : Color.GRAY);
     mhs.getTextField().setTextFill(selView.isMinHeightSet()? Color.BLACK : Color.GRAY);
     
+    // Update BoundsText
+    Rect bnds = selView.getBounds();
+    setViewText("BoundsText", fmt(bnds.x) + ", " + fmt(bnds.y) + ", " + fmt(bnds.width) + ", " + fmt(bnds.height));
+    
     // Update MarginText, PaddingText, SpaceSpinner
     setViewValue("MarginText", selView.getMargin().getString());
     setViewValue("PaddingText", selView.getPadding().getString());
@@ -71,11 +76,9 @@ protected void resetUI()
     setViewValue("LeanX0", selView.getLeanX()==HPos.LEFT);
     setViewValue("LeanX1", selView.getLeanX()==HPos.CENTER);
     setViewValue("LeanX2", selView.getLeanX()==HPos.RIGHT);
-    setViewValue("LeanX3", selView.getLeanX()==null);
     setViewValue("LeanY0", selView.getLeanY()==VPos.TOP);
     setViewValue("LeanY1", selView.getLeanY()==VPos.CENTER);
     setViewValue("LeanY2", selView.getLeanY()==VPos.BOTTOM);
-    setViewValue("LeanY3", selView.getLeanY()==null);
     
     // Update GrowWidthCheckBox, GrowHeightCheckBox
     setViewValue("GrowWidthCheckBox", selView.isGrowWidth());
@@ -166,11 +169,11 @@ protected void respondUI(ViewEvent anEvent)
     if(anEvent.equals("LeanX0")) selView.setLeanX(HPos.LEFT);
     if(anEvent.equals("LeanX1")) selView.setLeanX(HPos.CENTER);
     if(anEvent.equals("LeanX2")) selView.setLeanX(HPos.RIGHT);
-    if(anEvent.equals("LeanX3")) selView.setLeanX(null);
+    if(anEvent.equals("LeanXReset")) selView.setLeanX(null);
     if(anEvent.equals("LeanY0")) selView.setLeanY(VPos.TOP);
     if(anEvent.equals("LeanY1")) selView.setLeanY(VPos.CENTER);
     if(anEvent.equals("LeanY2")) selView.setLeanY(VPos.BOTTOM);
-    if(anEvent.equals("LeanY3")) selView.setLeanY(null);
+    if(anEvent.equals("LeanYReset")) selView.setLeanY(null);
     
     // Handle GrowWidthCheckBox, GrowHeightCheckBox
     if(anEvent.equals("GrowWidthCheckBox")) selView.setGrowWidth(anEvent.getBoolValue());
@@ -227,5 +230,9 @@ protected void respondUI(ViewEvent anEvent)
 
 /** Returns the name. */
 public String getName()  { return "View Props"; }
+
+// Format
+private static String fmt(double aVal) { return _fmt.format(aVal); }
+private static DecimalFormat _fmt = new DecimalFormat("#.##");
 
 }

@@ -38,6 +38,10 @@
       <Button Name="MHAdd10Button" PrefWidth="24" PrefHeight="22" Padding="2" text="+10" ShowBorder="false" />
       <Button Name="MHResetButton" PrefWidth="20" PrefHeight="20" ToolTip="Clear Font Size" text="&#10226;" ShowBorder="false" />
     </RowView>
+    <RowView Padding="6,0,0,0" GrowWidth="true" Spacing="8">
+      <Label text="Bounds:" />
+      <Label Name="BoundsText" text="BoundsText" />
+    </RowView>
   </ColView>
   <ColView GrowHeight="true" Spacing="6">
     <RowView GrowWidth="true" Spacing="2">
@@ -65,14 +69,14 @@
       <ToggleButton Name="LeanX0" PrefWidth="22" PrefHeight="22" Padding="2" image="pkg.images/AlignLeft.png" ShowBorder="false" />
       <ToggleButton Name="LeanX1" PrefWidth="22" PrefHeight="22" Padding="2" image="pkg.images/AlignCenter.png" ShowBorder="false" />
       <ToggleButton Name="LeanX2" PrefWidth="22" PrefHeight="22" Padding="2" image="pkg.images/AlignRight.png" ShowBorder="false" />
-      <ToggleButton Name="LeanX3" PrefWidth="22" PrefHeight="22" Padding="2" text="&#10226;" ShowBorder="false" Selected="true" />
+      <Button Name="LeanXReset" PrefWidth="20" PrefHeight="20" Padding="2" text="&#10226;" ShowBorder="false" />
     </RowView>
     <RowView GrowWidth="true">
       <Label text="LeanY: " />
       <ToggleButton Name="LeanY0" PrefWidth="22" PrefHeight="22" Padding="2" image="pkg.images/AlignTop.png" ShowBorder="false" />
       <ToggleButton Name="LeanY1" PrefWidth="22" PrefHeight="22" Padding="2" image="pkg.images/AlignMiddle.png" ShowBorder="false" />
       <ToggleButton Name="LeanY2" PrefWidth="22" PrefHeight="22" Padding="2" image="pkg.images/AlignBottom.png" ShowBorder="false" />
-      <ToggleButton Name="LeanY3" PrefWidth="22" PrefHeight="22" Padding="2" text="&#10226;" ShowBorder="false" Selected="true" />
+      <Button Name="LeanYReset" PrefWidth="20" PrefHeight="20" Padding="2" text="&#10226;" ShowBorder="false" />
     </RowView>
     <RowView Align="TOP_LEFT" Padding="2" GrowWidth="true">
       <TitleView MinHeight="60" Align="CENTER" Padding="5,12,10,12" Text="Align">
