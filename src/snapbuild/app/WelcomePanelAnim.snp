@@ -5,7 +5,7 @@
     <ImageView width="400" height="220" resource="1902610833" PreserveRatio="false">
       <effect type="emboss" altitude="90" />
     </ImageView>
-    <TextArea x="11" y="1" width="380" height="140" valign="middle">
+    <TextArea x="11" y="1" width="380" height="140" Align="CENTER">
       <effect type="blur" radius="12" />
       <RichText>
         <font name="Arial Black" size="58" />
@@ -14,7 +14,7 @@
         <string>SnapBuilder</string>
       </RichText>
     </TextArea>
-    <TextArea x="11" y="-1" width="380" height="140" valign="middle">
+    <TextArea x="11" y="-1" width="380" height="140" Align="CENTER">
       <effect type="emboss" radius="5" />
       <RichText>
         <font name="Arial Black" size="58" />

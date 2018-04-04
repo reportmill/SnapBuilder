@@ -10,13 +10,14 @@
     <Separator PrefHeight="18" Vertical="true" />
     <Button Name="UndoButton" PrefWidth="22" PrefHeight="22" ToolTip="Undo" image="Edit_Undo.png" ShowBorder="false" />
     <Button Name="RedoButton" PrefWidth="22" PrefHeight="22" ToolTip="Redo" image="Edit_Redo.png" ShowBorder="false" />
+    <Button Name="DocButton" PrefHeight="20" Margin="0,8,0,0" Padding="0,4,0,4" LeanX="RIGHT" text="SnapKit Doc" />
     <RowView LeanX="RIGHT">
       <ToggleButton Name="EditButton" PrefWidth="52" PrefHeight="20" text="Edit" Position="CENTER_LEFT" Selected="true" Group="tge" />
       <ToggleButton Name="XMLButton" PrefWidth="52" PrefHeight="20" LeanX="RIGHT" text="XML" Position="CENTER" Group="tge" />
       <ToggleButton Name="PreviewButton" PrefWidth="52" PrefHeight="20" text="Run" Position="CENTER_RIGHT" Group="tge" />
     </RowView>
   </RowView>
-  <View Name="TransPane" Class="snap.viewx.TransitionPane" GrowHeight="true" />
+  <View Name="TransPane" GrowHeight="true" Class="snap.viewx.TransitionPane" />
   <SplitView Name="SplitView" GrowHeight="true">
     <TreeView Name="ViewTree" />
     <ScrollView Name="EditorScrollView" GrowWidth="true">
