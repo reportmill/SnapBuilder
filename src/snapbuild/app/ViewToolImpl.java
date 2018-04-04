@@ -62,7 +62,8 @@ protected void resetUI()
     mws.getTextField().setTextFill(selView.isMinWidthSet()? Color.BLACK : Color.GRAY);
     mhs.getTextField().setTextFill(selView.isMinHeightSet()? Color.BLACK : Color.GRAY);
     
-    // Update PaddingText, SpaceSpinner
+    // Update MarginText, PaddingText, SpaceSpinner
+    setViewValue("MarginText", selView.getMargin().getString());
     setViewValue("PaddingText", selView.getPadding().getString());
     setViewValue("SpaceSpinner", selView.getSpacing());
     
@@ -136,13 +137,23 @@ protected void respondUI(ViewEvent anEvent)
     if(anEvent.equals("MWResetButton")) selView.setMinWidth(-1);
     if(anEvent.equals("MHResetButton")) selView.setMinHeight(-1);
     
+    // Handle MarginText, MarginArrowView, MarginAdd5Button, MarginResetButton
+    if(anEvent.equals("MargindingText")) selView.setMargin(Insets.get(anEvent.getStringValue()));
+    if(anEvent.equals("MarginAdd5Button")) selView.setMargin(Insets.add(selView.getMargin(), 5, 5, 5, 5));
+    if(anEvent.equals("MarginResetButton")) selView.setMargin(selView.getDefaultMargin());
+    if(anEvent.equals("MarginArrowView")) { ArrowView av = anEvent.getView(ArrowView.class);
+        Insets ins = selView.getMargin();
+        Insets ins2 = Insets.add(ins, av.isUp()? 2 : 0, av.isRight()? 2 : 0, av.isDown()? 2 : 0, av.isLeft()? 2: 0);
+        selView.setMargin(ins2);
+    }
+    
     // Handle PaddingText, PadArrowView, PadAdd5Button, PadResetButton
     if(anEvent.equals("PaddingText")) selView.setPadding(Insets.get(anEvent.getStringValue()));
     if(anEvent.equals("PadAdd5Button")) selView.setPadding(Insets.add(selView.getPadding(), 5, 5, 5, 5));
     if(anEvent.equals("PadResetButton")) selView.setPadding(selView.getDefaultPadding());
     if(anEvent.equals("PadArrowView")) { ArrowView av = anEvent.getView(ArrowView.class);
         Insets ins = selView.getPadding();
-        Insets ins2 = Insets.add(ins, av.isUp()? 5 : 0, av.isRight()? 5 : 0, av.isDown()? 5 : 0, av.isLeft()? 5: 0);
+        Insets ins2 = Insets.add(ins, av.isUp()? 2 : 0, av.isRight()? 2 : 0, av.isDown()? 2 : 0, av.isLeft()? 2: 0);
         selView.setPadding(ins2);
     }
     
