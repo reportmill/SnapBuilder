@@ -15,6 +15,9 @@ public static class LabelHpr <T extends Label> extends ParentViewHpr <T> {
     
     /** Configures a new View. */
     public void configure(T aView)  { aView.setText("Label"); }
+    
+    /** Sets the text fill. */
+    public void setTextFill(T aView, Paint aPaint)  { aView.setTextFill(aPaint); }
 }
 
 /**
@@ -24,6 +27,9 @@ public static class ButtonBaseHpr <T extends ButtonBase> extends ParentViewHpr <
     
     /** Configures a new View. */
     public void configure(T aView)  { aView.setText("Button"); }
+    
+    /** Sets the text fill. */
+    public void setTextFill(T aView, Paint aPaint)  { aView.getLabel().setTextFill(aPaint); }
 }
 
 /**
@@ -75,6 +81,9 @@ public static class TextFieldHpr <T extends TextField> extends ParentViewHpr <T>
     {
         aView.setColCount(12); aView.setPromptText("TextField");
     }
+    
+    /** Sets the text fill. */
+    public void setTextFill(T aView, Paint aPaint)  { aView.setTextFill(aPaint); }
 }
 
 /**
@@ -172,6 +181,9 @@ public static class TextViewHpr <T extends TextView> extends ParentViewHpr <T> {
         
         aView.setText("TextView"); aView.setTextFill(Color.GRAY);
     }
+    
+    /** Sets the text fill. */
+    public void setTextFill(T aView, Paint aPaint)  { aView.setTextFill(aPaint); }
 }
 
 /**

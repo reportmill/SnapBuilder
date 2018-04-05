@@ -99,8 +99,14 @@ protected void resetUI()
     setViewValue("RaiseBdrButton", bdr instanceof BevelBorder && ((BevelBorder)bdr).getType()==1);
     setViewValue("EtchBdrButton", bdr instanceof EtchBorder);
     
-    // Update BorderWidthSpinner
+    // Update BorderColorButton, BorderWidthSpinner
+    //getView("BorderColorButton", ColorButton.class).setColor(bdr!=null? bdr.getColor() : null);
     setViewValue("BorderWidthSpinner", bdr!=null? bdr.getWidth() : 0);
+    
+    // Update FillColorButton, TextFillColorButton
+    //Color color = selView.getFill() instanceof Color? (Color)selView.getFill() : null;
+    //getView("FillColorButton", ColorButton.class).setColor(color);
+    //getView("TextColorButton", ColorButton.class).setColor(bdr!=null? bdr.getColor() : null);
     
     // Update OpacitySlider, RotationThumb, VerticalCheckBox
     setViewValue("OpacitySlider", selView.getOpacity());
@@ -141,7 +147,7 @@ protected void respondUI(ViewEvent anEvent)
     if(anEvent.equals("MHResetButton")) selView.setMinHeight(-1);
     
     // Handle MarginText, MarginArrowView, MarginAdd5Button, MarginResetButton
-    if(anEvent.equals("MargindingText")) selView.setMargin(Insets.get(anEvent.getStringValue()));
+    if(anEvent.equals("MarginText")) selView.setMargin(Insets.get(anEvent.getStringValue()));
     if(anEvent.equals("MarginAdd5Button")) selView.setMargin(Insets.add(selView.getMargin(), 5, 5, 5, 5));
     if(anEvent.equals("MarginResetButton")) selView.setMargin(selView.getDefaultMargin());
     if(anEvent.equals("MarginArrowView")) { ArrowView av = anEvent.getView(ArrowView.class);
@@ -221,6 +227,10 @@ protected void respondUI(ViewEvent anEvent)
     // Handle FillColorButton
     if(anEvent.equals("FillColorButton"))
         selView.setFill(getView("FillColorButton", ColorButton.class).getColor());
+    
+    // Handle TextFillColorButton
+    if(anEvent.equals("TextFillColorButton"))
+        ViewHpr.getHpr(selView).setTextFill(selView, getView("TextFillColorButton", ColorButton.class).getColor());
     
     // Handle OpacitySlider, RotationThumb, VerticalCheckBox
     if(anEvent.equals("OpacitySlider")) selView.setOpacity(anEvent.getFloatValue());

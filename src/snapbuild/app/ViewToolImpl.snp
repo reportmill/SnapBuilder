@@ -117,12 +117,14 @@
     </RowView>
     <RowView PrefHeight="22" GrowWidth="true" Spacing="4">
       <Label text="Border Stroke:" />
-      <ColorButton Name="BorderColorButton" PrefWidth="32" PrefHeight="22" Title="Stroke" />
+      <ColorButton Name="BorderColorButton" PrefWidth="32" PrefHeight="22" Title="StrokeView" />
       <Spinner Name="BorderWidthSpinner" PrefWidth="56" PrefHeight="22" />
     </RowView>
     <RowView PrefHeight="22" GrowWidth="true" Spacing="4">
       <Label ToolTip="" text="Fill:" />
-      <ColorButton Name="FillColorButton" PrefWidth="32" PrefHeight="22" Title="ViewFill" />
+      <ColorButton Name="FillColorButton" PrefWidth="32" PrefHeight="22" Title="FillView" />
+      <Label Margin="0,0,0,25" ToolTip="" text="Text Fill:" />
+      <ColorButton Name="TextFillColorButton" PrefWidth="32" PrefHeight="22" Title="TextFillView" />
     </RowView>
     <RowView PrefHeight="24" GrowWidth="true" Spacing="4">
       <Label PrefWidth="32" text="Font:" />

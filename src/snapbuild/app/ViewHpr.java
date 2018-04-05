@@ -1,5 +1,6 @@
 package snapbuild.app;
 import java.util.*;
+import snap.gfx.Paint;
 import snap.view.*;
 import snapbuild.app.ViewHprs.*;
 
@@ -28,6 +29,11 @@ public void configureGallery(T aView)  { configure(aView); }
  * Returns whether view wants to add given view. E.g.: Empty TitleView, empty ScrollView, TabView or SplitView.
  */
 public boolean wantsView(T aView, View aView2)  { return false; }
+
+/**
+ * Sets the text fill.
+ */
+public void setTextFill(T aView, Paint aPaint)  { }
 
 /**
  * Returns a ViewHpr subclass for given class.
