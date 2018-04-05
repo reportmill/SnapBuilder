@@ -10,24 +10,24 @@ import snap.view.*;
 public class XMLText extends ViewOwner {
     
     // The EditorPane
-    EditorPane       _epane;
+    EditorPane          _epane;
     
     // The View
-    View             _content;
+    View                _content;
 
     // The XML string
-    String           _xmlStr;
+    String              _xmlStr;
     
     // The TextView
-    static TextView  _xmlText;
-
-    // 
-    boolean         _xmlTextSelChanging;
+    static TextView     _xmlText;
+    
+    // Indicates that XMLText changed selection (so we know resulting editor selection isn't externa)
+    boolean             _xmlTextSelChanging;
 
     // Colors
-    static Color      NAME_COLOR = new Color("#7D1F7C"); //336633
-    static Color      KEY_COLOR = new Color("#8F4A19");
-    static Color      VALUE_COLOR = new Color("#5E1B9F"); // CC0000
+    static Color        NAME_COLOR = new Color("#7D1F7C"); //336633
+    static Color        KEY_COLOR = new Color("#8F4A19");
+    static Color        VALUE_COLOR = new Color("#5E1B9F"); // CC0000
     
 /**
  * Creates new XMLText for EditorPane.
