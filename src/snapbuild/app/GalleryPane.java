@@ -40,7 +40,7 @@ protected void initUI()
  */
 protected void resetUI()
 {
-    setViewEnabled("ChangeHostButton", getEditor().getSelView() instanceof HostView);
+    setViewEnabled("ChangeHostButton", getEditor().getSelView() instanceof ViewHost);
 }
 
 /**
@@ -62,11 +62,11 @@ protected void respondUI(ViewEvent anEvent)
 public void moveViewUp()
 {
     View sview = getEditor().getSelView();
-    HostView par = sview.getHost(); if(par==null) { beep(); return; }
+    ViewHost host = sview.getHost(); if(host==null) { beep(); return; }
     
     int ind = sview.indexInParent(); if(ind==0) { beep(); return; }
-    par.removeGuest(sview);
-    par.addGuest(sview, ind-1);
+    host.removeGuest(sview);
+    host.addGuest(sview, ind-1);
 }
 
 /**
@@ -75,11 +75,11 @@ public void moveViewUp()
 public void moveViewDown()
 {
     View sview = getEditor().getSelView();
-    HostView par = sview.getHost(); if(par==null) { beep(); return; }
+    ViewHost host = sview.getHost(); if(host==null) { beep(); return; }
     
-    int ind = sview.indexInHost(); if(ind+1>=par.getGuestCount()) { beep(); return; }
-    par.removeGuest(sview);
-    par.addGuest(sview, ind+1);
+    int ind = sview.indexInHost(); if(ind+1>=host.getGuestCount()) { beep(); return; }
+    host.removeGuest(sview);
+    host.addGuest(sview, ind+1);
 }
 
 /**
@@ -108,16 +108,18 @@ public void groupView()
     Class cls = opts[ind];
     
     // Create group view
-    HostView group = null; try { group = (HostView)cls.newInstance(); }
+    ParentView groupView = null; try { groupView = (ParentView)cls.newInstance(); }
     catch(Exception e) { throw new RuntimeException(e); }
-    ViewHpr.getHpr(group).configure(group);
+    ViewHpr.getHpr(groupView).configure(groupView);
     
     // Add group view to view parent
     View sview = getEditor().getSelView();
-    HostView par = sview.getHost(); if(par==null) { beep(); return; }
-    par.addGuest(group, sview.indexInHost());
-    group.addGuest(sview);
-    getEditor().setSelView(group);
+    ViewHost par = sview.getHost(); if(par==null) { beep(); return; }
+    par.addGuest(groupView, sview.indexInHost());
+    
+    ViewHost groupHost = groupView instanceof ViewHost? (ViewHost)groupView : null; if(groupHost==null) return;
+    groupHost.addGuest(sview);
+    getEditor().setSelView(groupView);
 }
 
 /**
@@ -127,17 +129,20 @@ public void ungroupView()
 {
     // Get View
     View view = getEditor().getSelView();
-    HostView group = view instanceof HostView? (HostView)view : null; if(group==null) { beep(); return; }
-    HostView par = group.getHost(); if(par==null) { beep(); return; }
+    ViewHost par = view.getHost(); if(par==null) { beep(); return; }
+    ViewHost groupHost = view instanceof ViewHost? (ViewHost)view : null; if(groupHost==null) { beep(); return; }
     
-    for(View child : group.getGuests())
+    // Add view guests to host view and remove old host
+    for(View child : groupHost.getGuests())
         par.addGuest(child);
-    par.removeGuest(group);
-    getEditor().setSelView(par);
+    par.removeGuest(view);
+    
+    // Select host
+    getEditor().setSelView((View)par);
 }
 
 /**
- * Changes the selected HostView to another HostView view.
+ * Changes the selected ViewHost to another.
  */
 public void changeHost()
 {
@@ -161,21 +166,23 @@ public void changeHost()
     int ind = 0; for(int i=0; i<opts.length; i++) if(cstr.equals(opts[i].getSimpleName())) ind = i;
     Class cls = opts[ind];
     
-    // Create new HostView view
-    HostView hostNew = null; try { hostNew = (HostView)cls.newInstance(); }
+    // Create new parent view
+    ParentView parNew = null; try { parNew = (ParentView)cls.newInstance(); }
     catch(Exception e) { throw new RuntimeException(e); }
-    ViewHpr.getHpr(hostNew).configure(hostNew);
+    ViewHpr.getHpr(parNew).configure(parNew);
+    ViewHost hostNew = parNew instanceof ViewHost? (ViewHost)parNew : null; if(hostNew==null) { beep(); return; }
     
     // Get old host and parent
     View sview = getEditor().getSelView();
-    HostView hostOld = sview instanceof HostView? (HostView)sview : null; if(hostOld==null) { beep(); return; }
-    HostView par = sview.getHost(); if(par==null) { beep(); return; }
+    ViewHost hostOld = sview instanceof ViewHost? (ViewHost)sview : null; if(hostOld==null) { beep(); return; }
+    ViewHost par = sview.getHost(); if(par==null) { beep(); return; }
     
     // Add new host
-    par.addGuest(hostNew, sview.indexInHost());
-    for(View guest : hostOld.getGuests()) hostNew.addGuest(guest);
-    par.removeGuest(hostOld);
-    getEditor().setSelView(hostNew);
+    par.addGuest(parNew, sview.indexInHost());
+    for(View guest : hostOld.getGuests())
+        hostNew.addGuest(guest);
+    par.removeGuest(sview);
+    getEditor().setSelView(parNew);
 }
 
 }

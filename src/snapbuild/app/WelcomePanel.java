@@ -206,12 +206,18 @@ DocView getAnimView()
     WebURL url = WebURL.getURL(getClass(), "WelcomePanelAnim.snp");
     DocView doc = (DocView)new ViewArchiver().getView(url);
     
-    // Set BuildText and JavaText
-    View bt = doc.getChild("BuildText"); bt.setText("Build: " + SnapUtils.getBuildInfo());
-    View jt = doc.getChild("JVMText"); jt.setText("JVM: " + System.getProperty("java.runtime.version"));
+    // Get page and clear border/shadow
+    PageView page = doc.getPage();
+    page.setBorder(null);
+    page.setEffect(null);
     
-    // Clear Effects and return doc
-    PageView page = doc.getPage(); page.setEffect(null); page.setBorder(null);
+    // Set BuildText and JavaText
+    View bt = page.getChild("BuildText");
+    View jt = page.getChild("JVMText");
+    bt.setText("Build: " + SnapUtils.getBuildInfo());
+    jt.setText("JVM: " + System.getProperty("java.runtime.version"));
+    
+    // Return doc
     return doc;
 }
 

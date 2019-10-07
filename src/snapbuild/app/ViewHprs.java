@@ -150,18 +150,9 @@ public static class ParentViewHpr <T extends ParentView> extends ViewHpr <T> {
 }
 
 /**
- * A ViewHpr for HostView.
- */
-public static class HostViewHpr <T extends HostView> extends ParentViewHpr <T> {
-    
-}
-
-/**
  * A ViewHpr for ChildView.
  */
-public static class ChildViewHpr <T extends ChildView> extends HostViewHpr <T> {
-    
-}
+public static class ChildViewHpr <T extends ChildView> extends ParentViewHpr <T>  { }
 
 /**
  * A ViewHpr for TextView.

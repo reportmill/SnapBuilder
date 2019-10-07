@@ -379,6 +379,10 @@ protected void initUI()
     _tabView = getView("MainTabView", TabView.class);
     _tabView.addTab(" Add Views ", _gallery.getUI(), 0);
     _tabView.addTab(" View Props ", _viewTool.getUI(), 1);
+    
+    // If TeaVM, go full window
+    if(SnapUtils.isTeaVM)
+        getWindow().setMaximized(true);
 }
 
 /**
@@ -613,7 +617,11 @@ public void addRowView()
     
     // Handle special cases: Empty TitleView, Empty ScrollView, TabView, SplitView
     if(ViewHpr.getHpr(view).wantsView(view, newRow)) {
-        ((HostView)view).addGuest(newRow); setSelView(newRow); return; }
+        ViewHost host = (ViewHost)view;
+        host.addGuest(newRow);
+        setSelView(newRow);
+        return;
+    }
     
     // Get parent ColView
     ColView colView = null;
@@ -639,7 +647,11 @@ public void addColView()
     
     // Handle special cases: Empty TitleView, Empty ScrollView, TabView, SplitView
     if(ViewHpr.getHpr(view).wantsView(view, newCol)) {
-        ((HostView)view).addGuest(newCol); setSelView(newCol); return; }
+        ViewHost host = (ViewHost)view;
+        host.addGuest(newCol);
+        setSelView(newCol);
+        return;
+    }
     
     // Get parent RowView
     RowView rowView = null;

@@ -6,9 +6,6 @@ import snap.util.Prefs;
  */
 public class App {
     
-    // Trigger snaptea
-    //static { snaptea.TV.set(); }
-
 /**
  * Standard main implementation.
  */
@@ -16,13 +13,15 @@ public static void main(String args[])
 {
     // Set App Prefs class
     Prefs.setPrefsDefault(Prefs.getPrefs(App.class));
+    //snaptea.TV.set();
     
     // Install Exception reporter
     //ExceptionReporter er = new ExceptionReporter("SnapStudio"); er.setToAddress("support@reportmill.com");
     //er.setInfo("SnapCode Version 1, Build Date: " + SnapUtils.getBuildInfo());
     //Thread.setDefaultUncaughtExceptionHandler(er);
     
-    if(snap.util.SnapUtils.isTeaVM) { new EditorPane().newDocument().setWindowVisible(true); return; }
+    if(snap.util.SnapUtils.isTeaVM) {
+        new EditorPane().newDocument().setWindowVisible(true); return; }
 
     // Show open data source panel
     WelcomePanel.getShared().setOnQuit(() -> quitApp());

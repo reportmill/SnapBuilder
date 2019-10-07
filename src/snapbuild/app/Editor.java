@@ -128,8 +128,8 @@ public void addView(View aView)
     View sview = getSelView();
     
     // If selected view is host, add to it
-    if(sview instanceof HostView)       //ViewHpr.getHpr(sview).addView(sview, view);
-        ((HostView)sview).addGuest(aView);
+    if(sview instanceof ViewHost)       //ViewHpr.getHpr(sview).addView(sview, view);
+        ((ViewHost)sview).addGuest(aView);
         
     // If selected view parent is host, add to it
     else if(sview.getHost()!=null)
@@ -285,13 +285,19 @@ public void paste()
  */
 public void delete()
 {
+    // Get selected view and parent
     View sview = getSelView();
-    HostView host = sview.getHost(); if(host==null) { ViewUtils.beep(); return; }
+    ParentView par = sview.getParent();
+    
+    // Get par as host (just return if not host) and remove guest
+    ViewHost host = sview.getHost(); if(host==null) { ViewUtils.beep(); return; }
     int ind = sview.indexInHost();
     host.removeGuest(sview);
+    
+    // Set new selected view
     if(host.getGuestCount()>0)
         setSelView(host.getGuest(ind<host.getGuestCount()? ind : ind -1));
-    else setSelView(host);
+    else setSelView(par);
 
     /*ParentView par = sview.getParent();
     int ind = sview.indexInParent();
@@ -353,18 +359,21 @@ protected void setUndoSelection(Object aSel)
 /**
  * Called when ContentBox has deep change.
  */
-protected void contentDidDeepChange(Object aView, PropChange anEvent)
+protected void contentDidDeepChange(Object aView, PropChange aPC)
 {
     // Get source and prop name (if not View, just return)
-    Object src = anEvent.getSource();
+    Object src = aPC.getSource();
     View view = (View)aView, sview = src instanceof View? (View)src : null; if(view==null) return;
-    String pname = anEvent.getPropertyName();
+    String pname = aPC.getPropertyName();
     
     // Ignore properties: Showing, NeedsLayout
     if(pname==Parent_Prop) return;
     if(pname==Showing_Prop) return;
     if(pname==NeedsLayout_Prop) return;
-    if(pname==ParentView.Child_Prop) return;
+    if(pname==ParentView.Child_Prop) {
+        if(!(view instanceof ViewHost))
+            return;
+    }
     
     // Ignore layout changes
     if(view instanceof ParentView && ((ParentView)view).isInLayout()) return;
@@ -379,7 +388,7 @@ protected void contentDidDeepChange(Object aView, PropChange anEvent)
             undoer.setUndoSelection(getSelView()); //new ArrayList(getSelectedOrSuperSelectedViews())
         
         // Add property change
-        undoer.addPropertyChange(anEvent);
+        undoer.addPropChange(aPC);
         
         // Save UndoerChanges after delay
         saveUndoerChangesLater();

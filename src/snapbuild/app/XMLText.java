@@ -67,8 +67,8 @@ int setCharIndexes(View aView, String aStr, int aStart)
     setCharStart(aView, start2);
     start2 += tag.length() + 1;
     
-    // If view is HostView, recurse
-    if(aView instanceof HostView) { HostView host = (HostView)aView;
+    // If view is ViewHost, recurse
+    if(aView instanceof ViewHost) { ViewHost host = (ViewHost)aView;
         for(View child : host.getGuests())
             start2 = setCharIndexes(child, aStr, start2); }
     
@@ -109,7 +109,7 @@ public View getViewInCharRange(int aStart, int aEnd)  { return getViewInCharRang
 View getViewInCharRange(int aStart, int aEnd, View aView)
 {
     // If view is host view, recurse to see if any Guests contain range (if so, return them)
-    if(aView instanceof HostView) { HostView host = (HostView)aView;
+    if(aView instanceof ViewHost) { ViewHost host = (ViewHost)aView;
         for(View child : host.getGuests()) {
             View c2 = getViewInCharRange(aStart, aEnd, child);
             if(c2!=null)

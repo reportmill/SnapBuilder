@@ -63,7 +63,6 @@ public static ViewHpr createHpr(Class aCls)
     if(aCls==CheckBox.class) return new CheckBoxHpr();
     if(aCls==ColView.class) return new ColViewHpr();
     if(aCls==ComboBox.class) return new ComboBoxHpr();
-    if(aCls==HostView.class) return new HostViewHpr();
     if(aCls==Label.class) return new LabelHpr();
     if(aCls==ListView.class) return new ListViewHpr();
     if(aCls==ParentView.class) return new ParentViewHpr();
