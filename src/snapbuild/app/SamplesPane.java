@@ -27,6 +27,9 @@ public class SamplesPane extends ViewOwner {
     // The shared document images
     private static Image      _docImages[];
     
+    // The shared image paths
+    private static String     _imgPaths[];
+    
     // Constants
     private static final String SAMPLES_ROOT = "http://reportmill.com/snaptea/SnapBuilderSamples/";
     private static final Effect SHADOW = new ShadowEffect();
@@ -262,7 +265,8 @@ private static View getDoc(int anIndex)
     if(bytes==null) { System.err.println("SamplesPane.getDoc: Couldn't load " + url); return null; }
     
     // Return document
-    View doc = new ViewArchiver().getView(bytes);
+    ViewArchiver arch = new SamplesViewArchiver(); arch.setSourceURL(url);
+    View doc = arch.getView(bytes);
     return doc;
 }
 
@@ -401,6 +405,62 @@ private class SheetDialogBox extends DialogBox {
     
     /** Override to set cancelled flag. */
     public void cancel()  { _cancelled = true; hide(); }
+}
+
+/**
+ * Returns the image paths.
+ */
+public static String[] getImagePaths()
+{
+    if(_imgPaths!=null) return _imgPaths;
+    
+    WebURL url = WebURL.getURL(SAMPLES_ROOT + "images/index.txt");
+    String pathsStr = url.getText();
+    String pathLines[] = pathsStr.split("\\s*\n\\s*");
+    List <String> pathsList = new ArrayList();
+    for(String line : pathLines) {
+        if(line.length()>0)
+            pathsList.add(line);
+    }
+    String paths[] = pathsList.toArray(new String[pathsList.size()]);
+    return _imgPaths = paths;
+}
+
+/**
+ * Returns an image path for given name.
+ */
+public static String getImagePathForName(String aName)
+{
+    String name = aName;
+    int ind = name.lastIndexOf('/'); if(ind>=0) name = name.substring(ind+1);
+    
+    for(String path : getImagePaths()) {
+        if(path.endsWith(name))
+            return path;
+    }
+    return null;
+}
+
+/**
+ * A ViewArchiver that looks for images in samples dir.
+ */
+private static class SamplesViewArchiver extends ViewArchiver {
+    
+    /**
+     * Override to look for images in samples dir.
+     */
+    public Image getImage(String aPath)
+    {
+        String path = getImagePathForName(aPath);
+        if(path!=null) {
+            String urls = SAMPLES_ROOT + "images/" + path;
+            WebURL url = WebURL.getURL(urls);
+            return Image.get(url);
+        }
+        
+        // Do normal version
+        return super.getImage(aPath);
+    }
 }
 
 }
