@@ -495,6 +495,9 @@ protected void respondUI(ViewEvent anEvent)
     if(anEvent.equals("UndoButton")) _editor.undo();
     if(anEvent.equals("RedoButton")) _editor.redo();
     
+    // Handle SamplesButton
+    if(anEvent.equals("SamplesButton")) new SamplesPane().showSamples(this);
+    
     // Handle DocButton
     if(anEvent.equals("DocButton")) URLUtils.openURL(getJavaDocURL());
     
