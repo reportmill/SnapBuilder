@@ -6,7 +6,7 @@
     <TextField Name="ImageNameText" PrefWidth="300" ColCount="12" />
   </RowView>
   <RowView Padding="4" GrowWidth="true" Spacing="4">
-    <CheckBox Name="ShowBorderCheckBox" text="Show Border" />
+    <CheckBox Name="ShowAreaCheckBox" text="Show Background Area" />
   </RowView>
   <RowView Align="TOP_LEFT" Padding="2" GrowWidth="true">
     <Label PrefWidth="50" PrefHeight="22" text="Position:" />

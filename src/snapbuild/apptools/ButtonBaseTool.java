@@ -17,9 +17,9 @@ protected void resetUI()
     // Get selected view
     T selView = getSelView();
 
-    // Update ImageNameText, ShowBorderCheckBox
+    // Update ImageNameText, ShowAreaCheckBox
     setViewValue("ImageNameText", selView.getImageName());
-    setViewValue("ShowBorderCheckBox", selView.isShowBorder());
+    setViewValue("ShowAreaCheckBox", selView.isShowArea());
     
     // Update Pos buttons
     Pos pos = selView.getPosition();
@@ -35,9 +35,9 @@ protected void respondUI(ViewEvent anEvent)
     // Get selected view
     T selView = getSelView();
 
-    // Handle ImageNameText, ShowBorderCheckBox
+    // Handle ImageNameText, ShowAreaCheckBox
     if(anEvent.equals("ImageNameText")) selView.setImageName(anEvent.getStringValue());
-    if(anEvent.equals("ShowBorderCheckBox")) selView.setShowBorder(anEvent.getBoolValue());
+    if(anEvent.equals("ShowAreaCheckBox")) selView.setShowArea(anEvent.getBoolValue());
     
     // Respond to Pos buttons
     if(anEvent.getName().startsWith("Pos")) {
