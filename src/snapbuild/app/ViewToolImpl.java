@@ -2,7 +2,7 @@ package snapbuild.app;
 import java.text.DecimalFormat;
 import snap.gfx.*;
 import snap.gfx.Border.*;
-import snap.util.StringUtils;
+import snap.util.*;
 import snap.view.*;
 import snap.viewx.*;
 
@@ -33,6 +33,12 @@ protected void initUI()
     l3.setBorder(new BevelBorder(1));
     Label l4 = getView("EtchBdrButton", ButtonBase.class).getLabel(); l4.setPrefSize(16,16);
     l4.setBorder(new EtchBorder());
+    
+    // Register MarginText, PadText to update
+    getView("MarginText").addPropChangeListener(pc -> insetsTextFieldChanged(pc),
+        TextField.Sel_Prop, View.Focused_Prop);
+    getView("PadText").addPropChangeListener(pc -> insetsTextFieldChanged(pc),
+        TextField.Sel_Prop, View.Focused_Prop);
 }
 
 /**
@@ -50,14 +56,16 @@ protected void resetUI()
     setViewText("ToolTipText", selView.getToolTip());
     
     // Update PrefWidthSpinner, PrefHeightSpinner
-    Spinner pws = getView("PrefWidthSpinner", Spinner.class), phs = getView("PrefHeightSpinner", Spinner.class);
+    Spinner pws = getView("PrefWidthSpinner", Spinner.class);
+    Spinner phs = getView("PrefHeightSpinner", Spinner.class);
     pws.setValue(selView.getPrefWidth());
     phs.setValue(selView.getPrefHeight());
     pws.getTextField().setTextFill(selView.isPrefWidthSet()? Color.BLACK : Color.GRAY);
     phs.getTextField().setTextFill(selView.isPrefHeightSet()? Color.BLACK : Color.GRAY);
     
     // Update MinWidthSpinner, MinHeightSpinner
-    Spinner mws = getView("MinWidthSpinner", Spinner.class), mhs = getView("MinHeightSpinner", Spinner.class);
+    Spinner mws = getView("MinWidthSpinner", Spinner.class);
+    Spinner mhs = getView("MinHeightSpinner", Spinner.class);
     mws.setValue(selView.getMinWidth());
     mhs.setValue(selView.getMinHeight());
     mws.getTextField().setTextFill(selView.isMinWidthSet()? Color.BLACK : Color.GRAY);
@@ -67,10 +75,16 @@ protected void resetUI()
     Rect bnds = selView.getBounds();
     setViewText("BoundsText", fmt(bnds.x) + ", " + fmt(bnds.y) + ", " + fmt(bnds.width) + ", " + fmt(bnds.height));
     
-    // Update MarginText, PaddingText, SpaceSpinner
-    setViewValue("MarginText", selView.getMargin().getString());
-    setViewValue("PaddingText", selView.getPadding().getString());
-    setViewValue("SpaceSpinner", selView.getSpacing());
+    // Update MarginLabel, MarginText
+    setViewValue("MarginLabel", getInsetsSelStringForTextFieldName("MarginText"));
+    setViewValue("MarginText", getInsetsString(selView.getMargin()));
+    
+    // Update PadLabel, PadText
+    setViewValue("PadLabel", getInsetsSelStringForTextFieldName("PadText"));
+    setViewValue("PadText", getInsetsString(selView.getPadding()));
+    
+    // Update SpaceText
+    setViewValue("SpaceText", SnapUtils.stringValue(selView.getSpacing()));
     
     // Update LeanX, LeanY
     setViewValue("LeanX0", selView.getLeanX()==HPos.LEFT);
@@ -134,41 +148,38 @@ protected void respondUI(ViewEvent anEvent)
     if(anEvent.equals("MinWidthSpinner")) selView.setMinWidth(anEvent.getFloatValue());
     if(anEvent.equals("MinHeightSpinner")) selView.setMinHeight(anEvent.getFloatValue());
     
-    // Handle PWAdd10Button, PHAdd10Button, PWResetButton, PHResetButton
-    if(anEvent.equals("PWAdd10Button")) selView.setPrefWidth(selView.getWidth()+10);
-    if(anEvent.equals("PHAdd10Button")) selView.setPrefHeight(selView.getHeight()+10);
+    // Handle PWAdd5Button, PWSub5Button, PHAdd5Button, PHSub5Button, PWResetButton, PHResetButton
+    if(anEvent.equals("PWAdd5Button")) selView.setPrefWidth(MathUtils.round(selView.getWidth()+5, 5));
+    if(anEvent.equals("PWSub5Button")) selView.setPrefWidth(MathUtils.round(selView.getWidth()-5, 5));
+    if(anEvent.equals("PHAdd5Button")) selView.setPrefHeight(MathUtils.round(selView.getHeight()+5, 5));
+    if(anEvent.equals("PHSub5Button")) selView.setPrefHeight(MathUtils.round(selView.getHeight()-5, 5));
     if(anEvent.equals("PWResetButton")) selView.setPrefWidth(-1);
     if(anEvent.equals("PHResetButton")) selView.setPrefHeight(-1);
     
-    // Handle MWAdd10Button, MHAdd10Button, MWResetButton, MHResetButton
-    if(anEvent.equals("MWAdd10Button")) selView.setMinWidth(selView.getWidth()+10);
-    if(anEvent.equals("MHAdd10Button")) selView.setMinHeight(selView.getHeight()+10);
+    // Handle MWAdd5Button, MWSub5Button, MHAdd5Button, MHSub5Button, MWResetButton, MHResetButton
+    if(anEvent.equals("MWAdd5Button")) selView.setMinWidth(MathUtils.round(selView.getWidth()+5, 5));
+    if(anEvent.equals("MWSub5Button")) selView.setMinWidth(MathUtils.round(selView.getWidth()-5, 5));
+    if(anEvent.equals("MHAdd5Button")) selView.setMinHeight(MathUtils.round(selView.getHeight()+5, 5));
+    if(anEvent.equals("MHSub5Button")) selView.setMinHeight(MathUtils.round(selView.getHeight()-5, 5));
     if(anEvent.equals("MWResetButton")) selView.setMinWidth(-1);
     if(anEvent.equals("MHResetButton")) selView.setMinHeight(-1);
     
-    // Handle MarginText, MarginArrowView, MarginAdd5Button, MarginResetButton
+    // Handle MarginText, MarginAdd1Button, MarginSub1Button, MarginResetButton
     if(anEvent.equals("MarginText")) selView.setMargin(Insets.get(anEvent.getStringValue()));
-    if(anEvent.equals("MarginAdd5Button")) selView.setMargin(Insets.add(selView.getMargin(), 5, 5, 5, 5));
+    if(anEvent.equals("MarginAdd1Button")) adjustMargin(selView, 1);
+    if(anEvent.equals("MarginSub1Button")) adjustMargin(selView, -1);
     if(anEvent.equals("MarginResetButton")) selView.setMargin(selView.getDefaultMargin());
-    if(anEvent.equals("MarginArrowView")) { ArrowView av = anEvent.getView(ArrowView.class);
-        Insets ins = selView.getMargin();
-        Insets ins2 = Insets.add(ins, av.isUp()? 2 : 0, av.isRight()? 2 : 0, av.isDown()? 2 : 0, av.isLeft()? 2: 0);
-        selView.setMargin(ins2);
-    }
     
-    // Handle PaddingText, PadArrowView, PadAdd5Button, PadResetButton
-    if(anEvent.equals("PaddingText")) selView.setPadding(Insets.get(anEvent.getStringValue()));
-    if(anEvent.equals("PadAdd5Button")) selView.setPadding(Insets.add(selView.getPadding(), 5, 5, 5, 5));
+    // Handle PadText, PadAdd1Button, PadSub1Button, PadResetButton
+    if(anEvent.equals("PadText")) selView.setPadding(Insets.get(anEvent.getStringValue()));
+    if(anEvent.equals("PadAdd1Button")) adjustPadding(selView, 1);
+    if(anEvent.equals("PadSub1Button")) adjustPadding(selView, -1);
     if(anEvent.equals("PadResetButton")) selView.setPadding(selView.getDefaultPadding());
-    if(anEvent.equals("PadArrowView")) { ArrowView av = anEvent.getView(ArrowView.class);
-        Insets ins = selView.getPadding();
-        Insets ins2 = Insets.add(ins, av.isUp()? 2 : 0, av.isRight()? 2 : 0, av.isDown()? 2 : 0, av.isLeft()? 2: 0);
-        selView.setPadding(ins2);
-    }
     
-    // Handle SpaceSpinner, SpaceAdd5Button, SpaceResetButton
-    if(anEvent.equals("SpaceSpinner")) selView.setSpacing(anEvent.getFloatValue());
-    if(anEvent.equals("SpaceAdd5Button")) selView.setSpacing(selView.getSpacing()+5);
+    // Handle SpaceText, SpaceAdd5Button, SpaceResetButton
+    if(anEvent.equals("SpaceText")) selView.setSpacing(anEvent.getFloatValue());
+    if(anEvent.equals("SpaceAdd1Button")) selView.setSpacing(selView.getSpacing()+1);
+    if(anEvent.equals("SpaceSub1Button")) selView.setSpacing(selView.getSpacing()-1);
     if(anEvent.equals("SpaceResetButton")) selView.setSpacing(0);
     
     // Handle LeanX, LeanY
@@ -236,6 +247,118 @@ protected void respondUI(ViewEvent anEvent)
     if(anEvent.equals("OpacitySlider")) selView.setOpacity(anEvent.getFloatValue());
     if(anEvent.equals("RotationThumb")) selView.setRotate(anEvent.getFloatValue());
     if(anEvent.equals("VerticalCheckBox")) selView.setVertical(anEvent.getBoolValue());
+}
+
+/**
+ * Adjust margin for given view by given amount (based on textfield selection).
+ */
+private void adjustMargin(View aView, double aVal)
+{
+    Insets ins = getAdjustedInsetsForTextFieldName("MarginText", aVal);
+    aView.setMargin(ins);
+}
+
+/**
+ * Adjust padding for given view by given amount (based on textfield selection).
+ */
+private void adjustPadding(View aView, double aVal)
+{
+    Insets ins = getAdjustedInsetsForTextFieldName("PadText", aVal);
+    aView.setPadding(ins);
+}
+
+/**
+ * Returns the adjusted insets for given TextField name and value.
+ */
+private Insets getAdjustedInsetsForTextFieldName(String aName, double aVal)
+{
+    // Get TextField and insets
+    TextField text = getView(aName, TextField.class);
+    Insets ins = Insets.get(text.getText());
+    
+    // Get range
+    Range range = getInsetsSelRangeForTextFieldName(aName);
+    if(range==null) range = new Range(0,3);
+    
+    // Adjust range
+    for(int i=range.start;i<=range.end;i++) {
+        switch(i) {
+            case 0: ins.top = Math.max(ins.top + aVal, 0); break;
+            case 1: ins.right = Math.max(ins.right + aVal, 0); break;
+            case 2: ins.bottom = Math.max(ins.bottom + aVal, 0); break;
+            case 3: ins.left = Math.max(ins.left + aVal, 0); break;
+        }
+    }
+    
+    // Return insets
+    return ins;
+}
+
+/**
+ * Returns the selected range for insets string.
+ */
+private Range getInsetsSelRangeForTextFieldName(String aName)
+{
+    // Get text field (just return null if not focused)
+    TextField text = getView(aName, TextField.class);
+    if(!text.isFocused()) return null;
+    
+    // Get string and textfield sel start/end
+    String str = text.getText();
+    int selStart = text.getSelStart(), selEnd = text.getSelEnd();
+    
+    // Using commas as landmarks for insets fields return range of selection
+    int start = countCommas(str, selStart);
+    int end = countCommas(str, selEnd);
+    return new Range(start, end);
+}
+
+/**
+ * Returns the selected range for insets string.
+ */
+private String getInsetsSelStringForTextFieldName(String aName)
+{
+    Range range = getInsetsSelRangeForTextFieldName(aName);
+    if(range==null) return "";
+    StringBuffer sb = new StringBuffer();
+    for(int i=range.start; i<=range.end; i++) {
+        switch(i) {
+            case 0: sb.append("top, "); break;
+            case 1: sb.append("right, "); break;
+            case 2: sb.append("bottom, "); break;
+            case 3: sb.append("left, "); break;
+        }
+    }
+    sb.delete(sb.length()-2, sb.length());
+    return sb.toString();
+}
+
+/**
+ * Returns a string representation of this Insets.
+ */
+private String getInsetsString(Insets anIns)
+{
+    String t = StringUtils.toString(anIns.top), r = StringUtils.toString(anIns.right);
+    String b = StringUtils.toString(anIns.bottom), l = StringUtils.toString(anIns.left);
+    return t + ", " + r + ", " + b + ", " + l;
+}
+
+/**
+ * Called when MarginText or PadText change focus or selection to update mini-label.
+ */
+private void insetsTextFieldChanged(PropChange aPC)
+{
+    TextField text = (TextField)aPC.getSource();
+    String name = text.getName(), name2 = name.replace("Text", "Label");
+    Label label = getView(name2, Label.class);
+    label.setText(getInsetsSelStringForTextFieldName(name));
+}
+
+/** Returns the number of commas in given string up to given index. */
+private int countCommas(String aStr, int anInd)
+{
+    int cc = 0; for(int i=0;i<anInd;i++) if(aStr.charAt(i)==',') cc++;
+    return cc;
 }
 
 /** Returns the name. */
