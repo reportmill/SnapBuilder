@@ -67,7 +67,7 @@
       </RowView>
     </ColView>
     <ColView FillWidth="true">
-      <RowView GrowWidth="true" Spacing="2">
+      <RowView Spacing="2">
         <Label PrefWidth="50" text="Padding:" />
         <TextField Name="PadText" PrefWidth="80" Align="CENTER" />
         <Button Name="PadAdd1Button" PrefWidth="20" PrefHeight="20" Padding="2" text="+1" ShowArea="false">
@@ -84,7 +84,7 @@
         </Label>
       </RowView>
     </ColView>
-    <RowView PrefHeight="24" GrowWidth="true" Spacing="4">
+    <RowView PrefHeight="24" Spacing="4">
       <Label PrefWidth="48" text="Spacing:" />
       <TextField Name="SpaceText" PrefWidth="60" PrefHeight="22" Align="CENTER" />
       <Button Name="SpaceAdd1Button" PrefWidth="20" PrefHeight="22" Padding="2" text="+1" ShowArea="false">
@@ -95,21 +95,21 @@
       </Button>
       <Button Name="SpaceResetButton" PrefWidth="20" PrefHeight="20" ToolTip="Clear Font Size" text="&#10226;" ShowArea="false" />
     </RowView>
-    <RowView GrowWidth="true">
+    <RowView>
       <Label text="LeanX: " />
       <ToggleButton Name="LeanX0" PrefWidth="22" PrefHeight="22" Padding="2" image="pkg.images/AlignLeft.png" ShowArea="false" />
       <ToggleButton Name="LeanX1" PrefWidth="22" PrefHeight="22" Padding="2" image="pkg.images/AlignCenter.png" ShowArea="false" />
       <ToggleButton Name="LeanX2" PrefWidth="22" PrefHeight="22" Padding="2" image="pkg.images/AlignRight.png" ShowArea="false" />
       <Button Name="LeanXReset" PrefWidth="20" PrefHeight="20" Padding="2" text="&#10226;" ShowArea="false" />
     </RowView>
-    <RowView GrowWidth="true">
+    <RowView>
       <Label text="LeanY: " />
       <ToggleButton Name="LeanY0" PrefWidth="22" PrefHeight="22" Padding="2" image="pkg.images/AlignTop.png" ShowArea="false" />
       <ToggleButton Name="LeanY1" PrefWidth="22" PrefHeight="22" Padding="2" image="pkg.images/AlignMiddle.png" ShowArea="false" />
       <ToggleButton Name="LeanY2" PrefWidth="22" PrefHeight="22" Padding="2" image="pkg.images/AlignBottom.png" ShowArea="false" />
       <Button Name="LeanYReset" PrefWidth="20" PrefHeight="20" Padding="2" text="&#10226;" ShowArea="false" />
     </RowView>
-    <RowView Align="TOP_LEFT" Padding="2" GrowWidth="true">
+    <RowView Align="TOP_LEFT" Padding="2" Spacing="5" FillHeight="true">
       <TitleView MinHeight="60" Align="CENTER" Padding="5,12,10,12" Text="Align">
         <ColView Margin="5">
           <font name="Arial" size="10" />
@@ -130,8 +130,8 @@
           </RowView>
         </ColView>
       </TitleView>
-      <ColView Align="CENTER" Padding="4" GrowHeight="true" Spacing="4">
-        <CheckBox Name="GrowWidthCheckBox" PrefHeight="20" Padding="0" text="Grow Width" />
+      <ColView Align="CENTER_LEFT" Padding="4" Spacing="4">
+        <CheckBox Name="GrowWidthCheckBox" PrefHeight="20" text="Grow Width" />
         <CheckBox Name="GrowHeightCheckBox" PrefHeight="20" text="Grow Height" />
       </ColView>
     </RowView>
