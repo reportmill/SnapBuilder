@@ -4,21 +4,15 @@
   <ColView GrowHeight="true" Spacing="6">
     <RowView GrowWidth="true" Spacing="4">
       <Label text="Name:" />
-      <TextField Name="NameText" PrefWidth="160" GrowWidth="true">
-        <LineBorder Color="#c0c0c0" />
-      </TextField>
+      <TextField Name="NameText" PrefWidth="160" GrowWidth="true" />
     </RowView>
     <RowView GrowWidth="true" Spacing="4">
       <Label text="Text:" />
-      <TextField Name="TextText" GrowWidth="true">
-        <LineBorder Color="#c0c0c0" />
-      </TextField>
+      <TextField Name="TextText" GrowWidth="true" />
     </RowView>
     <RowView GrowWidth="true" Spacing="4">
       <Label text="ToolTip:" />
-      <TextField Name="ToolTipText" GrowWidth="true">
-        <LineBorder Color="#c0c0c0" />
-      </TextField>
+      <TextField Name="ToolTipText" GrowWidth="true" />
     </RowView>
     <RowView PrefWidth="148" GrowWidth="true" Spacing="2">
       <Label PrefWidth="64" text="Pref Width:" />
@@ -170,9 +164,7 @@
     </RowView>
     <RowView PrefHeight="24" GrowWidth="true" Spacing="4">
       <Label PrefWidth="54" text="Font Size:" />
-      <TextField Name="FontSizeText" PrefWidth="40">
-        <LineBorder Color="#c0c0c0" />
-      </TextField>
+      <TextField Name="FontSizeText" PrefWidth="40" />
       <Button Name="FontPlusButton" PrefWidth="22" PrefHeight="22" ToolTip="Increase Font Size" ShowArea="false" />
       <Button Name="FontMinusButton" PrefWidth="22" PrefHeight="22" ToolTip="Decrease Font Size" ShowArea="false" />
     </RowView>
