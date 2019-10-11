@@ -1,10 +1,8 @@
 package snapbuild.app;
 import java.text.DecimalFormat;
 import snap.gfx.*;
-import snap.gfx.Border.*;
 import snap.util.*;
 import snap.view.*;
-import snap.viewx.*;
 
 /**
  * An class to manage UI editing of a View.
@@ -16,24 +14,6 @@ public class ViewToolImpl <T extends View> extends ViewTool <T> {
  */
 protected void initUI()
 {
-    // Set Font button images
-    setViewItems("FontCombo", new String[] { "Arial", "ArialBold"});
-    setViewSelItem("FontCombo", "Arial");
-    getView("FontPlusButton", ButtonBase.class).setImage(Image.get(TextPane.class, "pkg.images/Font_Increase.png"));
-    getView("FontMinusButton", ButtonBase.class).setImage(Image.get(TextPane.class, "pkg.images/Font_Decrease.png"));
-    
-    // Configure Borders
-    Label l0 = getView("NoBdrButton", ButtonBase.class).getLabel(); l0.setPrefSize(16,16);
-    l0.setBorder(Color.LIGHTGRAY,1);
-    Label l1 = getView("LineBdrButton", ButtonBase.class).getLabel(); l1.setPrefSize(16,16);
-    l1.setBorder(Color.BLACK,1);
-    Label l2 = getView("LowerBdrButton", ButtonBase.class).getLabel(); l2.setPrefSize(16,16);
-    l2.setBorder(new BevelBorder(0));
-    Label l3 = getView("RaiseBdrButton", ButtonBase.class).getLabel(); l3.setPrefSize(16,16);
-    l3.setBorder(new BevelBorder(1));
-    Label l4 = getView("EtchBdrButton", ButtonBase.class).getLabel(); l4.setPrefSize(16,16);
-    l4.setBorder(new EtchBorder());
-    
     // Register MarginText, PadText to update
     getView("MarginText").addPropChangeListener(pc -> insetsTextFieldChanged(pc),
         TextField.Sel_Prop, View.Focused_Prop);
@@ -94,42 +74,18 @@ protected void resetUI()
     setViewValue("LeanY1", selView.getLeanY()==VPos.CENTER);
     setViewValue("LeanY2", selView.getLeanY()==VPos.BOTTOM);
     
-    // Update GrowWidthCheckBox, GrowHeightCheckBox
+    // Update GrowWidthCheckBox, GrowHeightCheckBox, VerticalCheckBox
     setViewValue("GrowWidthCheckBox", selView.isGrowWidth());
     setViewValue("GrowHeightCheckBox", selView.isGrowHeight());
+    setViewValue("VerticalCheckBox", selView.isVertical());
     
     // Update Align
     Pos align = selView.getAlign();
     setViewValue("Align" + align.ordinal(), true);
-    
-    // Update FontSizeText
-    setViewValue("FontSizeText", selView.getFont().getSize());
-    
-    // Update Border Buttons
-    Border bdr = selView.getBorder();
-    setViewValue("NoBdrButton", bdr==null);
-    setViewValue("LineBdrButton", bdr instanceof LineBorder);
-    setViewValue("LowerBdrButton", bdr instanceof BevelBorder && ((BevelBorder)bdr).getType()==0);
-    setViewValue("RaiseBdrButton", bdr instanceof BevelBorder && ((BevelBorder)bdr).getType()==1);
-    setViewValue("EtchBdrButton", bdr instanceof EtchBorder);
-    
-    // Update BorderColorButton, BorderWidthSpinner
-    //getView("BorderColorButton", ColorButton.class).setColor(bdr!=null? bdr.getColor() : null);
-    setViewValue("BorderWidthSpinner", bdr!=null? bdr.getWidth() : 0);
-    
-    // Update FillColorButton, TextFillColorButton
-    //Color color = selView.getFill() instanceof Color? (Color)selView.getFill() : null;
-    //getView("FillColorButton", ColorButton.class).setColor(color);
-    //getView("TextColorButton", ColorButton.class).setColor(bdr!=null? bdr.getColor() : null);
-    
-    // Update OpacitySlider, RotationThumb, VerticalCheckBox
-    setViewValue("OpacitySlider", selView.getOpacity());
-    setViewValue("RotationThumb", selView.getRotate());
-    setViewValue("VerticalCheckBox", selView.isVertical());
 }
 
 /**
- * ResetUI.
+ * Respond UI.
  */
 protected void respondUI(ViewEvent anEvent)
 {
@@ -192,9 +148,10 @@ protected void respondUI(ViewEvent anEvent)
     if(anEvent.equals("LeanY2")) selView.setLeanY(VPos.BOTTOM);
     if(anEvent.equals("LeanYReset")) selView.setLeanY(null);
     
-    // Handle GrowWidthCheckBox, GrowHeightCheckBox
+    // Handle GrowWidthCheckBox, GrowHeightCheckBox, VerticalCheckBox
     if(anEvent.equals("GrowWidthCheckBox")) selView.setGrowWidth(anEvent.getBoolValue());
     if(anEvent.equals("GrowHeightCheckBox")) selView.setGrowHeight(anEvent.getBoolValue());
+    if(anEvent.equals("VerticalCheckBox")) selView.setVertical(anEvent.getBoolValue());
     
     // Handle AlignX
     String name = anEvent.getName();
@@ -203,50 +160,6 @@ protected void respondUI(ViewEvent anEvent)
         Pos pos = Pos.values()[val];
         selView.setAlign(pos);
     }
-    
-    // Handle FontSizeText, FontPlusButton, FontMinusButton
-    if(anEvent.equals("FontSizeText")) { Font font = selView.getFont();
-        selView.setFont(font.deriveFont(anEvent.getFloatValue())); }
-    if(anEvent.equals("FontPlusButton")) { Font font = selView.getFont();
-        selView.setFont(font.deriveFont(font.getSize()+1)); }
-    if(anEvent.equals("FontMinusButton")) { Font font = selView.getFont();
-        selView.setFont(font.deriveFont(font.getSize()-1)); }
-    if(anEvent.equals("FontResetButton")) selView.setFont(null);
-    
-    // Handle NoBdrButton, LineBdrButton, LowerBdrButton, RaiseBdrButton, EtchBdrButton
-    if(anEvent.equals("NoBdrButton")) selView.setBorder(null);
-    if(anEvent.equals("LineBdrButton")) selView.setBorder(Color.BLACK, 1);
-    if(anEvent.equals("LowerBdrButton")) selView.setBorder(new BevelBorder(0));
-    if(anEvent.equals("RaiseBdrButton")) selView.setBorder(new BevelBorder(1));
-    if(anEvent.equals("EtchBdrButton")) selView.setBorder(new EtchBorder());
-    
-    // Handle BorderColorButton
-    if(anEvent.equals("BorderColorButton")) {
-        Border bdr = selView.getBorder();
-        Color color = getView("BorderColorButton", ColorButton.class).getColor();
-        double w = bdr instanceof LineBorder? ((LineBorder)bdr).getWidth() : 1;
-        selView.setBorder(color, w);
-    }
-    
-    // Handle BorderWidthSpinner
-    if(anEvent.equals("BorderWidthSpinner")) {
-        Border bdr = selView.getBorder();
-        Color color = bdr!=null? bdr.getColor() : Color.BLACK;
-        selView.setBorder(color, anEvent.getFloatValue());
-    }
-    
-    // Handle FillColorButton
-    if(anEvent.equals("FillColorButton"))
-        selView.setFill(getView("FillColorButton", ColorButton.class).getColor());
-    
-    // Handle TextFillColorButton
-    if(anEvent.equals("TextFillColorButton"))
-        ViewHpr.getHpr(selView).setTextFill(selView, getView("TextFillColorButton", ColorButton.class).getColor());
-    
-    // Handle OpacitySlider, RotationThumb, VerticalCheckBox
-    if(anEvent.equals("OpacitySlider")) selView.setOpacity(anEvent.getFloatValue());
-    if(anEvent.equals("RotationThumb")) selView.setRotate(anEvent.getFloatValue());
-    if(anEvent.equals("VerticalCheckBox")) selView.setVertical(anEvent.getBoolValue());
 }
 
 /**

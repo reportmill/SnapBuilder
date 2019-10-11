@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<RowView MinHeight="0" Padding="12,8,8,8" GrowWidth="true" Spacing="5" FillHeight="true">
+<RowView MinHeight="0" Padding="12,8,8,8" Spacing="5" FillHeight="true">
   <font name="Arial" size="12" />
   <TitleView MinWidth="120" MinHeight="60" Padding="2" Text="Arrange Views">
     <ColView Padding="12" GrowHeight="true" Spacing="9">

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ColView Padding="5">
-  <RowView Padding="4" GrowWidth="true" Spacing="4">
+<ColView PrefWidth="275" Padding="8" FillWidth="true">
+  <RowView Padding="4" Spacing="4">
     <Label PrefWidth="40" text="Image:" />
-    <TextField Name="ImageNameText" PrefWidth="300" ColCount="12" />
+    <TextField Name="ImageNameText" GrowWidth="true" />
   </RowView>
 </ColView>

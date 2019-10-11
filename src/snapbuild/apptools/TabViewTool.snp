@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ColView Padding="5">
-  <RowView Padding="4" GrowWidth="true" Spacing="4">
-    <ColView Padding="4" GrowHeight="true" Spacing="4">
-      <RowView Padding="4" GrowWidth="true" Spacing="4">
-        <Label text="Tabs" />
-        <Button Name="RemoveButton" PrefWidth="22" PrefHeight="22" Padding="2" LeanX="RIGHT" text="-" />
-        <Button Name="AddButton" PrefWidth="22" PrefHeight="22" Padding="2" text="+" />
-      </RowView>
-      <ListView Name="TabList" MinWidth="120" MinHeight="60" PrefWidth="140" PrefHeight="150" />
-    </ColView>
-  </RowView>
+<ColView PrefWidth="275" Padding="8" FillWidth="true">
+  <ColView Padding="4" Spacing="4" FillWidth="true">
+    <RowView Padding="4" GrowWidth="true" Spacing="4">
+      <Label text="Tabs" />
+      <Button Name="RemoveButton" PrefWidth="22" PrefHeight="22" Padding="2" LeanX="RIGHT" text="-" />
+      <Button Name="AddButton" PrefWidth="22" PrefHeight="22" Padding="2" text="+" />
+    </RowView>
+    <ListView Name="TabList" MinWidth="120" MinHeight="60" PrefWidth="140" PrefHeight="150" />
+  </ColView>
 </ColView>

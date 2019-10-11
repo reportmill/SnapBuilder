@@ -27,11 +27,11 @@ public class EditorPane extends ViewOwner {
     // The deepest view to show in the SelPathBox
     View             _selPathDeep;
     
+    // The InspectorPane
+    InspectorPane    _inspPane;
+    
     // The ViewTree
     TreeView <View>  _viewTree;
-    
-    // The TabView
-    TabView          _tabView;
     
     // The GalleryPane
     GalleryPane      _gallery = new GalleryPane(this);
@@ -42,6 +42,9 @@ public class EditorPane extends ViewOwner {
     // The XML TextView
     XMLText          _xmlText = new XMLText(this);
     
+    // Map of tools
+    Map <Class,ViewTool>  _tools = new HashMap();
+
 /**
  * Creates a new EditorPane.
  */
@@ -87,6 +90,17 @@ public void setSourceURL(WebURL aURL)  { getEditor().setSourceURL(aURL); }
  * Returns the Editor.Content.
  */
 public View getContent()  { return _editor.getContent(); }
+
+/**
+ * Returns the inspector.
+ */
+public InspectorPane getInspector()
+{
+    if(_inspPane!=null) return _inspPane;
+    _inspPane = new InspectorPane();
+    _inspPane._epane = this;
+    return _inspPane;
+}
 
 /**
  * Returns the Editor.SelView.
@@ -340,6 +354,11 @@ protected void initUI()
     // Get TransPane
     _transPane = getView("TransPane", TransitionPane.class);
     
+    // Get EditorRowView, add Inspector and add to TransPane
+    RowView editorRowView = getView("EditorRowView", RowView.class);
+    editorRowView.addChild(getInspector().getUI());
+    _transPane.setContent(editorRowView);
+    
     // Get editor
     _editor = getView("Editor", Editor.class);
     _editor.addPropChangeListener(pce -> editorSelViewChange(), Editor.SelView_Prop);
@@ -347,7 +366,6 @@ protected void initUI()
     // Get Editor SplitView and add to TransPane
     _editorSplit = getView("SplitView", SplitView.class);
     _editorSplit.setBorder(null);
-    _transPane.setContent(_editorSplit);
     
     // Get/configure ViewTree
     _viewTree = getView("ViewTree", TreeView.class);
@@ -376,9 +394,8 @@ protected void initUI()
     enableEvents(win, WinClose);
     
     // Add GalleryPane
-    _tabView = getView("MainTabView", TabView.class);
-    _tabView.addTab(" Add Views ", _gallery.getUI(), 0);
-    _tabView.addTab(" View Props ", _viewTool.getUI(), 1);
+    BoxView box = getView("GalleryBox", BoxView.class);
+    box.setContent(_gallery.getUI());
     
     // If TeaVM, go full window
     if(SnapUtils.isTeaVM)
@@ -418,55 +435,27 @@ protected void resetUI()
     getWindow().setTitle(title);
     getWindow().setDocURL(getSourceURL());
     
-    // Reset ViewUI
-    //if(_viewInsp.getUI().isShowing()) _viewInsp.resetLater();
-    
-    // Reset TabView
-    resetTabView();
+    // Reset Inspector
+    getInspector().resetLater();
 }
 
 /**
- * Resets the tab view.
+ * Returns the tool for given View.
  */
-protected void resetTabView()
+public ViewTool getToolForView(View aView)
 {
-    // Get sel view and tools list
-    View selView = getSelView();
-    List <ViewTool> tools = new ArrayList();
-    for(Class c=selView.getClass();c!=View.class;c=c.getSuperclass()) {
-        ViewTool tool = getTool(c);
-        if(tool!=null) tools.add(0, tool);
-    }
-    
-    // Iterate over tabs and update if not matching
-    int buildInCount = 2;
-    for(int i=0;i<tools.size();i++) { ViewTool tool = tools.get(i);
-        if(i+buildInCount>=_tabView.getTabCount())
-            _tabView.addTab(tool.getName(), tool.getUI());
-        else if(_tabView.getTabContent(i+buildInCount)!=tool.getUI()) {
-            _tabView.addTab(tool.getName(), tool.getUI(), i+2);
-            _tabView.removeTab(i+2+1);
-        }
-    }
-    
-    // Remove extra tabs
-    while(_tabView.getTabCount()>tools.size()+2) _tabView.removeTab(_tabView.getTabCount()-1);
-    
-    // Update current tab
-    _tabView.getContent().getOwner().resetLater();
+    Class cls = aView.getClass();
+    return getToolForClass(cls);
 }
-
-    // Map of tools
-    Map <Class,ViewTool>  _tools = new HashMap();
 
 /**
  * Returns the tool for given class.
  */
-public ViewTool getTool(Class aClass)
+public ViewTool getToolForClass(Class aClass)
 {
     ViewTool tool = _tools.get(aClass);
     if(tool==null) { _tools.put(aClass, tool=createTool(aClass)); tool._epane = this; }
-    return tool.getClass()!=ViewTool.class? tool : null;
+    return tool;
 }
 
 /**

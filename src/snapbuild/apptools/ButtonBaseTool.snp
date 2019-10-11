@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ColView Padding="5" Spacing="4">
+<ColView PrefWidth="275" Padding="8" Spacing="4" FillWidth="true">
   <font name="Arial" size="11" />
-  <RowView Padding="4" GrowWidth="true" Spacing="4">
+  <RowView Padding="4" Spacing="4">
     <Label PrefWidth="40" text="Image:" />
-    <TextField Name="ImageNameText" PrefWidth="300" ColCount="12" />
+    <TextField Name="ImageNameText" PrefWidth="300" GrowWidth="true" />
   </RowView>
-  <RowView Padding="4" GrowWidth="true" Spacing="4">
+  <RowView Padding="4" Spacing="4">
     <CheckBox Name="ShowAreaCheckBox" text="Show Background Area" />
   </RowView>
-  <RowView Align="TOP_LEFT" Padding="2" GrowWidth="true">
+  <RowView Align="TOP_LEFT" Padding="2">
     <Label PrefWidth="50" PrefHeight="22" text="Position:" />
     <ColView>
       <RowView GrowWidth="true">

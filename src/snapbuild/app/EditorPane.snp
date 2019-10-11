@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ColView PrefWidth="800" PrefHeight="800" GrowWidth="true" FillWidth="true">
-  <RowView Padding="4,4,4,6" Spacing="4">
+<ColView PrefWidth="1000" PrefHeight="1000" GrowWidth="true" FillWidth="true">
+  <RowView Padding="8,8,8,6" Spacing="4">
     <Button Name="SaveButton" PrefWidth="22" PrefHeight="22" ToolTip="Save" image="File_Save.png" ShowArea="false" />
     <Separator PrefHeight="18" Vertical="true" />
     <Button Name="CutButton" PrefWidth="22" PrefHeight="22" ToolTip="Cut" image="Edit_Cut.png" ShowArea="false" />
@@ -19,13 +19,15 @@
     </RowView>
   </RowView>
   <View Name="TransPane" GrowHeight="true" Class="snap.viewx.TransitionPane" />
-  <SplitView Name="SplitView" GrowHeight="true">
-    <TreeView Name="ViewTree" />
-    <ScrollView Name="EditorScrollView" GrowWidth="true">
-      <LineBorder Color="#aaaaaa" />
-      <View Name="Editor" Class="snapbuild.app.Editor" />
-    </ScrollView>
-  </SplitView>
+  <RowView Name="EditorRowView" FillHeight="true">
+    <SplitView Name="SplitView" GrowWidth="true">
+      <TreeView Name="ViewTree" />
+      <ScrollView Name="EditorScrollView" GrowWidth="true">
+        <LineBorder Color="#aaaaaa" />
+        <View Name="Editor" Class="snapbuild.app.Editor" />
+      </ScrollView>
+    </SplitView>
+  </RowView>
   <RowView Padding="3,5,3,4" Spacing="4">
     <Button Name="ShowViewTreeButton" PrefWidth="22" PrefHeight="22" ToolTip="Show View Tree" image="pkg.images/FilesTree.png" />
     <RowView Name="SelPathBox" Padding="0,2,0,0">
@@ -34,7 +36,5 @@
     <Button Name="AddRowButton" PrefWidth="38" Padding="2" LeanX="RIGHT" text="+Row" />
     <Button Name="AddColButton" PrefWidth="38" Padding="2" text="+Col" />
   </RowView>
-  <TabView Name="MainTabView" PrefHeight="300">
-    <font name="Arial" size="14" />
-  </TabView>
+  <BoxView Name="GalleryBox" FillWidth="true" FillHeight="true" />
 </ColView>
