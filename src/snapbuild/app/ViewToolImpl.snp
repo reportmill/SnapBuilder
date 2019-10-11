@@ -16,33 +16,33 @@
     </RowView>
     <RowView PrefWidth="148" GrowWidth="true" Spacing="2">
       <Label PrefWidth="64" text="Pref Width:" />
-      <Spinner Name="PrefWidthSpinner" PrefWidth="60" Align="CENTER" />
+      <Spinner Name="PrefWidthSpinner" PrefWidth="75" Align="CENTER" />
       <Button Name="PWAdd5Button" PrefWidth="24" PrefHeight="22" Padding="2" text="+5" ShowArea="false" />
       <Button Name="PWSub5Button" PrefWidth="24" PrefHeight="22" Padding="2" text="-5" ShowArea="false" />
       <Button Name="PWResetButton" PrefWidth="20" PrefHeight="20" ToolTip="Clear Font Size" text="&#10226;" ShowArea="false" />
     </RowView>
     <RowView GrowWidth="true" Spacing="2">
       <Label PrefWidth="64" text="Pref Height:" />
-      <Spinner Name="PrefHeightSpinner" PrefWidth="60" Align="CENTER" />
+      <Spinner Name="PrefHeightSpinner" PrefWidth="75" Align="CENTER" />
       <Button Name="PHAdd5Button" PrefWidth="24" PrefHeight="22" Padding="2" text="+5" ShowArea="false" />
       <Button Name="PHSub5Button" PrefWidth="24" PrefHeight="22" Padding="2" text="-5" ShowArea="false" />
       <Button Name="PHResetButton" PrefWidth="20" PrefHeight="20" ToolTip="Clear Font Size" text="&#10226;" ShowArea="false" />
     </RowView>
     <RowView GrowWidth="true" Spacing="2">
       <Label PrefWidth="64" PrefHeight="14" text="Min Width:" />
-      <Spinner Name="MinWidthSpinner" PrefWidth="60" Align="CENTER" />
+      <Spinner Name="MinWidthSpinner" PrefWidth="75" Align="CENTER" />
       <Button Name="MWAdd5Button" PrefWidth="24" PrefHeight="22" Padding="2" text="+5" ShowArea="false" />
       <Button Name="MWSub5Button" PrefWidth="24" PrefHeight="22" Padding="2" text="-5" ShowArea="false" />
       <Button Name="MWResetButton" PrefWidth="20" PrefHeight="20" ToolTip="Clear Font Size" text="&#10226;" ShowArea="false" />
     </RowView>
     <RowView GrowWidth="true" Spacing="2">
       <Label PrefWidth="64" text="Min Height:" />
-      <Spinner Name="MinHeightSpinner" PrefWidth="60" Align="CENTER" />
+      <Spinner Name="MinHeightSpinner" PrefWidth="75" Align="CENTER" />
       <Button Name="MHAdd5Button" PrefWidth="24" PrefHeight="22" Padding="2" text="+5" ShowArea="false" />
       <Button Name="MHSub5Button" PrefWidth="24" PrefHeight="22" Padding="2" text="-5" ShowArea="false" />
       <Button Name="MHResetButton" PrefWidth="20" PrefHeight="20" ToolTip="Clear Font Size" text="&#10226;" ShowArea="false" />
     </RowView>
-    <RowView Padding="6,0,0,0" GrowWidth="true" Spacing="8">
+    <RowView Padding="2,0,8,0" GrowWidth="true" Spacing="8">
       <Label text="Bounds:" />
       <Label Name="BoundsText" text="BoundsText" />
     </RowView>
@@ -136,5 +136,19 @@
         <CheckBox Name="VerticalCheckBox" text="Vertical" />
       </ColView>
     </RowView>
+  <TitleView Padding="2" LeanY="BOTTOM" Text="Arrange Views">
+    <RowView Padding="8" Spacing="20">
+      <ColView Spacing="8" GrowWidth="true" Align="CENTER">
+        <Button Name="MoveUpButton" PrefWidth="90" Padding="2" text="Move Up" />
+        <Button Name="MoveDownButton" PrefWidth="90" Padding="2" text="Move Down" />
+        <Button Name="MoveOutButton" PrefWidth="90" Padding="2" text="Move Out" />
+      </ColView>
+      <ColView Spacing="8" GrowWidth="true" Align="CENTER">
+        <Button Name="GroupInButton" PrefWidth="90" Padding="2" text="Group..." />
+        <Button Name="UngroupButton" PrefWidth="90" Padding="2" text="Ungroup" />
+        <Button Name="ChangeHostButton" PrefWidth="90" Padding="2" LeanX="CENTER" text="Change to..." />
+      </ColView>
+    </RowView>
+  </TitleView>
   </ColView>
 </ColView>

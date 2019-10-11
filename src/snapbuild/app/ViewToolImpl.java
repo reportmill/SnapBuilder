@@ -82,6 +82,9 @@ protected void resetUI()
     // Update Align
     Pos align = selView.getAlign();
     setViewValue("Align" + align.ordinal(), true);
+    
+    // Update ChangeHostButton.Enabled
+    setViewEnabled("ChangeHostButton", getEditor().getSelView() instanceof ViewHost);
 }
 
 /**
@@ -160,6 +163,13 @@ protected void respondUI(ViewEvent anEvent)
         Pos pos = Pos.values()[val];
         selView.setAlign(pos);
     }
+    
+    // Handle MoveUpButton, MoveDownButton, GroupInButton, UngroupButton, ChangeHostButton
+    if(anEvent.equals("MoveUpButton")) EditorUtils.moveViewUp(getEditor());
+    if(anEvent.equals("MoveDownButton")) EditorUtils.moveViewDown(getEditor());
+    if(anEvent.equals("GroupInButton")) EditorUtils.groupView(getEditor());
+    if(anEvent.equals("UngroupButton")) EditorUtils.ungroupView(getEditor());
+    if(anEvent.equals("ChangeHostButton")) EditorUtils.changeHost(getEditor());
 }
 
 /**

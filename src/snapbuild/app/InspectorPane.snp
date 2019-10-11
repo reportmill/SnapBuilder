@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ColView Padding="3,0,0,0" FillWidth="true">
   <LineBorder Color="#C0C0C0" />
-  <Label Name="TitleLabel" PrefWidth="275" PrefHeight="25" Align="CENTER" text="Inspector">
+  <Label Name="TitleLabel" PrefWidth="275" PrefHeight="24" Align="CENTER" text="Inspector">
     <font name="Arial" size="14" />
   </Label>
-  <RowView PrefWidth="269" Align="CENTER" Padding="5,8,5,8">
+  <RowView PrefWidth="269" Align="CENTER" Padding="4,8,4,8">
     <ToggleButton Name="ViewGeneralButton" PrefWidth="50" PrefHeight="42" GrowWidth="true" ToolTip="General Attributes Inspector" image="ViewGeneral.png" Position="CENTER_LEFT" Selected="true" Group="InspTG" />
     <ToggleButton Name="ViewSpecificButton" PrefWidth="50" PrefHeight="42" GrowWidth="true" ToolTip="View-Specific Attributes Inspector" image="ViewSpec.png" Position="CENTER" Group="InspTG" />
     <ToggleButton Name="ViewLooksButton" PrefWidth="50" PrefHeight="42" GrowWidth="true" ToolTip="View Looks Inspector" image="ViewFills.png" Position="CENTER_RIGHT" Group="InspTG" />
