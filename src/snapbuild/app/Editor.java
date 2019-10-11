@@ -39,13 +39,17 @@ public class Editor extends ParentView {
 public Editor()
 {
     // Configure this view
-    setAlign(Pos.CENTER); setPadding(15,15,15,15);
+    setAlign(Pos.CENTER);
+    setPadding(15,15,15,15);
     setFill(ViewUtils.getBackDarkFill());
     enableEvents(MouseRelease);
     
     // Configure ContentBox
-    _cbox = new BoxView(); _cbox.setFillWidth(true); _cbox.setFillHeight(true); //_cbox.setMinSize(400,400);
-    _cbox.setFill(ViewUtils.getBackFill()); _cbox.setBorder(new Color("#99"),1);
+    _cbox = new BoxView();
+    _cbox.setFillWidth(true);
+    _cbox.setFillHeight(true);
+    _cbox.setFill(ViewUtils.getBackFill());
+    _cbox.setBorder(new Color("#99"),1);
     _cbox.setPickable(false);
     _cbox.addDeepChangeListener(_contentDeepChangeLsnr);
     addChild(_cbox);
@@ -186,14 +190,31 @@ public void updateFile()
     file.setBytes(bytes);
 }
 
-/** Override. */
-protected double getPrefWidthImpl(double aH)  { return BoxView.getPrefWidth(this, _cbox, aH); }
+/**
+ * Layout method: Override.
+ */
+protected double getPrefWidthImpl(double aH)
+{
+    double pw = BoxView.getPrefWidth(this, _cbox, aH);
+    return pw;
+}
 
-/** Override. */
-protected double getPrefHeightImpl(double aW)  { return BoxView.getPrefHeight(this, _cbox, aW); }
+/**
+ * Layout method: Override.
+ */
+protected double getPrefHeightImpl(double aW)
+{
+    double ph = BoxView.getPrefHeight(this, _cbox, aW);
+    return ph;
+}
 
-/** Override. */
-protected void layoutImpl()  { BoxView.layout(this, _cbox, null, false, false); }
+/**
+ * Layout method: Override.
+ */
+protected void layoutImpl()
+{
+    BoxView.layout(this, _cbox, null, false, false);
+}
 
 /**
  * Override to handle events.
@@ -209,11 +230,19 @@ protected void processEvent(ViewEvent anEvent)
  */
 protected void mouseRelease(ViewEvent anEvent)
 {
+    // Get event point in ContentBox
     Point pnt = anEvent.getPoint(_cbox);
-    View view = ViewUtils.getDeepestChildAt(_cbox, pnt.getX(), pnt.getY());
+    View view = ViewUtils.getDeepestChildAt(_cbox, pnt.x, pnt.y);
+    
+    // Get deepest guest view (child of ViewHost)
     while(view!=null && !view.isGuest() && view.getParent()!=_cbox)
         view = view.getParent();
-    if(view==null || view==_cbox) view = getContent();
+        
+    // If not found, constrain to Editor.Content
+    if(view==null || view==_cbox)
+        view = getContent();
+    
+    // Select new view
     setSelView(view);
 }
 
@@ -236,7 +265,7 @@ protected void paintAbove(Painter aPntr)
     // Repaint selected view
     if(sview.getRotate()==0) {
         Point pnt = sview.getParent().localToParent(sview.getX(), sview.getY(), this);
-        aPntr.translate(pnt.getX(), pnt.getY());
+        aPntr.translate(pnt.x, pnt.y);
         ViewUtils.paintAll(sview, aPntr);
     }
 }

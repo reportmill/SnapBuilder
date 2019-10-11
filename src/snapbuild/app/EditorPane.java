@@ -15,8 +15,11 @@ public class EditorPane extends ViewOwner {
     // The Transform Pane
     TransitionPane   _transPane;
     
-    // The Editor SplitView
+    // The Editor SplitView (holds Editor and ViewTree)
     SplitView        _editorSplit;
+    
+    // The SplitView that holds inner SplitView and Gallery
+    SplitView        _gallerySplit;
     
     // The Editor
     Editor           _editor, _realEditor;
@@ -347,23 +350,61 @@ public void setEditing(boolean aValue)
 }
 
 /**
+ * Returns the tool for given View.
+ */
+public ViewTool getToolForView(View aView)
+{
+    Class cls = aView.getClass();
+    return getToolForClass(cls);
+}
+
+/**
+ * Returns the tool for given class.
+ */
+public ViewTool getToolForClass(Class aClass)
+{
+    ViewTool tool = _tools.get(aClass);
+    if(tool==null) {
+        tool = createTool(aClass);  tool._epane = this;
+        _tools.put(aClass, tool);
+    }
+    return tool;
+}
+
+/**
+ * Creates the tool for given class.
+ */
+protected ViewTool createTool(Class aClass)
+{
+    if(aClass==ButtonBase.class) return new ButtonBaseTool();
+    if(aClass==Label.class) return new LabelTool();
+    if(aClass==TabView.class) return new TabViewTool();
+    return new ViewTool();
+}
+
+/**
  * Initialize UI.
  */
 protected void initUI()
 {
-    // Get TransPane
-    _transPane = getView("TransPane", TransitionPane.class);
     
-    // Get EditorRowView, add Inspector and add to TransPane
+    // Get EditorRowView and add Inspector UI
     RowView editorRowView = getView("EditorRowView", RowView.class);
     editorRowView.addChild(getInspector().getUI());
-    _transPane.setContent(editorRowView);
+    
+    // Get GallerySplitView (holds SplitView and Gallery)
+    _gallerySplit = getView("GallerySplitView", SplitView.class);
+    _gallerySplit.setBorder(null);
+    
+    // Get TransPane and add GallerySplitView
+    _transPane = getView("TransPane", TransitionPane.class);
+    _transPane.setContent(_gallerySplit);
     
     // Get editor
     _editor = getView("Editor", Editor.class);
     _editor.addPropChangeListener(pce -> editorSelViewChange(), Editor.SelView_Prop);
     
-    // Get Editor SplitView and add to TransPane
+    // Get Editor SplitView
     _editorSplit = getView("SplitView", SplitView.class);
     _editorSplit.setBorder(null);
     
@@ -395,7 +436,7 @@ protected void initUI()
     
     // Add GalleryPane
     BoxView box = getView("GalleryBox", BoxView.class);
-    box.setContent(_gallery.getUI());
+    //box.setContent(_gallery.getUI());
     
     // If TeaVM, go full window
     if(SnapUtils.isTeaVM)
@@ -440,36 +481,6 @@ protected void resetUI()
 }
 
 /**
- * Returns the tool for given View.
- */
-public ViewTool getToolForView(View aView)
-{
-    Class cls = aView.getClass();
-    return getToolForClass(cls);
-}
-
-/**
- * Returns the tool for given class.
- */
-public ViewTool getToolForClass(Class aClass)
-{
-    ViewTool tool = _tools.get(aClass);
-    if(tool==null) { _tools.put(aClass, tool=createTool(aClass)); tool._epane = this; }
-    return tool;
-}
-
-/**
- * Creates the tool for given class.
- */
-protected ViewTool createTool(Class aClass)
-{
-    if(aClass==ButtonBase.class) return new ButtonBaseTool();
-    if(aClass==Label.class) return new LabelTool();
-    if(aClass==TabView.class) return new TabViewTool();
-    return new ViewTool();
-}
-
-/**
  * Respond to UI.
  */
 protected void respondUI(ViewEvent anEvent)
@@ -485,43 +496,22 @@ protected void respondUI(ViewEvent anEvent)
     if(anEvent.equals("RedoButton")) _editor.redo();
     
     // Handle SamplesButton
-    if(anEvent.equals("SamplesButton")) new SamplesPane().showSamples(this);
+    if(anEvent.equals("SamplesButton")) showSamples();
     
     // Handle DocButton
     if(anEvent.equals("DocButton")) URLUtils.openURL(getJavaDocURL());
     
-    // Handle EditButton
-    if(anEvent.equals("EditButton")) {
-        _transPane.setTransition(TransitionPane.MoveLeft);
-        _transPane.setContent(_editorSplit);
-    }
-    
-    // Handle XMLButton
-    if(anEvent.equals("XMLButton")) {
-        if(_transPane.getContent()==_editorSplit) _transPane.setTransition(TransitionPane.MoveRight);
-        else _transPane.setTransition(TransitionPane.MoveLeft);
-        _transPane.setContent(_xmlText.getUI());
-        _xmlText.updateXMLText();
-     }
-
-    // Handle PreviewButton
-    if(anEvent.equals("PreviewButton")) {
-        
-        // Create copy of content
-        View content = new ViewArchiver().copy(getContent()); content.setGrowWidth(false); content.setGrowHeight(false);
-        if(content.getFill()==null) content.setFill(ViewUtils.getBackFill());
-        
-        // Create BoxView
-        BoxView box = new BoxView(content, false, false); box.setFill(ViewUtils.getBackDarkFill());
-        
-        // Add to TransPane
-        _transPane.setTransition(TransitionPane.MoveRight);
-        _transPane.setContent(box);
-    }
+    // Handle EditButton, XMLButton, PreviewButton
+    if(anEvent.equals("EditButton")) showEditor();
+    if(anEvent.equals("XMLButton")) showXMLEditor();
+    if(anEvent.equals("PreviewButton")) showPreview();
 
     // Handle ShowViewTreeButton
     if(anEvent.equals("ShowViewTreeButton"))
         toggleShowViewTree();
+        
+    // Handle GalleryButton
+    if(anEvent.equals("GalleryButton")) toggleShowGallery();
         
     // Handle AddRowButton, AddColButton
     if(anEvent.equals("AddRowButton")) addRowView();
@@ -549,6 +539,108 @@ protected void respondUI(ViewEvent anEvent)
     // Handle WinClosing
     if(anEvent.isWinClose()) {
         close(); anEvent.consume(); }
+}
+
+/**
+ * Shows the editor.
+ */
+public void showEditor()
+{
+    _transPane.setTransition(TransitionPane.MoveLeft);
+    _transPane.setContent(_gallerySplit);
+}
+
+/**
+ * Shows the XML editor.
+ */
+public void showXMLEditor()
+{
+    // Configure TransPane to slide in appropriate direction based on current mode
+    if(_transPane.getContent()==_gallerySplit) _transPane.setTransition(TransitionPane.MoveRight);
+    else _transPane.setTransition(TransitionPane.MoveLeft);
+    
+    // Set TransPane.Content to XMLText.UI
+    _transPane.setContent(_xmlText.getUI());
+    _xmlText.updateXMLText();
+}
+
+/**
+ * Shows preview of UI.
+ */
+public void showPreview()
+{
+    // Create copy of content
+    View content = new ViewArchiver().copy(getContent());
+    content.setGrowWidth(false);
+    content.setGrowHeight(false);
+    if(content.getFill()==null)
+        content.setFill(ViewUtils.getBackFill());
+    
+    // Create BoxView to hold UI
+    BoxView box = new BoxView(content, false, false);
+    box.setFill(ViewUtils.getBackDarkFill());
+    
+    // Add to TransPane
+    _transPane.setTransition(TransitionPane.MoveRight);
+    _transPane.setContent(box);
+}
+
+/**
+ * Shows the gallery.
+ */
+public void showGallery()
+{
+    // If already set, just return
+    if(_gallery.isShowing()) return;
+
+    // Add item    
+    _gallerySplit.addItemWithAnim(_gallery.getUI(), 220, 1);
+    
+    // Update GalleryButton.Text
+    getView("GalleryButton").setText("Hide Gallery");
+}
+    
+/**
+ * Hides the gallery.
+ */
+public void hideGallery()
+{
+    // If already set, just return
+    if(!_gallery.isShowing()) return;
+
+    // Remove item
+    _gallerySplit.removeItemWithAnim(_gallery.getUI());
+    
+    // Update GalleryButton.Text
+    getView("GalleryButton").setText("Show Gallery");
+}
+    
+/**
+ * Shows/Hides Gallery.
+ */
+public void toggleShowGallery()
+{
+    if(_gallery.isShowing()) hideGallery();
+    else showGallery();
+}
+
+/**
+ * Shows the Samples drawer.
+ */
+public void showSamples()
+{
+    hideGallery();
+    new SamplesPane().showSamples(this);
+}
+
+/**
+ * Shows/Hides ViewTree.
+ */
+protected void toggleShowViewTree()
+{
+    if(_viewTree.getParent()==null)
+        _editorSplit.addItemWithAnim(_viewTree, 160, 0);
+    else _editorSplit.removeItemWithAnim(_viewTree);
 }
 
 /**
@@ -589,13 +681,13 @@ protected void selPathItemClicked(View aView)
 }
 
 /**
- * Shows/Hides ViewTree.
+ * Override to show gallery.
  */
-protected void toggleShowViewTree()
+protected void showingChanged()
 {
-    if(_viewTree.getParent()==null)
-        _editorSplit.addItemWithAnim(_viewTree, 160, 0);
-    else _editorSplit.removeItemWithAnim(_viewTree);
+    super.showingChanged();
+    if(isShowing())
+        runLater(() -> showGallery());
 }
     
 /**

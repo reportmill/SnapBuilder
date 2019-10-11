@@ -1,49 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ColView PrefWidth="275" Padding="10,8,8,8" FillWidth="true">
   <font name="Arial" size="12" />
-  <ColView Spacing="6">
-    <RowView GrowWidth="true" Spacing="4">
+  <ColView Spacing="6" FillWidth="true">
+    <RowView Spacing="4">
       <Label text="Name:" />
       <TextField Name="NameText" PrefWidth="160" GrowWidth="true" />
     </RowView>
-    <RowView GrowWidth="true" Spacing="4">
+    <RowView Spacing="4">
       <Label text="Text:" />
       <TextField Name="TextText" GrowWidth="true" />
     </RowView>
-    <RowView GrowWidth="true" Spacing="4">
+    <RowView Spacing="4">
       <Label text="ToolTip:" />
       <TextField Name="ToolTipText" GrowWidth="true" />
     </RowView>
-    <RowView PrefWidth="148" GrowWidth="true" Spacing="2">
+    <RowView PrefWidth="148" Spacing="2">
       <Label PrefWidth="64" text="Pref Width:" />
       <Spinner Name="PrefWidthSpinner" PrefWidth="75" Align="CENTER" />
       <Button Name="PWAdd5Button" PrefWidth="24" PrefHeight="22" Padding="2" text="+5" ShowArea="false" />
       <Button Name="PWSub5Button" PrefWidth="24" PrefHeight="22" Padding="2" text="-5" ShowArea="false" />
       <Button Name="PWResetButton" PrefWidth="20" PrefHeight="20" ToolTip="Clear Font Size" text="&#10226;" ShowArea="false" />
     </RowView>
-    <RowView GrowWidth="true" Spacing="2">
+    <RowView Spacing="2">
       <Label PrefWidth="64" text="Pref Height:" />
       <Spinner Name="PrefHeightSpinner" PrefWidth="75" Align="CENTER" />
       <Button Name="PHAdd5Button" PrefWidth="24" PrefHeight="22" Padding="2" text="+5" ShowArea="false" />
       <Button Name="PHSub5Button" PrefWidth="24" PrefHeight="22" Padding="2" text="-5" ShowArea="false" />
       <Button Name="PHResetButton" PrefWidth="20" PrefHeight="20" ToolTip="Clear Font Size" text="&#10226;" ShowArea="false" />
     </RowView>
-    <RowView GrowWidth="true" Spacing="2">
+    <RowView Spacing="2">
       <Label PrefWidth="64" PrefHeight="14" text="Min Width:" />
       <Spinner Name="MinWidthSpinner" PrefWidth="75" Align="CENTER" />
       <Button Name="MWAdd5Button" PrefWidth="24" PrefHeight="22" Padding="2" text="+5" ShowArea="false" />
       <Button Name="MWSub5Button" PrefWidth="24" PrefHeight="22" Padding="2" text="-5" ShowArea="false" />
       <Button Name="MWResetButton" PrefWidth="20" PrefHeight="20" ToolTip="Clear Font Size" text="&#10226;" ShowArea="false" />
     </RowView>
-    <RowView GrowWidth="true" Spacing="2">
+    <RowView Spacing="2">
       <Label PrefWidth="64" text="Min Height:" />
       <Spinner Name="MinHeightSpinner" PrefWidth="75" Align="CENTER" />
       <Button Name="MHAdd5Button" PrefWidth="24" PrefHeight="22" Padding="2" text="+5" ShowArea="false" />
       <Button Name="MHSub5Button" PrefWidth="24" PrefHeight="22" Padding="2" text="-5" ShowArea="false" />
       <Button Name="MHResetButton" PrefWidth="20" PrefHeight="20" ToolTip="Clear Font Size" text="&#10226;" ShowArea="false" />
     </RowView>
-    <RowView Padding="2,0,8,0" GrowWidth="true" Spacing="8">
-      <Label text="Bounds:" />
+    <RowView Padding="2,0,8,0" Spacing="6">
+      <Label PrefWidth="64" text="Bounds:" />
       <Label Name="BoundsText" text="BoundsText" />
     </RowView>
   </ColView>
@@ -96,20 +96,20 @@
       <Button Name="SpaceResetButton" PrefWidth="20" PrefHeight="20" ToolTip="Clear Font Size" text="&#10226;" ShowArea="false" />
     </RowView>
     <RowView>
-      <Label text="LeanX: " />
-      <ToggleButton Name="LeanX0" PrefWidth="22" PrefHeight="22" Padding="2" image="pkg.images/AlignLeft.png" ShowArea="false" />
-      <ToggleButton Name="LeanX1" PrefWidth="22" PrefHeight="22" Padding="2" image="pkg.images/AlignCenter.png" ShowArea="false" />
-      <ToggleButton Name="LeanX2" PrefWidth="22" PrefHeight="22" Padding="2" image="pkg.images/AlignRight.png" ShowArea="false" />
-      <Button Name="LeanXReset" PrefWidth="20" PrefHeight="20" Padding="2" text="&#10226;" ShowArea="false" />
+      <Label PrefWidth="52" text="LeanX: " />
+      <ToggleButton Name="LeanX0" PrefWidth="26" PrefHeight="22" Padding="2" image="pkg.images/AlignLeft.png" Position="CENTER_LEFT" />
+      <ToggleButton Name="LeanX1" PrefWidth="26" PrefHeight="22" Padding="2" image="pkg.images/AlignCenter.png" Position="CENTER" />
+      <ToggleButton Name="LeanX2" PrefWidth="26" PrefHeight="22" Padding="2" image="pkg.images/AlignRight.png" Position="CENTER_RIGHT" />
+      <Button Name="LeanXReset" PrefWidth="24" PrefHeight="20" Padding="2" text="&#10226;" ShowArea="false" />
     </RowView>
     <RowView>
-      <Label text="LeanY: " />
-      <ToggleButton Name="LeanY0" PrefWidth="22" PrefHeight="22" Padding="2" image="pkg.images/AlignTop.png" ShowArea="false" />
-      <ToggleButton Name="LeanY1" PrefWidth="22" PrefHeight="22" Padding="2" image="pkg.images/AlignMiddle.png" ShowArea="false" />
-      <ToggleButton Name="LeanY2" PrefWidth="22" PrefHeight="22" Padding="2" image="pkg.images/AlignBottom.png" ShowArea="false" />
-      <Button Name="LeanYReset" PrefWidth="20" PrefHeight="20" Padding="2" text="&#10226;" ShowArea="false" />
+      <Label PrefWidth="52" text="LeanY: " />
+      <ToggleButton Name="LeanY0" PrefWidth="26" PrefHeight="22" Padding="2" image="pkg.images/AlignTop.png" Position="CENTER_LEFT" />
+      <ToggleButton Name="LeanY1" PrefWidth="26" PrefHeight="22" Padding="2" image="pkg.images/AlignMiddle.png" Position="CENTER" />
+      <ToggleButton Name="LeanY2" PrefWidth="26" PrefHeight="22" Padding="2" image="pkg.images/AlignBottom.png" Position="CENTER_RIGHT" />
+      <Button Name="LeanYReset" PrefWidth="24" PrefHeight="20" Padding="2" text="&#10226;" ShowArea="false" />
     </RowView>
-    <RowView Align="TOP_LEFT" Padding="2" Spacing="5" FillHeight="true">
+    <RowView Align="TOP_LEFT" Padding="2" Spacing="15" FillHeight="true">
       <TitleView MinHeight="60" Align="CENTER" Padding="5,12,10,12" Text="Align">
         <ColView Margin="5">
           <font name="Arial" size="10" />
