@@ -21,6 +21,11 @@ protected void resetUI()
     setViewValue("ImageNameText", selView.getImageName());
     setViewValue("ShowAreaCheckBox", selView.isShowArea());
     
+    // Update SelectedCheckBox
+    ToggleButton tbtn = selView instanceof ToggleButton? (ToggleButton)selView : null;
+    setViewValue("SelectedCheckBox", tbtn!=null && tbtn.isSelected());
+    setViewEnabled("SelectedCheckBox", tbtn!=null);
+    
     // Update Pos buttons
     Pos pos = selView.getPosition();
     ToggleButton selBtn = pos!=null? getView("Pos" + pos.ordinal(), ToggleButton.class) : null;
@@ -38,6 +43,10 @@ protected void respondUI(ViewEvent anEvent)
     // Handle ImageNameText, ShowAreaCheckBox
     if(anEvent.equals("ImageNameText")) selView.setImageName(anEvent.getStringValue());
     if(anEvent.equals("ShowAreaCheckBox")) selView.setShowArea(anEvent.getBoolValue());
+    
+    // Handle SelectedCheckBox
+    if(anEvent.equals("SelectedCheckBox") && selView instanceof ToggleButton)
+        ((ToggleButton)selView).setSelected(anEvent.getBoolValue());
     
     // Respond to Pos buttons
     if(anEvent.getName().startsWith("Pos")) {

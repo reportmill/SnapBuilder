@@ -34,6 +34,21 @@ public static void moveViewDown(Editor anEditor)
 }
 
 /**
+ * Moves a view out of a ViewHost.
+ */
+public static void moveViewOut(Editor anEditor)
+{
+    View sview = anEditor.getSelView();
+    ViewHost host = sview.getHost(); if(host==null) { ViewUtils.beep(); return; }
+    ViewHost hostHost = ((View)host).getHost(); if(hostHost==null) { ViewUtils.beep(); return; }
+    
+    int ind = sview.indexInParent();
+    int ind2 = hostHost.indexOfGuest((View)host);
+    host.removeGuest(sview);
+    hostHost.addGuest(sview, ind2+1);
+}
+
+/**
  * Groups the selected view in another content view.
  */
 public static void groupView(Editor anEditor)

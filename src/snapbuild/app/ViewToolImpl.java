@@ -164,9 +164,10 @@ protected void respondUI(ViewEvent anEvent)
         selView.setAlign(pos);
     }
     
-    // Handle MoveUpButton, MoveDownButton, GroupInButton, UngroupButton, ChangeHostButton
+    // Handle MoveUpButton, MoveDownButton, MoveOutButton, GroupInButton, UngroupButton, ChangeHostButton
     if(anEvent.equals("MoveUpButton")) EditorUtils.moveViewUp(getEditor());
     if(anEvent.equals("MoveDownButton")) EditorUtils.moveViewDown(getEditor());
+    if(anEvent.equals("MoveOutButton")) EditorUtils.moveViewOut(getEditor());
     if(anEvent.equals("GroupInButton")) EditorUtils.groupView(getEditor());
     if(anEvent.equals("UngroupButton")) EditorUtils.ungroupView(getEditor());
     if(anEvent.equals("ChangeHostButton")) EditorUtils.changeHost(getEditor());
