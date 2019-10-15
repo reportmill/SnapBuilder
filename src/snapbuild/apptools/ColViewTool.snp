@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ColView PrefWidth="275" Padding="8" FillWidth="true">
+  <RowView Padding="4" Spacing="4">
+    <CheckBox Name="FillWidthCheckBox" text="Fill Width" />
+  </RowView>
+</ColView>

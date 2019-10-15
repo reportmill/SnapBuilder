@@ -376,10 +376,17 @@ public ViewTool getToolForClass(Class aClass)
  */
 protected ViewTool createTool(Class aClass)
 {
+    // Handle known classes
     if(aClass==ButtonBase.class) return new ButtonBaseTool();
+    if(aClass==ColView.class) return new ColViewTool();
     if(aClass==Label.class) return new LabelTool();
+    if(aClass==RowView.class) return new RowViewTool();
     if(aClass==TabView.class) return new TabViewTool();
-    return new ViewTool();
+    if(aClass==View.class || aClass==null) return new ViewTool();
+    
+    // Try again with superclass
+    Class scls = aClass.getSuperclass();
+    return createTool(scls);
 }
 
 /**
