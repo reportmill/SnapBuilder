@@ -3,7 +3,7 @@ import snapbuild.app.ViewTool;
 import snap.view.*;
 
 /**
- * A class to manage UI for editing Labels.
+ * A ViewTool subclass for editing Labels.
  */
 public class LabelTool <T extends Label> extends ViewTool <T> {
 
