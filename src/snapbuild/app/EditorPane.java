@@ -383,6 +383,7 @@ protected ViewTool createTool(Class aClass)
     if(aClass==RowView.class) return new RowViewTool();
     if(aClass==TabView.class) return new TabViewTool();
     if(aClass==TextField.class) return new TextFieldTool();
+    if(aClass==TitleView.class) return new TitleViewTool();
     if(aClass==View.class || aClass==null) return new ViewTool();
     
     // Try again with superclass
