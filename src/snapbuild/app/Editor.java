@@ -162,7 +162,7 @@ public void setEditing(boolean aValue)
 public XMLElement getContentXML()
 {
     ViewArchiver varch = new ViewArchiver();
-    return varch.writeObject(getContent());
+    return varch.writeToXML(getContent());
 }
 
 /**
@@ -284,7 +284,7 @@ public void copy()
     if(getSelView()==getContent()) { ViewUtils.beep(); return; }
     
     // Get xml for selected shapes, and get as string
-    XMLElement xml = new ViewArchiver().writeObject(getSelView());
+    XMLElement xml = new ViewArchiver().writeToXML(getSelView());
     String xmlStr = xml.toString();
     
     // Get clipboard and add data as XML string (RMData) and plain string
