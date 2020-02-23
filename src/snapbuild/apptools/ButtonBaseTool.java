@@ -1,7 +1,7 @@
 package snapbuild.apptools;
 import snap.util.SnapUtils;
 import snapbuild.app.ViewTool;
-import snap.gfx.Pos;
+import snap.geom.Pos;
 import snap.view.*;
 
 /**

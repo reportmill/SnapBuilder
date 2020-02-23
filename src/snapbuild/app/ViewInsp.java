@@ -1,4 +1,8 @@
 package snapbuild.app;
+import snap.geom.HPos;
+import snap.geom.Insets;
+import snap.geom.Pos;
+import snap.geom.VPos;
 import snap.gfx.*;
 import snap.gfx.Border.*;
 import snap.util.StringUtils;
@@ -75,11 +79,11 @@ protected void resetUI()
     setViewValue("SpacingSpinner", selView.getSpacing());
     
     // Update LeanX, LeanY
-    setViewValue("LeanX0", selView.getLeanX()==HPos.LEFT);
+    setViewValue("LeanX0", selView.getLeanX()== HPos.LEFT);
     setViewValue("LeanX1", selView.getLeanX()==HPos.CENTER);
     setViewValue("LeanX2", selView.getLeanX()==HPos.RIGHT);
     setViewValue("LeanX3", selView.getLeanX()==null);
-    setViewValue("LeanY0", selView.getLeanY()==VPos.TOP);
+    setViewValue("LeanY0", selView.getLeanY()== VPos.TOP);
     setViewValue("LeanY1", selView.getLeanY()==VPos.CENTER);
     setViewValue("LeanY2", selView.getLeanY()==VPos.BOTTOM);
     setViewValue("LeanY3", selView.getLeanY()==null);

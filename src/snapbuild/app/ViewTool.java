@@ -1,4 +1,5 @@
 package snapbuild.app;
+import snap.geom.Pos;
 import snap.gfx.*;
 import snap.view.*;
 

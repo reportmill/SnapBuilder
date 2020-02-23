@@ -1,5 +1,7 @@
 package snapbuild.app;
 import java.text.DecimalFormat;
+
+import snap.geom.*;
 import snap.gfx.*;
 import snap.util.*;
 import snap.view.*;
@@ -67,10 +69,10 @@ protected void resetUI()
     setViewValue("SpaceText", SnapUtils.stringValue(selView.getSpacing()));
     
     // Update LeanX, LeanY
-    setViewValue("LeanX0", selView.getLeanX()==HPos.LEFT);
+    setViewValue("LeanX0", selView.getLeanX()== HPos.LEFT);
     setViewValue("LeanX1", selView.getLeanX()==HPos.CENTER);
     setViewValue("LeanX2", selView.getLeanX()==HPos.RIGHT);
-    setViewValue("LeanY0", selView.getLeanY()==VPos.TOP);
+    setViewValue("LeanY0", selView.getLeanY()== VPos.TOP);
     setViewValue("LeanY1", selView.getLeanY()==VPos.CENTER);
     setViewValue("LeanY2", selView.getLeanY()==VPos.BOTTOM);
     

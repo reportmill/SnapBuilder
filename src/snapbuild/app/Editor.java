@@ -1,4 +1,8 @@
 package snapbuild.app;
+import snap.geom.Point;
+import snap.geom.Pos;
+import snap.geom.Rect;
+import snap.geom.RoundRect;
 import snap.gfx.*;
 import snap.util.*;
 import snap.view.*;

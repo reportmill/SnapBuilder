@@ -1,5 +1,8 @@
 package snapbuild.app;
 import java.util.function.Consumer;
+
+import snap.geom.Insets;
+import snap.geom.Pos;
 import snap.gfx.*;
 import snap.view.*;
 
