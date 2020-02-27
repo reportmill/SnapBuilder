@@ -262,7 +262,7 @@ public static class SplitViewHpr <T extends SplitView> extends ParentViewHpr <T>
     /** Configures a new View. */
     public void configureGallery(T aView)
     {
-        aView.setFont(Font.Arial10); aView.setBorder(new Border.BevelBorder(0));
+        aView.setFont(Font.Arial10); aView.setBorder(new Borders.BevelBorder(0));
         Label label0 = new Label("Split"); label0.setPadding(10,20,10,20); label0.setTextFill(Color.GRAY);
         Label label1 = new Label("View"); label1.setPadding(10,20,10,20); label1.setTextFill(Color.GRAY);
         aView.setItems(label0,label1);

@@ -4,7 +4,6 @@ import snap.geom.Insets;
 import snap.geom.Pos;
 import snap.geom.VPos;
 import snap.gfx.*;
-import snap.gfx.Border.*;
 import snap.util.StringUtils;
 import snap.view.*;
 import snap.viewx.*;
@@ -39,11 +38,11 @@ protected void initUI()
     Label l1 = getView("LineBdrButton", ButtonBase.class).getLabel(); l1.setPrefSize(16,16);
     l1.setBorder(Color.BLACK,1);
     Label l2 = getView("LowerBdrButton", ButtonBase.class).getLabel(); l2.setPrefSize(16,16);
-    l2.setBorder(new BevelBorder(0));
+    l2.setBorder(new Borders.BevelBorder(0));
     Label l3 = getView("RaiseBdrButton", ButtonBase.class).getLabel(); l3.setPrefSize(16,16);
-    l3.setBorder(new BevelBorder(1));
+    l3.setBorder(new Borders.BevelBorder(1));
     Label l4 = getView("EtchBdrButton", ButtonBase.class).getLabel(); l4.setPrefSize(16,16);
-    l4.setBorder(new EtchBorder());
+    l4.setBorder(new Borders.EtchBorder());
 }
 
 /**
@@ -102,10 +101,10 @@ protected void resetUI()
     // Update Border Buttons
     Border bdr = selView.getBorder();
     setViewValue("NoBdrButton", bdr==null);
-    setViewValue("LineBdrButton", bdr instanceof LineBorder);
-    setViewValue("LowerBdrButton", bdr instanceof BevelBorder && ((BevelBorder)bdr).getType()==0);
-    setViewValue("RaiseBdrButton", bdr instanceof BevelBorder && ((BevelBorder)bdr).getType()==1);
-    setViewValue("EtchBdrButton", bdr instanceof EtchBorder);
+    setViewValue("LineBdrButton", bdr instanceof Borders.LineBorder);
+    setViewValue("LowerBdrButton", bdr instanceof Borders.BevelBorder && ((Borders.BevelBorder)bdr).getType()==0);
+    setViewValue("RaiseBdrButton", bdr instanceof Borders.BevelBorder && ((Borders.BevelBorder)bdr).getType()==1);
+    setViewValue("EtchBdrButton", bdr instanceof Borders.EtchBorder);
     
     // Update BorderWidthSpinner
     setViewValue("BorderWidthSpinner", bdr!=null? bdr.getWidth() : 0);
@@ -187,15 +186,15 @@ protected void respondUI(ViewEvent anEvent)
     // Handle NoBdrButton, LineBdrButton, LowerBdrButton, RaiseBdrButton, EtchBdrButton
     if(anEvent.equals("NoBdrButton")) selView.setBorder(null);
     if(anEvent.equals("LineBdrButton")) selView.setBorder(Color.BLACK, 1);
-    if(anEvent.equals("LowerBdrButton")) selView.setBorder(new BevelBorder(0));
-    if(anEvent.equals("RaiseBdrButton")) selView.setBorder(new BevelBorder(1));
-    if(anEvent.equals("EtchBdrButton")) selView.setBorder(new EtchBorder());
+    if(anEvent.equals("LowerBdrButton")) selView.setBorder(new Borders.BevelBorder(0));
+    if(anEvent.equals("RaiseBdrButton")) selView.setBorder(new Borders.BevelBorder(1));
+    if(anEvent.equals("EtchBdrButton")) selView.setBorder(new Borders.EtchBorder());
     
     // Handle BorderColorButton
     if(anEvent.equals("BorderColorButton")) {
         Border bdr = selView.getBorder();
         Color color = getView("BorderColorButton", ColorButton.class).getColor();
-        double w = bdr instanceof LineBorder? ((LineBorder)bdr).getWidth() : 1;
+        double w = bdr instanceof Borders.LineBorder ? ((Borders.LineBorder)bdr).getWidth() : 1;
         selView.setBorder(color, w);
     }
     
