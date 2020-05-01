@@ -17,6 +17,7 @@ repositories {
 
 dependencies {
     compile project(':SnapKit')
+    compile project(':RMDraw')
 }
 
 mainClassName = 'snapbuild.app.App'
