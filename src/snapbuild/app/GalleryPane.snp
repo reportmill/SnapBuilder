@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<RowView MinHeight="0" Padding="0,0,0,0" Spacing="5" FillHeight="true">
+<ColView Spacing="5" FillWidth="true">
   <font name="Arial" size="12" />
-  <ScrollView GrowWidth="true">
+  <BoxView Padding="8" FillWidth="true">
+    <ComboBox Name="SearchComboBox" ShowTextField="true" ShowButton="false" FilterList="true"/>
+  </BoxView>
+  <ScrollView GrowHeight="true" BarSize="14">
     <NullBorder />
     <View Name="GalleryView" MinWidth="200" MinHeight="200" Class="snapbuild.app.GalleryView" />
   </ScrollView>
-</RowView>
+</ColView>

@@ -407,7 +407,8 @@ public class EditorPane extends ViewOwner {
 
         // Get GallerySplitView (holds SplitView and Gallery)
         _gallerySplit = getView("GallerySplitView", SplitView.class);
-        _gallerySplit.setBorder(null);
+        //_gallerySplit.setBorder(null);
+        getView("GalleryButton").setVisible(false);
 
         // Get TransPane and add GallerySplitView
         _transPane = getView("TransPane", TransitionPane.class);
@@ -703,8 +704,7 @@ public class EditorPane extends ViewOwner {
     protected void showingChanged()
     {
         super.showingChanged();
-        if (isShowing())
-            runLater(() -> showGallery());
+        //if (isShowing()) runLater(() -> showGallery());
     }
 
     /**

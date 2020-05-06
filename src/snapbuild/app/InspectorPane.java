@@ -9,28 +9,25 @@ import snap.view.*;
 public class InspectorPane extends ViewOwner {
 
     // The EditorPane
-    EditorPane           _epane;
+    protected EditorPane  _epane;
     
     // The Title label
-    Label                 _titleLabel;
-    
-    // The ViewButton
-    ToggleButton          _viewBtn;
+    private Label  _titleLabel;
     
     // The ScrollView that holds UI for child inspectors
-    ScrollView            _inspBox;
+    private ScrollView  _inspBox;
     
     // The child inspector current installed in inspector panel
-    ViewOwner            _childInspector;
+    private ViewOwner  _childInspector;
+
+    // The Gallery pane
+    private GalleryPane  _gallery;
     
     // The inspector for view general
-    ViewTool             _viewTool;
+    private ViewTool  _viewTool;
     
-    // The inspector for view looks
-    ViewLooks            _viewLooks;
-
     // The inspector for View Fill, Border, Effect
-    StylerPane           _stylerPane;
+    private StylerPane  _stylerPane;
     
     /**
      * Returns the editor pane.
@@ -51,9 +48,6 @@ public class InspectorPane extends ViewOwner {
         _titleLabel = getView("TitleLabel", Label.class);
         _titleLabel.setTextFill(Color.GRAY);
 
-        // Get ViewButton
-        _viewBtn = getView("ViewSpecificButton", ToggleButton.class);
-
         // Get/configure ContentBox
         _inspBox = getView("ContentBox", ScrollView.class);
         _inspBox.setBorder(null);
@@ -61,11 +55,10 @@ public class InspectorPane extends ViewOwner {
         _inspBox.setFillWidth(true);
 
         // Get ViewTool
-        _viewTool = _epane._viewTool;
+        _gallery = new GalleryPane(_epane);
 
-        // Get ViewLooks
-        _viewLooks = new ViewLooks();
-        _viewLooks._epane = _epane;
+        // Get ViewTool
+        _viewTool = _epane._viewTool;
 
         // Get Styler
         _stylerPane = new StylerPane(_epane.getEditor().getStyler());
@@ -82,6 +75,10 @@ public class InspectorPane extends ViewOwner {
         View selView = editor.getSelView();
         ViewTool tool = epane.getToolForView(selView);
 
+        // If GalleryButton is selected, install inspector
+        if (getViewBoolValue("GalleryButton"))
+            setInspector(_gallery);
+
         // If ViewGeneralButton is selected, instal inspector
         if (getViewBoolValue("ViewGeneralButton"))
             setInspector(_viewTool);
@@ -90,16 +87,19 @@ public class InspectorPane extends ViewOwner {
         if (getViewBoolValue("ViewSpecificButton"))
             setInspector(tool);
 
-        // If ViewLooksButton is selected, install ViewLooks inspector
+        // If ViewLooksButton is selected, install StylerPane
         if (getViewBoolValue("ViewLooksButton"))
-            setInspector(_stylerPane); //_viewLooks
+            setInspector(_stylerPane);
 
         // Get the inspector (owner)
         ViewOwner owner = getInspector();
 
         // Get inspector title from owner and set
         String title = "Inspector";
-        if (owner instanceof ViewTool) title = selView.getClass().getSimpleName() + " Inspector";
+        if (owner==_gallery) title = "Gallery";
+        else if (owner==_viewTool) title = "View Inspector";
+        else if (owner==_stylerPane) title = "Style Inspector";
+        else if (owner instanceof ViewTool) title = selView.getClass().getSimpleName() + " Inspector";
         _titleLabel.setText(title);
 
         // If owner non-null, tell it to reset
