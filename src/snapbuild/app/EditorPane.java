@@ -593,10 +593,11 @@ public class EditorPane extends ViewOwner {
         content.setGrowHeight(false);
         if(content.getFill()==null)
             content.setFill(ViewUtils.getBackFill());
+        content.setEffect(new ShadowEffect());
 
         // Create BoxView to hold UI
         BoxView box = new BoxView(content, false, false);
-        box.setFill(ViewUtils.getBackDarkFill());
+        box.setFill(Editor.BACK_FILL.brighter());
 
         // Add to TransPane
         _transPane.setTransition(TransitionPane.MoveRight);

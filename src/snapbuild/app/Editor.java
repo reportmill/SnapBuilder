@@ -39,6 +39,7 @@ public class Editor extends ParentView {
 
     // The MIME type for reportmill xstring
     public static final String    SNAP_XML_TYPE = "snap-studio/xml";
+    public static Color BACK_FILL = new Color(165, 179, 216).brighter(); // ViewUtils.getBackDarkFill()
     
     /**
      * Creates the Editor view.
@@ -48,7 +49,7 @@ public class Editor extends ParentView {
         // Configure this view
         setAlign(Pos.CENTER);
         setPadding(15,15,15,15);
-        setFill(new Color(165, 179, 216)); //ViewUtils.getBackDarkFill();
+        setFill(BACK_FILL);
         enableEvents(MouseRelease);
 
         // Configure ContentBox
