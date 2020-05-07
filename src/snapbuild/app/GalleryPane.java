@@ -1,11 +1,8 @@
 package snapbuild.app;
-import snap.gfx.Color;
 import snap.gfx.Image;
 import snap.view.*;
 import snap.viewx.TextPane;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * Manages the UI for Gallery of views and arrange controls (move up/down, group/ungroup).
@@ -31,21 +28,13 @@ public class GalleryPane extends ViewOwner {
      */
     protected void initUI()
     {
-        // Get/configure SearchComboBox
-        ComboBox <GalleryView.ItemView> searchComboBox = getView("SearchComboBox", ComboBox.class);
-        searchComboBox.setItemTextFunction(itm -> itm.getName());
-        searchComboBox.getListView().setItemTextFunction(itm -> itm.getName() + " - " + itm.getName());
-        searchComboBox.setPrefixFunction(s -> getItemsForPrefix(s));
-
-        // Get/configure SearchComboBox.PopupList
-        PopupList searchPopup = searchComboBox.getPopupList();
-        searchPopup.setRowHeight(22); searchPopup.setPrefWidth(300); searchPopup.setMaxRowCount(15);
-        searchPopup.setAltPaint(Color.get("#F8F8F8"));
-
         // Get/configure SearchText: radius, prompt, image, animation
-        TextField searchText = searchComboBox.getTextField(); searchText.setRadius(8);
-        searchText.setPromptText("Search"); searchText.getLabel().setImage(Image.get(TextPane.class, "Find.png"));
+        TextField searchText = getView("SearchTextField", TextField.class);
+        searchText.setRadius(10);
+        searchText.setPromptText("Search");
+        searchText.getLabel().setImage(Image.get(TextPane.class, "Find.png"));
         TextField.setBackLabelAlignAnimatedOnFocused(searchText, true);
+        searchText.addEventFilter(e -> ViewUtils.runLater(() -> textFieldKeyTyped(e)), KeyPress);
 
         _galleryView = getView("GalleryView", GalleryView.class);
         _galleryView._galleryPane = this;
@@ -54,51 +43,83 @@ public class GalleryPane extends ViewOwner {
     @Override
     protected void respondUI(ViewEvent anEvent)
     {
-        // Handle SearchComboBox
-        if(anEvent.equals("SearchComboBox"))
-            handleSearchComboBox(anEvent);
+        // Handle SearchTextField
+        if(anEvent.equals("SearchTextField"))
+            handleSearchTextField(anEvent);
 
     }
 
     /**
-     * Handle SearchComboBox changes.
+     * Handle SearchTextField changes.
      */
-    public void handleSearchComboBox(ViewEvent anEvent)
+    public void handleSearchTextField(ViewEvent anEvent)
     {
-        // Get selected file and/or text
-        //WebFile file = (WebFile)anEvent.getSelItem();
-        String text = anEvent.getStringValue();
+        // Get prefix text and current selection
+        TextField searchText = getView("SearchTextField", TextField.class);
+        String text = searchText.getText();
 
-        // If file available, open file
-        //if(file!=null)
-        //    getAppBrowser().setFile(file);
+        // Look for possible completion
+        List<GalleryView.ItemView> items = getItemsForPrefix(text);
+        GalleryView.ItemView item = items.size()>0 ? items.get(0) : null;
 
-        // If text available, either open URL or search for string
-//        else if(text!=null && text.length()>0) {
-//            int colon = text.indexOf(':');
-//            if(colon>0 && colon<6) {
-//                WebURL url = WebURL.getURL(text);
-//                getAppBrowser().setURL(url);
-//            }
-//            else {
-//                getAppPane().getSearchPane().search(text);
-//                getAppPane().setSupportTrayIndex(SupportTray.SEARCH_PANE);
-//            }
-//        }
+        // If completion available, set completion text
+        if (item!=null) {
+            _epane.getEditor().addView(item.getContent().getClass());
+        }
 
-        // Clear SearchComboBox
-        setViewText("SearchComboBox", null);
+        // Clear SearchTextField
+        setViewText("SearchTextField", null);
+    }
+
+    /**
+     * Called after TextField has KeyType.
+     */
+    protected void textFieldKeyTyped(ViewEvent anEvent)
+    {
+        // Get prefix text and current selection
+        TextField searchText = getView("SearchTextField", TextField.class);
+        String text = searchText.getText();
+
+        // Look for possible completion
+        List<GalleryView.ItemView> items = getItemsForPrefix(text);
+        String item = items.size()>0 ? items.get(0).getName() : null;
+
+        // If completion available, set completion text
+        if (item!=null)
+            searchText.setCompletionText(item);
     }
 
     private List<GalleryView.ItemView> getItemsForPrefix(String aPfx)
     {
+        String pfx = aPfx.toLowerCase();
         List<GalleryView.ItemView> items = new ArrayList(Arrays.asList(_galleryView.getChildren()));
+        if (pfx.length()==0) {
+            for (GalleryView.ItemView item : items) {
+                item.setVisible(true);
+                item.setManaged(true);
+            }
+            return Collections.EMPTY_LIST;
+        }
 
         for (GalleryView.ItemView item : items.toArray(new GalleryView.ItemView[0]))
         {
-            if (!item.getName().toLowerCase().startsWith(aPfx))
+            if (pfx.length()>0 && !item.getName().toLowerCase().contains(pfx)) {
                 items.remove(item);
+                item.setVisible(false);
+            }
+            else item.setVisible(true);
+            item.setManaged(item.isVisible());
         }
+        Collections.sort(items, (o1,o2) -> compareForPrefix(o1.getName(), o2.getName(), pfx));
         return items;
+    }
+
+    private int compareForPrefix(String o1, String o2, String aPfx)
+    {
+        boolean b1 = o1.toLowerCase().startsWith(aPfx);
+        boolean b2 = o2.toLowerCase().startsWith(aPfx);
+        if (b1 ^ b2)
+            return b1 ? -1 : 1;
+        return o1.compareToIgnoreCase(o2);
     }
 }

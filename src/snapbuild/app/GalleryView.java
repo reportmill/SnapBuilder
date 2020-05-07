@@ -44,7 +44,8 @@ public class GalleryView extends ParentView {
      */
     protected double getPrefHeightImpl(double aW)
     {
-        int colCount = (int)aW/150, childCount = getChildCount(); if (colCount==0) return 0;
+        int colCount = (int)aW/150;
+        int childCount = getChildrenManaged().length; if (colCount==0) return 0;
         int rowCount = childCount/colCount + (childCount%colCount>0 ? 1 : 0);
         return rowCount*ITEM_HEIGHT;
     }
@@ -59,7 +60,8 @@ public class GalleryView extends ParentView {
         double cw = Math.floor(w/colCount);
 
         double x = 0, y = 0;
-        for (int i=0,iMax=getChildCount();i<iMax;i++) { View child = getChild(i);
+        View children[] = getChildrenManaged();
+        for (int i=0,iMax=children.length;i<iMax;i++) { View child = children[i];
             child.setBounds(x,y,cw,ITEM_HEIGHT);
             x += cw;
             if (x+cw>w) {

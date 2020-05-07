@@ -2,7 +2,7 @@
 <ColView Spacing="5" FillWidth="true">
   <font name="Arial" size="12" />
   <BoxView Padding="8" FillWidth="true">
-    <ComboBox Name="SearchComboBox" ShowTextField="true" ShowButton="false" FilterList="true"/>
+    <TextField Name="SearchTextField" />
   </BoxView>
   <ScrollView GrowHeight="true" BarSize="14">
     <NullBorder />

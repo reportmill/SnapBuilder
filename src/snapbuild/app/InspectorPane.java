@@ -87,8 +87,8 @@ public class InspectorPane extends ViewOwner {
         if (getViewBoolValue("ViewSpecificButton"))
             setInspector(tool);
 
-        // If ViewLooksButton is selected, install StylerPane
-        if (getViewBoolValue("ViewLooksButton"))
+        // If ViewStyleButton is selected, install StylerPane
+        if (getViewBoolValue("ViewStyleButton"))
             setInspector(_stylerPane);
 
         // Get the inspector (owner)

@@ -437,7 +437,7 @@ public class EditorPane extends ViewOwner {
         updateSelPathBox();
 
         // Add action for ESCAPE key to pop selection
-        addKeyActionFilter("EscapeAction", "ESCAPE");
+        addKeyActionHandler("EscapeAction", "ESCAPE");
 
         // Set Toolbar images
         getView("SaveButton", ButtonBase.class).setImage(Image.get(TextPane.class, "pkg.images/File_Save.png"));
