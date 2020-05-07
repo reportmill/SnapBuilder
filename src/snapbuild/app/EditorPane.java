@@ -48,6 +48,9 @@ public class EditorPane extends ViewOwner {
     // Map of tools
     Map <Class,ViewTool>  _tools = new HashMap();
 
+    // The Editor listener
+    PropChangeListener _editorLsnr = pce -> editorSelViewChange();
+
     /**
      * Creates a new EditorPane.
      */
@@ -68,7 +71,7 @@ public class EditorPane extends ViewOwner {
     protected void setEditor(Editor anEditor)
     {
         // Stop listening to PropChanges on old
-        //if(_editor!=null) _editor.removePropChangeListener(_editerLsnr);
+        if(_editor!=null) _editor.removePropChangeListener(_editorLsnr);
 
         // Set Viewer
         _editor = anEditor;
@@ -76,7 +79,7 @@ public class EditorPane extends ViewOwner {
         scroll.setContent(_editor);
 
         // Start listening to PropChanges
-        //_editor.addPropChangeListener(_editerLsnr);
+        _editor.addPropChangeListener(_editorLsnr);
     }
 
     /**
@@ -416,7 +419,7 @@ public class EditorPane extends ViewOwner {
 
         // Get editor
         _editor = getView("Editor", Editor.class);
-        _editor.addPropChangeListener(pce -> editorSelViewChange(), Editor.SelView_Prop);
+        _editor.addPropChangeListener(_editorLsnr, Editor.SelView_Prop);
 
         // Get Editor SplitView
         _editorSplit = getView("SplitView", SplitView.class);
