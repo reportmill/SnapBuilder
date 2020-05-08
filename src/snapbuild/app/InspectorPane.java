@@ -73,7 +73,6 @@ public class InspectorPane extends ViewOwner {
         EditorPane epane = getEditorPane();
         Editor editor = getEditor();
         View selView = editor.getSelView();
-        ViewTool tool = epane.getToolForView(selView);
 
         // If GalleryButton is selected, install inspector
         if (getViewBoolValue("GalleryButton"))
@@ -84,8 +83,8 @@ public class InspectorPane extends ViewOwner {
             setInspector(_viewTool);
 
         // If ViewSpecificButton is selected, instal inspector for current selection
-        if (getViewBoolValue("ViewSpecificButton"))
-            setInspector(tool);
+        //ViewTool tool = epane.getToolForView(selView);
+        //if (getViewBoolValue("ViewSpecificButton")) setInspector(tool);
 
         // If ViewStyleButton is selected, install StylerPane
         if (getViewBoolValue("ViewStyleButton"))

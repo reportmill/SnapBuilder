@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ColView PrefWidth="275" Padding="10,8,8,8" FillWidth="true">
+<ColView PrefWidth="275" Padding="4,8,8,8" FillWidth="true">
   <font name="Arial" size="12" />
   <ColView Spacing="6" FillWidth="true">
+    <Label Name="ViewLabel" Align="CENTER" Padding="5" GrowWidth="true" text="View Settings" Radius="10">
+      <color value="#e4e4e4" />
+      <font name="Arial" size="14" />
+    </Label>
     <RowView Spacing="4">
       <Label text="Name:" />
       <TextField Name="NameText" PrefWidth="160" GrowWidth="true" />
@@ -136,5 +140,11 @@
         <CheckBox Name="VerticalCheckBox" text="Vertical" />
       </ColView>
     </RowView>
+    <ColView Name="SubclassContainer" Padding="0" GrowHeight="true" Spacing="2">
+      <Label Name="SubclassLabel" Align="CENTER" Padding="5,5,5,5" GrowWidth="true" text="Subclass Settings" Radius="10">
+        <color value="#e4e4e4" />
+        <font name="Arial" size="14" />
+      </Label>
+    </ColView>
   </ColView>
 </ColView>
