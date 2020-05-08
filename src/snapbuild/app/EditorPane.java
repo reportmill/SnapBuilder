@@ -83,6 +83,14 @@ public class EditorPane extends ViewOwner {
     }
 
     /**
+     * Creates the editor.
+     */
+    protected Editor createEditor()
+    {
+        return new Editor();
+    }
+
+    /**
      * Returns the document source.
      */
     protected WebURL getSourceURL()  { return getEditor().getSourceURL(); }
@@ -344,7 +352,8 @@ public class EditorPane extends ViewOwner {
             View content = new ViewArchiver().copy(getContent());
 
             // Create new editor, set editing to false and set report document
-            Editor editor = new Editor(); editor.setEditing(false);
+            Editor editor = new Editor();
+            editor.setEditing(false);
             editor.setContent(content);
             editor.setSize(_realEditor.getSize());
 
@@ -353,7 +362,10 @@ public class EditorPane extends ViewOwner {
         }
 
         // If turning preview off, restore real editor
-        else { setEditor(_realEditor); _realEditor = null; }
+        else {
+            setEditor(_realEditor);
+            _realEditor = null;
+        }
 
         // Focus on editor
         requestFocus(getEditor());
@@ -407,10 +419,8 @@ public class EditorPane extends ViewOwner {
      */
     protected void initUI()
     {
-
         // Get GallerySplitView (holds SplitView and Gallery)
         _gallerySplit = getView("GallerySplitView", SplitView.class);
-        //_gallerySplit.setBorder(null);
         getView("GalleryButton").setVisible(false);
 
         // Get TransPane and add GallerySplitView
@@ -418,8 +428,12 @@ public class EditorPane extends ViewOwner {
         _transPane.setContent(_gallerySplit);
 
         // Get editor
-        _editor = getView("Editor", Editor.class);
+        _editor = createEditor();
         _editor.addPropChangeListener(_editorLsnr, Editor.SelView_Prop);
+
+        // Add to EditorScrollView
+        ScrollView scrollView = getView("EditorScrollView", ScrollView.class);
+        scrollView.setContent(_editor);
 
         // Get Editor SplitView
         _editorSplit = getView("SplitView", SplitView.class);

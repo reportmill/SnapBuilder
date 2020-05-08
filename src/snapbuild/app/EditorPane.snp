@@ -28,7 +28,6 @@
           <TreeView Name="ViewTree" />
           <ScrollView Name="EditorScrollView" GrowWidth="true">
             <LineBorder Color="#aaaaaa" />
-            <View Name="Editor" Class="snapbuild.app.Editor" />
           </ScrollView>
         </SplitView>
         <RowView Padding="3,5,3,4" Spacing="4">
