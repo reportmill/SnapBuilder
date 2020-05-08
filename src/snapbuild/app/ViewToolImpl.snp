@@ -136,19 +136,5 @@
         <CheckBox Name="VerticalCheckBox" text="Vertical" />
       </ColView>
     </RowView>
-  <TitleView Padding="2" LeanY="BOTTOM" Text="Arrange Views">
-    <RowView Padding="8" Spacing="20">
-      <ColView Spacing="8" GrowWidth="true" Align="CENTER">
-        <Button Name="MoveUpButton" PrefWidth="90" Padding="2" text="Move Up" />
-        <Button Name="MoveDownButton" PrefWidth="90" Padding="2" text="Move Down" />
-        <Button Name="MoveOutButton" PrefWidth="90" Padding="2" text="Move Out" />
-      </ColView>
-      <ColView Spacing="8" GrowWidth="true" Align="CENTER">
-        <Button Name="GroupInButton" PrefWidth="90" Padding="2" text="Group..." />
-        <Button Name="UngroupButton" PrefWidth="90" Padding="2" text="Ungroup" />
-        <Button Name="ChangeHostButton" PrefWidth="90" Padding="2" LeanX="CENTER" text="Change to..." />
-      </ColView>
-    </RowView>
-  </TitleView>
   </ColView>
 </ColView>

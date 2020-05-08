@@ -1,5 +1,6 @@
 package snapbuild.app;
 import snap.gfx.Image;
+import snap.util.URLUtils;
 import snap.view.*;
 import snap.viewx.TextPane;
 import java.util.*;
@@ -24,6 +25,11 @@ public class GalleryPane extends ViewOwner {
     }
 
     /**
+     * Returns the editor.
+     */
+    public Editor getEditor()  { return _epane.getEditor(); }
+
+    /**
      * Initialize UI.
      */
     protected void initUI()
@@ -41,18 +47,51 @@ public class GalleryPane extends ViewOwner {
     }
 
     @Override
+    protected void resetUI()
+    {
+        // Update DocButton
+        View sview = _epane.getSelView();
+        setViewText("DocButton", sview!=null? sview.getClass().getSimpleName() + " Doc" : "SnapKit Doc");
+
+        // Update ChangeHostButton.Enabled
+        setViewEnabled("ChangeHostButton", getEditor().getSelView() instanceof ViewHost);
+    }
+
+    @Override
     protected void respondUI(ViewEvent anEvent)
     {
         // Handle SearchTextField
         if(anEvent.equals("SearchTextField"))
-            handleSearchTextField(anEvent);
+            handleSearchTextField();
 
+        // Handle DocButton
+        if (anEvent.equals("DocButton")) {
+            URLUtils.openURL(getJavaDocURL());
+        }
+
+        // Handle MoveUpButton, MoveDownButton, MoveOutButton, GroupInButton, UngroupButton, ChangeHostButton
+        if (anEvent.equals("MoveUpButton")) EditorUtils.moveViewUp(getEditor());
+        if (anEvent.equals("MoveDownButton")) EditorUtils.moveViewDown(getEditor());
+        if (anEvent.equals("MoveOutButton")) EditorUtils.moveViewOut(getEditor());
+        if (anEvent.equals("GroupInButton")) EditorUtils.groupView(getEditor());
+        if (anEvent.equals("UngroupButton")) EditorUtils.ungroupView(getEditor());
+        if (anEvent.equals("ChangeHostButton")) EditorUtils.changeHost(getEditor());
+    }
+
+    /**
+     * Returns the JavaDoc url for currently selected view.
+     */
+    private String getJavaDocURL()
+    {
+        View view = _epane.getSelView(); if (view==null) return "http://reportmill.com/snap1/javadoc/";
+        String cname = view.getClass().getName();
+        return "http://reportmill.com/snap1/javadoc/index.html?" + cname.replace('.', '/') + ".html";
     }
 
     /**
      * Handle SearchTextField changes.
      */
-    public void handleSearchTextField(ViewEvent anEvent)
+    private void handleSearchTextField()
     {
         // Get prefix text and current selection
         TextField searchText = getView("SearchTextField", TextField.class);

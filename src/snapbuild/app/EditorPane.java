@@ -488,10 +488,6 @@ public class EditorPane extends ViewOwner {
         setViewEnabled("UndoButton", undoer!=null && undoer.hasUndos()); //undoer.getUndoSetLast()!=null
         setViewEnabled("RedoButton", undoer!=null && undoer.hasRedos()); //undoer.getRedoSetLast()!=null
 
-        // Update DocButton
-        View sview = getSelView();
-        setViewText("DocButton", sview!=null? sview.getClass().getSimpleName() + " Doc" : "SnapKit Doc");
-
         // Update SelPathBox
         updateSelPathBox();
 
@@ -532,9 +528,6 @@ public class EditorPane extends ViewOwner {
 
         // Handle SamplesButton
         if (anEvent.equals("SamplesButton")) showSamples();
-
-        // Handle DocButton
-        if (anEvent.equals("DocButton")) URLUtils.openURL(getJavaDocURL());
 
         // Handle EditButton, XMLButton, PreviewButton
         if (anEvent.equals("EditButton")) showEditor();
@@ -797,16 +790,6 @@ public class EditorPane extends ViewOwner {
         if (!isEditing()) title += "(preview)";
         else if (getEditor().getUndoer()!=null && getEditor().getUndoer().hasUndos()) title = "* " + title;
         return title;
-    }
-
-    /**
-     * Returns the JavaDoc url for currently selected view.
-     */
-    public String getJavaDocURL()
-    {
-        View view = getSelView(); if(view==null) return "http://reportmill.com/snap1/javadoc/";
-        String cname = view.getClass().getName();
-        return "http://reportmill.com/snap1/javadoc/index.html?" + cname.replace('.', '/') + ".html";
     }
 
     /**

@@ -42,8 +42,8 @@ protected void resetUI()
     Spinner phs = getView("PrefHeightSpinner", Spinner.class);
     pws.setValue(selView.getPrefWidth());
     phs.setValue(selView.getPrefHeight());
-    pws.getTextField().setTextFill(selView.isPrefWidthSet()? Color.BLACK : Color.GRAY);
-    phs.getTextField().setTextFill(selView.isPrefHeightSet()? Color.BLACK : Color.GRAY);
+    pws.getTextField().setTextFill(selView.isPrefWidthSet() ? Color.BLACK : Color.GRAY);
+    phs.getTextField().setTextFill(selView.isPrefHeightSet() ? Color.BLACK : Color.GRAY);
     
     // Update MinWidthSpinner, MinHeightSpinner
     Spinner mws = getView("MinWidthSpinner", Spinner.class);
@@ -84,9 +84,6 @@ protected void resetUI()
     // Update Align
     Pos align = selView.getAlign();
     setViewValue("Align" + align.ordinal(), true);
-    
-    // Update ChangeHostButton.Enabled
-    setViewEnabled("ChangeHostButton", getEditor().getSelView() instanceof ViewHost);
 }
 
 /**
@@ -99,80 +96,72 @@ protected void respondUI(ViewEvent anEvent)
     View selView = editor.getSelView();
     
     // Handle NameText, TextText, ToolTipText
-    if(anEvent.equals("NameText")) selView.setName(anEvent.getStringValue());
-    if(anEvent.equals("TextText")) selView.setText(anEvent.getStringValue());
-    if(anEvent.equals("ToolTipText")) selView.setToolTip(anEvent.getStringValue());
+    if (anEvent.equals("NameText")) selView.setName(anEvent.getStringValue());
+    if (anEvent.equals("TextText")) selView.setText(anEvent.getStringValue());
+    if (anEvent.equals("ToolTipText")) selView.setToolTip(anEvent.getStringValue());
     
     // Handle PrefWidthSpinner, PrefHeightSpinner, MinWidthSpinner, MinHeightSpinner
-    if(anEvent.equals("PrefWidthSpinner")) selView.setPrefWidth(anEvent.getFloatValue());
-    if(anEvent.equals("PrefHeightSpinner")) selView.setPrefHeight(anEvent.getFloatValue());
-    if(anEvent.equals("MinWidthSpinner")) selView.setMinWidth(anEvent.getFloatValue());
-    if(anEvent.equals("MinHeightSpinner")) selView.setMinHeight(anEvent.getFloatValue());
+    if (anEvent.equals("PrefWidthSpinner")) selView.setPrefWidth(anEvent.getFloatValue());
+    if (anEvent.equals("PrefHeightSpinner")) selView.setPrefHeight(anEvent.getFloatValue());
+    if (anEvent.equals("MinWidthSpinner")) selView.setMinWidth(anEvent.getFloatValue());
+    if (anEvent.equals("MinHeightSpinner")) selView.setMinHeight(anEvent.getFloatValue());
     
     // Handle PWAdd5Button, PWSub5Button, PHAdd5Button, PHSub5Button, PWResetButton, PHResetButton
-    if(anEvent.equals("PWAdd5Button")) selView.setPrefWidth(MathUtils.round(selView.getWidth()+5, 5));
-    if(anEvent.equals("PWSub5Button")) selView.setPrefWidth(MathUtils.round(selView.getWidth()-5, 5));
-    if(anEvent.equals("PHAdd5Button")) selView.setPrefHeight(MathUtils.round(selView.getHeight()+5, 5));
-    if(anEvent.equals("PHSub5Button")) selView.setPrefHeight(MathUtils.round(selView.getHeight()-5, 5));
-    if(anEvent.equals("PWResetButton")) selView.setPrefWidth(-1);
-    if(anEvent.equals("PHResetButton")) selView.setPrefHeight(-1);
+    if (anEvent.equals("PWAdd5Button")) selView.setPrefWidth(MathUtils.round(selView.getWidth()+5, 5));
+    if (anEvent.equals("PWSub5Button")) selView.setPrefWidth(MathUtils.round(selView.getWidth()-5, 5));
+    if (anEvent.equals("PHAdd5Button")) selView.setPrefHeight(MathUtils.round(selView.getHeight()+5, 5));
+    if (anEvent.equals("PHSub5Button")) selView.setPrefHeight(MathUtils.round(selView.getHeight()-5, 5));
+    if (anEvent.equals("PWResetButton")) selView.setPrefWidth(-1);
+    if (anEvent.equals("PHResetButton")) selView.setPrefHeight(-1);
     
     // Handle MWAdd5Button, MWSub5Button, MHAdd5Button, MHSub5Button, MWResetButton, MHResetButton
-    if(anEvent.equals("MWAdd5Button")) selView.setMinWidth(MathUtils.round(selView.getWidth()+5, 5));
-    if(anEvent.equals("MWSub5Button")) selView.setMinWidth(MathUtils.round(selView.getWidth()-5, 5));
-    if(anEvent.equals("MHAdd5Button")) selView.setMinHeight(MathUtils.round(selView.getHeight()+5, 5));
-    if(anEvent.equals("MHSub5Button")) selView.setMinHeight(MathUtils.round(selView.getHeight()-5, 5));
-    if(anEvent.equals("MWResetButton")) selView.setMinWidth(-1);
-    if(anEvent.equals("MHResetButton")) selView.setMinHeight(-1);
+    if (anEvent.equals("MWAdd5Button")) selView.setMinWidth(MathUtils.round(selView.getWidth()+5, 5));
+    if (anEvent.equals("MWSub5Button")) selView.setMinWidth(MathUtils.round(selView.getWidth()-5, 5));
+    if (anEvent.equals("MHAdd5Button")) selView.setMinHeight(MathUtils.round(selView.getHeight()+5, 5));
+    if (anEvent.equals("MHSub5Button")) selView.setMinHeight(MathUtils.round(selView.getHeight()-5, 5));
+    if (anEvent.equals("MWResetButton")) selView.setMinWidth(-1);
+    if (anEvent.equals("MHResetButton")) selView.setMinHeight(-1);
     
     // Handle MarginText, MarginAdd1Button, MarginSub1Button, MarginResetButton
-    if(anEvent.equals("MarginText")) selView.setMargin(Insets.get(anEvent.getStringValue()));
-    if(anEvent.equals("MarginAdd1Button")) adjustMargin(selView, 1);
-    if(anEvent.equals("MarginSub1Button")) adjustMargin(selView, -1);
-    if(anEvent.equals("MarginResetButton")) selView.setMargin(selView.getDefaultMargin());
+    if (anEvent.equals("MarginText")) selView.setMargin(Insets.get(anEvent.getStringValue()));
+    if (anEvent.equals("MarginAdd1Button")) adjustMargin(selView, 1);
+    if (anEvent.equals("MarginSub1Button")) adjustMargin(selView, -1);
+    if (anEvent.equals("MarginResetButton")) selView.setMargin(selView.getDefaultMargin());
     
     // Handle PadText, PadAdd1Button, PadSub1Button, PadResetButton
-    if(anEvent.equals("PadText")) selView.setPadding(Insets.get(anEvent.getStringValue()));
-    if(anEvent.equals("PadAdd1Button")) adjustPadding(selView, 1);
-    if(anEvent.equals("PadSub1Button")) adjustPadding(selView, -1);
-    if(anEvent.equals("PadResetButton")) selView.setPadding(selView.getDefaultPadding());
+    if (anEvent.equals("PadText")) selView.setPadding(Insets.get(anEvent.getStringValue()));
+    if (anEvent.equals("PadAdd1Button")) adjustPadding(selView, 1);
+    if (anEvent.equals("PadSub1Button")) adjustPadding(selView, -1);
+    if (anEvent.equals("PadResetButton")) selView.setPadding(selView.getDefaultPadding());
     
     // Handle SpaceText, SpaceAdd5Button, SpaceResetButton
-    if(anEvent.equals("SpaceText")) selView.setSpacing(anEvent.getFloatValue());
-    if(anEvent.equals("SpaceAdd1Button")) selView.setSpacing(selView.getSpacing()+1);
-    if(anEvent.equals("SpaceSub1Button")) selView.setSpacing(selView.getSpacing()-1);
-    if(anEvent.equals("SpaceResetButton")) selView.setSpacing(0);
+    if (anEvent.equals("SpaceText")) selView.setSpacing(anEvent.getFloatValue());
+    if (anEvent.equals("SpaceAdd1Button")) selView.setSpacing(selView.getSpacing()+1);
+    if (anEvent.equals("SpaceSub1Button")) selView.setSpacing(selView.getSpacing()-1);
+    if (anEvent.equals("SpaceResetButton")) selView.setSpacing(0);
     
     // Handle LeanX, LeanY
-    if(anEvent.equals("LeanX0")) selView.setLeanX(HPos.LEFT);
-    if(anEvent.equals("LeanX1")) selView.setLeanX(HPos.CENTER);
-    if(anEvent.equals("LeanX2")) selView.setLeanX(HPos.RIGHT);
-    if(anEvent.equals("LeanXReset")) selView.setLeanX(null);
-    if(anEvent.equals("LeanY0")) selView.setLeanY(VPos.TOP);
-    if(anEvent.equals("LeanY1")) selView.setLeanY(VPos.CENTER);
-    if(anEvent.equals("LeanY2")) selView.setLeanY(VPos.BOTTOM);
-    if(anEvent.equals("LeanYReset")) selView.setLeanY(null);
+    if (anEvent.equals("LeanX0")) selView.setLeanX(HPos.LEFT);
+    if (anEvent.equals("LeanX1")) selView.setLeanX(HPos.CENTER);
+    if (anEvent.equals("LeanX2")) selView.setLeanX(HPos.RIGHT);
+    if (anEvent.equals("LeanXReset")) selView.setLeanX(null);
+    if (anEvent.equals("LeanY0")) selView.setLeanY(VPos.TOP);
+    if (anEvent.equals("LeanY1")) selView.setLeanY(VPos.CENTER);
+    if (anEvent.equals("LeanY2")) selView.setLeanY(VPos.BOTTOM);
+    if (anEvent.equals("LeanYReset")) selView.setLeanY(null);
     
     // Handle GrowWidthCheckBox, GrowHeightCheckBox, VerticalCheckBox
-    if(anEvent.equals("GrowWidthCheckBox")) selView.setGrowWidth(anEvent.getBoolValue());
-    if(anEvent.equals("GrowHeightCheckBox")) selView.setGrowHeight(anEvent.getBoolValue());
-    if(anEvent.equals("VerticalCheckBox")) selView.setVertical(anEvent.getBoolValue());
+    if (anEvent.equals("GrowWidthCheckBox")) selView.setGrowWidth(anEvent.getBoolValue());
+    if (anEvent.equals("GrowHeightCheckBox")) selView.setGrowHeight(anEvent.getBoolValue());
+    if (anEvent.equals("VerticalCheckBox")) selView.setVertical(anEvent.getBoolValue());
     
     // Handle AlignX
     String name = anEvent.getName();
-    if(name.startsWith("Align")) {
+    if (name.startsWith("Align")) {
         int val = StringUtils.intValue(name);
         Pos pos = Pos.values()[val];
         selView.setAlign(pos);
     }
-    
-    // Handle MoveUpButton, MoveDownButton, MoveOutButton, GroupInButton, UngroupButton, ChangeHostButton
-    if(anEvent.equals("MoveUpButton")) EditorUtils.moveViewUp(getEditor());
-    if(anEvent.equals("MoveDownButton")) EditorUtils.moveViewDown(getEditor());
-    if(anEvent.equals("MoveOutButton")) EditorUtils.moveViewOut(getEditor());
-    if(anEvent.equals("GroupInButton")) EditorUtils.groupView(getEditor());
-    if(anEvent.equals("UngroupButton")) EditorUtils.ungroupView(getEditor());
-    if(anEvent.equals("ChangeHostButton")) EditorUtils.changeHost(getEditor());
 }
 
 /**

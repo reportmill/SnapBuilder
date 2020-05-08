@@ -5,7 +5,27 @@
     <TextField Name="SearchTextField" />
   </BoxView>
   <ScrollView GrowHeight="true" BarSize="14">
-    <NullBorder />
     <View Name="GalleryView" MinWidth="200" MinHeight="200" Class="snapbuild.app.GalleryView" />
   </ScrollView>
+  <BoxView Padding="0,4,2,4" MinHeight="22" FillWidth="true">
+    <TitleView Padding="3" LeanY="BOTTOM" Text="Arrange Views" Collapsible="true" Expanded="false">
+      <ColView FillWidth="true">
+        <RowView Padding="8" Spacing="20">
+          <ColView Align="CENTER" GrowWidth="true" Spacing="8">
+            <Button Name="MoveUpButton" PrefWidth="90" Padding="2" text="Move Up" />
+            <Button Name="MoveDownButton" PrefWidth="90" Padding="2" text="Move Down" />
+            <Button Name="MoveOutButton" PrefWidth="90" Padding="2" text="Move Out" />
+          </ColView>
+          <ColView Align="CENTER" GrowWidth="true" Spacing="8">
+            <Button Name="GroupInButton" PrefWidth="90" Padding="2" text="Group..." />
+            <Button Name="UngroupButton" PrefWidth="90" Padding="2" text="Ungroup" />
+            <Button Name="ChangeHostButton" PrefWidth="90" Padding="2" LeanX="CENTER" text="Change to..." />
+          </ColView>
+        </RowView>
+        <RowView Padding="4,4,8,4">
+          <Button Name="DocButton" PrefHeight="20" Padding="4,8,4,8" LeanX="CENTER" text="SnapKit Doc" />
+        </RowView>
+      </ColView>
+    </TitleView>
+  </BoxView>
 </ColView>
