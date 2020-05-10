@@ -56,14 +56,18 @@ public class EditorPane extends ViewOwner {
      */
     public EditorPane()
     {
-        getUI();
+        //getUI();
         _viewTool._epane = this;
     }
 
     /**
      * Returns the editor.
      */
-    public Editor getEditor()  { return _editor; }
+    public Editor getEditor()
+    {
+        if (_editor==null) getUI();
+        return _editor;
+    }
 
     /**
      * Sets the viewer for this viewer pane.
