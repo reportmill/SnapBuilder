@@ -4,6 +4,7 @@ import snap.gfx.*;
 import snap.util.*;
 import snap.view.*;
 import snap.viewx.*;
+import snap.web.WebFile;
 import snap.web.WebURL;
 import snapbuild.apptools.*;
 
@@ -243,8 +244,8 @@ public class EditorPane extends ViewOwner {
         }
 
         // Run save panel, set Document.Source to path and re-save (or just return if cancelled)
-        String path = FilePanel.showSavePanel(getEditor(), "SnapKit UI file", exts); if (path==null) return;
-        setSourceURL(WebURL.getURL(path));
+        WebFile file = FilePanel.showSavePanelWeb(getEditor(), "SnapKit UI file", exts); if (file==null) return;
+        setSourceURL(file.getURL());
         save();
     }
 
