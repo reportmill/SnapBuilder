@@ -1,7 +1,6 @@
 package snapbuild.app;
 
 import snap.util.JSONNode;
-import snap.util.JSONParser;
 import snap.viewx.FilePanel;
 import snap.web.*;
 
@@ -25,14 +24,12 @@ public class DropBox extends WebSite {
     private String _sitePath;
 
     // Constants for DropBox endpoints
-    private static final String GET_METADATA = "/files/get_metadata";
-    private static final String GET_CONTENT = "/files/download";
-    private static final String LIST_FOLDER = "/files/list_folder";
-
-    // The root for DropBox HTTP API calls
-    private static String DROPBOX_ROOT = "dbox://dbox.com";
-    private static String DROPBOX_API_ROOT = "https://api.dropboxapi.com/2";
-    private static String DROPBOX_CONTENT_API_ROOT = "https://content.dropboxapi.com/2";
+    private static final String GET_METADATA = "https://api.dropboxapi.com/2/files/get_metadata";
+    private static final String LIST_FOLDER = "https://api.dropboxapi.com/2/files/list_folder";
+    private static final String CREATE_FOLDER = "https://api.dropboxapi.com/2/files/create_folder_v2";
+    private static final String DELETE = "https://api.dropboxapi.com/2/files/delete_v2";
+    private static final String UPLOAD = "https://content.dropboxapi.com/2/files/upload";
+    private static final String GET_CONTENT = "https://content.dropboxapi.com/2/files/download";
 
     // Token
     private static String _atok = "7bETIxvsar8AAAAAAAAAIfhjz12dECbKOYXhq8IWCzlNEUVKsPgp-gDuFjNt7zrI";
@@ -48,12 +45,21 @@ public class DropBox extends WebSite {
      */
     private DropBox(String anEmail)
     {
+        // Set ivars
         _email = anEmail;
         _sitePath = getPathForEmail(anEmail);
+
+        // Create/set URL
+        String DROPBOX_ROOT = "dbox://dbox.com";
         String urls = DROPBOX_ROOT + _sitePath;
         WebURL url = WebURL.getURL(urls);
         setURL(url);
     }
+
+    /**
+     * Returns the DropBox email.
+     */
+    public String getEmail()  { return _email; }
 
     /**
      * Handles getting file info, contents or directory files.
@@ -84,30 +90,28 @@ public class DropBox extends WebSite {
      */
     protected void doHead(WebRequest aReq, WebResponse aResp)
     {
-        // Get URL and Path
-        WebURL url = aReq.getURL();
-        String path = url.getPath();
-        String dboxPath = _sitePath + (path.length()>1 ? path : "");
-
         // Create Request
-        HTTPRequest req = createRequestForEndpoint(GET_METADATA);
+        HTTPRequest req = new HTTPRequest(GET_METADATA);
+        req.addHeader("Authorization", "Bearer " + _atok);
+        req.addHeader("Content-Type", "application/json");
 
-        // Create JSON Request
-        JSONNode jsonReq = new JSONNode();
-        jsonReq.addKeyValue("path", dboxPath);
+        // Add path param as JSON content
+        String dboxPath = getDropBoxPathForURL(aReq.getURL());
+        addParamsToRequestAsJSON(req, false, "path", dboxPath);
 
-        // Set Request bytes
-        String jsonReqStr = jsonReq.toString();
-        req.setBytes(jsonReqStr.getBytes());
+        // Get HTTP Response
+        HTTPResponse resp = getResponseHTTP(req, aResp);
+        if (resp==null || resp.getCode()!=HTTPResponse.OK)
+            return;
 
         // Get JSON response
-        JSONNode json = getResponseJSON(req, aResp);
+        JSONNode json = resp.getJSON();
         if (json==null)
             return;
 
         // Get JSON response
         FileHeader fhdr = createFileHeaderForJSON(json);
-        fhdr.setPath(path);
+        fhdr.setPath(aReq.getURL().getPath());
         aResp.setFileHeader(fhdr);
     }
 
@@ -116,22 +120,22 @@ public class DropBox extends WebSite {
      */
     protected void doGetDir(WebRequest aReq, WebResponse aResp)
     {
-        // Get URL, Path and DropBoxPath
-        WebURL url = aReq.getURL();
-        String path = url.getPath();
-        String dboxPath = _sitePath + (path.length()>1 ? path : "");
-
         // Create Request
-        HTTPRequest req = createRequestForEndpoint(LIST_FOLDER);
+        HTTPRequest req = new HTTPRequest(LIST_FOLDER);
+        req.addHeader("Authorization", "Bearer " + _atok);
+        req.addHeader("Content-Type", "application/json");
 
-        // Set Data
-        JSONNode jsonReq = new JSONNode();
-        jsonReq.addKeyValue("path", dboxPath);
-        String jsonReqStr = jsonReq.toString();
-        req.setBytes(jsonReqStr.getBytes());
+        // Add path param as JSON content
+        String dboxPath = getDropBoxPathForURL(aReq.getURL());
+        addParamsToRequestAsJSON(req, false, "path", dboxPath);
+
+        // Get HTTP Response
+        HTTPResponse resp = getResponseHTTP(req, aResp);
+        if (resp==null || resp.getCode()!=HTTPResponse.OK)
+            return;
 
         // Get JSON response
-        JSONNode json = getResponseJSON(req, aResp);
+        JSONNode json = resp.getJSON();
         if (json==null)
             return;
 
@@ -155,58 +159,147 @@ public class DropBox extends WebSite {
      */
     protected void doGetFileContents(WebRequest aReq, WebResponse aResp)
     {
-        // Get URL, Path and DropBox path
-        WebURL url = aReq.getURL();
-        String path = url.getPath();
-        String dboxPath = _sitePath + (path.length()>1 ? path : "");
-
         // Create Request
-        String dboxUrl = DROPBOX_CONTENT_API_ROOT + GET_CONTENT;
-        HTTPRequest req = new HTTPRequest(dboxUrl);
+        HTTPRequest req = new HTTPRequest(GET_CONTENT);
         req.addHeader("Authorization", "Bearer " + _atok);
 
-        // Create JSON Request
-        JSONNode jsonReq = new JSONNode();
-        jsonReq.addKeyValue("path", dboxPath);
-
-        // Set Request Header
-        String jsonReqStr = jsonReq.toStringCompacted();
-        jsonReqStr = jsonReqStr.replace("\"", "\\\"");
-        jsonReqStr = jsonReqStr.replace("\\", "");
-        req.addHeader("Dropbox-API-Arg", jsonReqStr);
+        // Add path param as JSON header
+        String dboxPath = getDropBoxPathForURL(aReq.getURL());
+        addParamsToRequestAsJSON(req, true, "path", dboxPath);
 
         // Get response
-        HTTPResponse resp;
-        try { resp = req.getResponse(); }
-        catch (Exception e) { throw new RuntimeException(e); }
+        getResponseHTTP(req, aResp);
+    }
 
-        // Get response bytes
-        int code = resp.getCode();
-        if (code==HTTPResponse.OK) {
-            byte bytes[] = resp.getBytes();
-            aResp.setBytes(bytes);
+    /**
+     * Handle a PUT request.
+     */
+    protected void doPut(WebRequest aReq, WebResponse aResp)
+    {
+        WebFile file = aReq.getFile();
+        if (file.isFile())
+            doPutFile(aReq, aResp);
+        else doPutDir(aReq, aResp);
+    }
+
+    /**
+     * Handle a PUT request.
+     */
+    protected void doPutFile(WebRequest aReq, WebResponse aResp)
+    {
+        // Create Request
+        HTTPRequest req = new HTTPRequest(UPLOAD);
+        req.addHeader("Authorization", "Bearer " + _atok);
+        req.addHeader("Content-Type", "application/octet-stream");
+
+        // Add path param as JSON header
+        String dboxPath = getDropBoxPathForURL(aReq.getURL());
+        addParamsToRequestAsJSON(req, true, "path", dboxPath, "mode", "overwrite");
+
+        // Add bytes
+        byte bytes[] = aReq.getSendBytes();
+        req.setBytes(bytes);
+
+        // Get HTTP Response
+        HTTPResponse resp = getResponseHTTP(req, aResp);
+        if (resp==null || resp.getCode()!=HTTPResponse.OK) {
+            System.err.println("DropBox.putFile: " + (resp!=null ? resp.getMessage() : "null"));
+            return;
+        }
+
+        // Get JSON response
+        JSONNode json = resp.getJSON();
+        if (json!=null) {
+            String mod = json.getNodeString("server_modified");
+            if (mod!=null && mod.endsWith("Z")) {
+                try {
+                    Date date = _fmt.parse(mod);
+                    aResp.setModTime(date.getTime());
+                    System.out.println("Save ModTime: " + date);
+                }
+                catch (Exception e) { System.err.println(e); }
+            }
+            else System.err.println("DropBox.doPutFile: Can't get save mod time: " + json);
         }
     }
 
     /**
-     * Gets response for HTTPRequest, update WebResponse, and returns JSON, if available.
+     * Handle a PUT request.
      */
-    private static JSONNode getResponseJSON(HTTPRequest aReq, WebResponse aResp)
+    protected void doPutDir(WebRequest aReq, WebResponse aResp)
     {
-        // Get HTTP Response
-        HTTPResponse resp = getResponseHTTP(aReq, aResp);
-        if (resp==null)
-            return null;
+        // Create Request
+        HTTPRequest req = new HTTPRequest(CREATE_FOLDER);
+        req.addHeader("Authorization", "Bearer " + _atok);
+        req.addHeader("Content-Type", "application/json");
 
-        // If there was an error, just return
-        int code = resp.getCode();
-        if (code!=HTTPResponse.OK)
-            return null;
+        // Add path param as JSON content
+        String dboxPath = getDropBoxPathForURL(aReq.getURL());
+        addParamsToRequestAsJSON(req, false, "path", dboxPath);
+
+        // Get HTTP Response
+        HTTPResponse resp = getResponseHTTP(req, aResp);
+        if (resp==null || resp.getCode()!=HTTPResponse.OK) {
+            System.err.println("DropBox.createFolder: " + (resp!=null ? resp.getMessage() : "null"));
+            return;
+        }
 
         // Get JSON response
-        String text = resp.getText();
-        JSONNode json = new JSONParser().readString(text);
-        return json;
+        JSONNode json = resp.getJSON();
+        if (json!=null)
+            System.out.println(json);
+    }
+
+    /**
+     * Handle a DELETE request.
+     */
+    protected void doDelete(WebRequest aReq, WebResponse aResp)
+    {
+        // Create Request
+        HTTPRequest req = new HTTPRequest(DELETE);
+        req.addHeader("Authorization", "Bearer " + _atok);
+        req.addHeader("Content-Type", "application/json");
+
+        // Add path param as JSON content
+        String dboxPath = getDropBoxPathForURL(aReq.getURL());
+        addParamsToRequestAsJSON(req, false, "path", dboxPath);
+
+        // Get response
+        getResponseHTTP(req, aResp);
+    }
+
+    /**
+     * Returns the dropbox path for URL.
+     */
+    private String getDropBoxPathForURL(WebURL aURL)
+    {
+        String path = aURL.getPath();
+        return _sitePath + (path.length()>1 ? path : "");
+    }
+
+    /**
+     * Adds a JSON Header to given HTTP Request.
+     */
+    private static void addParamsToRequestAsJSON(HTTPRequest aReq, boolean asHeader, String ... thePairs)
+    {
+        // Create JSON Request and add pairs
+        JSONNode jsonReq = new JSONNode();
+        for (int i=0; i<thePairs.length; i+=2)
+            jsonReq.addKeyValue(thePairs[i], thePairs[i+1]);
+
+        // Add as header
+        if (asHeader) {
+            String jsonReqStr = jsonReq.toStringCompacted();
+            jsonReqStr = jsonReqStr.replace("\"", "\\\"");
+            jsonReqStr = jsonReqStr.replace("\\", "");
+            aReq.addHeader("Dropbox-API-Arg", jsonReqStr);
+        }
+
+        // Add as send-bytes
+        else {
+            String jsonReqStr = jsonReq.toString();
+            aReq.setBytes(jsonReqStr.getBytes());
+        }
     }
 
     /**
@@ -223,25 +316,9 @@ public class DropBox extends WebSite {
             return null;
         }
 
-        // Handle error
-        int code = resp.getCode();
-        aResp.setCode(code);
+        // Copy response
+        aResp.copyResponse(resp);
         return resp;
-    }
-
-    /**
-     * Creates a request for given endpoint path.
-     */
-    private static HTTPRequest createRequestForEndpoint(String anEndpoint)
-    {
-        // Create Request
-        String url = DROPBOX_API_ROOT + anEndpoint;
-        HTTPRequest req = new HTTPRequest(url);
-
-        // Add Headers
-        req.addHeader("Authorization", "Bearer " + _atok);
-        req.addHeader("Content-Type", "application/json");
-        return req;
     }
 
     /**
@@ -262,7 +339,7 @@ public class DropBox extends WebSite {
 
             // Get/set size
             String sizeStr = aFileEntryNode.getNodeString("size");
-            long size = Long.valueOf(sizeStr);
+            long size = Long.parseLong(sizeStr);
             fhdr.setSize(size);
 
             // Get/set ModTime
@@ -278,22 +355,6 @@ public class DropBox extends WebSite {
 
         // Return FileHeader
         return fhdr;
-    }
-
-    /**
-     * List root files.
-     */
-    public void listRootFiles()
-    {
-        WebFile roodDir = getRootDir();
-        List<WebFile> files = roodDir.getFiles();
-        for (WebFile file : files)
-            System.out.println("File: " + file.getPath() + ", date: " + file.getModDate() + ", size: " + file.getSize());
-
-        WebFile file0 = files.get(0);
-        String text = file0.getText();
-        System.out.println("File bytes for " + file0.getPath() + ":");
-        System.out.println(text);
     }
 
     /**
