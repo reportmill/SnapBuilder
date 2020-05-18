@@ -31,8 +31,8 @@ public class DropBox extends WebSite {
     private static final String UPLOAD = "https://content.dropboxapi.com/2/files/upload";
     private static final String GET_CONTENT = "https://content.dropboxapi.com/2/files/download";
 
-    // Token
-    private static String _atok = "7bETIxvsar8AAAAAAAAAIfhjz12dECbKOYXhq8IWCzlNEUVKsPgp-gDuFjNt7zrI";
+    // Header value
+    private static String _atok = DropBoxHelp.str;
 
     // Date format
     private static DateFormat _fmt = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");

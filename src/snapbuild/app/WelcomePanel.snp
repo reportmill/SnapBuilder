@@ -6,7 +6,7 @@
     </Label>
     <TableView Name="SitesTable" GrowHeight="true">
       <font name="Arial" size="14" />
-      <TableCol PrefWidth="120" ItemKey="Name" Header="Name" />
+      <TableCol PrefWidth="120" Header="Name" />
     </TableView>
     <RowView Align="CENTER" Spacing="10">
       <Button Name="NewButton" PrefWidth="80" PrefHeight="22" text="New" />

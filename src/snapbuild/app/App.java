@@ -20,8 +20,8 @@ public static void main(String args[])
     //er.setInfo("SnapCode Version 1, Build Date: " + SnapUtils.getBuildInfo());
     //Thread.setDefaultUncaughtExceptionHandler(er);
     
-    if(snap.util.SnapUtils.isTeaVM) {
-        new EditorPane().newDocument().setWindowVisible(true); return; }
+//    if(snap.util.SnapUtils.isTeaVM) {
+//        new EditorPane().newDocument().setWindowVisible(true); return; }
 
     // Show open data source panel
     WelcomePanel.getShared().setOnQuit(() -> quitApp());

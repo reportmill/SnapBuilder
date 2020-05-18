@@ -90,9 +90,11 @@ public class WelcomePanel extends ViewOwner {
         getUI(ChildView.class).addChild(anim, 0); anim.playAnimDeep();
 
         // Enable SitesTable MouseReleased
-        TableView sitesTable = getView("SitesTable", TableView.class);
+        TableView<WebFile> sitesTable = getView("SitesTable", TableView.class);
         sitesTable.setRowHeight(24);
-        List <WebFile> rfiles = getRecentFiles(); if(rfiles.size()>0) _selFile = rfiles.get(0);
+        sitesTable.getCol(0).setItemTextFunction(i -> i.getName());
+        List <WebFile> rfiles = getRecentFiles();
+        if (rfiles.size()>0) _selFile = rfiles.get(0);
         enableEvents(sitesTable, MouseRelease);
 
         // Set preferred size
