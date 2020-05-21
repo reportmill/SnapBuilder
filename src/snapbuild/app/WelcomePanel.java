@@ -2,6 +2,7 @@ package snapbuild.app;
 import java.util.*;
 import snap.util.*;
 import snap.view.*;
+import snap.viewx.DialogBox;
 import snap.viewx.RecentFiles;
 import snap.web.*;
 
@@ -10,17 +11,56 @@ import snap.web.*;
  */
 public class WelcomePanel extends ViewOwner {
 
+    // Whether file system is cloud
+    private boolean  _isCloud;
+
+    // The cloud email account
+    private String  _email;
+
     // The selected file
-    WebFile                 _selFile;
+    private WebFile  _selFile;
     
     // Whether welcome panel should exit on hide
-    boolean                 _exit;
+    private boolean  _exit;
     
     // The Runnable to be called when app quits
-    Runnable                _onQuit;
+    private Runnable  _onQuit;
+
+    // The RecentFiles
+    private List<WebFile>  _recentFiles;
 
     // The shared instance
-    static WelcomePanel     _shared;
+    private static WelcomePanel  _shared;
+
+    /**
+     * Returns wether file system is cloud.
+     */
+    public boolean isCloud()  { return _isCloud; }
+
+    /**
+     * Sets whether file system is cloud.
+     */
+    public void setCloud(boolean aValue)
+    {
+        if (aValue==isCloud()) return;
+        _isCloud = aValue;
+        _recentFiles = null;
+    }
+
+    /**
+     * Returns the cloud email.
+     */
+    public String getCloudEmail()  { return _email; }
+
+    /**
+     * Sets the cloud email.
+     */
+    public void setCloudEmail(String aString)
+    {
+        if (aString==getCloudEmail()) return;
+        _email = aString;
+        _recentFiles = null;
+    }
 
     /**
      * Returns the shared instance.
@@ -89,16 +129,21 @@ public class WelcomePanel extends ViewOwner {
         DocView anim = getAnimView();
         getUI(ChildView.class).addChild(anim, 0); anim.playAnimDeep();
 
-        // Enable SitesTable MouseReleased
+        // Configure SitesTable
         TableView<WebFile> sitesTable = getView("SitesTable", TableView.class);
         sitesTable.setRowHeight(24);
         sitesTable.getCol(0).setItemTextFunction(i -> i.getName());
+
+        // Enable SitesTable MouseReleased
         List <WebFile> rfiles = getRecentFiles();
         if (rfiles.size()>0) _selFile = rfiles.get(0);
         enableEvents(sitesTable, MouseRelease);
 
+        // Hide ProgressBar
+        getView("ProgressBar").setVisible(false);
+
         // Set preferred size
-        getUI().setPrefSize(400,480);
+        getUI().setPrefSize(400,600);
 
         // Configure Window: Add WindowListener to indicate app should exit when close button clicked
         WindowView win = getWindow(); win.setTitle("Welcome"); win.setResizable(false);
@@ -114,6 +159,11 @@ public class WelcomePanel extends ViewOwner {
         setViewEnabled("OpenButton", getSelFile()!=null);
         setViewItems("SitesTable", getRecentFiles());
         setViewSelItem("SitesTable", getSelFile());
+
+        // Update file system buttons/text: LocalButton, CloudButton, EmailText
+        setViewValue("LocalButton", !isCloud());
+        setViewValue("CloudButton", isCloud());
+        setViewValue("EmailText", getCloudEmail());
     }
 
     /**
@@ -121,6 +171,22 @@ public class WelcomePanel extends ViewOwner {
      */
     public void respondUI(ViewEvent anEvent)
     {
+        // Handle LocalButton, CloudButton
+        if (anEvent.equals("LocalButton"))
+            setCloud(false);
+        if (anEvent.equals("CloudButton"))
+            handleCloudButton();
+
+        // Handle EmailText
+        if (anEvent.equals("EmailText")) {
+            String email = anEvent.getStringValue().trim().toLowerCase();
+            if (email.equals("jeff@reportmill.com")) return;
+            if (email.equals("jeff")) email = "jeff@reportmill.com";
+            if (!email.contains("@")) return;
+            setCloudEmail(email);
+            setCloud(true);
+        }
+
         // Handle SitesTable
         if (anEvent.equals("SitesTable"))
             setSelFile((WebFile)anEvent.getSelItem());
@@ -147,6 +213,25 @@ public class WelcomePanel extends ViewOwner {
         // Handle WinClosing
         if (anEvent.isWinClose()) {
             _exit = true; hide(); }
+    }
+
+    /**
+     * Called when CloudButton selected.
+     */
+    private void handleCloudButton()
+    {
+        if (getCloudEmail()==null || getCloudEmail().length()==0) {
+            String msg = "The cloud file system needs an email to provide a unique folder for user files.\n";
+            msg += "This information is not used for any other purposes. Though feel free to email\n";
+            msg += "me at jeff@reportmill.com";
+            String email = DialogBox.showInputDialog(getUI(), "Set Cloud Email", msg, "guest@guest");
+            if (email==null || !email.contains("@")) return;
+            email = email.trim().toLowerCase();
+            if (email.equalsIgnoreCase("jeff@reportmill.com")) {
+                DialogBox.showErrorDialog(getUI(), "Joker Alert", "Nice try."); return; }
+            setCloudEmail(email);
+        }
+        setCloud(true);
     }
 
     /**
@@ -194,12 +279,51 @@ public class WelcomePanel extends ViewOwner {
     /**
      * Returns the list of the recent documents as a list of strings.
      */
-    public static List <WebFile> getRecentFiles()
+    public List <WebFile> getRecentFiles()
     {
-        List<WebFile> files = DropBox.getShared().getRootDir().getFiles();
-        return files;
+        // If already set, just return
+        if (_recentFiles!=null) return _recentFiles;
 
-        //return RecentFiles.getFiles("RecentDocuments");
+        // Handle Local
+        if (!isCloud()) {
+            List <WebFile> rfiles = RecentFiles.getFiles("RecentDocuments");
+            return _recentFiles = rfiles;
+        }
+
+        // Turn on progress bar
+        ProgressBar pbar = getView("ProgressBar", ProgressBar.class);
+        pbar.setIndeterminate(true);
+        pbar.setVisible(true);
+
+        // Set loading files
+        new Thread(() -> setRecentFilesInBackground()).start();
+
+        // Handle Cloud
+        return Collections.EMPTY_LIST;
+    }
+
+    /**
+     * Loads recent files in background.
+     */
+    private void setRecentFilesInBackground()
+    {
+        String email = getCloudEmail();
+        if (email==null || email.length()==0) email = "guest@guest";
+        List<WebFile> files = DropBox.getSiteForEmail(email).getRootDir().getFiles();
+        _recentFiles = files;
+        runLater(() -> recentFilesLoaded());
+    }
+
+    /**
+     * Called when cloud files finish loading.
+     */
+    private void recentFilesLoaded()
+    {
+        // Turn on progress bar
+        ProgressBar pbar = getView("ProgressBar", ProgressBar.class);
+        pbar.setIndeterminate(false);
+        pbar.setVisible(false);
+        resetLater();
     }
 
     /**

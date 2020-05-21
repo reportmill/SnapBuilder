@@ -6,9 +6,7 @@ import snap.web.*;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -38,7 +36,7 @@ public class DropBox extends WebSite {
     private static DateFormat _fmt = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
 
     // Shared instance
-    private static DropBox  _shared;
+    private static Map<String,DropBox> _dboxes = new HashMap<>();
 
     /**
      * Constructor.
@@ -392,12 +390,19 @@ public class DropBox extends WebSite {
     /**
      * Returns shared instance.
      */
-    public static DropBox getShared()
+    public static DropBox getSiteForEmail(String anEmail)
     {
-        if (_shared!=null) return _shared;
+        // Get cached dropbox for email
+        String email = anEmail.toLowerCase();
+        DropBox dbox = _dboxes.get(email);
+        if (dbox!=null)
+            return dbox;
+
+        // Otherwise, create and set
         //System.setProperty("javax.net.debug","all");
-        DropBox shared = new DropBox("jack@reportmill.com");
-        FilePanel.setSiteDefault(shared);
-        return _shared = shared;
+        dbox = new DropBox(anEmail);
+        _dboxes.put(email, dbox);
+        FilePanel.setSiteDefault(dbox);
+        return dbox;
     }
 }
