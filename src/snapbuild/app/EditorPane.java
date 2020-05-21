@@ -12,7 +12,10 @@ import snapbuild.apptools.*;
  * A class to manage the Editor and controls.
  */
 public class EditorPane extends ViewOwner {
-    
+
+    // The menu bar owner
+    EditorPaneMenuBar _menuBar;
+
     // The Transform Pane
     TransitionPane   _transPane;
     
@@ -93,6 +96,15 @@ public class EditorPane extends ViewOwner {
     protected Editor createEditor()
     {
         return new Editor();
+    }
+
+    /**
+     * Returns the SwingOwner for the menu bar.
+     */
+    public EditorPaneMenuBar getMenuBar()
+    {
+        if (_menuBar!=null) return _menuBar;
+        return _menuBar = new EditorPaneMenuBar(this);
     }
 
     /**
@@ -420,6 +432,19 @@ public class EditorPane extends ViewOwner {
     }
 
     /**
+     * Create UI.
+     */
+    protected View createUI()
+    {
+        // Do normal version
+        View mainView = super.createUI();
+
+        // Create ColView holding MenuBar and EditorPane UI (with key listener so MenuBar catches shortcut keys)
+        View mbarView = MenuBar.createMenuBarView(getMenuBar().getUI(), mainView);
+        return mbarView;
+    }
+
+    /**
      * Initialize UI.
      */
     protected void initUI()
@@ -446,6 +471,7 @@ public class EditorPane extends ViewOwner {
 
         // Get/configure ViewTree
         _viewTree = getView("ViewTree", TreeView.class);
+        _viewTree.getCol(0).setAltPaint(Editor.BACK_FILL.blend(Color.WHITE, .9));
         _viewTree.setResolver(new ViewTreeResolver());
         _viewTree.setOwner(this);
         _editorSplit.removeItem(_viewTree);
@@ -473,10 +499,6 @@ public class EditorPane extends ViewOwner {
         // Configure window
         WindowView win = getWindow();
         enableEvents(win, WinClose);
-
-        // Add GalleryPane
-        BoxView box = getView("GalleryBox", BoxView.class);
-        //box.setContent(_gallery.getUI());
 
         // If TeaVM, go full window
         if (SnapUtils.isTeaVM)
@@ -512,8 +534,9 @@ public class EditorPane extends ViewOwner {
         getWindow().setTitle(title);
         getWindow().setDocURL(getSourceURL());
 
-        // Reset Inspector
+        // Reset Inspector, MenuBar
         getInspector().resetLater();
+        if (!ViewUtils.isMouseDown()) getMenuBar().resetLater();
     }
 
     /**
@@ -796,6 +819,11 @@ public class EditorPane extends ViewOwner {
         else if (getEditor().getUndoer()!=null && getEditor().getUndoer().hasUndos()) title = "* " + title;
         return title;
     }
+
+    /**
+     * Called when the app is about to exit to gracefully handle any open documents.
+     */
+    public void quit()  { App.quitApp(); }
 
     /**
      * A resolver for Views.

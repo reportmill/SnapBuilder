@@ -356,6 +356,14 @@ public class Editor extends ParentView {
     }
 
     /**
+     * Handles SelectAll.
+     */
+    public void selectAll()
+    {
+        ViewUtils.beep();
+    }
+
+    /**
      * Override to return Undoer.
      */
     public Undoer getUndoer()  { return _undoer; }

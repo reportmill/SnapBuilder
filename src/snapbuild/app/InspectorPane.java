@@ -28,6 +28,12 @@ public class InspectorPane extends ViewOwner {
     
     // The inspector for View Fill, Border, Effect
     private StylerPane  _stylerPane;
+
+    // Constants for the Inspectors
+    public static final String GALLERY_PANE = "Gallery";
+    public static final String VIEW_PANE = "View";
+    public static final String STYLE_PANE = "STYLE";
+
     
     /**
      * Returns the editor pane.
@@ -38,6 +44,19 @@ public class InspectorPane extends ViewOwner {
      * Returns the editor.
      */
     public Editor getEditor()  { return getEditorPane().getEditor(); }
+
+    /**
+     * Sets the given named inspector visible.
+     */
+    public void setVisibleForName(String aName)
+    {
+        switch (aName) {
+            case GALLERY_PANE: ViewUtils.fireActionEvent(getView("GalleryButton"), null); break;
+            case VIEW_PANE: ViewUtils.fireActionEvent(getView("ViewGeneralButton"), null); break;
+            case STYLE_PANE: ViewUtils.fireActionEvent(getView("ViewStyleButton"), null); break;
+            default: System.err.println("InspectorPane.setVisibleForName: Unknown name: " + aName);
+        }
+    }
 
     /**
      * Initializes UI panel for the inspector.
