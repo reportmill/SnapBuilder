@@ -19,30 +19,18 @@ public class Editor extends ParentView {
     // The context box
     private BoxView  _cbox;
 
-    // The Selected View
-    private View  _selView;
-    
-    // The Super Selected View
-    private View  _superSelView;
-
-    // The relative spot view (if selection is a spot)
-    private View  _spotView;
-
-    // The relaive spot order
-    private Order  _spotOrder;
-
-    // The timer to handle spot painting
-    private ViewTimer  _spotTimer;
-
-    // Whether to suppress spot painting
-    private boolean  _hideSpot;
-
     // The undoer
     private Undoer  _undoer = new Undoer();
 
+    // The editor selection
+    private EditorSel _sel = new EditorSel(this);
+
     // The Styler
     private EditorStyler _styler = new EditorStyler(this);
-    
+
+    // The default CopyPaster
+    private EditorCopyPaster _copyPaster;
+
     // The DeepChangeListener
     DeepChangeListener  _contentDeepChangeLsnr = (src,pce) -> contentDidDeepChange(src,pce);
     
@@ -55,7 +43,6 @@ public class Editor extends ParentView {
     public enum Order { BEFORE, ON, AFTER }
 
     // Constants
-    public static final String    SNAP_XML_TYPE = "snap-studio/xml";
     public static Color BACK_FILL = new Color(165, 179, 216).brighter(); // ViewUtils.getBackDarkFill()
     private Color SEL_COLOR = new Color(.3,.3,1,.33);
     private Stroke SEL_STROKE = new Stroke(3);
@@ -129,140 +116,34 @@ public class Editor extends ParentView {
     }
 
     /**
+     * Returns the editor selection.
+     */
+    public EditorSel getSel()  { return _sel; }
+
+    /**
      * Returns the selected view.
      */
-    public View getSelView()  { return _selView; }
+    public View getSelView()  { return _sel.getSelView(); }
 
     /**
      * Sets the selected view.
      */
-    public void setSelView(View aView)
-    {
-        // If already set, just return
-        if (aView==getSelView()) return;
-
-        // Set value
-        View old = _selView;
-        _selView = aView;
-        _spotView = null;
-        _spotOrder = null;
-
-        // Set SuperSelView
-        View par = _selView!=null ? _selView.getParent() : null;
-        if (par!=null)
-            setSuperSelView(par);
-
-        // FirePropChange and repaint
-        firePropChange(SelView_Prop, old, _selView);
-        repaint();
-        setSpotAnim();
-    }
-
-    /**
-     * Sets the super selected view.
-     */
-    public View getSuperSelView()  { return _superSelView; }
-
-    /**
-     * Sets the super selected view.
-     */
-    public void setSuperSelView(View aView)
-    {
-        // If value already set, just return
-        if (aView==getSuperSelView()) return;
-
-        // Set value
-        View old = _superSelView;
-        _superSelView = aView;
-
-        // FirePropChange and repaint
-        firePropChange(SuperSelView_Prop, old, _superSelView);
-        repaint();
-    }
+    public void setSelView(View aView)  { _sel.setSelView(aView); }
 
     /**
      * Returns the selected or super selected view.
      */
     public View getSelOrSuperSelView()
     {
-        return _selView!=null ? _selView : _superSelView;
+        return _sel.getSelOrSuperSelView();
     }
 
     /**
-     * Returns whether selection is really just a spot.
+     * Lets EditorSel fire prop changes.
      */
-    public boolean isSelSpot()  { return _spotView!=null; }
-
-    /**
-     * Returns the spot selection view.
-     */
-    public View getSelSpot()  { return _spotView; }
-
-    /**
-     * Sets a selected spot relative to given view (before = -1, on = 0, after = 1).
-     */
-    public void setSelSpot(View aView, Order anOrder)
+    protected void fireSelPropChange(String aProp, View anOld, View aNew)
     {
-        // If already set, just return
-        if (aView==_spotView && anOrder==_spotOrder) return;
-
-        // Set value(s)
-        View old = _spotView; _spotView = aView;
-        _spotOrder = anOrder;
-
-        // Clear SelView
-        _selView = null;
-
-        // Set SuperSelView
-        View par = anOrder==Order.ON ? _spotView : _spotView!=null ? _spotView.getParent() : null;
-        if (par!=null)
-            setSuperSelView(par);
-
-        // Set Value, FirePropChange and repaint
-        firePropChange(SelSpot_Prop, old, _spotView);
-        repaint();
-        setSpotAnim();
-    }
-
-    /**
-     * Returns the spot order.
-     */
-    public Order getSelSpotOrder()  { return _spotOrder; }
-
-    /**
-     * Sets the caret animation to whether it's needed.
-     */
-    private void setSpotAnim()
-    {
-        boolean isNeeded = isFocused() && isSelSpot() && isShowing();
-        setSpotAnim(isNeeded);
-    }
-
-    /**
-     * Returns whether ProgressBar is animating.
-     */
-    private boolean isSpotAnim()  { return _spotTimer!=null; }
-
-    /**
-     * Sets anim.
-     */
-    private void setSpotAnim(boolean aValue)
-    {
-        if (aValue==isSpotAnim()) return;
-        if (aValue) {
-            _spotTimer = new ViewTimer(500, t -> toggleShowSpot());
-            _spotTimer.start();
-        }
-        else { _spotTimer.stop(); _spotTimer = null; _hideSpot = false; repaint(); }
-    }
-
-    /**
-     * Called to make spot show/hid.
-     */
-    private void toggleShowSpot()
-    {
-        _hideSpot = !_hideSpot;
-        repaint();
+        firePropChange(aProp, anOld, aNew);
     }
 
     /**
@@ -281,24 +162,14 @@ public class Editor extends ParentView {
      */
     public void addView(View aView)
     {
-        // Get selected view
-        View sview = getSelOrSuperSelView();
-
-        // Get index
-        int index = sview instanceof ViewHost ? ((ViewHost)sview).getGuestCount() : 0;
-        if (isSelSpot()) {
-            sview = getSelSpot();
-            index = sview.indexInHost();
-            if (getSelSpotOrder()==Order.AFTER) index++;
-        }
-
-        // If selected view is host, add to it
-        if(sview instanceof ViewHost)       //ViewHpr.getHpr(sview).addView(sview, view);
-            ((ViewHost)sview).addGuest(aView);
+        // Get AddView and index
+        EditorSel.Tuple<View,Integer> addViewAndIndex = _sel.getAddViewAndIndex();
+        View host = addViewAndIndex.getA();
+        int index = addViewAndIndex.getB();
 
         // If selected view parent is host, add to it
-        else if(sview.getHost()!=null)
-            sview.getHost().addGuest(aView, index);
+        if(host!=null)
+            ((ViewHost)host).addGuest(aView, index);
 
         // Otherwise bail and complain
         else { ViewUtils.beep(); return; }
@@ -314,6 +185,40 @@ public class Editor extends ParentView {
     {
         return _styler;
     }
+
+    /**
+     * Returns the editor copy/paster.
+     */
+    public EditorCopyPaster getCopyPaster()
+    {
+        if (_copyPaster!=null) return _copyPaster;
+        return _copyPaster = new EditorCopyPaster(this);
+    }
+
+    /**
+     * Standard clipboard cut functionality.
+     */
+    public void cut()  { getCopyPaster().cut(); }
+
+    /**
+     * Standard clipboard copy functionality.
+     */
+    public void copy()  { getCopyPaster().copy(); }
+
+    /**
+     * Standard clipbard paste functionality.
+     */
+    public void paste()  { getCopyPaster().paste(); }
+
+    /**
+     * Deletes all the currently selected views.
+     */
+    public void delete()  { getCopyPaster().delete(); }
+
+    /**
+     * Causes all the children of the current super selected view to become selected.
+     */
+    public void selectAll()  { getCopyPaster().selectAll(); }
 
     /**
      * Sets whether editor is really doing editing.
@@ -398,27 +303,7 @@ public class Editor extends ParentView {
      */
     protected void mouseRelease(ViewEvent anEvent)
     {
-        // Get event point in ContentBox
-        Point pnt = anEvent.getPoint(_cbox);
-        View view = ViewUtils.getDeepestChildAt(_cbox, pnt.x, pnt.y);
-
-        // Get deepest guest view (child of ViewHost)
-        while (view!=null && !view.isGuest() && view.getParent()!=_cbox)
-            view = view.getParent();
-
-        // If not found, constrain to Editor.Content
-        if (view==null || view==_cbox)
-            view = getContent();
-
-        // If point close to edge, setSpotView
-        Point pnt2 = view.parentToLocal(pnt.x, pnt.y, _cbox);
-        if (pnt2.x>view.getWidth()-6)
-            setSelSpot(view, Order.AFTER);
-        else if (pnt2.x<6)
-            setSelSpot(view, Order.BEFORE);
-
-        // Select new view
-        else setSelView(view);
+        _sel.setSelectionForPoint(anEvent.getPoint());
     }
 
     /**
@@ -439,11 +324,7 @@ public class Editor extends ParentView {
         }
 
         // Paint SelSpot
-        if (isFocused() && isSelSpot() && !_hideSpot) {
-            Shape shape = getSelSpotShape();
-            aPntr.setPaint(SEL_COLOR); aPntr.setStroke(Stroke.Stroke1);
-            aPntr.draw(shape);
-        }
+        _sel.paintSel(aPntr);
 
         // Repaint selected view
         if (sview.getRotate()==0) {
@@ -451,108 +332,6 @@ public class Editor extends ParentView {
             aPntr.translate(pnt.x, pnt.y);
             ViewUtils.paintAll(sview, aPntr);
         }
-    }
-
-    /**
-     * Returns the Shape used to paint SelSpot.
-     */
-    private Shape getSelSpotShape()
-    {
-        View sview = _spotView;
-        Rect bnds = sview.localToParent(sview.getBoundsShape(), this).getBounds();
-        double x = _spotOrder==Order.BEFORE ? bnds.x - 2 : bnds.getMaxX() + 2;
-        Rect rect = new Rect(x, bnds.y-1, 0, bnds.height+2);
-        return rect;
-    }
-
-    /**
-     * Returns the counterpart to the SelSpot View.
-     */
-    private View getSelSpotOther()
-    {
-        if (_spotView==null || _spotOrder==null || _spotOrder==Order.ON) return null;
-        ParentView par = _spotView.getParent(); if (par==null) return null;
-        int ind = _spotView.indexInParent();
-        if (_spotOrder==Order.BEFORE)
-            return ind>0 ? par.getChild(ind-1) : null;
-        return ind+1<par.getChildCount() ? par.getChild(ind+1) : null;
-    }
-
-    /**
-     * Handles editor cut operation.
-     */
-    public void cut()  { copy(); delete(); }
-
-    /**
-     * Handles editor copy operation.
-     */
-    public void copy()
-    {
-        // If SelView is Content, just return
-        View view = getSelOrSuperSelView();
-        if (view==getContent()) { ViewUtils.beep(); return; }
-
-        // Get xml for selected shapes, and get as string
-        XMLElement xml = new ViewArchiver().writeToXML(view);
-        String xmlStr = xml.toString();
-
-        // Get clipboard and add data as XML string (RMData) and plain string
-        Clipboard cb = Clipboard.get();
-        cb.addData(SNAP_XML_TYPE, xmlStr);
-        cb.addData(xmlStr);
-    }
-
-    /**
-     * Handles editor paste operation.
-     */
-    public void paste()
-    {
-        // If Clipboard has View Data, paste it
-        Clipboard cb = Clipboard.get();
-        if (cb.hasData(SNAP_XML_TYPE)) {
-
-            // Get bytes, unarchive view and add
-            byte bytes[] = cb.getDataBytes(SNAP_XML_TYPE);
-            View view = new ViewArchiver().getView(bytes);
-            addView(view);
-        }
-    }
-
-    /**
-     * Handles editor delete operation.
-     */
-    public void delete()
-    {
-        // Get selected view and parent
-        View sview = getSelOrSuperSelView();
-        ParentView par = sview.getParent();
-
-        // Get par as host (just return if not host) and remove guest
-        ViewHost host = sview.getHost(); if (host==null) { ViewUtils.beep(); return; }
-        int ind = sview.indexInHost();
-        host.removeGuest(sview);
-
-        // Set new selected view
-        if (host.getGuestCount()>0)
-            setSelView(host.getGuest(ind<host.getGuestCount()? ind : ind -1));
-        else setSelView(par);
-
-        /*ParentView par = sview.getParent();
-        int ind = sview.indexInParent();
-        if(par instanceof ChildView) { ChildView cview = (ChildView)par;
-            cview.removeChild(sview);
-            if(cview.getChildCount()>0)
-                setSelView(ind<cview.getChildCount()? cview.getChild(ind) : cview.getChild(ind-1));
-            else setSelView(cview);
-        }*/
-    }
-
-    /**
-     * Handles SelectAll.
-     */
-    public void selectAll()
-    {
-        ViewUtils.beep();
     }
 
     /**
@@ -681,5 +460,6 @@ public class Editor extends ParentView {
             getEnv().runDelayed(_saveChangesRun = _scrShared, 400, true);
     }
 
+    // Support for delayed saveUnderChanges()
     private Runnable _saveChangesRun, _scrShared = () -> saveUndoerChanges();
 }
