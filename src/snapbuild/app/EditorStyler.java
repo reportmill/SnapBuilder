@@ -114,7 +114,7 @@ public class EditorStyler extends Styler {
      */
     private View getSelView()
     {
-        return _editor.getSelView();
+        return _editor.getSelOrSuperSelView();
     }
 
     /**

@@ -91,7 +91,7 @@ public class InspectorPane extends ViewOwner {
         // Get editor (and just return if null) and tool for selected shapes
         EditorPane epane = getEditorPane();
         Editor editor = getEditor();
-        View selView = editor.getSelView();
+        View selView = editor.getSelOrSuperSelView();
 
         // If GalleryButton is selected, install inspector
         if (getViewBoolValue("GalleryButton"))

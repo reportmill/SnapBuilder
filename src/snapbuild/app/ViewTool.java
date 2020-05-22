@@ -29,7 +29,7 @@ public Editor getEditor()  { return _epane.getEditor(); }
 /**
  * Returns the selected view.
  */
-public T getSelView()  { return (T)getEditor().getSelView(); }
+public T getSelView()  { return (T)getEditor().getSelOrSuperSelView(); }
 
 /**
  * Create UI.

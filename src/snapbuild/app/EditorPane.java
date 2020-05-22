@@ -144,6 +144,11 @@ public class EditorPane extends ViewOwner {
     public void setSelView(View aView)  { _editor.setSelView(aView); }
 
     /**
+     * Returns the selected or super-selected view.
+     */
+    public View getSelOrSuperSelView()  { return _editor.getSelOrSuperSelView(); }
+
+    /**
      * Called when SelPath is clicked.
      */
     protected void setSelViewKeepPath(View aView)
@@ -524,9 +529,9 @@ public class EditorPane extends ViewOwner {
             _viewTree.setSelItem(null);
             _viewTree.collapseItem(getContent());
             _viewTree.expandItem(getContent());
-            for(View v=getSelView();v!=getContent();v=v.getParent())
+            for(View v=getSelOrSuperSelView();v!=getContent();v=v.getParent())
                 _viewTree.expandItem(v);
-            _viewTree.setSelItem(getSelView());
+            _viewTree.setSelItem(getSelOrSuperSelView());
         }
 
         // If title has changed, update window title
@@ -581,7 +586,8 @@ public class EditorPane extends ViewOwner {
 
         // Handle EscapeAction
         if (anEvent.equals("EscapeAction")) {
-            View sview = getSelView(), par = sview.getParent();
+            View sview = getSelOrSuperSelView();
+            View par = sview.getParent();
             if(sview!=getContent())
                 setSelView(par);
             else beep();
@@ -705,15 +711,20 @@ public class EditorPane extends ViewOwner {
      */
     protected void updateSelPathBox()
     {
-        _selPathBox.removeChildren(); if(_selPathDeep==null) _selPathDeep = getSelView();
-        View sview = getSelView(), cview = getContent(), view = _selPathDeep;
+        _selPathBox.removeChildren(); if (_selPathDeep==null) _selPathDeep = getSelOrSuperSelView();
+        View sview = getSelOrSuperSelView();
+        View cview = getContent();
+        View view = _selPathDeep;
         while (view!=null) { View view2 = view;
-            Label label = new Label(view.getClass().getSimpleName()); label.setPadding(2,2,2,2);
-            if(view==sview) label.setFill(Color.LIGHTGRAY);
+            Label label = new Label(view.getClass().getSimpleName());
+            label.setPadding(2,2,2,2);
+            if (view==sview) label.setFill(Color.LIGHTGRAY);
             label.addEventHandler(e -> selPathItemClicked(view2), MouseRelease);
             _selPathBox.addChild(label, 0);
-            if(_selPathBox.getChildCount()>1) _selPathBox.addChild(new Label(" \u2022 "),1);
-            if(view==cview) break; view = view.getParent();
+            if (_selPathBox.getChildCount()>1)
+                _selPathBox.addChild(new Label(" \u2022 "),1);
+            if (view==cview) break;
+            view = view.getParent();
         }
     }
 
@@ -722,7 +733,7 @@ public class EditorPane extends ViewOwner {
      */
     protected void editorSelViewChange()
     {
-        _selPathDeep = getSelView();
+        _selPathDeep = getSelOrSuperSelView();
         resetLater();
         _xmlText.updateXMLTextSel();
     }
@@ -753,7 +764,7 @@ public class EditorPane extends ViewOwner {
     {
         // Create/configure RowView and get selected view
         RowView newRow = new RowView(); ViewHpr.getHpr(newRow).configure(newRow);
-        View view = getSelView();
+        View view = getSelOrSuperSelView();
 
         // Handle special cases: Empty TitleView, Empty ScrollView, TabView, SplitView
         if (ViewHpr.getHpr(view).wantsView(view, newRow)) {
@@ -783,7 +794,7 @@ public class EditorPane extends ViewOwner {
     {
         // Create/configure RowView and get selected view
         ColView newCol = new ColView(); ViewHpr.getHpr(newCol).configure(newCol);
-        View view = getSelView();
+        View view = getSelOrSuperSelView();
 
         // Handle special cases: Empty TitleView, Empty ScrollView, TabView, SplitView
         if (ViewHpr.getHpr(view).wantsView(view, newCol)) {
