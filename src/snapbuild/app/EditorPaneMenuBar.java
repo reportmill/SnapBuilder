@@ -2,7 +2,6 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package snapbuild.app;
-import snap.geom.HPos;
 import snap.gfx.Border;
 import snap.text.TextEditor;
 import snap.util.ClassUtils;
@@ -92,7 +91,7 @@ public class EditorPaneMenuBar extends ViewOwner {
         // Handle OpenRecentMenuItem
         if (anEvent.equals("OpenRecentMenuItem")) {
             String path = RecentFiles.showPathsPanel(epane.getUI(), "RecentDocuments"); if(path==null) return;
-            rmdraw.app.Welcome.getShared().open(path); //file.getAbsolutePath());
+            WelcomePanel.getShared().openFile(path); //file.getAbsolutePath());
         }
 
         // Handle CloseMenuItem
