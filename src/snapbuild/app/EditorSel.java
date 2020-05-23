@@ -202,7 +202,9 @@ public class EditorSel {
         if (isSelSpot()) {
             View spotView = getSelSpot();
             index = spotView.indexInHost();
-            if (getSelSpotOrder()== Order.AFTER) index++;
+            Order order = getSelSpotOrder();
+            if (order==Order.ON) index = 0;
+            else if (order==Order.AFTER) index++;
         }
         else if (sview instanceof ViewHost)
             index = ((ViewHost)sview).getGuestCount();
