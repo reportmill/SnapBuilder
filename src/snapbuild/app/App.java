@@ -1,4 +1,5 @@
 package snapbuild.app;
+import snap.gfx.GFXEnv;
 import snap.util.Prefs;
 
 /**
@@ -35,7 +36,7 @@ public static void quitApp()
 {
     //if(AppPane.getOpenAppPane()!=null) AppPane.getOpenAppPane().hide();
     Prefs.get().flush();
-    //System.exit(0);
+    GFXEnv.getEnv().exit(0);
 }
 
 }

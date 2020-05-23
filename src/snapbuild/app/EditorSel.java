@@ -169,7 +169,7 @@ public class EditorSel {
     {
         View sview = _spotView;
         Rect bnds = sview.localToParent(sview.getBoundsShape(), _editor).getBounds();
-        View hostView = _spotOrder==Order.ON ? sview.getParent() : sview;
+        View hostView = _spotOrder==Order.ON ? sview : sview.getParent();
 
         if (hostView.isHorizontal()) {
             double x;
