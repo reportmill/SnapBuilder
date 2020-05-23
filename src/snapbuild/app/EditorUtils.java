@@ -12,7 +12,7 @@ public class EditorUtils {
      */
     public static void moveViewUp(Editor anEditor)
     {
-        View sview = anEditor.getSelOrSuperSelView();
+        View sview = anEditor.getSelView();
         ViewHost host = sview.getHost(); if (host==null) { ViewUtils.beep(); return; }
 
         int ind = sview.indexInParent(); if (ind==0) { ViewUtils.beep(); return; }
@@ -25,7 +25,7 @@ public class EditorUtils {
      */
     public static void moveViewDown(Editor anEditor)
     {
-        View sview = anEditor.getSelOrSuperSelView();
+        View sview = anEditor.getSelView();
         ViewHost host = sview.getHost(); if (host==null) { ViewUtils.beep(); return; }
 
         int ind = sview.indexInHost(); if (ind+1>=host.getGuestCount()) { ViewUtils.beep(); return; }
@@ -38,7 +38,7 @@ public class EditorUtils {
      */
     public static void moveViewOut(Editor anEditor)
     {
-        View sview = anEditor.getSelOrSuperSelView();
+        View sview = anEditor.getSelView();
         ViewHost host = sview.getHost(); if (host==null) { ViewUtils.beep(); return; }
         ViewHost hostHost = ((View)host).getHost(); if (hostHost==null) { ViewUtils.beep(); return; }
 

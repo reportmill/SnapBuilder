@@ -162,7 +162,8 @@ protected void updateXMLTextSel()
     if(_xmlText==null || !_xmlText.isShowing() || _xmlTextSelChanging) return;
     
     // Get View
-    View sview = _epane.getSelOrSuperSelView();
+    Editor editor = _epane.getEditor();
+    View sview = editor.getSelView();
     int start = getCharStart(sview);
     int end = getCharEnd(sview);
     _xmlText.setSel(start, end);

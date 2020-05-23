@@ -50,11 +50,12 @@ public class GalleryPane extends ViewOwner {
     protected void resetUI()
     {
         // Update DocButton
-        View sview = _epane.getSelOrSuperSelView();
+        Editor editor = getEditor();
+        View sview = editor.getSelView();
         setViewText("DocButton", sview!=null? sview.getClass().getSimpleName() + " Doc" : "SnapKit Doc");
 
         // Update ChangeHostButton.Enabled
-        setViewEnabled("ChangeHostButton", getEditor().getSelOrSuperSelView() instanceof ViewHost);
+        setViewEnabled("ChangeHostButton", getEditor().getSelView() instanceof ViewHost);
     }
 
     @Override
@@ -83,7 +84,8 @@ public class GalleryPane extends ViewOwner {
      */
     private String getJavaDocURL()
     {
-        View view = _epane.getSelOrSuperSelView(); if (view==null) return "http://reportmill.com/snap1/javadoc/";
+        Editor editor = getEditor();
+        View view = editor.getSelView(); if (view==null) return "http://reportmill.com/snap1/javadoc/";
         String cname = view.getClass().getName();
         return "http://reportmill.com/snap1/javadoc/index.html?" + cname.replace('.', '/') + ".html";
     }

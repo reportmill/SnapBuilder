@@ -41,7 +41,7 @@ public class EditorCopyPaster {
     public void copy()
     {
         // If SelView is Content, just return
-        View view = _editor.getSelOrSuperSelView();
+        View view = _editor.getSelView();
         if (view==_editor.getContent()) { ViewUtils.beep(); return; }
 
         // Get xml for selected shapes, and get as string
@@ -76,7 +76,7 @@ public class EditorCopyPaster {
     public void delete()
     {
         // Get selected view and parent
-        View sview = _editor.getSelOrSuperSelView();
+        View sview = _editor.getSelView();
         ParentView par = sview.getParent();
 
         // Get par as host (just return if not host) and remove guest

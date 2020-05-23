@@ -40,7 +40,7 @@ public class ViewToolImpl <T extends View> extends ViewTool <T> {
 
         // Set label
         Editor editor = _epane.getEditor();
-        View selView = editor.getSelOrSuperSelView();
+        View selView = editor.getSelView();
         String text = selView.getClass().getSimpleName() + " Settings";
         setViewValue("SubclassLabel", text);
     }
@@ -72,7 +72,7 @@ public class ViewToolImpl <T extends View> extends ViewTool <T> {
     {
         // Get Editor and SelView
         Editor editor = _epane.getEditor();
-        View selView = editor.getSelOrSuperSelView();
+        View selView = editor.getSelView();
 
         // Update NameText, TextText, ToolTipText
         setViewText("NameText", selView.getName());
@@ -140,7 +140,7 @@ public class ViewToolImpl <T extends View> extends ViewTool <T> {
     {
         // Get Editor and SelView
         Editor editor = _epane.getEditor();
-        View selView = editor.getSelOrSuperSelView();
+        View selView = editor.getSelView();
 
         // Handle NameText, TextText, ToolTipText
         if (anEvent.equals("NameText")) selView.setName(anEvent.getStringValue());

@@ -123,20 +123,12 @@ public class Editor extends ParentView {
     /**
      * Returns the selected view.
      */
-    public View getSelView()  { return _sel.getSelView(); }
+    public View getSelView()  { return _sel.getSelOrSuperSelView(); }
 
     /**
      * Sets the selected view.
      */
     public void setSelView(View aView)  { _sel.setSelView(aView); }
-
-    /**
-     * Returns the selected or super selected view.
-     */
-    public View getSelOrSuperSelView()
-    {
-        return _sel.getSelOrSuperSelView();
-    }
 
     /**
      * Lets EditorSel fire prop changes.
@@ -312,7 +304,7 @@ public class Editor extends ParentView {
     protected void paintAbove(Painter aPntr)
     {
         // Get round rect for selected view
-        View sview = getSelOrSuperSelView();
+        View sview = getSelView();
         Rect bnds = sview.localToParent(sview.getBoundsShape(), this).getBounds();
         RoundRect rrect = new RoundRect(bnds.x-1, bnds.y-1, bnds.width+2, bnds.height+2, 3);
 
@@ -410,7 +402,7 @@ public class Editor extends ParentView {
 
             // If no changes yet, set selected objects
             if(undoer.getActiveUndoSet().getChangeCount()==0)
-                undoer.setUndoSelection(getSelOrSuperSelView()); //new ArrayList(getSelectedOrSuperSelectedViews())
+                undoer.setUndoSelection(getSelView()); //new ArrayList(getSelectedOrSuperSelectedViews())
 
             // Add property change
             undoer.addPropChange(aPC);

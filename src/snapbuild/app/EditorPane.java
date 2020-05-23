@@ -134,21 +134,6 @@ public class EditorPane extends ViewOwner {
     }
 
     /**
-     * Returns the Editor.SelView.
-     */
-    public View getSelView()  { return _editor.getSelView(); }
-
-    /**
-     * Sets the Editor.SelView.
-     */
-    public void setSelView(View aView)  { _editor.setSelView(aView); }
-
-    /**
-     * Returns the selected or super-selected view.
-     */
-    public View getSelOrSuperSelView()  { return _editor.getSelOrSuperSelView(); }
-
-    /**
      * Called when SelPath is clicked.
      */
     protected void setSelViewKeepPath(View aView)
@@ -177,7 +162,9 @@ public class EditorPane extends ViewOwner {
         col.setPadding(4,4,4,4);
         col.setSpacing(4);
         col.addChild(row);
-        getEditor().setContent(col); setSelView(row);
+        Editor editor = getEditor();
+        editor.setContent(col);
+        editor.setSelView(row);
         //BoxView box0 = new BoxView(); box0.setPadding(4,4,4,4); box0.setSpacing(4); box0.setVertical(true);
         //BoxView box1 = new BoxView(); box1.setPadding(4,4,4,4); box1.setSpacing(4); box1.setGrowWidth(true);
         //box0.addGuest(box1); getEditor().setContent(box0); getEditor().setSelView(box1);
@@ -529,9 +516,9 @@ public class EditorPane extends ViewOwner {
             _viewTree.setSelItem(null);
             _viewTree.collapseItem(getContent());
             _viewTree.expandItem(getContent());
-            for(View v=getSelOrSuperSelView();v!=getContent();v=v.getParent())
+            for(View v=_editor.getSelView();v!=getContent();v=v.getParent())
                 _viewTree.expandItem(v);
-            _viewTree.setSelItem(getSelOrSuperSelView());
+            _viewTree.setSelItem(_editor.getSelView());
         }
 
         // If title has changed, update window title
@@ -581,15 +568,15 @@ public class EditorPane extends ViewOwner {
         // Handle ViewTree
         if (anEvent.equals(_viewTree)) {
             View view = _viewTree.getSelItem();
-            getEditor().setSelView(view);
+            _editor.setSelView(view);
         }
 
         // Handle EscapeAction
         if (anEvent.equals("EscapeAction")) {
-            View sview = getSelOrSuperSelView();
+            View sview = _editor.getSelView();
             View par = sview.getParent();
             if(sview!=getContent())
-                setSelView(par);
+                _editor.setSelView(par);
             else beep();
         }
 
@@ -711,8 +698,8 @@ public class EditorPane extends ViewOwner {
      */
     protected void updateSelPathBox()
     {
-        _selPathBox.removeChildren(); if (_selPathDeep==null) _selPathDeep = getSelOrSuperSelView();
-        View sview = getSelOrSuperSelView();
+        _selPathBox.removeChildren(); if (_selPathDeep==null) _selPathDeep = _editor.getSelView();
+        View sview = _editor.getSelView();
         View cview = getContent();
         View view = _selPathDeep;
         while (view!=null) { View view2 = view;
@@ -733,7 +720,7 @@ public class EditorPane extends ViewOwner {
      */
     protected void editorSelViewChange()
     {
-        _selPathDeep = getSelOrSuperSelView();
+        _selPathDeep = _editor.getSelView();
         resetLater();
         _xmlText.updateXMLTextSel();
     }
@@ -764,13 +751,13 @@ public class EditorPane extends ViewOwner {
     {
         // Create/configure RowView and get selected view
         RowView newRow = new RowView(); ViewHpr.getHpr(newRow).configure(newRow);
-        View view = getSelOrSuperSelView();
+        View view = _editor.getSelView();
 
         // Handle special cases: Empty TitleView, Empty ScrollView, TabView, SplitView
         if (ViewHpr.getHpr(view).wantsView(view, newRow)) {
             ViewHost host = (ViewHost)view;
             host.addGuest(newRow);
-            setSelView(newRow);
+            _editor.setSelView(newRow);
             return;
         }
 
@@ -784,7 +771,7 @@ public class EditorPane extends ViewOwner {
 
         // Add new row to ColView and select it
         colView.addChild(newRow, view!=null? view.indexInParent()+1 : colView.getChildCount());
-        setSelView(newRow);
+        _editor.setSelView(newRow);
     }
 
     /**
@@ -794,13 +781,13 @@ public class EditorPane extends ViewOwner {
     {
         // Create/configure RowView and get selected view
         ColView newCol = new ColView(); ViewHpr.getHpr(newCol).configure(newCol);
-        View view = getSelOrSuperSelView();
+        View view = _editor.getSelView();
 
         // Handle special cases: Empty TitleView, Empty ScrollView, TabView, SplitView
         if (ViewHpr.getHpr(view).wantsView(view, newCol)) {
             ViewHost host = (ViewHost)view;
             host.addGuest(newCol);
-            setSelView(newCol);
+            _editor.setSelView(newCol);
             return;
         }
 
@@ -814,7 +801,7 @@ public class EditorPane extends ViewOwner {
 
         // Add new col to RowView and select it
         rowView.addChild(newCol, view!=null? view.indexInParent()+1 : rowView.getChildCount());
-        setSelView(newCol);
+        _editor.setSelView(newCol);
     }
 
     /**

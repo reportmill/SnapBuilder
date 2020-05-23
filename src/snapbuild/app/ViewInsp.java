@@ -52,7 +52,7 @@ protected void resetUI()
 {
     // Get Editor and SelView
     Editor editor = _epane.getEditor();
-    View selView = editor.getSelOrSuperSelView();
+    View selView = editor.getSelView();
     
     // Update NameText, TextText, ToolTipText
     setViewText("NameText", selView.getName());
@@ -121,7 +121,7 @@ protected void respondUI(ViewEvent anEvent)
 {
     // Get Editor and SelView
     Editor editor = _epane.getEditor();
-    View selView = editor.getSelOrSuperSelView();
+    View selView = editor.getSelView();
     
     // Handle NameText, TextText, ToolTipText
     if(anEvent.equals("NameText")) selView.setName(anEvent.getStringValue());
