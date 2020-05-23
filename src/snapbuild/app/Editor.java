@@ -39,9 +39,6 @@ public class Editor extends ParentView {
     public static final String SuperSelView_Prop = "SuperSelView";
     public static final String SelSpot_Prop = "SelSpot";
 
-    // Constants for ordering
-    public enum Order { BEFORE, ON, AFTER }
-
     // Constants
     public static Color BACK_FILL = new Color(165, 179, 216).brighter(); // ViewUtils.getBackDarkFill()
     private Color SEL_COLOR = new Color(.3,.3,1,.33);
@@ -295,7 +292,7 @@ public class Editor extends ParentView {
      */
     protected void mouseRelease(ViewEvent anEvent)
     {
-        _sel.setSelectionForPoint(anEvent.getPoint());
+        _sel.setSelForPoint(anEvent.getPoint());
     }
 
     /**
