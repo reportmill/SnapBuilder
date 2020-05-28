@@ -36,8 +36,6 @@ public class Editor extends ParentView {
     
     // Constants for properties
     public static final String SelView_Prop = "SelView";
-    public static final String SuperSelView_Prop = "SuperSelView";
-    public static final String SelSpot_Prop = "SelSpot";
 
     // Constants
     public static Color BACK_FILL = new Color(165, 179, 216).brighter(); // ViewUtils.getBackDarkFill()
@@ -120,7 +118,7 @@ public class Editor extends ParentView {
     /**
      * Returns the selected view.
      */
-    public View getSelView()  { return _sel.getSelOrSuperSelView(); }
+    public View getSelView()  { return _sel.getSelView(); }
 
     /**
      * Sets the selected view.
@@ -305,22 +303,23 @@ public class Editor extends ParentView {
         Rect bnds = sview.localToParent(sview.getBoundsShape(), this).getBounds();
         RoundRect rrect = new RoundRect(bnds.x-1, bnds.y-1, bnds.width+2, bnds.height+2, 3);
 
-        // Paint selection for SelOrSuperSelView
+        // Paint selection for SelView
         if (sview!=getContent()) {
-            aPntr.setColor(SEL_COLOR);
-            aPntr.setStroke(SEL_STROKE); aPntr.draw(rrect);
+            aPntr.setColor(SEL_COLOR); aPntr.setStroke(SEL_STROKE);
+            aPntr.draw(rrect);
             aPntr.setStroke(Stroke.Stroke1);
         }
 
-        // Paint SelSpot
-        _sel.paintSel(aPntr);
-
-        // Repaint selected view
+        // Repaint SelView so selection is behind
         if (sview.getRotate()==0) {
             Point pnt = sview.getParent().localToParent(sview.getX(), sview.getY(), this);
             aPntr.translate(pnt.x, pnt.y);
             ViewUtils.paintAll(sview, aPntr);
+            aPntr.translate(-pnt.x, -pnt.y);
         }
+
+        // Paint SelSpot caret (if needed)
+        _sel.paintSel(aPntr);
     }
 
     /**

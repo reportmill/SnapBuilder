@@ -21,20 +21,14 @@ public class EditorSel {
     // The Super Selected View
     private View  _superSelView;
 
-    // The relative spot view (if selection is a spot)
-    private View  _spotView;
-
-    // The relaive spot order
-    private Order  _spotOrder;
+    // The selected index, if SelView is host
+    private int  _selIndex;
 
     // The timer to handle spot painting
     private ViewTimer _spotTimer;
 
     // Whether to suppress spot painting
     private boolean  _hideSpot;
-
-    // Constants for ordering
-    public enum Order { BEFORE, ON, AFTER }
 
     /**
      * Constructor.
@@ -57,13 +51,6 @@ public class EditorSel {
         // Set value
         View old = _selView;
         _selView = aView;
-        _spotView = null;
-        _spotOrder = null;
-
-        // Set SuperSelView
-        View par = _selView!=null ? _selView.getParent() : null;
-        if (par!=null)
-            setSuperSelView(par);
 
         // FirePropChange and repaint
         _editor.fireSelPropChange(Editor.SelView_Prop, old, _selView);
@@ -72,82 +59,78 @@ public class EditorSel {
     }
 
     /**
-     * Sets the super selected view.
-     */
-    public View getSuperSelView()  { return _superSelView; }
-
-    /**
-     * Sets the super selected view.
-     */
-    public void setSuperSelView(View aView)
-    {
-        // If value already set, just return
-        if (aView==getSuperSelView()) return;
-
-        // Set value
-        _superSelView = aView;
-    }
-
-    /**
-     * Returns the selected or super selected view.
-     */
-    public View getSelOrSuperSelView()
-    {
-        return _selView!=null ? _selView : _superSelView;
-    }
-
-    /**
      * Returns whether selection is really just a spot.
      */
-    public boolean isSelSpot()  { return _spotView!=null; }
+    public boolean isSelSpot()
+    {
+        return getSelView() instanceof ViewHost && _selIndex>=0;
+    }
 
     /**
-     * Returns the spot selection view.
+     * Returns the selected index if SelView is host.
      */
-    public View getSelSpot()  { return _spotView; }
+    public int getSelIndex()  { return _selIndex; }
 
     /**
      * Sets a selected spot relative to given view (before = -1, on = 0, after = 1).
      */
-    public void setSelSpot(View aView, Order anOrder)
+    public void setSelViewAndIndex(View aView, int anIndex)
     {
         // If already set, just return
-        if (aView==_spotView && anOrder==_spotOrder) return;
+        if (aView==_selView && anIndex==_selIndex) return;
 
-        // Set value(s)
-        View old = _spotView; _spotView = aView;
-        _spotOrder = anOrder;
-
-        // Clear SelView
-        _selView = null;
-
-        // Set SuperSelView
-        View par = anOrder== Order.ON ? _spotView : _spotView!=null ? _spotView.getParent() : null;
-        if (par!=null)
-            setSuperSelView(par);
+        // Set values
+        setSelView(aView);
+        _selIndex = anIndex;
 
         // Set Value, FirePropChange and repaint
-        _editor.fireSelPropChange(Editor.SelView_Prop, old, _spotView);
         _editor.repaint();
         setSpotAnim();
     }
 
     /**
-     * Returns the spot order.
+     * Returns the most appropriate view for the SelIndex (either ViewBefore, ViewAfter or ViewHost).
      */
-    public Order getSelSpotOrder()  { return _spotOrder; }
+    private View getSelIndexView()
+    {
+        View before = getSelIndexViewBefore();
+        if (before!=null)
+            return before;
+        View after = getSelIndexViewAfter();
+        if (after!=null)
+            return after;
+        View selView = getSelView();
+        return selView instanceof ViewHost ? selView : null;
+    }
 
     /**
-     * Returns the counterpart to the SelSpot View.
+     * Returns the view before the SelIndex.
      */
-    private View getSelSpotOther()
+    private View getSelIndexViewBefore()
     {
-        if (_spotView==null || _spotOrder==null || _spotOrder== Order.ON) return null;
-        ParentView par = _spotView.getParent(); if (par==null) return null;
-        int ind = _spotView.indexInParent();
-        if (_spotOrder== Order.BEFORE)
-            return ind>0 ? par.getChild(ind-1) : null;
-        return ind+1<par.getChildCount() ? par.getChild(ind+1) : null;
+        int ind = getSelIndex();
+        if (ind<=0)
+            return null;
+        View hostView = getSelView();
+        ViewHost host = (ViewHost)hostView;
+        if (ind-1<host.getGuestCount())
+            return host.getGuest(ind-1);
+        return null;
+    }
+
+    /**
+     * Returns the view after the SelIndex.
+     */
+    private View getSelIndexViewAfter()
+    {
+        int ind = getSelIndex();
+        if (ind<0)
+            return null;
+        View hostView = getSelView();
+        ViewHost host = (ViewHost)hostView;
+        if (ind<host.getGuestCount())
+            return host.getGuest(ind);
+        return null;
     }
 
     /**
@@ -156,7 +139,7 @@ public class EditorSel {
     public void paintSel(Painter aPntr)
     {
         if (_editor.isFocused() && isSelSpot() && !_hideSpot) {
-            Shape shape = getSelSpotShape();
+            Shape shape = getSelIndexShape();
             aPntr.setPaint(Color.BLACK); aPntr.setStroke(Stroke.Stroke1);
             aPntr.draw(shape);
         }
@@ -165,27 +148,23 @@ public class EditorSel {
     /**
      * Returns the Shape used to paint SelSpot.
      */
-    private Shape getSelSpotShape()
+    private Shape getSelIndexShape()
     {
-        View sview = _spotView;
-        Rect bnds = sview.localToParent(sview.getBoundsShape(), _editor).getBounds();
-        View hostView = _spotOrder==Order.ON ? sview : sview.getParent();
+        // Get view for index
+        View indexView = getSelIndexView();
+        Rect bnds = indexView.localToParent(indexView.getBoundsShape(), _editor).getBounds();
+        View hostView = indexView instanceof ViewHost ? indexView : indexView.getParent();
+        boolean isBeforeView = indexView==getSelIndexViewBefore();
+        boolean isAfterView = indexView==getSelIndexViewAfter();
 
+        // Handle host horizontal: Return vertical line
         if (hostView.isHorizontal()) {
-            double x;
-            switch (_spotOrder) {
-                case BEFORE: x = bnds.x - 2; break;
-                case ON: x = bnds.x + 2; break;
-                default: x = bnds.getMaxX() + 2; break;
-            }
+            double x = isBeforeView ? (bnds.getMaxX() + 2) : isAfterView ? (bnds.x - 2) : (bnds.x + 2);
             return new Rect(x, bnds.y - 1, 0, bnds.height + 2);
         }
-        double y;
-        switch (_spotOrder) {
-            case BEFORE: y = bnds.y - 2; break;
-            case ON: y = bnds.y + 2; break;
-            default: y = bnds.getMaxY() + 2; break;
-        }
+
+        // Handle host vertical: Return horizontal line
+        double y = isBeforeView ? (bnds.getMaxY() + 2) : isAfterView ? (bnds.y - 2) : (bnds.y + 2);
         return new Rect(bnds.x - 1, y, bnds.width + 2,  0);
     }
 
@@ -194,33 +173,30 @@ public class EditorSel {
      */
     public Tuple<View,Integer> getAddViewAndIndex()
     {
-        // Get selected view
-        View sview = getSelOrSuperSelView();
-
-        // Get index
-        int index;
-        if (isSelSpot()) {
-            View spotView = getSelSpot();
-            index = spotView.indexInHost();
-            Order order = getSelSpotOrder();
-            if (order==Order.ON) index = 0;
-            else if (order==Order.AFTER) index++;
-        }
-        else if (sview instanceof ViewHost)
-            index = ((ViewHost)sview).getGuestCount();
-        else {
-            index = sview.indexInHost() + 1;
-            sview = (View)sview.getHost();
+        // If SelView is host, return SelView and insertion index
+        View selView = getSelView();
+        if (selView instanceof ViewHost) { ViewHost host = (ViewHost)selView;
+            int ind = getSelIndex();
+            int gcount = host.getGuestCount();
+            int ind2 = ind>=0 && ind<gcount ? ind : gcount;
+            return new Tuple<>(selView, ind2);
         }
 
-        // If selected view parent is host, add to it
-        return new Tuple<>(sview, index);
+        // Otherwise get host and return end
+        ViewHost host = selView.getHost();
+        if (host!=null) {
+            int ind = selView.indexInHost() + 1;
+            return new Tuple<>((View) host, ind);
+        }
+
+        // Return null (can this happen?)
+        return null;
     }
 
     /**
      * Returns the guest view closest to given point.
      */
-    public Tuple<View,Order> getSelForPoint(Point aPnt)
+    public Tuple<View,Integer> getSelForPoint(Point aPnt)
     {
         // Get event point in ContentBox
         View cbox = _editor.getContentBox();
@@ -244,12 +220,12 @@ public class EditorSel {
     /**
      * Returns the guest view closest to given point.
      */
-    public Tuple<View,Order> getSelForHostPoint(ViewHost aHost, Point aPnt)
+    public Tuple<View,Integer> getSelForHostPoint(ViewHost aHost, Point aPnt)
     {
-        // If no children, just return host + ON
+        // If no children, just return index 0
         View hostView = (View)aHost;
         if (aHost.getGuestCount()==0)
-            return new Tuple<>(hostView, Order.ON);
+            return new Tuple<>(hostView, 0);
 
         // Iterate over children
         for (int i=0, iMax=aHost.getGuestCount(); i<iMax; i++) {
@@ -259,26 +235,26 @@ public class EditorSel {
             // Handle horizontal: Check before first, On first, or before second
             if (hostView.isHorizontal()) {
                 if (aPnt.x<v1.getX()+6)
-                    return new Tuple<>(v1, Order.BEFORE);
+                    return new Tuple<>(hostView, i);
                 if (aPnt.x<v1.getMaxX()-6)
-                    return new Tuple<>(v1, Order.ON);
+                    return new Tuple<>(v1, null);
                 if (v2==null || aPnt.x<v2.getX()+6)
-                    return new Tuple<>(v1, Order.AFTER);
+                    return new Tuple<>(hostView, i+1);
             }
 
             // Handle vertical: Check before first, On first, or before second
             else {
                 if (aPnt.y<v1.getY()+6)
-                    return new Tuple<>(v1, Order.BEFORE);
+                    return new Tuple<>(hostView, i);
                 if (aPnt.y<v1.getMaxY()-6)
-                    return new Tuple<>(v1, Order.ON);
+                    return new Tuple<>(v1, null);
                 if (v2==null || aPnt.y<v2.getY()+6)
-                    return new Tuple<>(v1, Order.AFTER);
+                    return new Tuple<>(hostView, i+1);
             }
         }
 
         // Otherwise it's after last view
-        return new Tuple<>(aHost.getGuest(aHost.getGuestCount()-1), Order.AFTER);
+        return new Tuple<>(hostView, aHost.getGuestCount());
     }
 
     /**
@@ -287,14 +263,14 @@ public class EditorSel {
     public void setSelForPoint(Point aPnt)
     {
         // Get view/order for selection at point
-        Tuple <View,Order> sel = getSelForPoint(aPnt);
+        Tuple <View,Integer> sel = getSelForPoint(aPnt);
         View selView = sel.getA();
-        Order order = sel.getB();
+        Integer index = sel.getB();
 
         // Either select view or spot
-        if (order==Order.ON && !(selView instanceof ViewHost))
+        if (index==null)
             setSelView(selView);
-        else setSelSpot(selView, order);
+        else setSelViewAndIndex(selView, index);
     }
 
     /**
@@ -316,12 +292,28 @@ public class EditorSel {
      */
     private void setSpotAnim(boolean aValue)
     {
-        if (aValue==isSpotAnim()) return;
+        // If already set
+        if (aValue==isSpotAnim()) {
+            if (aValue) {
+                _spotTimer.stop();
+                _spotTimer.start();
+                _hideSpot = false;
+            }
+            return;
+        }
+
+        // Turn timer on
         if (aValue) {
             _spotTimer = new ViewTimer(500, t -> toggleShowSpot());
             _spotTimer.start();
         }
-        else { _spotTimer.stop(); _spotTimer = null; _hideSpot = false; _editor.repaint(); }
+
+        // Turn off
+        else {
+            _spotTimer.stop();
+            _spotTimer = null; _hideSpot = false;
+            _editor.repaint();
+        }
     }
 
     /**
