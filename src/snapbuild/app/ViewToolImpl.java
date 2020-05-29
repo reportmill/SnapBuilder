@@ -34,9 +34,9 @@ public class ViewToolImpl <T extends View> extends ViewTool <T> {
         _subInsp = anOwner;
 
         // Get content, content and set
-        if (_inspBox.getChildCount()>1)
-            _inspBox.removeChild(1);
-        _inspBox.addChild(_subInsp.getUI(), 1);
+        if (_inspBox.getChildCount()>0)
+            _inspBox.removeChild(0);
+        _inspBox.addChild(_subInsp.getUI(), 0);
 
         // Set label
         Editor editor = _epane.getEditor();
@@ -50,6 +50,10 @@ public class ViewToolImpl <T extends View> extends ViewTool <T> {
      */
     protected void initUI()
     {
+        // Add Handler to collapse ViewPropsView, SubclassPropsView
+        getView("ViewLabel").addEventHandler(e -> viewLabelPressed(0), MouseRelease);
+        getView("SubclassLabel").addEventHandler(e -> viewLabelPressed(1), MouseRelease);
+
         // Register MarginText, PadText to update
         getView("MarginText").addPropChangeListener(pc -> insetsTextFieldChanged(pc),
             TextField.Sel_Prop, View.Focused_Prop);
@@ -63,6 +67,13 @@ public class ViewToolImpl <T extends View> extends ViewTool <T> {
         Label label = getView("SubclassLabel", Label.class);
         label.setTextFill(Color.GRAY);
         getView("ViewLabel", Label.class).setTextFill(Color.GRAY);
+    }
+
+    void viewLabelPressed(int anIndex)
+    {
+        String name = anIndex==0 ? "ViewPropsView" : "SubclassPropsView";
+        TitleView titleView = getView(name, TitleView.class);
+        titleView.setExpandedAnimated(!titleView.isExpanded());
     }
 
     /**

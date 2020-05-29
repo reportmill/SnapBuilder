@@ -6,6 +6,9 @@
       <color value="#e4e4e4" />
       <font name="Arial" size="14" />
     </Label>
+  </ColView>
+  <TitleView Name="ViewPropsView" Collapsible="true" TitleStyle="Plain">
+  <ColView Spacing="6" FillWidth="true">
     <RowView Spacing="4">
       <Label text="Name:" />
       <TextField Name="NameText" PrefWidth="160" GrowWidth="true" />
@@ -50,8 +53,6 @@
       <Label PrefWidth="64" text="Bounds:" />
       <Label Name="BoundsText" text="BoundsText" />
     </RowView>
-  </ColView>
-  <ColView Spacing="6" FillWidth="true">
     <ColView FillWidth="true">
       <RowView Spacing="2">
         <Label PrefWidth="50" text="Margin:" />
@@ -140,11 +141,14 @@
         <CheckBox Name="VerticalCheckBox" text="Vertical" />
       </ColView>
     </RowView>
-    <ColView Name="SubclassContainer" Padding="0" GrowHeight="true" Spacing="2">
-      <Label Name="SubclassLabel" Align="CENTER" Padding="5,5,5,5" GrowWidth="true" text="Subclass Settings" Radius="10">
-        <color value="#e4e4e4" />
-        <font name="Arial" size="14" />
-      </Label>
-    </ColView>
   </ColView>
+  </TitleView>
+  <Label Name="SubclassLabel" Align="CENTER" Padding="5,5,5,5" GrowWidth="true" text="Subclass Settings" Radius="10">
+    <color value="#e4e4e4" />
+    <font name="Arial" size="14" />
+  </Label>
+  <TitleView Name="SubclassPropsView" Collapsible="true" TitleStyle="Plain">
+  <ColView Name="SubclassContainer" Padding="0" GrowHeight="true" Spacing="2">
+  </ColView>
+  </TitleView>
 </ColView>
