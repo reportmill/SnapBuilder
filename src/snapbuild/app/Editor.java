@@ -67,6 +67,7 @@ public class Editor extends ParentView {
         _cbox.setBorder(new Color("#99"),1);
         _cbox.setEffect(new ShadowEffect());
         _cbox.setPickable(false);
+        _cbox.setMinSize(200, 200);
         _cbox.addDeepChangeListener(_contentDeepChangeLsnr);
         addChild(_cbox);
 

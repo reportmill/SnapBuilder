@@ -411,6 +411,7 @@ public class EditorPane extends ViewOwner {
         // Handle known classes
         if (aClass==ButtonBase.class) return new ButtonBaseTool();
         if (aClass==ColView.class) return new ColViewTool();
+        if (aClass==ImageView.class) return new ImageViewTool();
         if (aClass==Label.class) return new LabelTool();
         if (aClass==RowView.class) return new RowViewTool();
         if (aClass==TabView.class) return new TabViewTool();

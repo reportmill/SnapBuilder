@@ -108,12 +108,11 @@ public class EditorSel {
         View viewAfter = indexViews.getB();
         View indexView = viewBefore!=null ? viewBefore : viewAfter!=null ? viewAfter : aHostView;
         Rect bnds = indexView.localToParent(indexView.getBoundsShape(), _editor).getBounds();
-        View hostView = indexView instanceof ViewHost ? indexView : indexView.getParent();
         boolean isBeforeView = indexView==viewBefore;
         boolean isAfterView = indexView==viewAfter;
 
         // Handle host horizontal: Return vertical line
-        if (hostView.isHorizontal()) {
+        if (aHostView.isHorizontal()) {
             double x = isBeforeView ? (bnds.getMaxX() + 2) : isAfterView ? (bnds.x - 2) : (bnds.x + 2);
             return new Rect(x, bnds.y - 1, 0, bnds.height + 2);
         }
