@@ -31,6 +31,9 @@ public class Editor extends ParentView {
     // The default CopyPaster
     private EditorCopyPaster _copyPaster;
 
+    // The default DragDropper
+    private EditorDragDropper  _dragDropper;
+
     // The DeepChangeListener
     DeepChangeListener  _contentDeepChangeLsnr = (src,pce) -> contentDidDeepChange(src,pce);
     
@@ -52,6 +55,7 @@ public class Editor extends ParentView {
         setPadding(15,15,15,15);
         setFill(BACK_FILL);
         enableEvents(MouseRelease);
+        enableEvents(DragEvents);
         setFocusable(true);
         setFocusWhenPressed(true);
 
@@ -150,7 +154,7 @@ public class Editor extends ParentView {
     public void addView(View aView)
     {
         // Get AddView and index
-        EditorSel.Tuple<View,Integer> addViewAndIndex = _sel.getAddViewAndIndex();
+        EditorSel.Tuple<View,Integer> addViewAndIndex = _sel.getSelHostViewAndIndex();
         View host = addViewAndIndex.getA();
         int index = addViewAndIndex.getB();
 
@@ -162,6 +166,19 @@ public class Editor extends ParentView {
         else { ViewUtils.beep(); return; }
 
         // Select view
+        setSelView(aView);
+    }
+
+    /**
+     * Adds a given view at given point.
+     */
+    public void addViewAtPoint(View aView, Point aPoint)
+    {
+        EditorSel.Tuple<View,Integer> viewIndex = getSel().getHostViewAndIndexForPoint(aPoint);
+        View hostView = viewIndex.getA();
+        int index = viewIndex.getB();
+        ViewHost host = (ViewHost)hostView;
+        host.addGuest(aView, index);
         setSelView(aView);
     }
 
@@ -206,6 +223,15 @@ public class Editor extends ParentView {
      * Causes all the children of the current super selected view to become selected.
      */
     public void selectAll()  { getCopyPaster().selectAll(); }
+
+    /**
+     * Returns the editor copy/paster.
+     */
+    public EditorDragDropper getDragDropper()
+    {
+        if (_dragDropper!=null) return _dragDropper;
+        return _dragDropper = new EditorDragDropper(this);
+    }
 
     /**
      * Sets whether editor is really doing editing.
@@ -282,7 +308,13 @@ public class Editor extends ParentView {
      */
     protected void processEvent(ViewEvent anEvent)
     {
-        if (anEvent.isMouseRelease()) mouseRelease(anEvent);
+        // Handle MouseEvent
+        if (anEvent.isMouseRelease())
+            mouseRelease(anEvent);
+
+        // Handle DragEvent
+        else if (anEvent.isDragEvent())
+            getDragDropper().processDragEvent(anEvent);
     }
 
     /**
@@ -320,6 +352,9 @@ public class Editor extends ParentView {
 
         // Paint SelSpot caret (if needed)
         _sel.paintSel(aPntr);
+
+        // Paint Drag
+        getDragDropper().paintDrag(aPntr);
     }
 
     /**

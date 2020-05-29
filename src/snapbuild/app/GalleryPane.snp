@@ -8,7 +8,7 @@
     <View Name="GalleryView" MinWidth="200" MinHeight="200" Class="snapbuild.app.GalleryView" />
   </ScrollView>
   <BoxView Padding="0,4,2,4" MinHeight="22" FillWidth="true">
-    <TitleView Padding="3" LeanY="BOTTOM" Text="Arrange Views" Collapsible="true" Expanded="false">
+    <TitleView Padding="3" LeanY="BOTTOM" Text="Arrange Views" Collapsible="true">
       <ColView FillWidth="true">
         <RowView Padding="8" Spacing="20">
           <ColView Align="CENTER" GrowWidth="true" Spacing="8">

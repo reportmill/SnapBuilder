@@ -68,6 +68,14 @@ public class EditorCopyPaster {
             View view = new ViewArchiver().getView(bytes);
             _editor.addView(view);
         }
+
+        // Paste Image
+        else if(cb.hasImage()) {
+            ClipboardData idata = cb.getImageData();
+            byte bytes[] = idata.getBytes();
+            ImageView iview = new ImageView(bytes);
+            _editor.addView(iview);
+        }
     }
 
     /**
