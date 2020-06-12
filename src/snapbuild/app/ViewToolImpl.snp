@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ColView PrefWidth="275" Padding="4,8,8,8" FillWidth="true">
   <font name="Arial" size="12" />
-  <ColView Spacing="6" FillWidth="true">
-    <Label Name="ViewLabel" Align="CENTER" Padding="5" GrowWidth="true" text="View Settings" Radius="10">
-      <color value="#e4e4e4" />
-      <font name="Arial" size="14" />
-    </Label>
-  </ColView>
-  <TitleView Name="ViewPropsView" TitleStyle="Plain" Collapsible="true">
+  <Label Name="ViewLabel" Align="CENTER" Padding="5" Margin="0,0,4,0" GrowWidth="true" text="View Settings" Radius="10">
+    <color value="#e4e4e4" />
+    <font name="Arial" size="14" />
+  </Label>
+  <BoxView Name="ViewPropsView" FillWidth="true" FillHeight="true">
     <ColView Spacing="6" FillWidth="true">
       <RowView Spacing="4">
         <Label text="Name:" />
@@ -24,25 +22,25 @@
       <RowView PrefWidth="148" Spacing="2">
         <Label PrefWidth="64" text="Pref Width:" />
         <Spinner Name="PrefWidthSpinner" PrefWidth="75" Align="CENTER" />
-        <ThumbWheel Name="PrefWidthThumb" PrefWidth="60" PrefHeight="16" Margin="2,2,2,8" type="linear" max="50" absmin="0" />
+        <ThumbWheel Name="PrefWidthThumb" PrefWidth="60" PrefHeight="18" Margin="2,2,2,8" type="linear" max="50" absmin="0" />
         <Button Name="PWResetButton" PrefWidth="20" PrefHeight="20" ToolTip="Clear Font Size" text="&#10226;" ShowArea="false" />
       </RowView>
       <RowView Spacing="2">
         <Label PrefWidth="64" text="Pref Height:" />
         <Spinner Name="PrefHeightSpinner" PrefWidth="75" Align="CENTER" />
-        <ThumbWheel Name="PrefHeightThumb" PrefWidth="60" PrefHeight="16" Margin="2,2,2,8" type="linear" max="50" absmin="0" />
+        <ThumbWheel Name="PrefHeightThumb" PrefWidth="60" PrefHeight="18" Margin="2,2,2,8" type="linear" max="50" absmin="0" />
         <Button Name="PHResetButton" PrefWidth="20" PrefHeight="20" ToolTip="Clear Font Size" text="&#10226;" ShowArea="false" />
       </RowView>
       <RowView Spacing="2">
         <Label PrefWidth="64" PrefHeight="14" text="Min Width:" />
         <Spinner Name="MinWidthSpinner" PrefWidth="75" Align="CENTER" />
-        <ThumbWheel Name="MinWidthThumb" PrefWidth="60" PrefHeight="16" Margin="2,2,2,8" type="linear" max="50" absmin="0" />
+        <ThumbWheel Name="MinWidthThumb" PrefWidth="60" PrefHeight="18" Margin="2,2,2,8" type="linear" max="50" absmin="0" />
         <Button Name="MWResetButton" PrefWidth="20" PrefHeight="20" ToolTip="Clear Font Size" text="&#10226;" ShowArea="false" />
       </RowView>
       <RowView Spacing="2">
         <Label PrefWidth="64" text="Min Height:" />
         <Spinner Name="MinHeightSpinner" PrefWidth="75" Align="CENTER" />
-        <ThumbWheel Name="MinHeightThumb" PrefWidth="60" PrefHeight="16" Margin="0,0,0,8" type="linear" max="50" absmin="0" />
+        <ThumbWheel Name="MinHeightThumb" PrefWidth="60" PrefHeight="18" Margin="0,0,0,8" type="linear" max="50" absmin="0" />
         <Button Name="MHResetButton" PrefWidth="20" PrefHeight="20" ToolTip="Clear Font Size" text="&#10226;" ShowArea="false" />
       </RowView>
       <RowView Padding="2,0,8,0" Spacing="6">
@@ -138,12 +136,12 @@
         </ColView>
       </RowView>
     </ColView>
-  </TitleView>
+  </BoxView>
   <Label Name="SubclassLabel" Align="CENTER" Padding="5" GrowWidth="true" text="Subclass Settings" Radius="10">
     <color value="#e4e4e4" />
     <font name="Arial" size="14" />
   </Label>
-  <TitleView Name="SubclassPropsView" TitleStyle="Plain" Collapsible="true">
+  <BoxView Name="SubclassPropsView">
     <ColView Name="SubclassContainer" GrowHeight="true" Spacing="2" />
-  </TitleView>
+  </BoxView>
 </ColView>

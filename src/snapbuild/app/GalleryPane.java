@@ -1,4 +1,5 @@
 package snapbuild.app;
+import snap.gfx.Color;
 import snap.gfx.Image;
 import snap.util.URLUtils;
 import snap.view.*;
@@ -34,6 +35,21 @@ public class GalleryPane extends ViewOwner {
      */
     protected void initUI()
     {
+        // Add Collapser for ArrangeLabel and ArrangeBox
+        Label arrangeLabel = getView("ArrangeLabel", Label.class);
+        arrangeLabel.getStringView().setGrowWidth(true);
+        arrangeLabel.setTextFill(Color.GRAY);
+        View arrangeBox = getView("ArrangeBox");
+        Collapser collapser = new Collapser(arrangeBox, arrangeLabel);
+        collapser.setCollapsed(true);
+
+        // Add Collapser for ViewsLabel and ViewsBox
+        Label viewsLabel = getView("ViewsLabel", Label.class);
+        viewsLabel.getStringView().setGrowWidth(true);
+        viewsLabel.setTextFill(Color.GRAY);
+        View viewsBox = getView("ViewsBox");
+        new Collapser(viewsBox, viewsLabel);
+
         // Get/configure SearchText: radius, prompt, image, animation
         TextField searchText = getView("SearchTextField", TextField.class);
         searchText.setRadius(10);

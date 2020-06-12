@@ -50,9 +50,19 @@ public class ViewToolImpl <T extends View> extends ViewTool <T> {
      */
     protected void initUI()
     {
-        // Add Handler to collapse ViewPropsView, SubclassPropsView
-        getView("ViewLabel").addEventHandler(e -> viewLabelPressed(0), MouseRelease);
-        getView("SubclassLabel").addEventHandler(e -> viewLabelPressed(1), MouseRelease);
+        // Add Collapser for ViewLabel and ViewPropsView
+        Label viewLabel = getView("ViewLabel", Label.class);
+        View viewPropsView = getView("ViewPropsView");
+        new Collapser(viewPropsView, viewLabel);
+        viewLabel.getStringView().setGrowWidth(true);
+        viewLabel.setTextFill(Color.GRAY);
+
+        // Add Collapser for SubclassLabel and SubclassPropsView
+        Label subclassLabel = getView("SubclassLabel", Label.class);
+        View subclassPropsView = getView("SubclassPropsView");
+        new Collapser(subclassPropsView, subclassLabel);
+        subclassLabel.getStringView().setGrowWidth(true);
+        subclassLabel.setTextFill(Color.GRAY);
 
         // Register MarginText, PadText to update
         getView("MarginText").addPropChangeListener(pc -> insetsTextFieldChanged(pc),
@@ -66,14 +76,6 @@ public class ViewToolImpl <T extends View> extends ViewTool <T> {
         // Init SubclassLabel
         Label label = getView("SubclassLabel", Label.class);
         label.setTextFill(Color.GRAY);
-        getView("ViewLabel", Label.class).setTextFill(Color.GRAY);
-    }
-
-    void viewLabelPressed(int anIndex)
-    {
-        String name = anIndex==0 ? "ViewPropsView" : "SubclassPropsView";
-        TitleView titleView = getView(name, TitleView.class);
-        titleView.setExpandedAnimated(!titleView.isExpanded());
     }
 
     /**
