@@ -1,6 +1,8 @@
 package snapbuild.app;
+import snap.gfx.Image;
 import snap.util.XMLElement;
 import snap.view.*;
+import snap.web.MIMEType;
 
 /**
  * A CopyPaster implementation for Editor.
@@ -44,13 +46,19 @@ public class EditorCopyPaster {
         View view = _editor.getSelView();
         if (view==_editor.getContent()) { ViewUtils.beep(); return; }
 
-        // Get xml for selected shapes, and get as string
+        // Get clipboard
+        Clipboard cb = Clipboard.get();
+
+        // Get image and add to clipbard
+        Image image = ViewUtils.getImage(view);
+        cb.addData(image);
+
+        // Get xml string for selected shapes and add to clipboard as SNAP_XML
         XMLElement xml = new ViewArchiver().writeToXML(view);
         String xmlStr = xml.toString();
-
-        // Get clipboard and add data as XML string (RMData) and plain string
-        Clipboard cb = Clipboard.get();
         cb.addData(SNAP_XML_TYPE, xmlStr);
+
+        // Add xml as String (probably stupid)
         cb.addData(xmlStr);
     }
 
@@ -59,18 +67,18 @@ public class EditorCopyPaster {
      */
     public void paste()
     {
-        // If Clipboard has View Data, paste it
+        // Get Clipboard
         Clipboard cb = Clipboard.get();
-        if (cb.hasData(SNAP_XML_TYPE)) {
 
-            // Get bytes, unarchive view and add
+        // Handle SNAP_XML: Get bytes, unarchive view and add
+        if (cb.hasData(SNAP_XML_TYPE)) {
             byte bytes[] = cb.getDataBytes(SNAP_XML_TYPE);
             View view = new ViewArchiver().getView(bytes);
             _editor.addView(view);
         }
 
         // Paste Image
-        else if(cb.hasImage()) {
+        else if (cb.hasImage()) {
             ClipboardData idata = cb.getImageData();
             byte bytes[] = idata.getBytes();
             ImageView iview = new ImageView(bytes);
