@@ -90,21 +90,25 @@ public class ViewToolImpl <T extends View> extends ViewTool <T> {
         setViewText("TextText", selView.getText());
         setViewText("ToolTipText", selView.getToolTip());
 
-        // Update PrefWidthSpinner, PrefHeightSpinner
+        // Update PrefWidthSpinner, PrefHeightSpinner, PrefWidthThumb, PrefHeightThumb
         Spinner pws = getView("PrefWidthSpinner", Spinner.class);
         Spinner phs = getView("PrefHeightSpinner", Spinner.class);
         pws.setValue(selView.getPrefWidth());
         phs.setValue(selView.getPrefHeight());
         pws.getTextField().setTextFill(selView.isPrefWidthSet() ? Color.BLACK : Color.GRAY);
         phs.getTextField().setTextFill(selView.isPrefHeightSet() ? Color.BLACK : Color.GRAY);
+        setViewValue("PrefWidthThumb", selView.getPrefWidth());
+        setViewValue("PrefHeightThumb", selView.getPrefHeight());
 
-        // Update MinWidthSpinner, MinHeightSpinner
+        // Update MinWidthSpinner, MinHeightSpinner, MinWidthThumb, MinHeightThumb
         Spinner mws = getView("MinWidthSpinner", Spinner.class);
         Spinner mhs = getView("MinHeightSpinner", Spinner.class);
         mws.setValue(selView.getMinWidth());
         mhs.setValue(selView.getMinHeight());
         mws.getTextField().setTextFill(selView.isMinWidthSet()? Color.BLACK : Color.GRAY);
         mhs.getTextField().setTextFill(selView.isMinHeightSet()? Color.BLACK : Color.GRAY);
+        setViewValue("MinWidthThumb", selView.getMinWidth());
+        setViewValue("MinHeightThumb", selView.getMinHeight());
 
         // Update BoundsText
         Rect bnds = selView.getBounds();
@@ -158,25 +162,23 @@ public class ViewToolImpl <T extends View> extends ViewTool <T> {
         if (anEvent.equals("TextText")) selView.setText(anEvent.getStringValue());
         if (anEvent.equals("ToolTipText")) selView.setToolTip(anEvent.getStringValue());
 
-        // Handle PrefWidthSpinner, PrefHeightSpinner, MinWidthSpinner, MinHeightSpinner
+        // Handle PrefWidthSpinner, PrefHeightSpinner, PrefWidthThumb, PrefHeightThumb
         if (anEvent.equals("PrefWidthSpinner")) selView.setPrefWidth(anEvent.getFloatValue());
         if (anEvent.equals("PrefHeightSpinner")) selView.setPrefHeight(anEvent.getFloatValue());
+        if (anEvent.equals("PrefWidthThumb")) selView.setPrefWidth(anEvent.getIntValue());
+        if (anEvent.equals("PrefHeightThumb")) selView.setPrefHeight(anEvent.getIntValue());
+
+        // Handle MinWidthSpinner, MinHeightSpinner, MinWidthThumb, MinHeightThumb
         if (anEvent.equals("MinWidthSpinner")) selView.setMinWidth(anEvent.getFloatValue());
         if (anEvent.equals("MinHeightSpinner")) selView.setMinHeight(anEvent.getFloatValue());
+        if (anEvent.equals("MinWidthThumb")) selView.setMinWidth(anEvent.getIntValue());
+        if (anEvent.equals("MinHeightThumb")) selView.setMinHeight(anEvent.getIntValue());
 
-        // Handle PWAdd5Button, PWSub5Button, PHAdd5Button, PHSub5Button, PWResetButton, PHResetButton
-        if (anEvent.equals("PWAdd5Button")) selView.setPrefWidth(MathUtils.round(selView.getWidth()+5, 5));
-        if (anEvent.equals("PWSub5Button")) selView.setPrefWidth(MathUtils.round(selView.getWidth()-5, 5));
-        if (anEvent.equals("PHAdd5Button")) selView.setPrefHeight(MathUtils.round(selView.getHeight()+5, 5));
-        if (anEvent.equals("PHSub5Button")) selView.setPrefHeight(MathUtils.round(selView.getHeight()-5, 5));
+        // Handle PWResetButton, PHResetButton
         if (anEvent.equals("PWResetButton")) selView.setPrefWidth(-1);
         if (anEvent.equals("PHResetButton")) selView.setPrefHeight(-1);
 
-        // Handle MWAdd5Button, MWSub5Button, MHAdd5Button, MHSub5Button, MWResetButton, MHResetButton
-        if (anEvent.equals("MWAdd5Button")) selView.setMinWidth(MathUtils.round(selView.getWidth()+5, 5));
-        if (anEvent.equals("MWSub5Button")) selView.setMinWidth(MathUtils.round(selView.getWidth()-5, 5));
-        if (anEvent.equals("MHAdd5Button")) selView.setMinHeight(MathUtils.round(selView.getHeight()+5, 5));
-        if (anEvent.equals("MHSub5Button")) selView.setMinHeight(MathUtils.round(selView.getHeight()-5, 5));
+        // Handle MWResetButton, MHResetButton
         if (anEvent.equals("MWResetButton")) selView.setMinWidth(-1);
         if (anEvent.equals("MHResetButton")) selView.setMinHeight(-1);
 

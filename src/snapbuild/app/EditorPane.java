@@ -416,6 +416,7 @@ public class EditorPane extends ViewOwner {
         if (aClass==RowView.class) return new RowViewTool();
         if (aClass==TabView.class) return new TabViewTool();
         if (aClass==TextField.class) return new TextFieldTool();
+        if (aClass==ThumbWheel.class) return new ThumbWheelTool();
         if (aClass==TitleView.class) return new TitleViewTool();
         if (aClass==View.class || aClass==null) return new ViewTool();
 
