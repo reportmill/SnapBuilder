@@ -55,7 +55,7 @@ public class EditorCopyPaster {
 
         // Get xml string for selected shapes and add to clipboard as SNAP_XML
         XMLElement xml = new ViewArchiver().writeToXML(view);
-        String xmlStr = xml.toString();
+        String xmlStr = xml.getString();
         cb.addData(SNAP_XML_TYPE, xmlStr);
 
         // Add xml as String (probably stupid)
