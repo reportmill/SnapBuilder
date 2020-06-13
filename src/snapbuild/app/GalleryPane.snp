@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ColView FillWidth="true">
   <font name="Arial" size="12" />
-  <Label Name="ArrangeLabel" Align="CENTER" Padding="5" Margin="4,8,0,8" GrowWidth="true" text="Arrange Views" Radius="10">
-    <color value="#e4e4e4" />
-    <font name="Arial" size="14" />
-  </Label>
   <BoxView Name="ArrangeBox" FillWidth="true">
     <ColView Padding="3,7,5,7" FillWidth="true">
       <RowView Padding="8" Spacing="20">
@@ -24,12 +20,8 @@
       </RowView>
     </ColView>
   </BoxView>
-  <Label Name="ViewsLabel" Align="CENTER" Padding="5" Margin="4,8,0,8" GrowWidth="true" text="Available Views" Radius="10">
-    <color value="#e4e4e4" />
-    <font name="Arial" size="14" />
-  </Label>
   <ColView Name="ViewsBox" GrowHeight="true" FillWidth="true">
-    <TextField Name="SearchTextField" Margin="8" />
+    <TextField Name="SearchTextField" Margin="4,8,4,8" />
     <ScrollView GrowHeight="true" BarSize="14">
       <View Name="GalleryView" MinWidth="200" MinHeight="200" Class="snapbuild.app.GalleryView" />
     </ScrollView>

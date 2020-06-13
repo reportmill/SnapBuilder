@@ -1,7 +1,9 @@
 package snapbuild.app;
 
 import snap.geom.Polygon;
+import snap.geom.Pos;
 import snap.gfx.Color;
+import snap.gfx.Font;
 import snap.view.*;
 
 /**
@@ -163,8 +165,8 @@ public class Collapser {
      */
     private void setExpandedAnimDone(boolean aValue)
     {
-        //setExpanded(aValue);
-        //_view.setPrefSize(-1, -1);
+        if (aValue)
+            _view.setPrefHeight(-1);
     }
 
     /**
@@ -195,5 +197,53 @@ public class Collapser {
         ShapeView sview = new ShapeView(poly); sview.setPrefSize(9,9);
         sview.setFill(Color.GRAY); sview.setBorder(Color.GRAY, 1);
         return _clpView = sview;
+    }
+
+    /**
+     * Creates a Collapser for given view, including a label with given name.
+     */
+    public static Collapser createCollapserAndLabel(View aView, String aLabelTitle)
+    {
+        // Create Label
+        Label label = createLabel(aLabelTitle);
+
+        // Handle TitleView
+        if (aView instanceof TitleView) { TitleView titleView = (TitleView)aView;
+            View content = titleView.getContent();
+            BoxView boxView = new BoxView(content, true, true);
+            boxView.setPadding(titleView.getPadding());
+            ColView colView = new ColView();
+            colView.addChild(boxView);
+            ViewUtils.replaceView(titleView, colView);
+            aView = colView;
+        }
+
+        // Add above given view
+        //else {
+            ViewHost host = aView.getHost();
+            int index = aView.indexInHost();
+            host.addGuest(label, index);
+        //}
+
+        // Create/return collapser
+        return new Collapser(aView, label);
+    }
+
+    /**
+     * Creates a label.
+     */
+    private static Label createLabel(String aTitle)
+    {
+        Label label = new Label(aTitle);
+        label.setName(aTitle + "Label");
+        label.setFill(new Color("#e0e0e4"));
+        label.setFont(Font.Arial14);
+        label.getStringView().setGrowWidth(true);
+        label.setTextFill(Color.GRAY);
+        label.setAlign(Pos.CENTER);
+        label.setPadding(4,4,4,10);
+        label.setMargin(2,8,2,8);
+        label.setRadius(10);
+        return label;
     }
 }

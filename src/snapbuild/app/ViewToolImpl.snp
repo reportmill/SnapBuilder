@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ColView PrefWidth="275" Padding="4,8,8,8" FillWidth="true">
+<ColView PrefWidth="275" FillWidth="true">
   <font name="Arial" size="12" />
-  <Label Name="ViewLabel" Align="CENTER" Padding="5" Margin="0,0,4,0" GrowWidth="true" text="View Settings" Radius="10">
-    <color value="#e4e4e4" />
-    <font name="Arial" size="14" />
-  </Label>
-  <BoxView Name="ViewPropsView" FillWidth="true" FillHeight="true">
+  <BoxView Name="ViewPropsView" Padding="2,8,2,8" FillWidth="true" FillHeight="true">
     <ColView Spacing="6" FillWidth="true">
       <RowView Spacing="4">
         <Label text="Name:" />
@@ -137,11 +133,7 @@
       </RowView>
     </ColView>
   </BoxView>
-  <Label Name="SubclassLabel" Align="CENTER" Padding="5" GrowWidth="true" text="Subclass Settings" Radius="10">
-    <color value="#e4e4e4" />
-    <font name="Arial" size="14" />
-  </Label>
-  <BoxView Name="SubclassPropsView">
-    <ColView Name="SubclassContainer" GrowHeight="true" Spacing="2" />
+  <BoxView Name="SubclassPropsView" Padding="2,8,2,8">
+    <ColView Name="SubclassContainer" GrowHeight="true" />
   </BoxView>
 </ColView>
