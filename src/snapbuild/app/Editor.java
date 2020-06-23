@@ -184,6 +184,22 @@ public class Editor extends ParentView {
     }
 
     /**
+     * Adds an image.
+     */
+    public void addImage(Image anImage)
+    {
+        View selView = getSelView();
+        if (selView instanceof ButtonBase)
+            ((ButtonBase)selView).setImage(anImage);
+        else if (selView instanceof Label)
+            ((Label)selView).setImage(anImage);
+        else {
+            ImageView iview = new ImageView(anImage);
+            addView(iview);
+        }
+    }
+
+    /**
      * Returns the Styler.
      */
     public EditorStyler getStyler()

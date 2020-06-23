@@ -6,6 +6,11 @@ import snap.gfx.Color;
 import snap.gfx.Font;
 import snap.view.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * A class to collapse any view.
  */
@@ -22,6 +27,15 @@ public class Collapser {
 
     // Whether Title view is expanded
     private boolean  _expanded = true;
+
+    // Whether view is GrowHeight
+    private boolean _growHeight;
+
+    // A Collapse group
+    private CollapseGroup  _group;
+
+    // Known Collapse groups by name
+    private static Map<String,CollapseGroup> _groups = new HashMap<>();
 
     /**
      * Creates a Collapser for given View and Label.
@@ -44,6 +58,7 @@ public class Collapser {
     {
         if (aView==_view) return;
         _view = aView;
+        _growHeight = aView.isGrowHeight();
     }
 
     /**
@@ -111,11 +126,15 @@ public class Collapser {
         // If expanding
         if (aValue) {
             _view.setPrefHeight(-1);
+            _view.setGrowHeight(_growHeight);
+            if (_group!=null)
+                _group.collapserDidExpand(this);
         }
 
         // If callapsing
         else {
             _view.setPrefHeight(0);
+            _view.setGrowHeight(false);
         }
 
         // Update graphic
@@ -176,6 +195,26 @@ public class Collapser {
     {
         //ViewUtils.fireActionEvent(_view, anEvent);
         setExpandedAnimated(!isExpanded());
+    }
+
+    /**
+     * Sets a collapse group by name.
+     */
+    public void setGroupForName(String aName)
+    {
+        _group = getCollapseGroupForName(aName);
+        _group.addCollapser(this);
+    }
+
+    /**
+     * Sets a collapse group by name.
+     */
+    public CollapseGroup getCollapseGroupForName(String aName)
+    {
+        CollapseGroup cg = _groups.get(aName);
+        if (cg==null)
+            _groups.put(aName, cg = new CollapseGroup());
+        return cg;
     }
 
     /**
@@ -245,5 +284,32 @@ public class Collapser {
         label.setMargin(2,8,2,8);
         label.setRadius(10);
         return label;
+    }
+
+    /**
+     * A class that tracks multiple collapsers, making sure only one is visible at a time.
+     */
+    public static class CollapseGroup {
+
+        // The list of collapsers
+        List<Collapser> _collapsers = new ArrayList<>();
+
+        /**
+         * Adds a collapser.
+         */
+        public void addCollapser(Collapser aCollapser)
+        {
+            _collapsers.add(aCollapser);
+        }
+
+        /**
+         * Called when a collapser collapses.
+         */
+        protected void collapserDidExpand(Collapser aCollapser)
+        {
+            for (Collapser c : _collapsers)
+                if (c!=aCollapser && c.isExpanded())
+                    c.setExpandedAnimated(false);
+        }
     }
 }

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ColView Padding="4" Spacing="4" FillWidth="true">
+  <RowView Padding="4" GrowWidth="true" Spacing="4">
+    <Label text="Search">
+      <font name="Arial" size="14" />
+    </Label>
+    <TextField Name="SearchTextField" GrowWidth="true" Radius="10" />
+  </RowView>
+  <ScrollView Name="ScrollView" MinWidth="120" MinHeight="60" GrowHeight="true" />
+</ColView>

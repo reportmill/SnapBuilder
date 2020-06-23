@@ -1,5 +1,4 @@
 package snapbuild.app;
-import snap.gfx.Color;
 import snap.gfx.Image;
 import snap.util.URLUtils;
 import snap.view.*;
@@ -12,10 +11,13 @@ import java.util.*;
 public class GalleryPane extends ViewOwner {
 
     // The editor pane
-    EditorPane        _epane;
+    protected EditorPane  _epane;
     
     // The GalleryView
-    GalleryView       _galleryView;
+    private GalleryView  _galleryView;
+
+    // The FlatIconPanel
+    private FlatIconPanel  _flatIcon;
     
     /**
      * Creates a new GalleryPane.
@@ -23,6 +25,14 @@ public class GalleryPane extends ViewOwner {
     public GalleryPane(EditorPane anEP)
     {
         _epane = anEP;
+        _flatIcon = new FlatIconPanel() {
+            @Override
+            protected void itemWasClicked(FlatIcon.ImageItem anItem)
+            {
+                Image img = anItem.getSample();
+                _epane.getEditor().addImage(img);
+            }
+        };
     }
 
     /**
@@ -37,27 +47,13 @@ public class GalleryPane extends ViewOwner {
     {
         // Add Collapser with label for ArrangeBox
         View arrangeBox = getView("ArrangeBox");
-        Collapser collapser = Collapser.createCollapserAndLabel(arrangeBox, "Arrange Views");
-        collapser.setCollapsed(true);
+        Collapser arrangeCollapser = Collapser.createCollapserAndLabel(arrangeBox, "Arrange Views");
+        arrangeCollapser.setCollapsed(true);
 
         // Add Collapser with label for ViewsBox
         View viewsBox = getView("ViewsBox");
-        Collapser.createCollapserAndLabel(viewsBox, "Select View");
-
-        // Add Collapser for ArrangeLabel and ArrangeBox
-//        Label arrangeLabel = getView("ArrangeLabel", Label.class);
-//        arrangeLabel.getStringView().setGrowWidth(true);
-//        arrangeLabel.setTextFill(Color.GRAY);
-//        View arrangeBox = getView("ArrangeBox");
-//        Collapser collapser = new Collapser(arrangeBox, arrangeLabel);
-//        collapser.setCollapsed(true);
-
-        // Add Collapser for ViewsLabel and ViewsBox
-//        Label viewsLabel = getView("ViewsLabel", Label.class);
-//        viewsLabel.getStringView().setGrowWidth(true);
-//        viewsLabel.setTextFill(Color.GRAY);
-//        View viewsBox = getView("ViewsBox");
-//        new Collapser(viewsBox, viewsLabel);
+        Collapser viewCollapser = Collapser.createCollapserAndLabel(viewsBox, "Select View");
+        viewCollapser.setGroupForName("GalleryPane");
 
         // Get/configure SearchText: radius, prompt, image, animation
         TextField searchText = getView("SearchTextField", TextField.class);
@@ -69,6 +65,15 @@ public class GalleryPane extends ViewOwner {
 
         _galleryView = getView("GalleryView", GalleryView.class);
         _galleryView._galleryPane = this;
+
+        // Add FlatIcon UI
+        ColView colView = getUI(ColView.class);
+        ColView flatIconView = _flatIcon.getUI(ColView.class);
+        flatIconView.setGrowHeight(true);
+        colView.addChild(flatIconView);
+        Collapser imageSearchCollapse = Collapser.createCollapserAndLabel(flatIconView, "Select Image");
+        imageSearchCollapse.setCollapsed(true);
+        imageSearchCollapse.setGroupForName("GalleryPane");
     }
 
     @Override
