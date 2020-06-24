@@ -13,7 +13,7 @@ import snap.viewx.TextPane;
 public class FlatIconPanel extends ViewOwner {
 
     // The ImageItems
-    private FlatIcon.ImageItem _items[];
+    private FlatIconItem _items[];
 
     // The ScrollView to show items
     private ScrollView  _scrollView;
@@ -45,6 +45,8 @@ public class FlatIconPanel extends ViewOwner {
         _scrollView.setContent(_itemsView);
         _scrollView.getScroller().addPropChangeListener(pc -> scrollBoundsDidChange(),
             Scroller.ScrollX_Prop, Scroller.ScrollY_Prop, View.Width_Prop, View.Height_Prop);
+
+        getView("FlatIconLabel", Label.class).setTextFill(Color.DARKGRAY);
     }
 
     /**
@@ -67,10 +69,16 @@ public class FlatIconPanel extends ViewOwner {
         // Remove items
         _itemsView.removeChildren();
 
+        // Add ProgressBar
+        ProgressBar pbar = new ProgressBar();
+        pbar.setPrefSize(100, 20);
+        _itemsView.addChild(pbar);
+        pbar.setIndeterminate(true);
+
         // Get items in background thread
         new Thread(() -> {
             System.out.println("Image search start: " + aString);
-            FlatIcon.ImageItem[] items = FlatIcon.SHARED.getImageItemsForSearchString(aString);
+            FlatIconItem[] items = FlatIcon.SHARED.getImageItemsForSearchString(aString);
             System.out.println("Image search completed: " + items.length + " items found");
             runLater(() -> imageSearchGotItems(items));
         }).start();
@@ -79,13 +87,19 @@ public class FlatIconPanel extends ViewOwner {
     /**
      * Called on app thread when items are loaded.
      */
-    private void imageSearchGotItems(FlatIcon.ImageItem[] theItems)
+    private void imageSearchGotItems(FlatIconItem[] theItems)
     {
+        // Cap items at 10 for now
+        //if (theItems.length>10) theItems = Arrays.copyOf(theItems, 10);
+
+        // Remove items (ProgressBar)
+        _itemsView.removeChildren();
+
         // Set items
         _items = theItems;
 
         // Iterate over items and create/add ImageItem
-        for (FlatIcon.ImageItem item : _items) {
+        for (FlatIconItem item : _items) {
             ItemView iview = new ItemView(item);
             _itemsView.addChild(iview);
         }
@@ -110,7 +124,7 @@ public class FlatIconPanel extends ViewOwner {
     /**
      * Called when an item view is clicked.
      */
-    protected void itemWasClicked(FlatIcon.ImageItem anItem)
+    protected void itemWasClicked(FlatIconItem anItem)
     {
 
     }
@@ -121,7 +135,7 @@ public class FlatIconPanel extends ViewOwner {
     private class ItemView extends Label {
 
         // The item
-        private FlatIcon.ImageItem _item;
+        private FlatIconItem _item;
 
         // Whether item needs to have real image
         private boolean _active;
@@ -129,7 +143,7 @@ public class FlatIconPanel extends ViewOwner {
         /**
          * Constructor.
          */
-        public ItemView(FlatIcon.ImageItem anItem)
+        public ItemView(FlatIconItem anItem)
         {
             _item = anItem;
             setAlign(Pos.CENTER);
@@ -149,10 +163,13 @@ public class FlatIconPanel extends ViewOwner {
         {
             if (aValue==_active) return;
             _active = aValue;
-            System.out.println("Loading image: " + _item.getDescription());
+
+            // Load image
             new Thread(() -> {
                 Image img = _item.getSample();
-                ViewUtils.runLater(() -> setSampleImage(img));
+                if (img.isLoaded())
+                    ViewUtils.runLater(() -> setSampleImage(img));
+                else img.addLoadListener(() -> setSampleImage(_item.getSample()));
             }).start();
         }
 
