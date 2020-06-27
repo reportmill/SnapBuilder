@@ -54,6 +54,7 @@ public class GalleryPane extends ViewOwner {
         View viewsBox = getView("ViewsBox");
         Collapser viewCollapser = Collapser.createCollapserAndLabel(viewsBox, "Select View");
         viewCollapser.setGroupForName("GalleryPane");
+        viewCollapser.setFirstFocus(getView("SearchTextField"));
 
         // Get/configure SearchText: radius, prompt, image, animation
         TextField searchText = getView("SearchTextField", TextField.class);
@@ -74,6 +75,7 @@ public class GalleryPane extends ViewOwner {
         Collapser imageSearchCollapse = Collapser.createCollapserAndLabel(flatIconView, "Select Image");
         imageSearchCollapse.setCollapsed(true);
         imageSearchCollapse.setGroupForName("GalleryPane");
+        imageSearchCollapse.setFirstFocus(_flatIcon.getView("SearchTextField"));
     }
 
     @Override
