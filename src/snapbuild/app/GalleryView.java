@@ -9,9 +9,6 @@ public class GalleryView extends ParentView {
     // The GalleryPane
     GalleryPane       _galleryPane;
     
-    // The Height of a GalleryItem
-    double ITEM_HEIGHT = 60;
-
     /**
      * Creates new GalleryView.
      */
@@ -44,10 +41,7 @@ public class GalleryView extends ParentView {
      */
     protected double getPrefHeightImpl(double aW)
     {
-        int colCount = (int)aW/150;
-        int childCount = getChildrenManaged().length; if (colCount==0) return 0;
-        int rowCount = childCount/colCount + (childCount%colCount>0 ? 1 : 0);
-        return rowCount*ITEM_HEIGHT;
+        return ColView.getPrefHeight(this, aW);
     }
 
     /**
@@ -55,20 +49,7 @@ public class GalleryView extends ParentView {
      */
     protected void layoutImpl()
     {
-        double w = getWidth();
-        int colCount = (int)w/150;
-        double cw = Math.floor(w/colCount);
-
-        double x = 0, y = 0;
-        View children[] = getChildrenManaged();
-        for (int i=0,iMax=children.length;i<iMax;i++) { View child = children[i];
-            child.setBounds(x,y,cw,ITEM_HEIGHT);
-            x += cw;
-            if (x+cw>w) {
-                x = 0;
-                y += ITEM_HEIGHT;
-            }
-        }
+        ColView.layout(this, true);
     }
 
     /**
@@ -84,6 +65,8 @@ public class GalleryView extends ParentView {
             enableEvents(MousePress);
 
             setName(aCls.getSimpleName());
+            setPadding(10, 10, 10, 10);
+            setMinHeight(40);
 
             // Create item view, configure and add
             View view = null; try { view = aCls.newInstance(); } catch(Exception e) { }

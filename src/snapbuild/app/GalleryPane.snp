@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ColView PrefWidth="275" FillWidth="true">
+<ColView PrefWidth="275" GrowHeight="true" FillWidth="true">
   <font name="Arial" size="12" />
   <BoxView Name="ArrangeBox" FillWidth="true">
     <ColView Padding="3,7,5,7" FillWidth="true">

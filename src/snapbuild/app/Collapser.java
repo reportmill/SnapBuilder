@@ -258,11 +258,9 @@ public class Collapser {
         }
 
         // Add above given view
-        //else {
-            ViewHost host = aView.getHost();
-            int index = aView.indexInHost();
-            host.addGuest(label, index);
-        //}
+        ViewHost host = aView.getHost();
+        int index = aView.indexInHost();
+        host.addGuest(label, index);
 
         // Create/return collapser
         return new Collapser(aView, label);

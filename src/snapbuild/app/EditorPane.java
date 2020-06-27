@@ -50,7 +50,7 @@ public class EditorPane extends ViewOwner {
     XMLText          _xmlText = new XMLText(this);
     
     // Map of tools
-    Map <Class,ViewTool>  _tools = new HashMap();
+    Map <Class,ViewTool>  _tools = new HashMap<>();
 
     // The Editor listener
     PropChangeListener _editorLsnr = pce -> editorSelViewChange();
@@ -154,20 +154,22 @@ public class EditorPane extends ViewOwner {
      */
     public EditorPane newDocument()
     {
+        // Create ColView as root view
+        ColView col = new ColView();
+        col.setPadding(20,20,20,20);
+        col.setSpacing(4);
+
+        // Create default RowView as default child
         RowView row = new RowView();
         row.setPadding(4,4,4,4);
         row.setSpacing(4);
         row.setGrowWidth(true);
-        ColView col = new ColView();
-        col.setPadding(4,4,4,4);
-        col.setSpacing(4);
         col.addChild(row);
+
+        // Set ColView as Editor content, select row and return
         Editor editor = getEditor();
         editor.setContent(col);
         editor.setSelView(row);
-        //BoxView box0 = new BoxView(); box0.setPadding(4,4,4,4); box0.setSpacing(4); box0.setVertical(true);
-        //BoxView box1 = new BoxView(); box1.setPadding(4,4,4,4); box1.setSpacing(4); box1.setGrowWidth(true);
-        //box0.addGuest(box1); getEditor().setContent(box0); getEditor().setSelView(box1);
         return this;
     }
 
@@ -242,9 +244,9 @@ public class EditorPane extends ViewOwner {
         // Get extensions - if there is an existing extension, make sure it's first in the exts array
         String exts[] = { "snp" };
         if (getSourceURL()!=null && FilePathUtils.getExtension(getSourceURL().getPath())!=null) {
-            List ex = new ArrayList(Arrays.asList(exts));
+            List<String> ex = new ArrayList<>(Arrays.asList(exts));
             ex.add(0, "." + FilePathUtils.getExtension(getSourceURL().getPath()));
-            exts = (String[])ex.toArray(new String[ex.size()]);
+            exts = ex.toArray(new String[0]);
         }
 
         // Run save panel, set Document.Source to path and re-save (or just return if cancelled)
