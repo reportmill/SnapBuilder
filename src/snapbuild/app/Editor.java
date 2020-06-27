@@ -502,4 +502,27 @@ public class Editor extends ParentView {
 
     // Support for delayed saveUnderChanges()
     private Runnable _saveChangesRun, _scrShared = () -> saveUndoerChanges();
+
+    /**
+     * ContentBox.
+     */
+    private static class ContentBox extends BoxView {
+
+        @Override
+        protected void paintBack(Painter aPntr)
+        {
+            double w = getWidth();
+            double h = getHeight();
+            aPntr.setColor(Color.WHITE);
+            aPntr.fillRect(0, 0, w, h);
+
+            int GRID_SIZE = 15;
+            aPntr.setColor(Color.BLUE.blend(Color.CYAN, .5).blend(Color.WHITE, .95));
+            aPntr.setStroke(Stroke.Stroke1);
+            for (double x=.5; x<w; x+=GRID_SIZE)
+                aPntr.drawLine(x, .5, x, h-1);
+            for (double y=.5; y<h; y+=GRID_SIZE)
+                aPntr.drawLine(.5, y, w-1, y);
+        }
+    }
 }
