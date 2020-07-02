@@ -32,6 +32,25 @@ public class WelcomePanel extends ViewOwner {
     // The shared instance
     private static WelcomePanel  _shared;
 
+    // Constants
+    private static final String FILE_SYSTEM = "FileSystem";
+    private static final String FILE_SYSTEM_LOCAL = "FileSystemLocal";
+    private static final String FILE_SYSTEM_CLOUD = "FileSystemCloud";
+    private static final String USER_EMAIL = "UserEmail";
+
+    /**
+     * Constructor.
+     */
+    private WelcomePanel()
+    {
+        // Get FileSystem
+        String fileSys = Prefs.get().getString(FILE_SYSTEM);
+        _isCloud = fileSys!=null && fileSys.equals(FILE_SYSTEM_CLOUD);
+
+        // Get Email
+        _email = Prefs.get().getString(USER_EMAIL);
+    }
+
     /**
      * Returns wether file system is cloud.
      */
@@ -45,6 +64,10 @@ public class WelcomePanel extends ViewOwner {
         if (aValue==isCloud()) return;
         _isCloud = aValue;
         _recentFiles = null;
+
+        // Update Prefs
+        String fileSys = aValue ? FILE_SYSTEM_CLOUD : FILE_SYSTEM_LOCAL;
+        Prefs.get().setValue(FILE_SYSTEM, fileSys);
     }
 
     /**
@@ -60,6 +83,9 @@ public class WelcomePanel extends ViewOwner {
         if (aString==getCloudEmail()) return;
         _email = aString;
         _recentFiles = null;
+
+        // Update Prefs
+        Prefs.get().setValue(USER_EMAIL, _email);
     }
 
     /**

@@ -36,7 +36,7 @@ public class SamplesPane extends ViewOwner {
     private static String     _imgPaths[];
     
     // Constants
-    private static final String SAMPLES_ROOT = "http://reportmill.com/snaptea/SnapBuilderSamples/";
+    private static final String SAMPLES_ROOT = "https://reportmill.com/snaptea/SnapBuilderSamples/";
     private static final Effect SHADOW = new ShadowEffect();
     private static final Effect SHADOW_SEL = new ShadowEffect(10, Color.get("#038ec3"), 0, 0);
     

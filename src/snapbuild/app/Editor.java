@@ -64,6 +64,7 @@ public class Editor extends ParentView {
         _cbox.setFillWidth(true);
         _cbox.setFillHeight(true);
         _cbox.setFill(ViewUtils.getBackFill());
+        _cbox.setFill(BACK_FILL.blend(Color.WHITE, .8));
         _cbox.setBorder(new Color("#99"),1);
         _cbox.setEffect(new ShadowEffect());
         _cbox.setPickable(false);
