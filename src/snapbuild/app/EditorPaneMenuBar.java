@@ -168,8 +168,8 @@ public class EditorPaneMenuBar extends ViewOwner {
             epane.getInspector().setVisibleForName(InspectorPane.STYLE_PANE);
 
         // Handle SupportPageMenuItem, TutorialMenuItem
-        if (anEvent.equals("SupportPageMenuItem")) URLUtils.openURL("http://reportmill.com/support");
-        if (anEvent.equals("TutorialMenuItem")) URLUtils.openURL("http://reportmill.com/support/tutorial.pdf");
+        if (anEvent.equals("SupportPageMenuItem")) URLUtils.openURL("https://reportmill.com/support");
+        if (anEvent.equals("TutorialMenuItem")) URLUtils.openURL("https://reportmill.com/support/tutorial.pdf");
 
         // Handle Theme menus: StandardThemeMenuItem, LightThemeMenuItem, DarkThemeMenuItem, BlackAndWhiteThemeMenuItem
         if (anEvent.equals("StandardThemeMenuItem")) ViewTheme.setThemeForName("Standard");
