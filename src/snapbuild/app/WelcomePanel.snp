@@ -18,6 +18,7 @@
             <font name="Arial" size="11" />
           </TextField>
         </RowView>
+        <Button Name="SamplesButton" PrefWidth="120" PrefHeight="24" Padding="2" text="Show Samples" />
       </ColView>
     </TitleView>
     <RowView GrowWidth="true" Spacing="4">

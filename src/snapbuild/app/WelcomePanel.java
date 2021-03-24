@@ -203,6 +203,10 @@ public class WelcomePanel extends ViewOwner {
         if (anEvent.equals("CloudButton"))
             handleCloudButton();
 
+        // Handle SamplesButton
+        if (anEvent.equals("SamplesButton"))
+            openSamples();
+
         // Handle EmailText
         if (anEvent.equals("EmailText")) {
             String email = anEvent.getStringValue().trim().toLowerCase();
@@ -268,6 +272,17 @@ public class WelcomePanel extends ViewOwner {
         EditorPane epane = new EditorPane().newDocument();
         epane.setWindowVisible(true);
         hide();
+    }
+
+    /**
+     * Opens the Samples.
+     */
+    protected void openSamples()
+    {
+        EditorPane dpane = new EditorPane().newDocument();
+        dpane.setWindowVisible(true);
+        hide();
+        runLaterDelayed(300, () -> dpane.showSamples());
     }
 
     /**
