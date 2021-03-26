@@ -11,39 +11,45 @@ public class ViewTool <T extends View> extends ViewOwner {
     // The EditorPane
     EditorPane         _epane;
     
-/**
- * Returns the name.
- */
-public String getName()  { return getClass().getSimpleName().replace("Tool","") + " Props"; }
+    /**
+     * Returns the name.
+     */
+    public String getName()
+    {
+        Class cls = getClass();
+        String clsName = cls.getSimpleName();
+        return clsName.replace("Tool","") + " Props";
+    }
 
-/**
- * Returns the editor pane.
- */
-public EditorPane getEditorPane()  { return _epane; }
+    /**
+     * Returns the editor pane.
+     */
+    public EditorPane getEditorPane()  { return _epane; }
 
-/**
- * Returns the editor.
- */
-public Editor getEditor()  { return _epane.getEditor(); }
+    /**
+     * Returns the editor.
+     */
+    public Editor getEditor()  { return _epane.getEditor(); }
 
-/**
- * Returns the selected view.
- */
-public T getSelView()  { return (T)getEditor().getSelView(); }
+    /**
+     * Returns the selected view.
+     */
+    public T getSelView()  { return (T)getEditor().getSelView(); }
 
-/**
- * Create UI.
- */
-protected View createUI()
-{
-    View ui = super.createUI();
-    if(ui!=null) return ui;
-    
-    Label label = new Label(getName());
-    label.setAlign(Pos.CENTER);
-    label.setFont(Font.Arial14);
-    label.setTextFill(Color.LIGHTGRAY);
-    return label;
-}
+    /**
+     * Create UI.
+     */
+    protected View createUI()
+    {
+        // Subclasses should have UI file
+        if (getClass() != ViewTool.class)
+            return super.createUI();
 
+        // This root class just returns a label
+        Label label = new Label(getName());
+        label.setAlign(Pos.CENTER);
+        label.setFont(Font.Arial14);
+        label.setTextFill(Color.LIGHTGRAY);
+        return label;
+    }
 }
