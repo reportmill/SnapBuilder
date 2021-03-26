@@ -2,6 +2,8 @@ package snapbuild.app;
 import snap.gfx.GFXEnv;
 import snap.util.Prefs;
 import snap.util.SnapUtils;
+import snap.web.WebFile;
+import snap.web.WebURL;
 
 import java.io.File;
 
@@ -11,7 +13,7 @@ import java.io.File;
 public class App {
 
     // A file to open on launch
-    private static File  _openOnLaunchFile;
+    private static WebFile  _openOnLaunchFile;
 
     /**
      * Standard main implementation.
@@ -73,8 +75,9 @@ public class App {
                 else {
                     byte[] xmlBytes = xmlStr.getBytes();
                     System.out.println("Process XMLString: Write bytes: " + xmlFilename + ", size=" + xmlBytes.length);
-                    _openOnLaunchFile = new File('/' + xmlFilename);
-                    SnapUtils.writeBytes(xmlBytes, _openOnLaunchFile);
+                    WebURL webURL = WebURL.getURL('/' + xmlFilename);
+                    _openOnLaunchFile = webURL.createFile(false);
+                    _openOnLaunchFile.setBytes(xmlBytes);
                 }
             }
         }
