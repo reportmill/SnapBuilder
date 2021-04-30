@@ -581,7 +581,10 @@ public class EditorPane extends ViewOwner {
             View par = sview.getParent();
             if(sview!=getContent())
                 _editor.setSelView(par);
-            else beep();
+            else {
+                getEditor().getCopyPaster().copy(); // This is for me - quick top level copy
+                beep();
+            }
         }
 
         // Handle SaveMenuItem, SaveButton, SaveAsMenuItem, SaveAsPDFMenuItem, RevertMenuItem

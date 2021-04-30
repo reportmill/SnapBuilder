@@ -354,14 +354,15 @@ public class Editor extends ParentView {
         RoundRect rrect = new RoundRect(bnds.x-1, bnds.y-1, bnds.width+2, bnds.height+2, 3);
 
         // Paint selection for SelView
-        if (sview!=getContent()) {
-            aPntr.setColor(SEL_COLOR); aPntr.setStroke(SEL_STROKE);
+        if (sview != getContent()) {
+            aPntr.setColor(SEL_COLOR);
+            aPntr.setStroke(SEL_STROKE);
             aPntr.draw(rrect);
             aPntr.setStroke(Stroke.Stroke1);
         }
 
         // Repaint SelView so selection is behind
-        if (sview.getRotate()==0) {
+        if (sview.getRotate() == 0) {
             Point pnt = sview.getParent().localToParent(sview.getX(), sview.getY(), this);
             aPntr.translate(pnt.x, pnt.y);
             ViewUtils.paintAll(sview, aPntr);
@@ -386,7 +387,7 @@ public class Editor extends ParentView {
     public void undo()
     {
         // If undoer exists, do undo, select views and repaint
-        if (getUndoer()!=null && getUndoer().getUndoSetLast()!=null) {
+        if (getUndoer() != null && getUndoer().getUndoSetLast() != null) {
             UndoSet undoSet = getUndoer().undo();
             setUndoSelection(undoSet.getUndoSelection());
             repaint();
@@ -402,7 +403,7 @@ public class Editor extends ParentView {
     public void redo()
     {
         // If undoer exists, do undo, select views and repaint
-        if (getUndoer()!=null && getUndoer().getRedoSetLast()!=null) {
+        if (getUndoer() != null && getUndoer().getRedoSetLast() != null) {
             UndoSet redoSet = getUndoer().redo();
             setUndoSelection(redoSet.getRedoSelection());
             repaint();
@@ -419,7 +420,8 @@ public class Editor extends ParentView {
     {
         // Handle List <View>
         //if(aSel instanceof List) setSelectedViews((List)aSelection);
-        if (aSel instanceof View) setSelView((View)aSel);
+        if (aSel instanceof View)
+            setSelView((View)aSel);
     }
 
     /**
@@ -429,14 +431,14 @@ public class Editor extends ParentView {
     {
         // Get source and prop name (if not View, just return)
         Object src = aPC.getSource();
-        View view = (View)aView, sview = src instanceof View ? (View)src : null; if(view==null) return;
+        View view = (View)aView, sview = src instanceof View ? (View)src : null; if(view == null) return;
         String pname = aPC.getPropertyName();
 
         // Ignore properties: Showing, NeedsLayout
-        if (pname==Parent_Prop) return;
-        if (pname==Showing_Prop) return;
-        if (pname==NeedsLayout_Prop) return;
-        if (pname==ParentView.Child_Prop) {
+        if (pname == Parent_Prop) return;
+        if (pname == Showing_Prop) return;
+        if (pname == NeedsLayout_Prop) return;
+        if (pname == ParentView.Child_Prop) {
             if(!(view instanceof ViewHost))
                 return;
         }
@@ -447,7 +449,7 @@ public class Editor extends ParentView {
 
         // If undoer exists, set selected objects and add property change
         Undoer undoer = getUndoer();
-        if (undoer!=null) {
+        if (undoer != null) {
 
             // If no changes yet, set selected objects
             if(undoer.getActiveUndoSet().getChangeCount()==0)
@@ -461,7 +463,8 @@ public class Editor extends ParentView {
 
             // Set updator
             WebFile file = getSourceFile(false);
-            if(file!=null) file.setUpdater(undoer.hasUndos()? _updr : null);
+            if(file != null)
+                file.setUpdater(undoer.hasUndos() ? _updr : null);
         }
 
         // Forward DeepChanges to EditorPane. Should have add/removeDeepChagneLister methods for this.
@@ -479,10 +482,13 @@ public class Editor extends ParentView {
     {
         // If MouseIsDown, come back later
         _saveChangesRun = null;
-        if (ViewUtils.isMouseDown()) { saveUndoerChangesLater(); return; }
+        if (ViewUtils.isMouseDown()) {
+            saveUndoerChangesLater();
+            return;
+        }
 
         // Get undoer
-        Undoer undoer = getUndoer(); if(undoer==null || !undoer.isEnabled()) return;
+        Undoer undoer = getUndoer(); if(undoer == null || !undoer.isEnabled()) return;
 
         // Set undo selected-views
         //List views = getSelectedViewCount()>0? getSelectedViews() : getSuperSelectedViews();
@@ -497,7 +503,7 @@ public class Editor extends ParentView {
      */
     protected void saveUndoerChangesLater()
     {
-        if(_saveChangesRun==null)
+        if(_saveChangesRun == null)
             getEnv().runDelayed(_saveChangesRun = _scrShared, 400, true);
     }
 

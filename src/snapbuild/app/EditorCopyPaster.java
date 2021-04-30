@@ -1,8 +1,8 @@
 package snapbuild.app;
 import snap.gfx.Image;
+import snap.util.SnapUtils;
 import snap.util.XMLElement;
 import snap.view.*;
-import snap.web.MIMEType;
 
 /**
  * A CopyPaster implementation for Editor.
@@ -42,24 +42,31 @@ public class EditorCopyPaster {
      */
     public void copy()
     {
-        // If SelView is Content, just return
-        View view = _editor.getSelView();
-        if (view==_editor.getContent()) { ViewUtils.beep(); return; }
+        // Get SelView
+        View selView = _editor.getSelView();
 
         // Get clipboard
         Clipboard cb = Clipboard.get();
 
+        // If browser, just copy XML as text
+        if (SnapUtils.isTeaVM) {
+            XMLElement xml = new ViewArchiver().writeToXML(selView);
+            String xmlStr = xml.getString();
+            cb.addData(xmlStr);
+            return;
+        }
+
         // Get image and add to clipbard
         int scale = ViewUtils.isAltDown() ? 1 : 0;
-        Image image = ViewUtils.getImageForScale(view, scale);
+        Image image = ViewUtils.getImageForScale(selView, scale);
         cb.addData(image);
 
         // Get xml string for selected shapes and add to clipboard as SNAP_XML
-        XMLElement xml = new ViewArchiver().writeToXML(view);
+        XMLElement xml = new ViewArchiver().writeToXML(selView);
         String xmlStr = xml.getString();
         cb.addData(SNAP_XML_TYPE, xmlStr);
 
-        // Add xml as String (probably stupid)
+        // Add xml as String
         cb.addData(xmlStr);
     }
 
@@ -68,12 +75,27 @@ public class EditorCopyPaster {
      */
     public void paste()
     {
-        // Get Clipboard
+        // Get clipboard - if not loaded come back when it is
         Clipboard cb = Clipboard.get();
+        if (!cb.isLoaded()) {
+            cb.addLoadListener(() -> paste());
+            return;
+        }
+
+        // If browser, just try for XML string
+        if (SnapUtils.isTeaVM) {
+            if (cb.hasString()) {
+                String str = cb.getString();
+                byte[] bytes = str.getBytes();
+                View view = new ViewArchiver().getView(bytes);
+                _editor.addView(view);
+            }
+            return;
+        }
 
         // Handle SNAP_XML: Get bytes, unarchive view and add
         if (cb.hasData(SNAP_XML_TYPE)) {
-            byte bytes[] = cb.getDataBytes(SNAP_XML_TYPE);
+            byte[] bytes = cb.getDataBytes(SNAP_XML_TYPE);
             View view = new ViewArchiver().getView(bytes);
             _editor.addView(view);
         }
@@ -121,6 +143,7 @@ public class EditorCopyPaster {
      */
     public void selectAll()
     {
+        _editor.setSelView(_editor.getContent());
         ViewUtils.beep();
     }
 }

@@ -92,7 +92,8 @@ public class EditorSel {
     {
         if (_editor.isFocused() && isSelSpot() && !_hideSpot) {
             Shape shape = getViewIndexShape(getSelView(), getSelIndex());
-            aPntr.setPaint(Color.BLACK); aPntr.setStroke(Stroke.Stroke1);
+            aPntr.setPaint(Color.BLACK);
+            aPntr.setStroke(Stroke.Stroke1);
             aPntr.draw(shape);
         }
     }
