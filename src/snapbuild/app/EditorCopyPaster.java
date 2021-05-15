@@ -46,7 +46,7 @@ public class EditorCopyPaster {
         View selView = _editor.getSelView();
 
         // Get clipboard
-        Clipboard cb = Clipboard.get();
+        Clipboard cb = Clipboard.getCleared();
 
         // If browser, just copy XML as text
         if (SnapUtils.isTeaVM) {
