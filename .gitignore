@@ -4,6 +4,7 @@
 /out/
 /target/
 .gradle
+.idea
 
 .DS_Store
 Project.settings

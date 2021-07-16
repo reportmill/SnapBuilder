@@ -1,5 +1,5 @@
 package snapbuild.app;
-import rmdraw.editors.StylerPane;
+import snap.styler.StylerPane;
 import snap.gfx.*;
 import snap.view.*;
 

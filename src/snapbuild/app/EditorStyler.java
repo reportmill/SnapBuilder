@@ -1,5 +1,5 @@
 package snapbuild.app;
-import rmdraw.editors.Styler;
+import snap.styler.Styler;
 import snap.geom.HPos;
 import snap.geom.Pos;
 import snap.gfx.*;
