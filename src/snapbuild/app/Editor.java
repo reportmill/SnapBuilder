@@ -318,7 +318,7 @@ public class Editor extends ParentView {
      */
     protected void layoutImpl()
     {
-        BoxView.layout(this, _cbox, null, false, false);
+        BoxView.layout(this, _cbox, false, false);
     }
 
     /**
