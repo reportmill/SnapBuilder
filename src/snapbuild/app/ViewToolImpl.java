@@ -192,13 +192,15 @@ public class ViewToolImpl <T extends View> extends ViewTool <T> {
         if (anEvent.equals("MarginText")) selView.setMargin(Insets.get(anEvent.getStringValue()));
         if (anEvent.equals("MarginAdd1Button")) adjustMargin(selView, 1);
         if (anEvent.equals("MarginSub1Button")) adjustMargin(selView, -1);
-        if (anEvent.equals("MarginResetButton")) selView.setMargin(selView.getDefaultMargin());
+        if (anEvent.equals("MarginResetButton"))
+            selView.setMargin((Insets) selView.getPropDefault(View.Margin_Prop));
 
         // Handle PadText, PadAdd1Button, PadSub1Button, PadResetButton
         if (anEvent.equals("PadText")) selView.setPadding(Insets.get(anEvent.getStringValue()));
         if (anEvent.equals("PadAdd1Button")) adjustPadding(selView, 1);
         if (anEvent.equals("PadSub1Button")) adjustPadding(selView, -1);
-        if (anEvent.equals("PadResetButton")) selView.setPadding(selView.getDefaultPadding());
+        if (anEvent.equals("PadResetButton"))
+            selView.setPadding((Insets) selView.getPropDefault(View.Padding_Prop));
 
         // Handle SpaceText, SpaceAdd5Button, SpaceResetButton
         if (anEvent.equals("SpaceText")) selView.setSpacing(anEvent.getFloatValue());
