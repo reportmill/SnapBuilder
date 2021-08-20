@@ -143,12 +143,16 @@ public class EditorDragDropper {
         }
 
         // Get path and extension (set to empty string if null)
-        String ext = aFile.getExtension(); if (ext==null) return;
+        String ext = aFile.getExtension(); if (ext == null) return;
         ext = ext.toLowerCase();
 
         // If image file, add image view
         if (Image.canRead(ext))
             dropImageFile(aFile, aPoint);
+
+        // Handle .snp file
+        else if (ext.equals("snp"))
+            dropSnapFile(aFile);
     }
 
     /**
@@ -157,12 +161,27 @@ public class EditorDragDropper {
     private void dropImageFile(ClipboardData aFile, Point aPoint)
     {
         // Get image source and image
-        Object imgSrc = aFile.getSourceURL()!=null? aFile.getSourceURL() : aFile.getBytes();
+        Object imgSrc = aFile.getSourceURL() != null? aFile.getSourceURL() : aFile.getBytes();
         Image image = Image.get(imgSrc);
 
         // Create ImageView and add at point
         ImageView iview = new ImageView(image);
         _editor.addViewAtPoint(iview, aPoint);
+    }
+
+    /**
+     * Handle drop of .snp UI file on the editor.
+     */
+    private void dropSnapFile(ClipboardData aFile)
+    {
+        // Get EditorPane
+        EditorPane editorPane = EditorPane.getEditorPane(_editor);
+        if (editorPane == null)
+            return;
+
+        // Get file source and open
+        Object fileSrc = aFile.getSourceURL() != null? aFile.getSourceURL() : aFile.getBytes();
+        editorPane.open(fileSrc);
     }
 
     /**

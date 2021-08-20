@@ -831,6 +831,15 @@ public class EditorPane extends ViewOwner {
     public void quit()  { App.quitApp(); }
 
     /**
+     * Returns the EditorPane for given editor.
+     */
+    public static EditorPane getEditorPane(Editor anEditor)
+    {
+        ViewOwner owner = anEditor.getOwner();
+        return owner instanceof EditorPane ? (EditorPane) owner : null;
+    }
+
+    /**
      * A resolver for Views.
      */
     public class ViewTreeResolver extends TreeResolver <View> {
