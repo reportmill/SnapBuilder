@@ -35,3 +35,19 @@ dependencies {
 }
 
 mainClassName = 'snapbuild.app.App'
+
+/**
+ * Build executable jar SnapBuilderAll.jar.
+ *
+ * We could use the standard jar task just by using jar { ... } and deleting 'baseName' and 'with jar' lines.
+ */
+task buildExecJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'snapbuild.app.App'
+    }
+    baseName = 'SnapBuilderAll'
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    with jar
+}
