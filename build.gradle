@@ -45,7 +45,7 @@ task buildExecJar(type: Jar) {
     manifest {
         attributes 'Main-Class': 'snapbuild.app.App'
     }
-    baseName = 'SnapBuilderAll'
+    archiveBaseName = 'SnapBuilderAll'
     from {
         configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
     }
