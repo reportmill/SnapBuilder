@@ -5,6 +5,8 @@
 /target/
 .gradle
 .idea
+/jdeploy/
+/jdeploy-publish/
 
 .DS_Store
 Project.settings

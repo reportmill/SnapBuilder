@@ -5,6 +5,9 @@ plugins {
     id 'idea'
 }
 
+group 'com.reportmill'
+version '1.0.0'
+
 sourceSets.main.java.srcDirs = ['src']
 sourceSets.main.resources.srcDirs = ['src']
 
@@ -47,7 +50,7 @@ task buildExecJar(type: Jar) {
     }
     archiveBaseName = 'SnapBuilderAll'
     from {
-        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
     with jar
 }
