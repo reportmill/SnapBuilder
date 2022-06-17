@@ -1,6 +1,10 @@
 package snapbuild.app;
 import snap.geom.*;
 import snap.gfx.*;
+import snap.props.DeepChangeListener;
+import snap.props.PropChange;
+import snap.props.UndoSet;
+import snap.props.Undoer;
 import snap.util.*;
 import snap.view.*;
 import snap.web.*;
@@ -20,7 +24,7 @@ public class Editor extends ParentView {
     private BoxView  _cbox;
 
     // The undoer
-    private Undoer  _undoer = new Undoer();
+    private Undoer _undoer = new Undoer();
 
     // The editor selection
     private EditorSel _sel = new EditorSel(this);
@@ -35,7 +39,7 @@ public class Editor extends ParentView {
     private EditorDragDropper  _dragDropper;
 
     // The DeepChangeListener
-    DeepChangeListener  _contentDeepChangeLsnr = (src,pce) -> contentDidDeepChange(src,pce);
+    DeepChangeListener _contentDeepChangeLsnr = (src, pce) -> contentDidDeepChange(src,pce);
     
     // Constants for properties
     public static final String SelView_Prop = "SelView";

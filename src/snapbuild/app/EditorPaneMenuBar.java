@@ -7,7 +7,7 @@ import snap.text.TextEditor;
 import snap.util.ClassUtils;
 import snap.util.Prefs;
 import snap.util.URLUtils;
-import snap.util.Undoer;
+import snap.props.Undoer;
 import snap.view.MenuBar;
 import snap.view.ViewEvent;
 import snap.view.ViewOwner;

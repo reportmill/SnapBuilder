@@ -1,6 +1,8 @@
 package snapbuild.app;
 import java.util.*;
 import snap.gfx.*;
+import snap.props.PropChangeListener;
+import snap.props.Undoer;
 import snap.util.*;
 import snap.view.*;
 import snap.viewx.*;
