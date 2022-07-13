@@ -4,12 +4,12 @@ import snap.geom.Pos;
 import snap.gfx.Color;
 import snap.gfx.Font;
 import snap.gfx.Image;
-import snap.util.JSONNode;
+import snap.util.JSValue;
+import snap.util.JSObject;
 import snap.util.SnapUtils;
 import snap.view.TextArea;
 import snap.view.ViewUtils;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -19,7 +19,7 @@ import java.util.Map;
 public class FlatIconItem {
 
     // The image item node
-    private JSONNode _itemNode;
+    private JSObject  _itemNode;
 
     // The Id
     private int  _id;
@@ -39,27 +39,28 @@ public class FlatIconItem {
     /**
      * Constructor.
      */
-    public FlatIconItem(JSONNode aNode)
+    public FlatIconItem(JSObject aNode)
     {
         _itemNode = aNode;
 
         // Get Id
-        String idStr = _itemNode.getNodeString("id");
+        String idStr = _itemNode.getStringValue("id");
         _id = SnapUtils.intValue(idStr);
 
         // Get description
-        _desc = _itemNode.getNodeString("description");
+        _desc = _itemNode.getStringValue("description");
 
         // Get images.png node and pngCount
-        JSONNode imagesNode = _itemNode.getNode("images");
-        JSONNode pngNode = imagesNode.getNode("png");
-        int pngCount = pngNode.getNodeCount();
+        JSObject imagesNode = (JSObject) _itemNode.getValue("images");
+        JSObject pngNode = imagesNode; //(JSObject) imagesNode.getValue("png");
+        Map<String, JSValue> keyValues = pngNode.getKeyValues();
 
         // Iterate over PNGs and add to PNG_URLs
-        for (int i=0; i<pngCount; i++) {
-            JSONNode sizeNode = pngNode.getNode(i);
-            int size = SnapUtils.intValue(sizeNode.getKey());
-            String urls = sizeNode.getString();
+        for (Map.Entry<String, JSValue> entry : keyValues.entrySet()) {
+            String key = entry.getKey();
+            JSValue sizeNode = entry.getValue();
+            int size = SnapUtils.intValue(key);
+            String urls = sizeNode.getValueAsString();
             _pngURLs.put(size, urls);
         }
     }

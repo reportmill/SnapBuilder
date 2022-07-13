@@ -79,7 +79,8 @@ public class FlatIconPanel extends ViewOwner {
         new Thread(() -> {
             System.out.println("Image search start: " + aString);
             FlatIconItem[] items = FlatIcon.SHARED.getImageItemsForSearchString(aString);
-            System.out.println("Image search completed: " + items.length + " items found");
+            int itemCount = items != null ? items.length : -1;
+            System.out.println("Image search completed: " + itemCount + " items found");
             runLater(() -> imageSearchGotItems(items));
         }).start();
     }

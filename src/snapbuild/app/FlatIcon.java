@@ -1,7 +1,8 @@
 package snapbuild.app;
 
 import snap.gfx.Image;
-import snap.util.JSONNode;
+import snap.util.JSArray;
+import snap.util.JSObject;
 import snap.util.SnapUtils;
 import snap.web.*;
 
@@ -14,13 +15,13 @@ import java.util.stream.Collectors;
  */
 public class FlatIcon {
 
-    // The Email for this DropBox
+    // The access token for FlatIcon api: https://api.flaticon.com
     private String  _token;
 
-    // Constants for DropBox endpoints
-    private static final String AUTHENTICATION = "https://api.flaticon.com/v2/app/authentication";
-    private static final String GET_ICONS = "https://api.flaticon.com/v2/search/icons";
-    private static final String DOWNLOAD = "https://api.flaticon.com/v2/item/icon/download";
+    // Constants for FlatIcon api endpoints: https://api.flaticon.com/v3/docs/index.html#flaticon-api
+    private static final String AUTHENTICATION = "https://api.flaticon.com/v3/app/authentication";
+    private static final String GET_ICONS = "https://api.flaticon.com/v3/search/icons";
+    private static final String DOWNLOAD = "https://api.flaticon.com/v3/item/icon/download";
 
     // Shared instance
     public static FlatIcon SHARED = new FlatIcon();
@@ -38,7 +39,7 @@ public class FlatIcon {
     public String getToken()
     {
         // If already set, just return
-        if (_token!=null) return _token;
+        if (_token != null) return _token;
 
         // Create Request
         HTTPRequest req = new HTTPRequest(AUTHENTICATION);
@@ -52,18 +53,18 @@ public class FlatIcon {
         HTTPResponse resp;
         try { resp = req.getResponse(); } //getResponseHTTP(req, aResp);
         catch(Exception e) { throw new RuntimeException(e); }
-        if (resp==null || resp.getCode()!=HTTPResponse.OK)
+        if (resp == null || resp.getCode() != HTTPResponse.OK)
             return null;
 
         // Get JSON response
-        JSONNode json = resp.getJSON();
-        if (json==null)
+        JSObject json = (JSObject) resp.getJSON();
+        if (json == null)
             return null;
 
         // Get data
-        JSONNode dataNode = json.getNode("data");
-        String token = dataNode.getNodeString("token");
-        String expires = dataNode.getNodeString("expires");
+        JSObject dataNode = (JSObject) json.getValue("data");
+        String token = dataNode.getStringValue("token");
+        String expires = dataNode.getStringValue("expires");
 
         System.out.println("Authorize OK, expires: " + expires);
 
@@ -75,7 +76,7 @@ public class FlatIcon {
      */
     public FlatIconItem[] getImageItemsForSearchString(String aSearchString)
     {
-        //
+        // Get search string with escaped spaces
         String searchString = aSearchString.replace(" ", "%20");
 
         // Create Request
@@ -87,28 +88,28 @@ public class FlatIcon {
         HTTPResponse resp;
         try { resp = req.getResponse(); } //getResponseHTTP(req, aResp);
         catch(Exception e) { throw new RuntimeException(e); }
-        if (resp==null || resp.getCode()!=HTTPResponse.OK)
+        if (resp == null || resp.getCode() != HTTPResponse.OK)
             return null;
 
         // Get JSON response
-        JSONNode json = resp.getJSON();
-        if (json==null)
+        JSObject json = (JSObject) resp.getJSON();
+        if (json == null)
             return null;
 
-        //
-        JSONNode metaNode = json.getNode("metadata");
-        int count = SnapUtils.intValue(metaNode.getNodeValue("count"));
-        int total = SnapUtils.intValue(metaNode.getNodeValue("total"));
+        // Get metadata, count, total
+        JSObject metaNode = (JSObject) json.getValue("metadata");
+        int count = SnapUtils.intValue(metaNode.getNativeValue("count"));
+        int total = SnapUtils.intValue(metaNode.getNativeValue("total"));
         System.out.println("Found " + count + " of " + total);
 
-        JSONNode dataNode = json.getNode("data");
+        // Get data
+        JSArray dataArrayJS = (JSArray) json.getValue("data");
 
         List <FlatIconItem> items = new ArrayList<>();
-        for (int i=0; i<count; i++) {
-            JSONNode imageNode = dataNode.getNode(i);
+        for (int i = 0; i < count; i++) {
+            JSObject imageNode = (JSObject) dataArrayJS.getValue(i);
             FlatIconItem imgItem = new FlatIconItem(imageNode);
             items.add(imgItem);
-
         }
 
         return items.toArray(new FlatIconItem[0]);
@@ -128,7 +129,7 @@ public class FlatIcon {
         HTTPResponse resp;
         try { resp = req.getResponse(); } //getResponseHTTP(req, aResp);
         catch(Exception e) { throw new RuntimeException(e); }
-        if (resp==null || resp.getCode()!=HTTPResponse.OK) {
+        if (resp == null || resp.getCode() != HTTPResponse.OK) {
             System.out.println("Get image failed: " + resp.getMessage());
             return null;
         }
@@ -144,9 +145,9 @@ public class FlatIcon {
     private static void addParamsToRequestAsJSON(HTTPRequest aReq, boolean asHeader, String ... thePairs)
     {
         // Create JSON Request and add pairs
-        JSONNode jsonReq = new JSONNode();
-        for (int i=0; i<thePairs.length; i+=2)
-            jsonReq.addKeyValue(thePairs[i], thePairs[i+1]);
+        JSObject jsonReq = new JSObject();
+        for (int i = 0; i < thePairs.length; i += 2)
+            jsonReq.setNativeValue(thePairs[i], thePairs[i + 1]);
 
         // Add as header
         if (asHeader) {
