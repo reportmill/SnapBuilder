@@ -350,8 +350,9 @@ public class WelcomePanel extends ViewOwner {
     {
         String email = getCloudEmail();
         if (email==null || email.length()==0) email = "guest@guest";
-        List<WebFile> files = DropBox.getSiteForEmail(email).getRootDir().getFiles();
-        _recentFiles = files;
+        WebFile dropBoxDir = DropBox.getSiteForEmail(email).getRootDir();
+        WebFile[] files = dropBoxDir.getFiles();
+        _recentFiles = Arrays.asList(files);
         runLater(() -> recentFilesLoaded());
     }
 
