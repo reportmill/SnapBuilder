@@ -150,7 +150,7 @@ public class XMLText extends ViewOwner {
         // Create XMLText TextView
         _xmlText = new TextView();
         _xmlText.setFont(Font.Arial14.deriveFont(15));
-        _xmlText.setRich(true);
+        _xmlText.setRichText(true);
         _xmlText.getTextArea().addPropChangeListener(pc -> xmlTextSelDidChange(), TextView.Selection_Prop);
         return _xmlText;
     }
