@@ -1,6 +1,7 @@
 package snapbuild.app;
 import snap.gfx.*;
 import snap.parse.*;
+import snap.text.TextDoc;
 import snap.text.TextStyle;
 import snap.util.SnapUtils;
 import snap.view.*;
@@ -207,7 +208,8 @@ public class XMLText extends ViewOwner {
      */
     static void setColor(Color aColor, int aStart, int aEnd)
     {
-        _xmlText.getTextBox().setStyleValue(TextStyle.COLOR_KEY, aColor, aStart, aEnd);
+        TextDoc textDoc = _xmlText.getTextDoc();
+        textDoc.setStyleValue(TextStyle.COLOR_KEY, aColor, aStart, aEnd);
     }
 
     /**
