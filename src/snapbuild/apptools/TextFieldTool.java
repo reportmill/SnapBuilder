@@ -17,7 +17,7 @@ protected void resetUI()
 
     // Update PromptText, RoundingSpinner, ColCountSpinner
     setViewValue("PromptText", selView.getPromptText());
-    setViewValue("RoundingSpinner", selView.getRadius());
+    setViewValue("RoundingSpinner", selView.getBorderRadius());
     setViewValue("ColCountSpinner", selView.getColCount());
 }
 
@@ -31,7 +31,7 @@ protected void respondUI(ViewEvent anEvent)
 
     // Handle PromptText, RoundingSpinner, ColCountSpinner
     if(anEvent.equals("PromptText")) selView.setPromptText(anEvent.getStringValue());
-    if(anEvent.equals("RoundingSpinner")) selView.setRadius(anEvent.getFloatValue());
+    if(anEvent.equals("RoundingSpinner")) selView.setBorderRadius(anEvent.getFloatValue());
     if(anEvent.equals("ColCountSpinner")) selView.setColCount(anEvent.getIntValue());
 }
 
