@@ -31,7 +31,7 @@ public class FlatIconPanel extends ViewOwner {
     {
         // Get/configure SearchText: radius, prompt, image, animation
         TextField searchText = getView("SearchTextField", TextField.class);
-        searchText.setRadius(10);
+        searchText.setBorderRadius(10);
         searchText.setPromptText("Search");
         searchText.getLabel().setImage(Image.get(TextPane.class, "Find.png"));
         TextField.setBackLabelAlignAnimatedOnFocused(searchText, true);
