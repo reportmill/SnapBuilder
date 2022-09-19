@@ -4,7 +4,7 @@
     <Label text="Search">
       <font name="Arial" size="14" />
     </Label>
-    <TextField Name="SearchTextField" GrowWidth="true" Radius="10" />
+    <TextField Name="SearchTextField" GrowWidth="true" BorderRadius="10" />
   </RowView>
   <ScrollView Name="ScrollView" MinWidth="120" MinHeight="60" GrowHeight="true" />
   <Label Name="FlatIconLabel" Align="CENTER" text="Icon search by FlatIcon.com">
