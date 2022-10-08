@@ -231,7 +231,7 @@ public class XMLText extends ViewOwner {
         }
 
         /** Override to return XMLTokenizer. */
-        protected Tokenizer createTokenizerImpl()
+        protected Tokenizer createTokenizer()
         {
             return new snap.util.XMLParser.XMLTokenizer();
         }
