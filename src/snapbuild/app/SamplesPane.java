@@ -1,6 +1,5 @@
 package snapbuild.app;
 import java.util.*;
-
 import snap.geom.Pos;
 import snap.geom.Size;
 import snap.geom.VPos;
@@ -37,6 +36,9 @@ public class SamplesPane extends ViewOwner {
 
     // Constants
     private static final String SAMPLES_ROOT = "https://reportmill.com/snaptea/SnapBuilderSamples/";
+    private static final String SAMPLES_EXT = ".snp";
+    private static final String SAMPLES_LABEL = "Select a UI file:";
+    private static final Size DOC_SIZE = new Size(102, 102);
     private static final Effect SHADOW = new ShadowEffect();
     private static final Effect SHADOW_SEL = new ShadowEffect(10, Color.get("#038ec3"), 0, 0);
 
@@ -95,7 +97,7 @@ public class SamplesPane extends ViewOwner {
         scroll.setShowVBar(true);
 
         // Create "Select template" label
-        Label selectLabel = new Label("Select a UI file:");
+        Label selectLabel = new Label(SAMPLES_LABEL);
         selectLabel.setFont(Font.Arial16.deriveFont(20).getBold());
 
         // Create HeaderRow to hold SelectLabel
@@ -198,32 +200,9 @@ public class SamplesPane extends ViewOwner {
                 colView.addChild(rowView);
             }
 
-            // Create ImageViewX for sample
-            ImageView iview = new ImageView();
-            iview.setPrefSize(getDocSize(i));
-            iview.setFill(Color.WHITE);
-            iview.setName("ImageView" + i);
-            iview.setEffect(i == 0 ? SHADOW_SEL : SHADOW);
-
-            // Create label for sample
-            Label label = new Label(name + ".snp");
-            label.setFont(Font.Arial13);
-            label.setPadding(3, 4, 3, 4);
-            label.setLeanY(VPos.BOTTOM);
-            if (i == 0) {
-                label.setFill(Color.BLUE);
-                label.setTextFill(Color.WHITE);
-            }
-
-            // Create/add ItemBox for Sample and add ImageView + Label
-            ColView ibox = new ColView();
-            ibox.setPrefSize(175, 175);
-            ibox.setAlign(Pos.CENTER);
-            ibox.setPadding(0, 0, 8, 0);
-            ibox.setName("ItemBox" + i);
-            ibox.addEventHandler(e -> itemBoxWasPressed(ibox, e), MousePress);
-            ibox.setChildren(iview, label);
-            rowView.addChild(ibox);
+            // Create/add new ItemBox for index
+            View itemBox = createItemBox(i);
+            rowView.addChild(itemBox);
         }
 
         // Make sure all row views and image boxes are owned by ui
@@ -232,6 +211,53 @@ public class SamplesPane extends ViewOwner {
 
         // Load images
         loadImagesInBackground();
+    }
+
+    /**
+     * Creates an item box for given index.
+     */
+    private ColView createItemBox(int anIndex)
+    {
+        // Create ImageViewX for sample
+        ImageView imageView = new ImageView();
+        imageView.setPrefSize(DOC_SIZE);
+        imageView.setFill(Color.WHITE);
+        imageView.setName("ImageView" + anIndex);
+
+        // Create label for sample
+        String name = getDocName(anIndex);
+        Label label = new Label(name + SAMPLES_EXT);
+        label.setFont(Font.Arial13);
+        label.setPadding(3, 4, 3, 4);
+        label.setLeanY(VPos.BOTTOM);
+
+        // Create/add ItemBox for Sample and add ImageView + Label
+        ColView itemBox = new ColView();
+        itemBox.setPrefSize(175, 175);
+        itemBox.setAlign(Pos.CENTER);
+        itemBox.setPadding(0, 0, 8, 0);
+        itemBox.setName("ItemBox" + anIndex);
+        itemBox.addEventHandler(e -> itemBoxWasPressed(itemBox, e), MousePress);
+        itemBox.setChildren(imageView, label);
+        setItemBoxSelected(itemBox, anIndex == 0);
+
+        // Return
+        return itemBox;
+    }
+
+    /**
+     * Configures an item box.
+     */
+    private void setItemBoxSelected(ColView itemBox, boolean isSelected)
+    {
+        // Set ImageView.Effect
+        ImageView imageView = (ImageView) itemBox.getChild(0);
+        imageView.setEffect(isSelected ? SHADOW_SEL : SHADOW);
+
+        // Set Label Fill and TextFill
+        Label oldLabel = (Label) itemBox.getChild(1);
+        oldLabel.setFill(isSelected ? Color.BLUE : null);
+        oldLabel.setTextFill(isSelected ? Color.WHITE : null);
     }
 
     /**
@@ -245,16 +271,10 @@ public class SamplesPane extends ViewOwner {
 
         // Set attributes of current selection back to normal
         ColView oldItemBox = getView("ItemBox" + _selIndex, ColView.class);
-        oldItemBox.getChild(0).setEffect(SHADOW);
-        Label oldLabel = (Label) oldItemBox.getChild(1);
-        oldLabel.setFill(null);
-        oldLabel.setTextFill(null);
+        setItemBoxSelected(oldItemBox, false);
 
         // Set attributes of new selection to selected effect
-        anItemBox.getChild(0).setEffect(SHADOW_SEL);
-        Label newLabel = (Label) anItemBox.getChild(1);
-        newLabel.setFill(Color.BLUE);
-        newLabel.setTextFill(Color.WHITE);
+        setItemBoxSelected(anItemBox, true);
 
         // Set new index
         _selIndex = index;
@@ -269,11 +289,6 @@ public class SamplesPane extends ViewOwner {
     private static int getDocCount()  { return _docNames.length; }
 
     /**
-     * Returns the doc names.
-     */
-    private static String[] getDocNames()  { return _docNames; }
-
-    /**
      * Returns the doc name at index.
      */
     private static String getDocName(int anIndex)  { return _docNames[anIndex]; }
@@ -285,7 +300,7 @@ public class SamplesPane extends ViewOwner {
     {
         // Get document name, URL string and URL
         String name = getDocName(anIndex);
-        String urls = SAMPLES_ROOT + name + '/' + name + ".snp";
+        String urls = SAMPLES_ROOT + name + '/' + name + SAMPLES_EXT;
         WebURL url = WebURL.getURL(urls);
 
         // Get bytes (complain if not found)
@@ -320,14 +335,6 @@ public class SamplesPane extends ViewOwner {
         img = _docImages[anIndex] = Image.get(imgURL);
         img.getNative();
         return img;
-    }
-
-    /**
-     * Returns size of doc at given index.
-     */
-    private static Size getDocSize(int anIndex)
-    {
-        return new Size(102, 102);
     }
 
     /**
