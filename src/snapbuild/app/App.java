@@ -21,7 +21,8 @@ public class App {
     public static void main(String args[])
     {
         // Set App Prefs class
-        Prefs.setPrefsDefault(Prefs.getPrefs(App.class));
+        Prefs prefs = Prefs.getPrefsForName("SnapBuilder");
+        Prefs.setPrefsDefault(prefs);
 
         // Install Exception reporter
         //ExceptionReporter er = new ExceptionReporter("SnapStudio"); er.setToAddress("support@reportmill.com");
