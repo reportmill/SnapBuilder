@@ -120,7 +120,7 @@ public class EditorPaneMenuBar extends ViewOwner {
         // Edit -> CheckSpellingAsYouTypeMenuItem
         if (anEvent.equals("CheckSpellingAsYouTypeMenuItem")) {
             TextEditor.isSpellChecking = anEvent.getBooleanValue();
-            Prefs.get().setValue("SpellChecking", TextEditor.isSpellChecking);
+            Prefs.getDefaultPrefs().setValue("SpellChecking", TextEditor.isSpellChecking);
             editor.repaint();
         }
 

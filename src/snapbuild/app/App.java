@@ -1,11 +1,8 @@
 package snapbuild.app;
 import snap.gfx.GFXEnv;
 import snap.util.Prefs;
-import snap.util.SnapUtils;
 import snap.web.WebFile;
 import snap.web.WebURL;
-
-import java.io.File;
 
 /**
  * A custom class.
@@ -22,7 +19,7 @@ public class App {
     {
         // Set App Prefs class
         Prefs prefs = Prefs.getPrefsForName("SnapBuilder");
-        Prefs.setPrefsDefault(prefs);
+        Prefs.setDefaultPrefs(prefs);
 
         // Install Exception reporter
         //ExceptionReporter er = new ExceptionReporter("SnapStudio"); er.setToAddress("support@reportmill.com");
@@ -90,7 +87,7 @@ public class App {
     public static void quitApp()
     {
         //if(AppPane.getOpenAppPane()!=null) AppPane.getOpenAppPane().hide();
-        Prefs.get().flush();
+        Prefs.getDefaultPrefs().flush();
         GFXEnv.getEnv().exit(0);
     }
 }

@@ -45,11 +45,11 @@ public class WelcomePanel extends ViewOwner {
     private WelcomePanel()
     {
         // Get FileSystem
-        String fileSys = Prefs.get().getString(FILE_SYSTEM);
+        String fileSys = Prefs.getDefaultPrefs().getString(FILE_SYSTEM);
         _isCloud = fileSys!=null && fileSys.equals(FILE_SYSTEM_CLOUD);
 
         // Get Email
-        _email = Prefs.get().getString(USER_EMAIL);
+        _email = Prefs.getDefaultPrefs().getString(USER_EMAIL);
     }
 
     /**
@@ -68,7 +68,7 @@ public class WelcomePanel extends ViewOwner {
 
         // Update Prefs
         String fileSys = aValue ? FILE_SYSTEM_CLOUD : FILE_SYSTEM_LOCAL;
-        Prefs.get().setValue(FILE_SYSTEM, fileSys);
+        Prefs.getDefaultPrefs().setValue(FILE_SYSTEM, fileSys);
     }
 
     /**
@@ -89,7 +89,7 @@ public class WelcomePanel extends ViewOwner {
         _recentFiles = null;
 
         // Update Prefs
-        Prefs.get().setValue(USER_EMAIL, _email);
+        Prefs.getDefaultPrefs().setValue(USER_EMAIL, _email);
     }
 
     /**
@@ -121,7 +121,7 @@ public class WelcomePanel extends ViewOwner {
 
         // Write current list of sites, flush prefs and mayb exit
         //writeSites();         // Write data file for open/selected sites
-        Prefs.get().flush();    // Flush preferences
+        Prefs.getDefaultPrefs().flush();    // Flush preferences
         if(_exit) quitApp(); // If exit requested, quit app
     }
 
@@ -377,7 +377,7 @@ public class WelcomePanel extends ViewOwner {
     /**
      * Clears recent documents from preferences.
      */
-    public void clearRecentFiles()  { Prefs.get().getChild("RecentDocuments").clear(); }
+    public void clearRecentFiles()  { Prefs.getDefaultPrefs().getChild("RecentDocuments").clear(); }
 
     /** Loads the WelcomePaneAnim.snp DocView. */
     DocView getAnimView()
