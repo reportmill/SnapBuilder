@@ -313,7 +313,7 @@ public class SamplesPane extends ViewOwner {
         // Return document
         ViewArchiver arch = new SamplesViewArchiver();
         arch.setSourceURL(url);
-        View doc = arch.getView(bytes);
+        View doc = arch.getViewForBytes(bytes);
         return doc;
     }
 

@@ -216,12 +216,16 @@ public class EditorPane extends ViewOwner {
     protected ParentView getParentView(Object aSource)
     {
         // If document source is null, just return null
-        if(aSource==null || aSource instanceof ParentView) return (ParentView)aSource;
+        if(aSource == null || aSource instanceof ParentView)
+            return (ParentView) aSource;
+
+        // Get archiver and clear UseRealClass
+        ViewArchiver archiver = new ViewArchiver();
+        ViewArchiver.setUseRealClass(false);
 
         // Load document
-        ViewArchiver archiver = new ViewArchiver(); ViewArchiver.setUseRealClass(false);
         ParentView view = null;
-        try { view = archiver.getParentView(aSource); }
+        try { view = (ParentView) archiver.getViewForSource(aSource); }
 
         // If there was an XML parse error loading aSource, show error dialog
         catch (Exception e) {
@@ -231,7 +235,11 @@ public class EditorPane extends ViewOwner {
                 DialogBox dbox = new DialogBox("Error Reading File"); dbox.setErrorMessage(msg);
                 dbox.showMessageDialog(getUI()); });
         }
+
+        // Restore UseRealClass
         ViewArchiver.setUseRealClass(true);
+
+        // Return
         return view;
     }
 

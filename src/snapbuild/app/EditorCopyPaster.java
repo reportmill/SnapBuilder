@@ -87,7 +87,7 @@ public class EditorCopyPaster {
             if (cb.hasString()) {
                 String str = cb.getString();
                 byte[] bytes = str.getBytes();
-                View view = new ViewArchiver().getView(bytes);
+                View view = new ViewArchiver().getViewForBytes(bytes);
                 _editor.addView(view);
             }
             return;
@@ -96,7 +96,7 @@ public class EditorCopyPaster {
         // Handle SNAP_XML: Get bytes, unarchive view and add
         if (cb.hasData(SNAP_XML_TYPE)) {
             byte[] bytes = cb.getDataBytes(SNAP_XML_TYPE);
-            View view = new ViewArchiver().getView(bytes);
+            View view = new ViewArchiver().getViewForBytes(bytes);
             _editor.addView(view);
         }
 
