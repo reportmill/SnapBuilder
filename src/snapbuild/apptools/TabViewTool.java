@@ -6,48 +6,51 @@ import snapbuild.app.ViewTool;
 /**
  * A class to manage UI for editing TabView.
  */
-public class TabViewTool <T extends TabView> extends ViewTool <T> {
+public class TabViewTool<T extends TabView> extends ViewTool<T> {
 
-/**
- * Reset UI.
- */
-protected void resetUI()
-{
-    // Get selected view
-    T selView = getSelView();
-    int tc = selView.getTabCount();
-    
-    // Get names
-    String names[] = new String[tc]; for(int i=0;i<tc;i++) names[i] = selView.getTabTitle(i);
+    /**
+     * Reset UI.
+     */
+    protected void resetUI()
+    {
+        // Get selected view
+        T tabView = getSelView();
+        int tabCount = tabView.getTabCount();
 
-    // Update TabList
-    setViewItems("TabList", names);
-    setViewSelIndex("TabList", selView.getSelIndex());
-}
+        // Get names
+        String[] names = new String[tabCount];
+        for (int i = 0; i < tabCount; i++)
+            names[i] = tabView.getTab(i).getTitle();
 
-/**
- * Respond to UI.
- */
-protected void respondUI(ViewEvent anEvent)
-{
-    // Get selected view
-    T selView = getSelView();
-    
-    // Handle AddButton
-    if(anEvent.equals("AddButton")) {
-        String val = DialogBox.showInputDialog(getEditor(), "Add Tab", "Enter Tab Title:", "Tab"); if(val==null) return;
-        selView.addTab(val, new Label("Tab Content"));
-    }
-    
-    // Handle RemoveButton
-    if(anEvent.equals("RemoveButton")) {
-        int ind = anEvent.getSelIndex();
-        selView.removeTab(ind);
+        // Update TabList
+        setViewItems("TabList", names);
+        setViewSelIndex("TabList", tabView.getSelIndex());
     }
 
-    // Handle TabList
-    if(anEvent.equals("TabList"))
-        selView.setSelIndex(anEvent.getSelIndex());
-}
+    /**
+     * Respond to UI.
+     */
+    protected void respondUI(ViewEvent anEvent)
+    {
+        // Get selected view
+        T tabView = getSelView();
+
+        // Handle AddButton
+        if (anEvent.equals("AddButton")) {
+            String val = DialogBox.showInputDialog(getEditor(), "Add Tab", "Enter Tab Title:", "Tab");
+            if (val == null) return;
+            tabView.addTab(val, new Label("Tab Content"));
+        }
+
+        // Handle RemoveButton
+        if (anEvent.equals("RemoveButton")) {
+            int ind = anEvent.getSelIndex();
+            tabView.removeTab(ind);
+        }
+
+        // Handle TabList
+        if (anEvent.equals("TabList"))
+            tabView.setSelIndex(anEvent.getSelIndex());
+    }
 
 }
