@@ -260,7 +260,7 @@ public class EditorPane extends ViewOwner {
         }
 
         // Run save panel, set Document.Source to path and re-save (or just return if cancelled)
-        WebFile file = FilePanel.showSavePanelWeb(getEditor(), "SnapKit UI file", exts); if (file==null) return;
+        WebFile file = FilePanel.showSaveFilePanel(getEditor(), "SnapKit UI file", exts); if (file==null) return;
         setSourceURL(file.getURL());
         save();
     }
