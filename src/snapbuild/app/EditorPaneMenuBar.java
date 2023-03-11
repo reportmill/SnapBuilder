@@ -12,7 +12,7 @@ import snap.view.MenuBar;
 import snap.view.ViewEvent;
 import snap.view.ViewOwner;
 import snap.view.ViewTheme;
-import snap.viewx.RecentFiles;
+import snap.web.RecentFiles;
 
 /**
  * Menu bar for Editor pane.

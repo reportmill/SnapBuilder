@@ -2,7 +2,7 @@ package snapbuild.app;
 import snap.util.*;
 import snap.view.*;
 import snap.viewx.DialogBox;
-import snap.viewx.RecentFiles;
+import snap.web.RecentFiles;
 import snap.web.*;
 
 import java.util.Objects;
