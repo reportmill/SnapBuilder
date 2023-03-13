@@ -1,22 +1,13 @@
 package snapbuild.app;
 import snap.util.*;
 import snap.view.*;
-import snap.viewx.DialogBox;
 import snap.web.RecentFiles;
 import snap.web.*;
-
-import java.util.Objects;
 
 /**
  * An implementation of a panel to manage/open user Snap sites (projects).
  */
 public class WelcomePanel extends ViewOwner {
-
-    // Whether file system is cloud
-    private boolean  _isCloud;
-
-    // The cloud email account
-    private String  _email;
 
     // The selected file
     private WebFile  _selFile;
@@ -33,63 +24,12 @@ public class WelcomePanel extends ViewOwner {
     // The shared instance
     private static WelcomePanel  _shared;
 
-    // Constants
-    private static final String FILE_SYSTEM = "FileSystem";
-    private static final String FILE_SYSTEM_LOCAL = "FileSystemLocal";
-    private static final String FILE_SYSTEM_CLOUD = "FileSystemCloud";
-    private static final String USER_EMAIL = "UserEmail";
-
     /**
      * Constructor.
      */
     private WelcomePanel()
     {
-        // Get FileSystem
-        String fileSys = Prefs.getDefaultPrefs().getString(FILE_SYSTEM);
-        _isCloud = fileSys!=null && fileSys.equals(FILE_SYSTEM_CLOUD);
-
-        // Get Email
-        _email = Prefs.getDefaultPrefs().getString(USER_EMAIL);
-    }
-
-    /**
-     * Returns wether file system is cloud.
-     */
-    public boolean isCloud()  { return _isCloud; }
-
-    /**
-     * Sets whether file system is cloud.
-     */
-    public void setCloud(boolean aValue)
-    {
-        if (aValue==isCloud()) return;
-        _isCloud = aValue;
-        _recentFiles = null;
-
-        // Update Prefs
-        String fileSys = aValue ? FILE_SYSTEM_CLOUD : FILE_SYSTEM_LOCAL;
-        Prefs.getDefaultPrefs().setValue(FILE_SYSTEM, fileSys);
-    }
-
-    /**
-     * Returns the cloud email.
-     */
-    public String getCloudEmail()  { return _email; }
-
-    /**
-     * Sets the cloud email.
-     */
-    public void setCloudEmail(String aString)
-    {
-        // If already set, just return
-        if (Objects.equals(aString, getCloudEmail())) return;
-
-        // Set and clear RecentFiles
-        _email = aString;
-        _recentFiles = null;
-
-        // Update Prefs
-        Prefs.getDefaultPrefs().setValue(USER_EMAIL, _email);
+        super();
     }
 
     /**
@@ -157,7 +97,8 @@ public class WelcomePanel extends ViewOwner {
     {
         // Add WelcomePaneAnim view
         DocView anim = getAnimView();
-        getUI(ChildView.class).addChild(anim, 0); anim.playAnimDeep();
+        getUI(ChildView.class).addChild(anim, 0);
+        anim.playAnimDeep();
 
         // Configure SitesTable
         TableView<WebFile> sitesTable = getView("SitesTable", TableView.class);
@@ -173,11 +114,9 @@ public class WelcomePanel extends ViewOwner {
         // Hide ProgressBar
         getView("ProgressBar").setVisible(false);
 
-        // Set preferred size
-        getUI().setPrefSize(400,600);
-
         // Configure Window: Add WindowListener to indicate app should exit when close button clicked
-        WindowView win = getWindow(); win.setTitle("Welcome"); win.setResizable(false);
+        WindowView win = getWindow(); win.setTitle("Welcome");
+        win.setResizable(false);
         enableEvents(win, WinClose);
         getView("OpenButton", Button.class).setDefaultButton(true);
     }
@@ -187,14 +126,9 @@ public class WelcomePanel extends ViewOwner {
      */
     public void resetUI()
     {
-        setViewEnabled("OpenButton", getSelFile()!=null);
+        setViewEnabled("OpenButton", getSelFile() != null);
         setViewItems("SitesTable", getRecentFiles());
         setViewSelItem("SitesTable", getSelFile());
-
-        // Update file system buttons/text: LocalButton, CloudButton, EmailText
-        setViewValue("LocalButton", !isCloud());
-        setViewValue("CloudButton", isCloud());
-        setViewValue("EmailText", getCloudEmail());
     }
 
     /**
@@ -202,25 +136,9 @@ public class WelcomePanel extends ViewOwner {
      */
     public void respondUI(ViewEvent anEvent)
     {
-        // Handle LocalButton, CloudButton
-        if (anEvent.equals("LocalButton"))
-            setCloud(false);
-        if (anEvent.equals("CloudButton"))
-            handleCloudButton();
-
         // Handle SamplesButton
         if (anEvent.equals("SamplesButton"))
             openSamples();
-
-        // Handle EmailText
-        if (anEvent.equals("EmailText")) {
-            String email = anEvent.getStringValue().trim().toLowerCase();
-            if (email.equals("jeff@reportmill.com")) return;
-            if (email.equals("jeff")) email = "jeff@reportmill.com";
-            if (!email.contains("@")) return;
-            setCloudEmail(email);
-            setCloud(true);
-        }
 
         // Handle SitesTable
         if (anEvent.equals("SitesTable"))
@@ -248,25 +166,6 @@ public class WelcomePanel extends ViewOwner {
         // Handle WinClosing
         if (anEvent.isWinClose()) {
             _exit = true; hide(); }
-    }
-
-    /**
-     * Called when CloudButton selected.
-     */
-    private void handleCloudButton()
-    {
-        if (getCloudEmail()==null || getCloudEmail().length()==0) {
-            String msg = "The cloud file system needs an email to provide a unique folder for user files.\n";
-            msg += "This information is not used for any other purposes. Though feel free to email\n";
-            msg += "me at jeff@reportmill.com";
-            String email = DialogBox.showInputDialog(getUI(), "Set Cloud Email", msg, "guest@guest");
-            if (email==null || !email.contains("@")) return;
-            email = email.trim().toLowerCase();
-            if (email.equalsIgnoreCase("jeff@reportmill.com")) {
-                DialogBox.showErrorDialog(getUI(), "Joker Alert", "Nice try."); return; }
-            setCloudEmail(email);
-        }
-        setCloud(true);
     }
 
     /**
@@ -330,54 +229,9 @@ public class WelcomePanel extends ViewOwner {
         // If already set, just return
         if (_recentFiles!=null) return _recentFiles;
 
-        // Handle Local
-        if (!isCloud()) {
-            WebFile[] recentFiles = RecentFiles.getFiles("RecentDocuments");
-            return _recentFiles = recentFiles;
-        }
-
-        // Turn on progress bar
-        ProgressBar pbar = getView("ProgressBar", ProgressBar.class);
-        pbar.setIndeterminate(true);
-        pbar.setVisible(true);
-
-        // Set loading files
-        new Thread(() -> setRecentFilesInBackground()).start();
-
-        // Handle Cloud
-        return _recentFiles = new WebFile[0];
+        WebFile[] recentFiles = RecentFiles.getFiles("RecentDocuments");
+        return _recentFiles = recentFiles;
     }
-
-    /**
-     * Loads recent files in background.
-     */
-    private void setRecentFilesInBackground()
-    {
-        String email = getCloudEmail();
-        if (email==null || email.length()==0)
-            email = "guest@guest";
-        WebFile dropBoxDir = DropBox.getSiteForEmail(email).getRootDir();
-        WebFile[] files = dropBoxDir.getFiles();
-        _recentFiles = files;
-        runLater(() -> recentFilesLoaded());
-    }
-
-    /**
-     * Called when cloud files finish loading.
-     */
-    private void recentFilesLoaded()
-    {
-        // Turn on progress bar
-        ProgressBar pbar = getView("ProgressBar", ProgressBar.class);
-        pbar.setIndeterminate(false);
-        pbar.setVisible(false);
-        resetLater();
-    }
-
-    /**
-     * Clears recent documents from preferences.
-     */
-    public void clearRecentFiles()  { Prefs.getDefaultPrefs().getChild("RecentDocuments").clear(); }
 
     /** Loads the WelcomePaneAnim.snp DocView. */
     DocView getAnimView()
