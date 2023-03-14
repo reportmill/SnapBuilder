@@ -195,14 +195,17 @@ public class WelcomePanel extends ViewOwner {
     public void showOpenPanel()
     {
         // Have editor run open panel (if no document opened, just return)
-        EditorPane epane = new EditorPane().showOpenPanel(getUI()); if(epane==null) return;
+        EditorPane epane = new EditorPane().showOpenPanel(getUI());
+        if (epane == null)
+            return;
 
         // Make editor window visible and hide welcome panel
         epane.setWindowVisible(true);
         hide();
 
-        // Add path to RecentFiles
-        RecentFiles.addPath(epane.getSourceURL().getPath());
+        // Add URL to RecentFiles
+        WebURL sourceURL = epane.getSourceURL();
+        RecentFiles.addURL(sourceURL);
     }
 
     /**
@@ -217,8 +220,9 @@ public class WelcomePanel extends ViewOwner {
         epane.setWindowVisible(true);
         hide();
 
-        // Add path to RecentFiles
-        RecentFiles.addPath(epane.getSourceURL().getPath());
+        // Add URL to RecentFiles
+        WebURL sourceURL = epane.getSourceURL();
+        RecentFiles.addURL(sourceURL);
     }
 
     /**
