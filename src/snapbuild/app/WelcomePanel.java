@@ -202,7 +202,7 @@ public class WelcomePanel extends ViewOwner {
         hide();
 
         // Add path to RecentFiles
-        RecentFiles.addPath("RecentDocuments", epane.getSourceURL().getPath(), 99);
+        RecentFiles.addPath(epane.getSourceURL().getPath());
     }
 
     /**
@@ -218,7 +218,7 @@ public class WelcomePanel extends ViewOwner {
         hide();
 
         // Add path to RecentFiles
-        RecentFiles.addPath("RecentDocuments", epane.getSourceURL().getPath(), 99);
+        RecentFiles.addPath(epane.getSourceURL().getPath());
     }
 
     /**
@@ -229,7 +229,7 @@ public class WelcomePanel extends ViewOwner {
         // If already set, just return
         if (_recentFiles!=null) return _recentFiles;
 
-        WebFile[] recentFiles = RecentFiles.getFiles("RecentDocuments");
+        WebFile[] recentFiles = RecentFiles.getFiles();
         return _recentFiles = recentFiles;
     }
 

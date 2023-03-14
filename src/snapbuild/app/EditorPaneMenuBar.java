@@ -90,7 +90,7 @@ public class EditorPaneMenuBar extends ViewOwner {
 
         // Handle OpenRecentMenuItem
         if (anEvent.equals("OpenRecentMenuItem")) {
-            String path = RecentFiles.showPathsPanel(epane.getUI(), "RecentDocuments"); if(path==null) return;
+            String path = RecentFiles.showPathsPanel(epane.getUI()); if(path==null) return;
             WelcomePanel.getShared().openFile(path); //file.getAbsolutePath());
         }
 
