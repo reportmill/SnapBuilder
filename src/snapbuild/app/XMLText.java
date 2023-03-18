@@ -11,36 +11,42 @@ import snap.view.*;
  * A class to manage XMLText view.
  */
 public class XMLText extends ViewOwner {
-    
+
     // The EditorPane
-    private EditorPane  _epane;
-    
+    private EditorPane _epane;
+
     // The View
-    private View  _content;
+    private View _content;
 
     // The XML string
-    private String  _xmlStr;
-    
+    private String _xmlStr;
+
     // The TextView
-    private static TextView  _xmlText;
-    
+    private static TextView _xmlText;
+
     // Indicates that XMLText changed selection (so we know resulting editor selection isn't externa)
-    private boolean  _xmlTextSelChanging;
+    private boolean _xmlTextSelChanging;
 
     // Colors
-    private static Color  NAME_COLOR = new Color("#7D1F7C"); //336633
-    private static Color  KEY_COLOR = new Color("#8F4A19");
-    private static Color  VALUE_COLOR = new Color("#5E1B9F"); // CC0000
-    
+    private static Color NAME_COLOR = new Color("#7D1F7C"); //336633
+    private static Color KEY_COLOR = new Color("#8F4A19");
+    private static Color VALUE_COLOR = new Color("#5E1B9F"); // CC0000
+
     /**
      * Creates new XMLText for EditorPane.
      */
-    public XMLText(EditorPane anEP)  { _epane = anEP; }
+    public XMLText(EditorPane anEP)
+    {
+        _epane = anEP;
+    }
 
     /**
      * Returns the XML string.
      */
-    public String getXMLString()  { return getXMLString(true); }
+    public String getXMLString()
+    {
+        return getXMLString(true);
+    }
 
     /**
      * Returns the XML string.
@@ -48,7 +54,7 @@ public class XMLText extends ViewOwner {
     public String getXMLString(boolean useCache)
     {
         // If already set, just return
-        if(_xmlStr != null && useCache) return _xmlStr;
+        if (_xmlStr != null && useCache) return _xmlStr;
 
         // Get text for content
         _content = _epane.getContent();
@@ -71,12 +77,15 @@ public class XMLText extends ViewOwner {
         start2 += tag.length() + 1;
 
         // If view is ViewHost, recurse
-        if(aView instanceof ViewHost) { ViewHost host = (ViewHost)aView;
-            for(View child : host.getGuests())
-                start2 = setCharIndexes(child, aStr, start2); }
+        if (aView instanceof ViewHost) {
+            ViewHost host = (ViewHost) aView;
+            for (View child : host.getGuests())
+                start2 = setCharIndexes(child, aStr, start2);
+        }
 
         // Find/set element close char index and return
-        start2 = aStr.indexOf('>', start2); start2++;
+        start2 = aStr.indexOf('>', start2);
+        start2++;
         setCharEnd(aView, start2);
         return start2;
     }
@@ -127,17 +136,18 @@ public class XMLText extends ViewOwner {
     View getViewInCharRange(int aStart, int aEnd, View aView)
     {
         // If view is host view, recurse to see if any Guests contain range (if so, return them)
-        if(aView instanceof ViewHost) { ViewHost host = (ViewHost)aView;
-            for(View child : host.getGuests()) {
+        if (aView instanceof ViewHost) {
+            ViewHost host = (ViewHost) aView;
+            for (View child : host.getGuests()) {
                 View c2 = getViewInCharRange(aStart, aEnd, child);
-                if(c2!=null)
+                if (c2 != null)
                     return c2;
             }
         }
 
         // If View contains range, return it
         int cstart = getCharStart(aView), cend = getCharEnd(aView);
-        if(cstart <= aStart && aEnd <= cend)
+        if (cstart <= aStart && aEnd <= cend)
             return aView;
 
         // Return null
@@ -171,7 +181,7 @@ public class XMLText extends ViewOwner {
     protected void updateXMLText()
     {
         // If not showing, just return
-        if(_xmlText == null || !_xmlText.isShowing()) return;
+        if (_xmlText == null || !_xmlText.isShowing()) return;
 
         // Get View
         String text = getXMLString(false);
@@ -186,7 +196,7 @@ public class XMLText extends ViewOwner {
     protected void updateXMLTextSel()
     {
         // If not showing, just return
-        if(_xmlText == null || !_xmlText.isShowing() || _xmlTextSelChanging) return;
+        if (_xmlText == null || !_xmlText.isShowing() || _xmlTextSelChanging) return;
 
         // Get View
         Editor editor = _epane.getEditor();
@@ -204,7 +214,8 @@ public class XMLText extends ViewOwner {
         // Get View that fully contains selection (just return if none)
         int start = _xmlText.getSelStart();
         int end = _xmlText.getSelEnd();
-        View view = getViewInCharRange(start, end); if(view == null) return;
+        View view = getViewInCharRange(start, end);
+        if (view == null) return;
 
         // Set SelView to view with suppression so that we don't update text selection
         _xmlTextSelChanging = true;
@@ -226,20 +237,26 @@ public class XMLText extends ViewOwner {
      */
     public class XMLParser extends Parser {
 
-        /** Override to set simple rule handlers. */
+        /**
+         * Override to set simple rule handlers.
+         */
         public XMLParser()
         {
             getRule("Element").setHandler(new ElementHandler());
             getRule("Attribute").setHandler(new AttributeHandler());
         }
 
-        /** Override to load rules from /snap/util/XMLParser.txt. */
+        /**
+         * Override to load rules from /snap/util/XMLParser.txt.
+         */
         protected ParseRule createRule()
         {
             return ParseUtils.loadRule(snap.util.XMLParser.class, null);
         }
 
-        /** Override to return XMLTokenizer. */
+        /**
+         * Override to return XMLTokenizer.
+         */
         protected Tokenizer createTokenizer()
         {
             return new snap.util.XMLParser.XMLTokenizer();
@@ -251,15 +268,17 @@ public class XMLText extends ViewOwner {
      */
     public static class ElementHandler extends ParseHandler {
 
-        /** ParseHandler method. */
+        /**
+         * ParseHandler method.
+         */
         public void parsedOne(ParseNode aNode, String anId)
         {
             // Handle Name
-            if(anId == "Name")
+            if (anId == "Name")
                 setColor(NAME_COLOR, aNode.getStart(), aNode.getEnd());
 
-            // Handle close: On first close, check for content
-            else if(anId == "<"|| anId == ">" || anId == "</" || anId == "/>")
+                // Handle close: On first close, check for content
+            else if (anId == "<" || anId == ">" || anId == "</" || anId == "/>")
                 setColor(NAME_COLOR, aNode.getStart(), aNode.getEnd());
         }
     }
@@ -269,19 +288,21 @@ public class XMLText extends ViewOwner {
      */
     public static class AttributeHandler extends ParseHandler {
 
-        /** ParseHandler method. */
+        /**
+         * ParseHandler method.
+         */
         public void parsedOne(ParseNode aNode, String anId)
         {
             // Handle Name
-            if(anId == "Name")
+            if (anId == "Name")
                 setColor(KEY_COLOR, aNode.getStart(), aNode.getEnd());
 
-            // Handle String
-            else if(anId == "String")
+                // Handle String
+            else if (anId == "String")
                 setColor(VALUE_COLOR, aNode.getStart(), aNode.getEnd());
 
-            // Handle "="
-            else if(anId == "=")
+                // Handle "="
+            else if (anId == "=")
                 setColor(NAME_COLOR, aNode.getStart(), aNode.getEnd());
         }
     }

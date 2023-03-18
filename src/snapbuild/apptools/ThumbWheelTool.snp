@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ColView PrefWidth="275" Padding="8" FillWidth="true">
-  <RowView Padding="4" Spacing="4">
-    <Label Padding="0,5,0,0" text="Visible Min:" />
-    <TextField Name="VisibleMinText" PrefWidth="100" />
-  </RowView>
-  <RowView Padding="4" Spacing="4">
-    <Label Padding="0,5,0,0" text="Visible Max:" />
-    <TextField Name="VisibleMaxText" PrefWidth="100" />
-  </RowView>
-  <RowView Padding="4" Spacing="4">
-    <Label Padding="0,5,0,0" text="Absolute Min:" />
-    <TextField Name="AbsoluteMinText" PrefWidth="100" />
-  </RowView>
-  <RowView Padding="4" Spacing="4">
-    <Label Padding="0,5,0,0" text="Absolute Max:" />
-    <TextField Name="AbsoluteMaxText" PrefWidth="100" />
-  </RowView>
-  <RowView Padding="4">
-    <Label PrefWidth="50" Padding="0,5,0,0" text="Style:" />
-    <ToggleButton Name="LinearButton" PrefWidth="60" Padding="2" text="Linear" Position="CENTER_LEFT" />
-    <ToggleButton Name="RadialButton" PrefWidth="60" Padding="2" text="Radial" Position="CENTER_RIGHT" />
-  </RowView>
+    <RowView Padding="4" Spacing="4">
+        <Label Padding="0,5,0,0" text="Visible Min:"/>
+        <TextField Name="VisibleMinText" PrefWidth="100"/>
+    </RowView>
+    <RowView Padding="4" Spacing="4">
+        <Label Padding="0,5,0,0" text="Visible Max:"/>
+        <TextField Name="VisibleMaxText" PrefWidth="100"/>
+    </RowView>
+    <RowView Padding="4" Spacing="4">
+        <Label Padding="0,5,0,0" text="Absolute Min:"/>
+        <TextField Name="AbsoluteMinText" PrefWidth="100"/>
+    </RowView>
+    <RowView Padding="4" Spacing="4">
+        <Label Padding="0,5,0,0" text="Absolute Max:"/>
+        <TextField Name="AbsoluteMaxText" PrefWidth="100"/>
+    </RowView>
+    <RowView Padding="4">
+        <Label PrefWidth="50" Padding="0,5,0,0" text="Style:"/>
+        <ToggleButton Name="LinearButton" PrefWidth="60" Padding="2" text="Linear" Position="CENTER_LEFT"/>
+        <ToggleButton Name="RadialButton" PrefWidth="60" Padding="2" text="Radial" Position="CENTER_RIGHT"/>
+    </RowView>
 </ColView>

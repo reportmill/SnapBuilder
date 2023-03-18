@@ -13,7 +13,7 @@ public class EditorCopyPaster {
     private Editor _editor;
 
     // The MIME type for archival format
-    public static final String    SNAP_XML_TYPE = "snap-studio/xml";
+    public static final String SNAP_XML_TYPE = "snap-studio/xml";
 
     /**
      * Creates EditorCopyPaster for given editor.
@@ -26,7 +26,10 @@ public class EditorCopyPaster {
     /**
      * Returns the editor.
      */
-    public Editor getEditor()  { return _editor; }
+    public Editor getEditor()
+    {
+        return _editor;
+    }
 
     /**
      * Handles editor cut operation.
@@ -119,13 +122,17 @@ public class EditorCopyPaster {
         ParentView par = sview.getParent();
 
         // Get par as host (just return if not host) and remove guest
-        ViewHost host = sview.getHost(); if (host==null) { ViewUtils.beep(); return; }
+        ViewHost host = sview.getHost();
+        if (host == null) {
+            ViewUtils.beep();
+            return;
+        }
         int ind = sview.indexInHost();
         host.removeGuest(sview);
 
         // Set new selected view
-        if (host.getGuestCount()>0)
-            _editor.setSelView(host.getGuest(ind<host.getGuestCount()? ind : ind -1));
+        if (host.getGuestCount() > 0)
+            _editor.setSelView(host.getGuest(ind < host.getGuestCount() ? ind : ind - 1));
         else _editor.setSelView(par);
 
         /*ParentView par = sview.getParent();

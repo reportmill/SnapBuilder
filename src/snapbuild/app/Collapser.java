@@ -17,28 +17,28 @@ import java.util.Map;
 public class Collapser {
 
     // The View
-    private View  _view;
+    private View _view;
 
     // The label
-    private Label  _label;
+    private Label _label;
 
     // The first focus view
-    private View  _firstFocus;
+    private View _firstFocus;
 
     // Indicator view for collapse
-    private View  _clpView;
+    private View _clpView;
 
     // Whether Title view is expanded
-    private boolean  _expanded = true;
+    private boolean _expanded = true;
 
     // Whether view is GrowHeight
     private boolean _growHeight;
 
     // A Collapse group
-    private CollapseGroup  _group;
+    private CollapseGroup _group;
 
     // Known Collapse groups by name
-    private static Map<String,CollapseGroup> _groups = new HashMap<>();
+    private static Map<String, CollapseGroup> _groups = new HashMap<>();
 
     /**
      * Creates a Collapser for given View and Label.
@@ -52,14 +52,17 @@ public class Collapser {
     /**
      * Returns the view.
      */
-    public View getView()  { return _view; }
+    public View getView()
+    {
+        return _view;
+    }
 
     /**
      * Sets the View.
      */
     public void setView(View aView)
     {
-        if (aView==_view) return;
+        if (aView == _view) return;
         _view = aView;
         _growHeight = aView.isGrowHeight();
     }
@@ -67,7 +70,10 @@ public class Collapser {
     /**
      * Returns the label.
      */
-    public Label getLabel()  { return _label; }
+    public Label getLabel()
+    {
+        return _label;
+    }
 
     /**
      * Sets the label.
@@ -75,7 +81,7 @@ public class Collapser {
     public void setLabel(Label aLabel)
     {
         // If already set, just return
-        if (aLabel==_label) return;
+        if (aLabel == _label) return;
 
         // Set label
         _label = aLabel;
@@ -100,7 +106,10 @@ public class Collapser {
     /**
      * Returns whether view is collapsed.
      */
-    public boolean isCollapsed()  { return !_expanded; }
+    public boolean isCollapsed()
+    {
+        return !_expanded;
+    }
 
     /**
      * Sets whether view is collapsed.
@@ -121,7 +130,10 @@ public class Collapser {
     /**
      * Returns whether title view is expanded.
      */
-    public boolean isExpanded()  { return _expanded; }
+    public boolean isExpanded()
+    {
+        return _expanded;
+    }
 
     /**
      * Sets whether title view is expanded.
@@ -129,7 +141,7 @@ public class Collapser {
     public void setExpanded(boolean aValue)
     {
         // If value already set, just return
-        if(aValue==_expanded) return;
+        if (aValue == _expanded) return;
 
         // Set value
         _expanded = aValue;
@@ -138,7 +150,7 @@ public class Collapser {
         if (aValue) {
             _view.setPrefHeight(-1);
             _view.setGrowHeight(_growHeight);
-            if (_group!=null)
+            if (_group != null)
                 _group.collapserDidExpand(this);
         }
 
@@ -148,13 +160,14 @@ public class Collapser {
             _view.setManaged(false);
             _view.setPrefHeight(0);
             _view.setGrowHeight(false);
-            if (_group!=null)
+            if (_group != null)
                 _group.collapserDidCollapse(this);
         }
 
         // Update graphic
-        View graphic = _label.getGraphic(); if (graphic==null) return;
-        graphic.setRotate(aValue? 90 : 0);
+        View graphic = _label.getGraphic();
+        if (graphic == null) return;
+        graphic.setRotate(aValue ? 90 : 0);
     }
 
     /**
@@ -163,7 +176,7 @@ public class Collapser {
     public void setExpandedAnimated(boolean aValue)
     {
         // If already set, just return
-        if(aValue==_expanded) return;
+        if (aValue == _expanded) return;
 
         // Cache current size and set new Expanded value
         double h = _view.getHeight();
@@ -186,8 +199,9 @@ public class Collapser {
         anim.getAnim(500).setPrefHeight(ph).setOnFinish(() -> setExpandedAnimDone(aValue)).needsFinish().play();
 
         // Get graphic and set initial anim rotate
-        View graphic = _label.getGraphic(); if (graphic==null) return;
-        graphic.setRotate(aValue? 0 : 90);
+        View graphic = _label.getGraphic();
+        if (graphic == null) return;
+        graphic.setRotate(aValue ? 0 : 90);
 
         // Configure anim for graphic
         anim = graphic.getAnim(0).clear();
@@ -239,7 +253,7 @@ public class Collapser {
     public CollapseGroup getCollapseGroupForName(String aName)
     {
         CollapseGroup cg = _groups.get(aName);
-        if (cg==null)
+        if (cg == null)
             _groups.put(aName, cg = new CollapseGroup());
         return cg;
     }
@@ -258,10 +272,12 @@ public class Collapser {
     public View getCollapseGraphic()
     {
         // If down arrow icon hasn't been created, create it
-        if (_clpView!=null) return _clpView;
+        if (_clpView != null) return _clpView;
         Polygon poly = new Polygon(2.5, .5, 2.5, 8.5, 8.5, 4.5);
-        ShapeView sview = new ShapeView(poly); sview.setPrefSize(9,9);
-        sview.setFill(Color.GRAY); sview.setBorder(Color.GRAY, 1);
+        ShapeView sview = new ShapeView(poly);
+        sview.setPrefSize(9, 9);
+        sview.setFill(Color.GRAY);
+        sview.setBorder(Color.GRAY, 1);
         return _clpView = sview;
     }
 
@@ -274,7 +290,8 @@ public class Collapser {
         Label label = createLabel(aLabelTitle);
 
         // Handle TitleView
-        if (aView instanceof TitleView) { TitleView titleView = (TitleView)aView;
+        if (aView instanceof TitleView) {
+            TitleView titleView = (TitleView) aView;
             View content = titleView.getContent();
             BoxView boxView = new BoxView(content, true, true);
             boxView.setPadding(titleView.getPadding());
@@ -305,8 +322,8 @@ public class Collapser {
         label.getStringView().setGrowWidth(true);
         label.setTextFill(Color.GRAY);
         label.setAlign(Pos.CENTER);
-        label.setPadding(4,4,4,10);
-        label.setMargin(4,8,4,8);
+        label.setPadding(4, 4, 4, 10);
+        label.setMargin(4, 8, 4, 8);
         label.setBorderRadius(10);
         return label;
     }
@@ -320,7 +337,7 @@ public class Collapser {
         private List<Collapser> _collapsers = new ArrayList<>();
 
         // Whether doing group work
-        private boolean  _groupWork;
+        private boolean _groupWork;
 
         /**
          * Adds a collapser.
@@ -339,7 +356,7 @@ public class Collapser {
             _groupWork = true;
 
             for (Collapser c : _collapsers)
-                if (c!=aCollapser && c.isExpanded())
+                if (c != aCollapser && c.isExpanded())
                     c.setExpandedAnimated(false);
 
             _groupWork = false;
@@ -354,7 +371,7 @@ public class Collapser {
             _groupWork = true;
 
             for (Collapser c : _collapsers)
-                if (c!=aCollapser && !c.isExpanded()) {
+                if (c != aCollapser && !c.isExpanded()) {
                     c.setExpandedAnimated(true);
                     break;
                 }

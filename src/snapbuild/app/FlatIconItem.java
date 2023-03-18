@@ -19,16 +19,16 @@ import java.util.Map;
 public class FlatIconItem {
 
     // The image item node
-    private JSObject  _itemNode;
+    private JSObject _itemNode;
 
     // The Id
-    private int  _id;
+    private int _id;
 
     // The description
-    private String  _desc;
+    private String _desc;
 
     // The image URLs
-    private Map<Integer,String> _pngURLs = new LinkedHashMap<>();
+    private Map<Integer, String> _pngURLs = new LinkedHashMap<>();
 
     // The sample image
     private Image _sample;
@@ -68,7 +68,10 @@ public class FlatIconItem {
     /**
      * Returns the description.
      */
-    public String getDescription()  { return _desc; }
+    public String getDescription()
+    {
+        return _desc;
+    }
 
     /**
      * Returns the PNG URL for the given size.
@@ -90,14 +93,14 @@ public class FlatIconItem {
      */
     public Image getSample()
     {
-        if (_sample!=null) return _sample;
+        if (_sample != null) return _sample;
 
         String url = getPNG_URL_ForSize(SAMPLE_SIZE);
-        if (url==null)
+        if (url == null)
             return _sample = getFailImage();
 
 
-        _sample = url!=null ? Image.get(url) : getFailImage();
+        _sample = url != null ? Image.get(url) : getFailImage();
 
         if (_sample.isLoaded())
             sampleImageLoaded();
@@ -106,10 +109,12 @@ public class FlatIconItem {
         return _sample;
     }
 
-    /** Called to adjust Sample image to make sure it's sample size. */
+    /**
+     * Called to adjust Sample image to make sure it's sample size.
+     */
     private void sampleImageLoaded()
     {
-        if (_sample.getPixWidth()!=SAMPLE_SIZE)
+        if (_sample.getPixWidth() != SAMPLE_SIZE)
             _sample = _sample.cloneForSizeAndScale(SAMPLE_SIZE, SAMPLE_SIZE, 1);
     }
 
@@ -118,11 +123,11 @@ public class FlatIconItem {
      */
     public Image getSample2()
     {
-        if (_sample!=null) return _sample;
+        if (_sample != null) return _sample;
 
         Image img = FlatIcon.SHARED.getImageForIdAndSize(_id, SAMPLE_SIZE);
 
-        if (img==null)
+        if (img == null)
             getFailImage();
 
         return _sample = img;
@@ -135,7 +140,7 @@ public class FlatIconItem {
     {
         TextArea text = new TextArea();
         text.setBorder(Color.BLACK, 1);
-        text.setPadding(10,10,10,10);
+        text.setPadding(10, 10, 10, 10);
         text.setWrapLines(true);
         text.setAlign(Pos.CENTER);
         text.setText("Image not found: " + _desc);

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ColView PrefWidth="275" Padding="8" FillWidth="true">
-  <RowView Padding="4" Spacing="4">
-    <Label PrefWidth="40" text="Style:" />
-    <ComboBox Name="StyleComboBox" MinWidth="80" MinHeight="22" PrefWidth="120" />
-  </RowView>
-  <CheckBox Name="CollapsibleCheckBox" Margin="2" text="Collapsible" />
-  <CheckBox Name="ExpandedCheckBox" Margin="2" text="Expanded" />
+    <RowView Padding="4" Spacing="4">
+        <Label PrefWidth="40" text="Style:"/>
+        <ComboBox Name="StyleComboBox" MinWidth="80" MinHeight="22" PrefWidth="120"/>
+    </RowView>
+    <CheckBox Name="CollapsibleCheckBox" Margin="2" text="Collapsible"/>
+    <CheckBox Name="ExpandedCheckBox" Margin="2" text="Expanded"/>
 </ColView>

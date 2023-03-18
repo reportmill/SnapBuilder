@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class FlatIcon {
 
     // The access token for FlatIcon api: https://api.flaticon.com
-    private String  _token;
+    private String _token;
 
     // Constants for FlatIcon api endpoints: https://api.flaticon.com/v3/docs/index.html#flaticon-api
     private static final String AUTHENTICATION = "https://api.flaticon.com/v3/app/authentication";
@@ -51,8 +51,12 @@ public class FlatIcon {
 
         // Get HTTP Response
         HTTPResponse resp;
-        try { resp = req.getResponse(); } //getResponseHTTP(req, aResp);
-        catch(Exception e) { throw new RuntimeException(e); }
+        try {
+            resp = req.getResponse();
+        } //getResponseHTTP(req, aResp);
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         if (resp == null || resp.getCode() != HTTPResponse.OK)
             return null;
 
@@ -86,8 +90,12 @@ public class FlatIcon {
 
         // Get HTTP Response
         HTTPResponse resp;
-        try { resp = req.getResponse(); } //getResponseHTTP(req, aResp);
-        catch(Exception e) { throw new RuntimeException(e); }
+        try {
+            resp = req.getResponse();
+        } //getResponseHTTP(req, aResp);
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         if (resp == null || resp.getCode() != HTTPResponse.OK)
             return null;
 
@@ -105,7 +113,7 @@ public class FlatIcon {
         // Get data
         JSArray dataArrayJS = (JSArray) json.getValue("data");
 
-        List <FlatIconItem> items = new ArrayList<>();
+        List<FlatIconItem> items = new ArrayList<>();
         for (int i = 0; i < count; i++) {
             JSObject imageNode = (JSObject) dataArrayJS.getValue(i);
             FlatIconItem imgItem = new FlatIconItem(imageNode);
@@ -127,8 +135,12 @@ public class FlatIcon {
 
         // Get HTTP Response
         HTTPResponse resp;
-        try { resp = req.getResponse(); } //getResponseHTTP(req, aResp);
-        catch(Exception e) { throw new RuntimeException(e); }
+        try {
+            resp = req.getResponse();
+        } //getResponseHTTP(req, aResp);
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         if (resp == null || resp.getCode() != HTTPResponse.OK) {
             System.out.println("Get image failed: " + resp.getMessage());
             return null;
@@ -142,7 +154,7 @@ public class FlatIcon {
     /**
      * Adds a JSON Header to given HTTP Request.
      */
-    private static void addParamsToRequestAsJSON(HTTPRequest aReq, boolean asHeader, String ... thePairs)
+    private static void addParamsToRequestAsJSON(HTTPRequest aReq, boolean asHeader, String... thePairs)
     {
         // Create JSON Request and add pairs
         JSObject jsonReq = new JSObject();
@@ -167,7 +179,7 @@ public class FlatIcon {
     /**
      * Returns a list of derived items for given collection of original items.
      */
-    private static <T,R> List<R> getMappedList(Collection<T> aList, Function<? super T, ? extends R> mapper)
+    private static <T, R> List<R> getMappedList(Collection<T> aList, Function<? super T, ? extends R> mapper)
     {
         return aList.stream().map(mapper).collect(Collectors.toList());
     }

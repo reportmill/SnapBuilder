@@ -9,41 +9,47 @@ import snap.view.*;
 public class InspectorPane extends ViewOwner {
 
     // The EditorPane
-    protected EditorPane  _epane;
-    
+    protected EditorPane _epane;
+
     // The Title label
-    private Label  _titleLabel;
-    
+    private Label _titleLabel;
+
     // The ScrollView that holds UI for child inspectors
-    private ScrollView  _inspBox;
-    
+    private ScrollView _inspBox;
+
     // The child inspector current installed in inspector panel
-    private ViewOwner  _childInspector;
+    private ViewOwner _childInspector;
 
     // The Gallery pane
-    private GalleryPane  _gallery;
-    
+    private GalleryPane _gallery;
+
     // The inspector for view general
-    private ViewTool  _viewTool;
-    
+    private ViewTool _viewTool;
+
     // The inspector for View Fill, Border, Effect
-    private StylerPane  _stylerPane;
+    private StylerPane _stylerPane;
 
     // Constants for the Inspectors
     public static final String GALLERY_PANE = "Gallery";
     public static final String VIEW_PANE = "View";
     public static final String STYLE_PANE = "STYLE";
 
-    
+
     /**
      * Returns the editor pane.
      */
-    public EditorPane getEditorPane()  { return _epane; }
+    public EditorPane getEditorPane()
+    {
+        return _epane;
+    }
 
     /**
      * Returns the editor.
      */
-    public Editor getEditor()  { return getEditorPane().getEditor(); }
+    public Editor getEditor()
+    {
+        return getEditorPane().getEditor();
+    }
 
     /**
      * Sets the given named inspector visible.
@@ -51,10 +57,17 @@ public class InspectorPane extends ViewOwner {
     public void setVisibleForName(String aName)
     {
         switch (aName) {
-            case GALLERY_PANE: ViewUtils.fireActionEvent(getView("GalleryButton"), null); break;
-            case VIEW_PANE: ViewUtils.fireActionEvent(getView("ViewGeneralButton"), null); break;
-            case STYLE_PANE: ViewUtils.fireActionEvent(getView("ViewStyleButton"), null); break;
-            default: System.err.println("InspectorPane.setVisibleForName: Unknown name: " + aName);
+            case GALLERY_PANE:
+                ViewUtils.fireActionEvent(getView("GalleryButton"), null);
+                break;
+            case VIEW_PANE:
+                ViewUtils.fireActionEvent(getView("ViewGeneralButton"), null);
+                break;
+            case STYLE_PANE:
+                ViewUtils.fireActionEvent(getView("ViewStyleButton"), null);
+                break;
+            default:
+                System.err.println("InspectorPane.setVisibleForName: Unknown name: " + aName);
         }
     }
 
@@ -114,14 +127,14 @@ public class InspectorPane extends ViewOwner {
 
         // Get inspector title from owner and set
         String title = "Inspector";
-        if (owner==_gallery) title = "Gallery";
-        else if (owner==_viewTool) title = "View Inspector";
-        else if (owner==_stylerPane) title = "Style Inspector";
+        if (owner == _gallery) title = "Gallery";
+        else if (owner == _viewTool) title = "View Inspector";
+        else if (owner == _stylerPane) title = "Style Inspector";
         else if (owner instanceof ViewTool) title = selView.getClass().getSimpleName() + " Inspector";
         _titleLabel.setText(title);
 
         // If owner non-null, tell it to reset
-        if (owner!=null)
+        if (owner != null)
             owner.resetLater();
 
         // Get image for current tool and set in ShapeSpecificButton
@@ -145,7 +158,10 @@ public class InspectorPane extends ViewOwner {
     /**
      * Returns the inspector (owner) of the inspector pane.
      */
-    protected ViewOwner getInspector()  { return _childInspector; }
+    protected ViewOwner getInspector()
+    {
+        return _childInspector;
+    }
 
     /**
      * Sets the inspector in the inspector pane.

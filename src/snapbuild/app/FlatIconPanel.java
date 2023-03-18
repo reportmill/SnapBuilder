@@ -16,7 +16,7 @@ public class FlatIconPanel extends ViewOwner {
     private FlatIconItem _items[];
 
     // The ScrollView to show items
-    private ScrollView  _scrollView;
+    private ScrollView _scrollView;
 
     // The view to show items
     private GridView _itemsView;
@@ -44,7 +44,7 @@ public class FlatIconPanel extends ViewOwner {
         _scrollView.setFillWidth(true);
         _scrollView.setContent(_itemsView);
         _scrollView.getScroller().addPropChangeListener(pc -> scrollBoundsDidChange(),
-            Scroller.ScrollX_Prop, Scroller.ScrollY_Prop, View.Width_Prop, View.Height_Prop);
+                Scroller.ScrollX_Prop, Scroller.ScrollY_Prop, View.Width_Prop, View.Height_Prop);
 
         getView("FlatIconLabel", Label.class).setTextFill(Color.DARKGRAY);
     }
@@ -162,7 +162,7 @@ public class FlatIconPanel extends ViewOwner {
          */
         public void setActive(boolean aValue)
         {
-            if (aValue==_active) return;
+            if (aValue == _active) return;
             _active = aValue;
 
             // Load image
@@ -191,7 +191,7 @@ public class FlatIconPanel extends ViewOwner {
 
         private void itemViewMouseClicked(ViewEvent anEvent)
         {
-            if (anEvent.isMouseClick() && anEvent.getClickCount()==2) {
+            if (anEvent.isMouseClick() && anEvent.getClickCount() == 2) {
                 itemWasClicked(_item);
             }
         }
@@ -201,11 +201,12 @@ public class FlatIconPanel extends ViewOwner {
      * Returns the stand-in image for loading.
      */
     private static Image _loadingImage;
+
     private static Image getLoadingImage()
     {
-        if (_loadingImage!=null) return _loadingImage;
+        if (_loadingImage != null) return _loadingImage;
         TextArea text = new TextArea();
-        text.setPadding(10,10,10,10);
+        text.setPadding(10, 10, 10, 10);
         text.setWrapLines(true);
         text.setAlign(Pos.CENTER);
         text.setText("Image loading...");

@@ -1,5 +1,6 @@
 package snapbuild.app;
 import java.util.*;
+
 import snap.geom.Pos;
 import snap.geom.Size;
 import snap.geom.VPos;
@@ -17,22 +18,22 @@ import snap.web.WebURL;
 public class SamplesPane extends ViewOwner {
 
     // The editor pane
-    private EditorPane  _editorPane;
+    private EditorPane _editorPane;
 
     // The selected index
-    private int  _selIndex;
+    private int _selIndex;
 
     // The dialog box
-    private DialogSheet  _dialogSheet;
+    private DialogSheet _dialogSheet;
 
     // The shared document names
-    private static String[]  _docNames;
+    private static String[] _docNames;
 
     // The shared document images
-    private static Image[]  _docImages;
+    private static Image[] _docImages;
 
     // The shared image paths
-    private static String[]  _imagePaths;
+    private static String[] _imagePaths;
 
     // Constants
     private static final String SAMPLES_ROOT = "https://reportmill.com/snaptea/SnapBuilderSamples/";
@@ -286,12 +287,18 @@ public class SamplesPane extends ViewOwner {
     /**
      * Returns the number of docs.
      */
-    private static int getDocCount()  { return _docNames.length; }
+    private static int getDocCount()
+    {
+        return _docNames.length;
+    }
 
     /**
      * Returns the doc name at index.
      */
-    private static String getDocName(int anIndex)  { return _docNames[anIndex]; }
+    private static String getDocName(int anIndex)
+    {
+        return _docNames[anIndex];
+    }
 
     /**
      * Returns the doc at given index.

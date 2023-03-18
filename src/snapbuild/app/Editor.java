@@ -13,15 +13,15 @@ import snap.web.*;
  * A view to hold the UI.
  */
 public class Editor extends ParentView {
-    
+
     // The Source URL
-    protected WebURL  _url;
+    protected WebURL _url;
 
     // The content
-    private View  _content;
-    
+    private View _content;
+
     // The context box
-    private BoxView  _cbox;
+    private BoxView _cbox;
 
     // The undoer
     private Undoer _undoer = new Undoer();
@@ -36,17 +36,17 @@ public class Editor extends ParentView {
     private EditorCopyPaster _copyPaster;
 
     // The default DragDropper
-    private EditorDragDropper  _dragDropper;
+    private EditorDragDropper _dragDropper;
 
     // The DeepChangeListener
-    DeepChangeListener _contentDeepChangeLsnr = (src, pce) -> contentDidDeepChange(src,pce);
-    
+    DeepChangeListener _contentDeepChangeLsnr = (src, pce) -> contentDidDeepChange(src, pce);
+
     // Constants for properties
     public static final String SelView_Prop = "SelView";
 
     // Constants
     public static Color BACK_FILL = new Color(165, 179, 216).brighter(); // ViewUtils.getBackDarkFill()
-    private Color SEL_COLOR = new Color(.3,.3,1,.33);
+    private Color SEL_COLOR = new Color(.3, .3, 1, .33);
     private Stroke SEL_STROKE = new Stroke(3);
 
     /**
@@ -56,7 +56,7 @@ public class Editor extends ParentView {
     {
         // Configure this view
         setAlign(Pos.CENTER);
-        setPadding(15,15,15,15);
+        setPadding(15, 15, 15, 15);
         setFill(BACK_FILL);
         enableEvents(MouseRelease);
         enableEvents(DragEvents);
@@ -69,7 +69,7 @@ public class Editor extends ParentView {
         _cbox.setFillHeight(true);
         _cbox.setFill(ViewUtils.getBackFill());
         _cbox.setFill(BACK_FILL.blend(Color.WHITE, .8));
-        _cbox.setBorder(new Color("#99"),1);
+        _cbox.setBorder(new Color("#99"), 1);
         _cbox.setEffect(new ShadowEffect());
         _cbox.setPickable(false);
         _cbox.setMinSize(200, 200);
@@ -88,16 +88,19 @@ public class Editor extends ParentView {
     /**
      * Sets the source URL.
      */
-    public void setSourceURL(WebURL aURL)  { _url = aURL; }
+    public void setSourceURL(WebURL aURL)
+    {
+        _url = aURL;
+    }
 
     /**
      * Returns the source URL.
      */
     public WebFile getSourceFile(boolean doCreate)
     {
-        if(_url==null) return null;
+        if (_url == null) return null;
         WebFile file = _url.getFile();
-        if(file==null && doCreate) file = _url.createFile(false);
+        if (file == null && doCreate) file = _url.createFile(false);
         return file;
     }
 
@@ -133,7 +136,10 @@ public class Editor extends ParentView {
     /**
      * Sets the selected view.
      */
-    public void setSelView(View aView)  { _sel.setSelView(aView); }
+    public void setSelView(View aView)
+    {
+        _sel.setSelView(aView);
+    }
 
     /**
      * Lets EditorSel fire prop changes.
@@ -146,10 +152,12 @@ public class Editor extends ParentView {
     /**
      * Adds a view to content.
      */
-    public void addView(Class <? extends View> aCls)
+    public void addView(Class<? extends View> aCls)
     {
         // Create view from class, configure, add
-        View view = null; try { view = aCls.newInstance(); } catch(Exception e) { }
+        View view = null;
+        try { view = aCls.newInstance(); }
+        catch (Exception e) { }
         ViewHpr.getHpr(view).configure(view);
         addView(view);
     }
@@ -160,16 +168,19 @@ public class Editor extends ParentView {
     public void addView(View aView)
     {
         // Get AddView and index
-        EditorSel.Tuple<View,Integer> addViewAndIndex = _sel.getSelHostViewAndIndex();
+        EditorSel.Tuple<View, Integer> addViewAndIndex = _sel.getSelHostViewAndIndex();
         View host = addViewAndIndex.getA();
         int index = addViewAndIndex.getB();
 
         // If selected view parent is host, add to it
-        if(host!=null)
-            ((ViewHost)host).addGuest(aView, index);
+        if (host != null)
+            ((ViewHost) host).addGuest(aView, index);
 
-        // Otherwise bail and complain
-        else { ViewUtils.beep(); return; }
+            // Otherwise bail and complain
+        else {
+            ViewUtils.beep();
+            return;
+        }
 
         // Select view
         setSelView(aView);
@@ -180,10 +191,10 @@ public class Editor extends ParentView {
      */
     public void addViewAtPoint(View aView, Point aPoint)
     {
-        EditorSel.Tuple<View,Integer> viewIndex = getSel().getHostViewAndIndexForPoint(aPoint);
+        EditorSel.Tuple<View, Integer> viewIndex = getSel().getHostViewAndIndexForPoint(aPoint);
         View hostView = viewIndex.getA();
         int index = viewIndex.getB();
-        ViewHost host = (ViewHost)hostView;
+        ViewHost host = (ViewHost) hostView;
         host.addGuest(aView, index);
         setSelView(aView);
     }
@@ -195,9 +206,9 @@ public class Editor extends ParentView {
     {
         View selView = getSelView();
         if (selView instanceof ButtonBase)
-            ((ButtonBase)selView).setImage(anImage);
+            ((ButtonBase) selView).setImage(anImage);
         else if (selView instanceof Label)
-            ((Label)selView).setImage(anImage);
+            ((Label) selView).setImage(anImage);
         else {
             ImageView iview = new ImageView(anImage);
             addView(iview);
@@ -207,51 +218,63 @@ public class Editor extends ParentView {
     /**
      * Returns the Styler.
      */
-    public EditorStyler getStyler()
-    {
-        return _styler;
-    }
+    public EditorStyler getStyler()  { return _styler; }
 
     /**
      * Returns the editor copy/paster.
      */
     public EditorCopyPaster getCopyPaster()
     {
-        if (_copyPaster!=null) return _copyPaster;
+        if (_copyPaster != null) return _copyPaster;
         return _copyPaster = new EditorCopyPaster(this);
     }
 
     /**
      * Standard clipboard cut functionality.
      */
-    public void cut()  { getCopyPaster().cut(); }
+    public void cut()
+    {
+        getCopyPaster().cut();
+    }
 
     /**
      * Standard clipboard copy functionality.
      */
-    public void copy()  { getCopyPaster().copy(); }
+    public void copy()
+    {
+        getCopyPaster().copy();
+    }
 
     /**
      * Standard clipbard paste functionality.
      */
-    public void paste()  { getCopyPaster().paste(); }
+    public void paste()
+    {
+        getCopyPaster().paste();
+    }
 
     /**
      * Deletes all the currently selected views.
      */
-    public void delete()  { getCopyPaster().delete(); }
+    public void delete()
+    {
+        getCopyPaster().delete();
+    }
 
     /**
      * Causes all the children of the current super selected view to become selected.
      */
-    public void selectAll()  { getCopyPaster().selectAll(); }
+    public void selectAll()
+    {
+        getCopyPaster().selectAll();
+    }
 
     /**
      * Returns the editor copy/paster.
      */
     public EditorDragDropper getDragDropper()
     {
-        if (_dragDropper!=null) return _dragDropper;
+        if (_dragDropper != null) return _dragDropper;
         return _dragDropper = new EditorDragDropper(this);
     }
 
@@ -295,7 +318,7 @@ public class Editor extends ParentView {
     {
         WebFile file = getSourceFile(true);
         XMLElement xml = getContentXML();
-        byte bytes[] = xml.getBytes();
+        byte[] bytes = xml.getBytes();
         file.setBytes(bytes);
     }
 
@@ -334,7 +357,7 @@ public class Editor extends ParentView {
         if (anEvent.isMouseRelease())
             mouseRelease(anEvent);
 
-        // Handle DragEvent
+            // Handle DragEvent
         else if (anEvent.isDragEvent())
             getDragDropper().processDragEvent(anEvent);
     }
@@ -355,7 +378,7 @@ public class Editor extends ParentView {
         // Get round rect for selected view
         View sview = getSelView();
         Rect bnds = sview.localToParent(sview.getBoundsShape(), this).getBounds();
-        RoundRect rrect = new RoundRect(bnds.x-1, bnds.y-1, bnds.width+2, bnds.height+2, 3);
+        RoundRect rrect = new RoundRect(bnds.x - 1, bnds.y - 1, bnds.width + 2, bnds.height + 2, 3);
 
         // Paint selection for SelView
         if (sview != getContent()) {
@@ -425,7 +448,7 @@ public class Editor extends ParentView {
         // Handle List <View>
         //if(aSel instanceof List) setSelectedViews((List)aSelection);
         if (aSel instanceof View)
-            setSelView((View)aSel);
+            setSelView((View) aSel);
     }
 
     /**
@@ -435,7 +458,8 @@ public class Editor extends ParentView {
     {
         // Get source and prop name (if not View, just return)
         Object src = aPC.getSource();
-        View view = (View)aView, sview = src instanceof View ? (View)src : null; if(view == null) return;
+        View view = (View) aView, sview = src instanceof View ? (View) src : null;
+        if (view == null) return;
         String pname = aPC.getPropertyName();
 
         // Ignore properties: Showing, NeedsLayout
@@ -443,20 +467,20 @@ public class Editor extends ParentView {
         if (pname == Showing_Prop) return;
         if (pname == NeedsLayout_Prop) return;
         if (pname == ParentView.Child_Prop) {
-            if(!(view instanceof ViewHost))
+            if (!(view instanceof ViewHost))
                 return;
         }
 
         // Ignore layout changes
-        if (view instanceof ParentView && ((ParentView)view).isInLayout()) return;
-        if (sview instanceof ParentView && ((ParentView)sview).isInLayout()) return;
+        if (view instanceof ParentView && ((ParentView) view).isInLayout()) return;
+        if (sview instanceof ParentView && ((ParentView) sview).isInLayout()) return;
 
         // If undoer exists, set selected objects and add property change
         Undoer undoer = getUndoer();
         if (undoer != null) {
 
             // If no changes yet, set selected objects
-            if(undoer.getActiveUndoSet().getChangeCount()==0)
+            if (undoer.getActiveUndoSet().getChangeCount() == 0)
                 undoer.setUndoSelection(getSelView()); //new ArrayList(getSelectedOrSuperSelectedViews())
 
             // Add property change
@@ -467,7 +491,7 @@ public class Editor extends ParentView {
 
             // Set updator
             WebFile file = getSourceFile(false);
-            if(file != null)
+            if (file != null)
                 file.setUpdater(undoer.hasUndos() ? _updr : null);
         }
 
@@ -492,7 +516,8 @@ public class Editor extends ParentView {
         }
 
         // Get undoer
-        Undoer undoer = getUndoer(); if(undoer == null || !undoer.isEnabled()) return;
+        Undoer undoer = getUndoer();
+        if (undoer == null || !undoer.isEnabled()) return;
 
         // Set undo selected-views
         //List views = getSelectedViewCount()>0? getSelectedViews() : getSuperSelectedViews();
@@ -507,7 +532,7 @@ public class Editor extends ParentView {
      */
     protected void saveUndoerChangesLater()
     {
-        if(_saveChangesRun == null)
+        if (_saveChangesRun == null)
             getEnv().runDelayed(_saveChangesRun = _scrShared, 400, true);
     }
 
@@ -530,10 +555,10 @@ public class Editor extends ParentView {
             int GRID_SIZE = 15;
             aPntr.setColor(Color.BLUE.blend(Color.CYAN, .5).blend(Color.WHITE, .95));
             aPntr.setStroke(Stroke.Stroke1);
-            for (double x=.5; x<w; x+=GRID_SIZE)
-                aPntr.drawLine(x, .5, x, h-1);
-            for (double y=.5; y<h; y+=GRID_SIZE)
-                aPntr.drawLine(.5, y, w-1, y);
+            for (double x = .5; x < w; x += GRID_SIZE)
+                aPntr.drawLine(x, .5, x, h - 1);
+            for (double y = .5; y < h; y += GRID_SIZE)
+                aPntr.drawLine(.5, y, w - 1, y);
         }
     }
 }

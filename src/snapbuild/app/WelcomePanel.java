@@ -10,19 +10,19 @@ import snap.web.*;
 public class WelcomePanel extends ViewOwner {
 
     // The selected file
-    private WebFile  _selFile;
-    
+    private WebFile _selFile;
+
     // Whether welcome panel should exit on hide
-    private boolean  _exit;
-    
+    private boolean _exit;
+
     // The Runnable to be called when app quits
-    private Runnable  _onQuit;
+    private Runnable _onQuit;
 
     // The RecentFiles
-    private WebFile[]  _recentFiles;
+    private WebFile[] _recentFiles;
 
     // The shared instance
-    private static WelcomePanel  _shared;
+    private static WelcomePanel _shared;
 
     /**
      * Constructor.
@@ -37,7 +37,7 @@ public class WelcomePanel extends ViewOwner {
      */
     public static WelcomePanel getShared()
     {
-        if(_shared != null) return _shared;
+        if (_shared != null) return _shared;
         return _shared = new WelcomePanel();
     }
 
@@ -62,33 +62,48 @@ public class WelcomePanel extends ViewOwner {
         // Write current list of sites, flush prefs and mayb exit
         //writeSites();         // Write data file for open/selected sites
         Prefs.getDefaultPrefs().flush();    // Flush preferences
-        if(_exit) quitApp(); // If exit requested, quit app
+        if (_exit) quitApp(); // If exit requested, quit app
     }
 
     /**
      * Returns the selected file.
      */
-    public WebFile getSelFile()  { return _selFile; }
+    public WebFile getSelFile()
+    {
+        return _selFile;
+    }
 
     /**
      * Sets the selected file.
      */
-    public void setSelFile(WebFile aFile)  { _selFile = aFile; }
+    public void setSelFile(WebFile aFile)
+    {
+        _selFile = aFile;
+    }
 
     /**
      * Returns the Runnable to be called to quit app.
      */
-    public Runnable getOnQuit()  { return _onQuit; }
+    public Runnable getOnQuit()
+    {
+        return _onQuit;
+    }
 
     /**
      * Sets the Runnable to be called to quit app.
      */
-    public void setOnQuit(Runnable aRunnable)  { _onQuit = aRunnable; }
+    public void setOnQuit(Runnable aRunnable)
+    {
+        _onQuit = aRunnable;
+    }
 
     /**
      * Called to quit app.
      */
-    public void quitApp()  { _onQuit.run(); }
+    public void quitApp()
+    {
+        _onQuit.run();
+    }
 
     /**
      * Initialize UI panel.
@@ -115,7 +130,8 @@ public class WelcomePanel extends ViewOwner {
         getView("ProgressBar").setVisible(false);
 
         // Configure Window: Add WindowListener to indicate app should exit when close button clicked
-        WindowView win = getWindow(); win.setTitle("Welcome");
+        WindowView win = getWindow();
+        win.setTitle("Welcome");
         win.setResizable(false);
         enableEvents(win, WinClose);
         getView("OpenButton", Button.class).setDefaultButton(true);
@@ -142,7 +158,7 @@ public class WelcomePanel extends ViewOwner {
 
         // Handle SitesTable
         if (anEvent.equals("SitesTable"))
-            setSelFile((WebFile)anEvent.getSelItem());
+            setSelFile((WebFile) anEvent.getSelItem());
 
         // Handle NewButton
         if (anEvent.equals("NewButton")) {
@@ -154,18 +170,22 @@ public class WelcomePanel extends ViewOwner {
             showOpenPanel();
 
         // Handle OpenButton or SitesTable double-click
-        if (anEvent.equals("OpenButton") || anEvent.equals("SitesTable") && anEvent.getClickCount()>1) {
-            WebFile file = (WebFile)getViewSelItem("SitesTable");
+        if (anEvent.equals("OpenButton") || anEvent.equals("SitesTable") && anEvent.getClickCount() > 1) {
+            WebFile file = (WebFile) getViewSelItem("SitesTable");
             openFile(file);
         }
 
         // Handle QuitButton
         if (anEvent.equals("QuitButton")) {
-            _exit = true; hide(); }
+            _exit = true;
+            hide();
+        }
 
         // Handle WinClosing
         if (anEvent.isWinClose()) {
-            _exit = true; hide(); }
+            _exit = true;
+            hide();
+        }
     }
 
     /**
@@ -214,7 +234,8 @@ public class WelcomePanel extends ViewOwner {
     public void openFile(Object aSource)
     {
         // Have editor run open panel (if no document opened, just return)
-        EditorPane epane = new EditorPane().open(aSource); if(epane==null) return;
+        EditorPane epane = new EditorPane().open(aSource);
+        if (epane == null) return;
 
         // Make editor window visible and hide welcome panel
         epane.setWindowVisible(true);
@@ -231,18 +252,20 @@ public class WelcomePanel extends ViewOwner {
     public WebFile[] getRecentFiles()
     {
         // If already set, just return
-        if (_recentFiles!=null) return _recentFiles;
+        if (_recentFiles != null) return _recentFiles;
 
         WebFile[] recentFiles = RecentFiles.getFiles();
         return _recentFiles = recentFiles;
     }
 
-    /** Loads the WelcomePaneAnim.snp DocView. */
+    /**
+     * Loads the WelcomePaneAnim.snp DocView.
+     */
     DocView getAnimView()
     {
         // Unarchive WelcomePaneAnim.snp as DocView
         WebURL url = WebURL.getURL(getClass(), "WelcomePanelAnim.snp");
-        DocView doc = (DocView)new ViewArchiver().getViewForSource(url);
+        DocView doc = (DocView) new ViewArchiver().getViewForSource(url);
 
         // Get page and clear border/shadow
         PageView page = doc.getPage();

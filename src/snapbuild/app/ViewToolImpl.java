@@ -10,10 +10,10 @@ import snap.view.*;
 /**
  * An class to manage UI editing of a View.
  */
-public class ViewToolImpl <T extends View> extends ViewTool <T> {
+public class ViewToolImpl<T extends View> extends ViewTool<T> {
 
     // The ScrollView that holds UI for child inspectors
-    private ColView  _inspBox;
+    private ColView _inspBox;
 
     // The child inspector current installed in inspector panel
     private ViewOwner _subInsp;
@@ -21,7 +21,10 @@ public class ViewToolImpl <T extends View> extends ViewTool <T> {
     /**
      * Returns the inspector (owner) of the inspector pane.
      */
-    protected ViewOwner getInspector()  { return _subInsp; }
+    protected ViewOwner getInspector()
+    {
+        return _subInsp;
+    }
 
     /**
      * Sets the inspector in the inspector pane.
@@ -29,13 +32,13 @@ public class ViewToolImpl <T extends View> extends ViewTool <T> {
     protected void setInspector(ViewOwner anOwner)
     {
         // If already set, just return
-        if (anOwner==_subInsp) return;
+        if (anOwner == _subInsp) return;
 
         // Set new inspector
         _subInsp = anOwner;
 
         // Get content, content and set
-        if (_inspBox.getChildCount()>0)
+        if (_inspBox.getChildCount() > 0)
             _inspBox.removeChild(0);
         _inspBox.addChild(_subInsp.getUI(), 0);
 
@@ -75,9 +78,9 @@ public class ViewToolImpl <T extends View> extends ViewTool <T> {
 
         // Register MarginText, PadText to update
         getView("MarginText").addPropChangeListener(pc -> insetsTextFieldChanged(pc),
-            TextField.Sel_Prop, View.Focused_Prop);
+                TextField.Sel_Prop, View.Focused_Prop);
         getView("PadText").addPropChangeListener(pc -> insetsTextFieldChanged(pc),
-            TextField.Sel_Prop, View.Focused_Prop);
+                TextField.Sel_Prop, View.Focused_Prop);
 
         // Get SubclassContainer
         _inspBox = getView("SubclassContainer", ColView.class);
@@ -112,8 +115,8 @@ public class ViewToolImpl <T extends View> extends ViewTool <T> {
         Spinner mhs = getView("MinHeightSpinner", Spinner.class);
         mws.setValue(selView.getMinWidth());
         mhs.setValue(selView.getMinHeight());
-        mws.getTextField().setTextFill(selView.isMinWidthSet()? Color.BLACK : Color.GRAY);
-        mhs.getTextField().setTextFill(selView.isMinHeightSet()? Color.BLACK : Color.GRAY);
+        mws.getTextField().setTextFill(selView.isMinWidthSet() ? Color.BLACK : Color.GRAY);
+        mhs.getTextField().setTextFill(selView.isMinHeightSet() ? Color.BLACK : Color.GRAY);
         setViewValue("MinWidthThumb", selView.getMinWidth());
         setViewValue("MinHeightThumb", selView.getMinHeight());
 
@@ -133,12 +136,12 @@ public class ViewToolImpl <T extends View> extends ViewTool <T> {
         setViewValue("SpaceText", SnapUtils.stringValue(selView.getSpacing()));
 
         // Update LeanX, LeanY
-        setViewValue("LeanX0", selView.getLeanX()== HPos.LEFT);
-        setViewValue("LeanX1", selView.getLeanX()==HPos.CENTER);
-        setViewValue("LeanX2", selView.getLeanX()==HPos.RIGHT);
-        setViewValue("LeanY0", selView.getLeanY()== VPos.TOP);
-        setViewValue("LeanY1", selView.getLeanY()==VPos.CENTER);
-        setViewValue("LeanY2", selView.getLeanY()==VPos.BOTTOM);
+        setViewValue("LeanX0", selView.getLeanX() == HPos.LEFT);
+        setViewValue("LeanX1", selView.getLeanX() == HPos.CENTER);
+        setViewValue("LeanX2", selView.getLeanX() == HPos.RIGHT);
+        setViewValue("LeanY0", selView.getLeanY() == VPos.TOP);
+        setViewValue("LeanY1", selView.getLeanY() == VPos.CENTER);
+        setViewValue("LeanY2", selView.getLeanY() == VPos.BOTTOM);
 
         // Update GrowWidthCheckBox, GrowHeightCheckBox, VerticalCheckBox
         setViewValue("GrowWidthCheckBox", selView.isGrowWidth());
@@ -205,8 +208,8 @@ public class ViewToolImpl <T extends View> extends ViewTool <T> {
 
         // Handle SpaceText, SpaceAdd5Button, SpaceResetButton
         if (anEvent.equals("SpaceText")) selView.setSpacing(anEvent.getFloatValue());
-        if (anEvent.equals("SpaceAdd1Button")) selView.setSpacing(selView.getSpacing()+1);
-        if (anEvent.equals("SpaceSub1Button")) selView.setSpacing(selView.getSpacing()-1);
+        if (anEvent.equals("SpaceAdd1Button")) selView.setSpacing(selView.getSpacing() + 1);
+        if (anEvent.equals("SpaceSub1Button")) selView.setSpacing(selView.getSpacing() - 1);
         if (anEvent.equals("SpaceResetButton")) selView.setSpacing(0);
 
         // Handle LeanX, LeanY
@@ -262,15 +265,23 @@ public class ViewToolImpl <T extends View> extends ViewTool <T> {
 
         // Get range
         Range range = getInsetsSelRangeForTextFieldName(aName);
-        if(range==null) range = new Range(0,3);
+        if (range == null) range = new Range(0, 3);
 
         // Adjust range
-        for(int i=range.start;i<=range.end;i++) {
-            switch(i) {
-                case 0: ins.top = Math.max(ins.top + aVal, 0); break;
-                case 1: ins.right = Math.max(ins.right + aVal, 0); break;
-                case 2: ins.bottom = Math.max(ins.bottom + aVal, 0); break;
-                case 3: ins.left = Math.max(ins.left + aVal, 0); break;
+        for (int i = range.start; i <= range.end; i++) {
+            switch (i) {
+                case 0:
+                    ins.top = Math.max(ins.top + aVal, 0);
+                    break;
+                case 1:
+                    ins.right = Math.max(ins.right + aVal, 0);
+                    break;
+                case 2:
+                    ins.bottom = Math.max(ins.bottom + aVal, 0);
+                    break;
+                case 3:
+                    ins.left = Math.max(ins.left + aVal, 0);
+                    break;
             }
         }
 
@@ -285,7 +296,7 @@ public class ViewToolImpl <T extends View> extends ViewTool <T> {
     {
         // Get text field (just return null if not focused)
         TextField text = getView(aName, TextField.class);
-        if(!text.isFocused()) return null;
+        if (!text.isFocused()) return null;
 
         // Get string and textfield sel start/end
         String str = text.getText();
@@ -303,17 +314,25 @@ public class ViewToolImpl <T extends View> extends ViewTool <T> {
     private String getInsetsSelStringForTextFieldName(String aName)
     {
         Range range = getInsetsSelRangeForTextFieldName(aName);
-        if(range==null) return "";
+        if (range == null) return "";
         StringBuffer sb = new StringBuffer();
-        for(int i=range.start; i<=range.end; i++) {
-            switch(i) {
-                case 0: sb.append("top, "); break;
-                case 1: sb.append("right, "); break;
-                case 2: sb.append("bottom, "); break;
-                case 3: sb.append("left, "); break;
+        for (int i = range.start; i <= range.end; i++) {
+            switch (i) {
+                case 0:
+                    sb.append("top, ");
+                    break;
+                case 1:
+                    sb.append("right, ");
+                    break;
+                case 2:
+                    sb.append("bottom, ");
+                    break;
+                case 3:
+                    sb.append("left, ");
+                    break;
             }
         }
-        sb.delete(sb.length()-2, sb.length());
+        sb.delete(sb.length() - 2, sb.length());
         return sb.toString();
     }
 
@@ -332,23 +351,35 @@ public class ViewToolImpl <T extends View> extends ViewTool <T> {
      */
     private void insetsTextFieldChanged(PropChange aPC)
     {
-        TextField text = (TextField)aPC.getSource();
+        TextField text = (TextField) aPC.getSource();
         String name = text.getName(), name2 = name.replace("Text", "Label");
         Label label = getView(name2, Label.class);
         label.setText(getInsetsSelStringForTextFieldName(name));
     }
 
-    /** Returns the number of commas in given string up to given index. */
+    /**
+     * Returns the number of commas in given string up to given index.
+     */
     private int countCommas(String aStr, int anInd)
     {
-        int cc = 0; for(int i=0;i<anInd;i++) if(aStr.charAt(i)==',') cc++;
+        int cc = 0;
+        for (int i = 0; i < anInd; i++) if (aStr.charAt(i) == ',') cc++;
         return cc;
     }
 
-    /** Returns the name. */
-    public String getName()  { return "View Props"; }
+    /**
+     * Returns the name.
+     */
+    public String getName()
+    {
+        return "View Props";
+    }
 
     // Format
-    private static String fmt(double aVal) { return _fmt.format(aVal); }
+    private static String fmt(double aVal)
+    {
+        return _fmt.format(aVal);
+    }
+
     private static DecimalFormat _fmt = new DecimalFormat("#.##");
 }

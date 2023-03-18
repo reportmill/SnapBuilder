@@ -10,7 +10,7 @@ import snap.web.WebURL;
 public class App {
 
     // A file to open on launch
-    private static WebFile  _openOnLaunchFile;
+    private static WebFile _openOnLaunchFile;
 
     /**
      * Standard main implementation.
@@ -34,7 +34,7 @@ public class App {
         if (_openOnLaunchFile != null)
             WelcomePanel.getShared().openFile(_openOnLaunchFile);
 
-        // Otherwise, show open data source panel
+            // Otherwise, show open data source panel
         else {
             WelcomePanel.getShared().setOnQuit(() -> quitApp());
             WelcomePanel.getShared().showPanel();
@@ -50,7 +50,7 @@ public class App {
         String xmlFilename = "ViewOwner.snp";
 
         // Iterate over args
-        for (int i=0; i<args.length; i++) {
+        for (int i = 0; i < args.length; i++) {
 
             // Get loop arg
             String arg = args[i];
@@ -59,15 +59,19 @@ public class App {
             // Handle XMLFilename
             if (arg.equals("XMLFilename")) {
                 String str = i + 1 < args.length ? args[++i] : null;
-                if (str == null) { System.err.println("Process XMLFilename: Missing filename"); }
+                if (str == null) {
+                    System.err.println("Process XMLFilename: Missing filename");
+                }
                 else xmlFilename = str;
                 System.out.println("Process XMLFilename = " + xmlFilename);
             }
 
             // Handle XMLString
             if (arg.equals("XMLString")) {
-                String xmlStr = i+1 < args.length ? args[++i] : null;
-                if (xmlStr == null) { System.err.println("Process XMLString: Missing string"); }
+                String xmlStr = i + 1 < args.length ? args[++i] : null;
+                if (xmlStr == null) {
+                    System.err.println("Process XMLString: Missing string");
+                }
 
                 // Since this is TeaVM, just write string to root file and
                 else {

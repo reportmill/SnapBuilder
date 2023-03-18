@@ -3,6 +3,7 @@ import snap.gfx.Image;
 import snap.util.URLUtils;
 import snap.view.*;
 import snap.viewx.TextPane;
+
 import java.util.*;
 
 /**
@@ -11,14 +12,14 @@ import java.util.*;
 public class GalleryPane extends ViewOwner {
 
     // The editor pane
-    protected EditorPane  _epane;
-    
+    protected EditorPane _epane;
+
     // The GalleryView
-    private GalleryView  _galleryView;
+    private GalleryView _galleryView;
 
     // The FlatIconPanel
-    private FlatIconPanel  _flatIcon;
-    
+    private FlatIconPanel _flatIcon;
+
     /**
      * Creates a new GalleryPane.
      */
@@ -38,7 +39,10 @@ public class GalleryPane extends ViewOwner {
     /**
      * Returns the editor.
      */
-    public Editor getEditor()  { return _epane.getEditor(); }
+    public Editor getEditor()
+    {
+        return _epane.getEditor();
+    }
 
     /**
      * Initialize UI.
@@ -84,7 +88,7 @@ public class GalleryPane extends ViewOwner {
         // Update DocButton
         Editor editor = getEditor();
         View sview = editor.getSelView();
-        setViewText("DocButton", sview!=null? sview.getClass().getSimpleName() + " Doc" : "SnapKit Doc");
+        setViewText("DocButton", sview != null ? sview.getClass().getSimpleName() + " Doc" : "SnapKit Doc");
 
         // Update ChangeHostButton.Enabled
         setViewEnabled("ChangeHostButton", getEditor().getSelView() instanceof ViewHost);
@@ -94,7 +98,7 @@ public class GalleryPane extends ViewOwner {
     protected void respondUI(ViewEvent anEvent)
     {
         // Handle SearchTextField
-        if(anEvent.equals("SearchTextField"))
+        if (anEvent.equals("SearchTextField"))
             handleSearchTextField();
 
         // Handle DocButton
@@ -117,7 +121,8 @@ public class GalleryPane extends ViewOwner {
     private String getJavaDocURL()
     {
         Editor editor = getEditor();
-        View view = editor.getSelView(); if (view==null) return "http://reportmill.com/snap1/javadoc/";
+        View view = editor.getSelView();
+        if (view == null) return "http://reportmill.com/snap1/javadoc/";
         String cname = view.getClass().getName();
         return "http://reportmill.com/snap1/javadoc/index.html?" + cname.replace('.', '/') + ".html";
     }
@@ -133,10 +138,10 @@ public class GalleryPane extends ViewOwner {
 
         // Look for possible completion
         List<GalleryView.ItemView> items = getItemsForPrefix(text);
-        GalleryView.ItemView item = items.size()>0 ? items.get(0) : null;
+        GalleryView.ItemView item = items.size() > 0 ? items.get(0) : null;
 
         // If completion available, set completion text
-        if (item!=null) {
+        if (item != null) {
             _epane.getEditor().addView(item.getContent().getClass());
         }
 
@@ -155,10 +160,10 @@ public class GalleryPane extends ViewOwner {
 
         // Look for possible completion
         List<GalleryView.ItemView> items = getItemsForPrefix(text);
-        String item = items.size()>0 ? items.get(0).getName() : null;
+        String item = items.size() > 0 ? items.get(0).getName() : null;
 
         // If completion available, set completion text
-        if (item!=null)
+        if (item != null)
             searchText.setCompletionText(item);
     }
 
@@ -166,7 +171,7 @@ public class GalleryPane extends ViewOwner {
     {
         String pfx = aPfx.toLowerCase();
         List<GalleryView.ItemView> items = new ArrayList(Arrays.asList(_galleryView.getChildren()));
-        if (pfx.length()==0) {
+        if (pfx.length() == 0) {
             for (GalleryView.ItemView item : items) {
                 item.setVisible(true);
                 item.setManaged(true);
@@ -174,16 +179,15 @@ public class GalleryPane extends ViewOwner {
             return Collections.EMPTY_LIST;
         }
 
-        for (GalleryView.ItemView item : items.toArray(new GalleryView.ItemView[0]))
-        {
-            if (pfx.length()>0 && !item.getName().toLowerCase().contains(pfx)) {
+        for (GalleryView.ItemView item : items.toArray(new GalleryView.ItemView[0])) {
+            if (pfx.length() > 0 && !item.getName().toLowerCase().contains(pfx)) {
                 items.remove(item);
                 item.setVisible(false);
             }
             else item.setVisible(true);
             item.setManaged(item.isVisible());
         }
-        Collections.sort(items, (o1,o2) -> compareForPrefix(o1.getName(), o2.getName(), pfx));
+        Collections.sort(items, (o1, o2) -> compareForPrefix(o1.getName(), o2.getName(), pfx));
         return items;
     }
 

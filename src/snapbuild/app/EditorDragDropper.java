@@ -9,31 +9,38 @@ import snap.gfx.Color;
 import snap.gfx.Image;
 import snap.gfx.Painter;
 import snap.view.*;
+
 import java.util.List;
 
 /**
  * Handles editor methods specific to drag and drop operations.
  */
 public class EditorDragDropper {
-    
+
     // The editor that this class is working for
-    private Editor  _editor;
+    private Editor _editor;
 
     // The view that current drag and drop event is over
     private View _dragOverView;
 
     // The index in DragOverView that current drop would hit
-    private int  _dragOverViewIndex;
+    private int _dragOverViewIndex;
 
     /**
      * Creates a new editor drop target listener.
      */
-    public EditorDragDropper(Editor anEditor)  { _editor = anEditor; }
+    public EditorDragDropper(Editor anEditor)
+    {
+        _editor = anEditor;
+    }
 
     /**
      * Returns the editor.
      */
-    public Editor getEditor()  { return _editor; }
+    public Editor getEditor()
+    {
+        return _editor;
+    }
 
     /**
      * Implemented by views that can handle drag & drop.
@@ -69,10 +76,10 @@ public class EditorDragDropper {
         anEvent.acceptDrag(); //DnDConstants.ACTION_COPY);
 
         // Get view at drag point - if new DragOverView, update and request repaint
-        EditorSel.Tuple<View,Integer> viewIndex = _editor.getSel().getHostViewAndIndexForPoint(anEvent.getPoint());
+        EditorSel.Tuple<View, Integer> viewIndex = _editor.getSel().getHostViewAndIndexForPoint(anEvent.getPoint());
         View view = viewIndex.getA();
         int index = viewIndex.getB();
-        if (view!=_dragOverView || index!=_dragOverViewIndex) {
+        if (view != _dragOverView || index != _dragOverViewIndex) {
             _dragOverView = view;
             _dragOverViewIndex = index;
             _editor.repaint();
@@ -143,14 +150,15 @@ public class EditorDragDropper {
         }
 
         // Get path and extension (set to empty string if null)
-        String ext = aFile.getExtension(); if (ext == null) return;
+        String ext = aFile.getExtension();
+        if (ext == null) return;
         ext = ext.toLowerCase();
 
         // If image file, add image view
         if (Image.canRead(ext))
             dropImageFile(aFile, aPoint);
 
-        // Handle .snp file
+            // Handle .snp file
         else if (ext.equals("snp"))
             dropSnapFile(aFile);
     }
@@ -161,7 +169,7 @@ public class EditorDragDropper {
     private void dropImageFile(ClipboardData aFile, Point aPoint)
     {
         // Get image source and image
-        Object imgSrc = aFile.getSourceURL() != null? aFile.getSourceURL() : aFile.getBytes();
+        Object imgSrc = aFile.getSourceURL() != null ? aFile.getSourceURL() : aFile.getBytes();
         Image image = Image.get(imgSrc);
 
         // Create ImageView and add at point
@@ -180,7 +188,7 @@ public class EditorDragDropper {
             return;
 
         // Get file source and open
-        Object fileSrc = aFile.getSourceURL() != null? aFile.getSourceURL() : aFile.getBytes();
+        Object fileSrc = aFile.getSourceURL() != null ? aFile.getSourceURL() : aFile.getBytes();
         editorPane.open(fileSrc);
     }
 
@@ -190,12 +198,12 @@ public class EditorDragDropper {
     public void paintDrag(Painter aPntr)
     {
         // If no DragOverView, just return
-        if (_dragOverView==null) return;
+        if (_dragOverView == null) return;
 
         // Paint rect around DrawOverView
         Rect bounds = _dragOverView.getBoundsLocal();
         Shape dragShape = _dragOverView.localToParent(bounds, _editor);
-        aPntr.setColor(new Color(0,.6,1,.5));
+        aPntr.setColor(new Color(0, .6, 1, .5));
         aPntr.setStrokeWidth(3);
         aPntr.draw(dragShape);
 
@@ -209,12 +217,21 @@ public class EditorDragDropper {
      */
     public void processDragEvent(ViewEvent anEvent)
     {
-        switch(anEvent.getType()) {
-            case DragEnter: dragEnter(anEvent); break;
-            case DragOver: dragOver(anEvent); break;
-            case DragExit: dragExit(anEvent); break;
-            case DragDrop: dragDrop(anEvent); break;
-            default: throw new RuntimeException("DragDropper.processDragEvent: Unknown event type: " + anEvent.getType());
+        switch (anEvent.getType()) {
+            case DragEnter:
+                dragEnter(anEvent);
+                break;
+            case DragOver:
+                dragOver(anEvent);
+                break;
+            case DragExit:
+                dragExit(anEvent);
+                break;
+            case DragDrop:
+                dragDrop(anEvent);
+                break;
+            default:
+                throw new RuntimeException("DragDropper.processDragEvent: Unknown event type: " + anEvent.getType());
                 //case DragActionChanged: anEvent.acceptDrag(DnDConstants.ACTION_COPY);
         }
     }

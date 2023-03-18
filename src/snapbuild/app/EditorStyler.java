@@ -5,6 +5,7 @@ import snap.geom.Pos;
 import snap.gfx.*;
 import snap.text.TextFormat;
 import snap.view.View;
+
 import java.util.List;
 
 /**
@@ -107,7 +108,10 @@ public class EditorStyler extends Styler {
     /**
      * Returns the client View.
      */
-    public View getClientView()  { return _editor; }
+    public View getClientView()
+    {
+        return _editor;
+    }
 
     /**
      * Returns the Selected View.
