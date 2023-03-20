@@ -785,15 +785,6 @@ public class EditorPane extends ViewOwner {
     }
 
     /**
-     * Override to show gallery.
-     */
-    protected void showingChanged()
-    {
-        super.showingChanged();
-        //if (isShowing()) runLater(() -> showGallery());
-    }
-
-    /**
      * Adds a new row view.
      */
     public void addRowView()
