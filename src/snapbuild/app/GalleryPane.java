@@ -1,5 +1,6 @@
 package snapbuild.app;
 import snap.gfx.Image;
+import snap.styler.Collapser;
 import snap.util.URLUtils;
 import snap.view.*;
 import snap.viewx.TextPane;
