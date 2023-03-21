@@ -91,7 +91,7 @@ public class EditorCopyPaster {
                 String str = cb.getString();
                 byte[] bytes = str.getBytes();
                 View view = new ViewArchiver().getViewForBytes(bytes);
-                _editor.addView(view);
+                _editor.addViewToContent(view);
             }
             return;
         }
@@ -100,7 +100,7 @@ public class EditorCopyPaster {
         if (cb.hasData(SNAP_XML_TYPE)) {
             byte[] bytes = cb.getDataBytes(SNAP_XML_TYPE);
             View view = new ViewArchiver().getViewForBytes(bytes);
-            _editor.addView(view);
+            _editor.addViewToContent(view);
         }
 
         // Paste Image
@@ -108,7 +108,7 @@ public class EditorCopyPaster {
             ClipboardData idata = cb.getImageData();
             byte bytes[] = idata.getBytes();
             ImageView iview = new ImageView(bytes);
-            _editor.addView(iview);
+            _editor.addViewToContent(iview);
         }
     }
 

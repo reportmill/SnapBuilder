@@ -20,14 +20,14 @@ import snap.web.RecentFiles;
 public class EditorPaneMenuBar extends ViewOwner {
 
     // The EditorPane
-    private EditorPane _epane;
+    private EditorPane  _editorPane;
 
     /**
      * Creates a new editor pane menu bar.
      */
     public EditorPaneMenuBar(EditorPane anEP)
     {
-        _epane = anEP;
+        _editorPane = anEP;
     }
 
     /**
@@ -35,7 +35,7 @@ public class EditorPaneMenuBar extends ViewOwner {
      */
     public EditorPane getEditorPane()
     {
-        return _epane;
+        return _editorPane;
     }
 
     /**
@@ -43,7 +43,7 @@ public class EditorPaneMenuBar extends ViewOwner {
      */
     public Editor getEditor()
     {
-        return _epane.getEditor();
+        return _editorPane.getEditor();
     }
 
     /**
@@ -86,51 +86,57 @@ public class EditorPaneMenuBar extends ViewOwner {
     protected void respondUI(ViewEvent anEvent)
     {
         // Get editor pane
-        EditorPane epane = getEditorPane();
+        EditorPane editorPane = getEditorPane();
         Editor editor = getEditor();
 
         // Handle NewMenuItem, NewButton: Get new editor pane and make visible
         if (anEvent.equals("NewMenuItem") || anEvent.equals("NewButton")) {
-            EditorPane editorPane = ClassUtils.newInstance(epane).newDocument();
-            editorPane.setWindowVisible(true);
+            EditorPane editorPane2 = ClassUtils.newInstance(editorPane).newDocument();
+            editorPane2.setWindowVisible(true);
         }
 
         // Handle OpenMenuItem, OpenButton: Get new editor pane from open panel and make visible (if created)
         if (anEvent.equals("OpenMenuItem") || anEvent.equals("OpenButton")) {
-            EditorPane editorPane = ClassUtils.newInstance(epane).open(epane.getUI());
-            if (editorPane != null)
-                editorPane.setWindowVisible(true);
+            EditorPane editorPane2 = ClassUtils.newInstance(editorPane).openSource(editorPane.getUI());
+            if (editorPane2 != null)
+                editorPane2.setWindowVisible(true);
         }
 
         // Handle OpenRecentMenuItem
         if (anEvent.equals("OpenRecentMenuItem")) {
-            String path = RecentFiles.showPathsPanel(epane.getUI());
+            String path = RecentFiles.showPathsPanel(editorPane.getUI());
             if (path == null) return;
             WelcomePanel.getShared().openFile(path); //file.getAbsolutePath());
         }
 
         // Handle CloseMenuItem
-        if (anEvent.equals("CloseMenuItem")) epane.close();
+        if (anEvent.equals("CloseMenuItem")) editorPane.close();
 
         // Handle SaveMenuItem, SaveButton, SaveAsMenuItem, RevertMenuItem
         if (anEvent.equals("SaveMenuItem") || anEvent.equals("SaveButton"))
-            epane.save();
+            editorPane.save();
         if (anEvent.equals("SaveAsMenuItem"))
-            epane.saveAs();
+            editorPane.saveAs();
         if (anEvent.equals("RevertMenuItem"))
-            epane.revert();
+            editorPane.revert();
 
         // Handle QuitMenuItem
         if (anEvent.equals("QuitMenuItem"))
-            epane.quit();
+            editorPane.quit();
 
         // Handle Edit menu items
-        if (anEvent.equals("UndoMenuItem") || anEvent.equals("UndoButton")) editor.undo();
-        if (anEvent.equals("RedoMenuItem") || anEvent.equals("RedoButton")) editor.redo();
-        if (anEvent.equals("CutMenuItem") || anEvent.equals("CutButton")) editor.cut();
-        if (anEvent.equals("CopyMenuItem") || anEvent.equals("CopyButton")) editor.copy();
-        if (anEvent.equals("PasteMenuItem") || anEvent.equals("PasteButton")) editor.paste();
-        if (anEvent.equals("SelectAllMenuItem")) editor.selectAll();
+        if (anEvent.equals("UndoMenuItem") || anEvent.equals("UndoButton"))
+            editor.undo();
+        if (anEvent.equals("RedoMenuItem") || anEvent.equals("RedoButton"))
+            editor.redo();
+        if (anEvent.equals("CutMenuItem") || anEvent.equals("CutButton"))
+            editor.cut();
+        if (anEvent.equals("CopyMenuItem") || anEvent.equals("CopyButton"))
+            editor.copy();
+        if (anEvent.equals("PasteMenuItem") || anEvent.equals("PasteButton"))
+            editor.paste();
+        if (anEvent.equals("SelectAllMenuItem"))
+            editor.selectAll();
 
         // Edit -> CheckSpellingAsYouTypeMenuItem
         if (anEvent.equals("CheckSpellingAsYouTypeMenuItem")) {
@@ -147,7 +153,7 @@ public class EditorPaneMenuBar extends ViewOwner {
 
         // Handle Format menu items (use name because anObj may come from popup menu)
         if (anEvent.equals("FontPanelMenuItem"))
-            epane.getInspector().setVisibleForName(InspectorPane.STYLE_PANE);
+            editorPane.getInspector().setVisibleForName(InspectorPane.STYLE_PANE);
         if (anEvent.equals("BoldMenuItem") || anEvent.equals("BoldButton"))
             editor.getStyler().setFontBold(!editor.getStyler().getFont().isBold());
         if (anEvent.equals("ItalicMenuItem") || anEvent.equals("ItalicButton"))
@@ -176,15 +182,17 @@ public class EditorPaneMenuBar extends ViewOwner {
 
         // Handle Tools menu items
         if (anEvent.equals("GalleryPaneMenuItem"))
-            epane.getInspector().setVisibleForName(InspectorPane.GALLERY_PANE);
+            editorPane.getInspector().setVisibleForName(InspectorPane.GALLERY_PANE);
         if (anEvent.equals("ViewPaneMenuItem"))
-            epane.getInspector().setVisibleForName(InspectorPane.VIEW_PANE);
+            editorPane.getInspector().setVisibleForName(InspectorPane.VIEW_PANE);
         if (anEvent.equals("StylePaneMenuItem"))
-            epane.getInspector().setVisibleForName(InspectorPane.STYLE_PANE);
+            editorPane.getInspector().setVisibleForName(InspectorPane.STYLE_PANE);
 
         // Handle SupportPageMenuItem, TutorialMenuItem
-        if (anEvent.equals("SupportPageMenuItem")) URLUtils.openURL("https://reportmill.com/support");
-        if (anEvent.equals("TutorialMenuItem")) URLUtils.openURL("https://reportmill.com/support/tutorial.pdf");
+        if (anEvent.equals("SupportPageMenuItem"))
+            URLUtils.openURL("https://reportmill.com/support");
+        if (anEvent.equals("TutorialMenuItem"))
+            URLUtils.openURL("https://reportmill.com/support/tutorial.pdf");
 
         // Handle Theme menus: StandardThemeMenuItem, LightThemeMenuItem, DarkThemeMenuItem, BlackAndWhiteThemeMenuItem
         if (anEvent.equals("StandardThemeMenuItem")) ViewTheme.setThemeForName("Standard");

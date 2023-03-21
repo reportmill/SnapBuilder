@@ -5,6 +5,7 @@ import snap.geom.Shape;
 import snap.gfx.Color;
 import snap.gfx.Painter;
 import snap.gfx.Stroke;
+import snap.props.PropChangeListener;
 import snap.view.*;
 
 /**
@@ -13,7 +14,7 @@ import snap.view.*;
 public class EditorSel {
 
     // The editor
-    private Editor _editor;
+    protected Editor _editor;
 
     // The Selected View
     private View _selView;
@@ -27,12 +28,20 @@ public class EditorSel {
     // Whether to suppress spot painting
     private boolean _hideSpot;
 
+    // A PropChangeListener to enable/disable caret when window loses focus
+    private PropChangeListener _windowFocusedChangedLsnr;
+
+    // A pointer to window this TextArea is showing in so we can remove WindowFocusChangedLsnr
+    private WindowView _showingWindow;
+
     /**
      * Constructor.
      */
     public EditorSel(Editor anEditor)
     {
         _editor = anEditor;
+        _editor.addPropChangeListener(pc -> setSpotAnim(), View.Focused_Prop);
+        _editor.addPropChangeListener(pc -> editorShowingChanged(), View.Showing_Prop);
     }
 
     /**
@@ -49,7 +58,7 @@ public class EditorSel {
     public void setSelView(View aView)
     {
         // If already set, just return
-        if (aView == getSelView()) return;
+        if (aView == _selView) return;
 
         // Set value
         View old = _selView;
@@ -66,7 +75,7 @@ public class EditorSel {
      */
     public boolean isSelSpot()
     {
-        return getSelView() instanceof ViewHost && _selIndex >= 0;
+        return _selView instanceof ViewHost && _selIndex >= 0;
     }
 
     /**
@@ -302,7 +311,15 @@ public class EditorSel {
      */
     private void setSpotAnim()
     {
-        boolean isNeeded = _editor.isFocused() && isSelSpot() && _editor.isShowing();
+        // Get criteria
+        boolean editorFocused = _editor.isFocused();
+        boolean isSelSpot = isSelSpot();
+        boolean editorShowing = _editor.isShowing();
+        WindowView editorWindow = _editor.getWindow();
+        boolean editorWindowFocused = editorWindow != null && editorWindow.isFocused();
+
+        // Get whether anim is needed and set
+        boolean isNeeded = editorFocused && isSelSpot && editorShowing && editorWindowFocused;
         setSpotAnim(isNeeded);
     }
 
@@ -319,15 +336,8 @@ public class EditorSel {
      */
     private void setSpotAnim(boolean aValue)
     {
-        // If already set
-        if (aValue == isSpotAnim()) {
-            if (aValue) {
-                _spotTimer.stop();
-                _spotTimer.start();
-                _hideSpot = false;
-            }
-            return;
-        }
+        // If already set, just return
+        if (aValue == isSpotAnim()) return;
 
         // Turn timer on
         if (aValue) {
@@ -351,6 +361,41 @@ public class EditorSel {
     {
         _hideSpot = !_hideSpot;
         _editor.repaint();
+    }
+
+    /**
+     * Called when Editor.Showing changes.
+     */
+    private void editorShowingChanged()
+    {
+        // Update anim
+        setSpotAnim();
+
+        // Manage listener for Window.Focus changes
+        updateWindowFocusChangedLsnr();
+    }
+
+    /**
+     * Updates WindowFocusChangedLsnr when Showing prop changes to update caret showing.
+     */
+    private void updateWindowFocusChangedLsnr()
+    {
+        // Handle Showing: Set ShowingWindow, add WindowFocusChangedLsnr and reset caret
+        if (_editor.isShowing()) {
+            _showingWindow = _editor.getWindow();
+            if (_showingWindow != null) {
+                _windowFocusedChangedLsnr = e -> setSpotAnim();
+                _showingWindow.addPropChangeListener(_windowFocusedChangedLsnr, View.Focused_Prop);
+            }
+        }
+
+        // Handle not Showing: Remove WindowFocusChangedLsnr and clear
+        else {
+            if (_showingWindow != null)
+                _showingWindow.removePropChangeListener(_windowFocusedChangedLsnr);
+            _showingWindow = null;
+            _windowFocusedChangedLsnr = null;
+        }
     }
 
     /**

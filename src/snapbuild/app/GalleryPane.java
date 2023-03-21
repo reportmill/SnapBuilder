@@ -31,7 +31,7 @@ public class GalleryPane extends ViewOwner {
             protected void itemWasClicked(FlatIconItem anItem)
             {
                 Image img = anItem.getSample();
-                _epane.getEditor().addImage(img);
+                _epane.getEditor().addImageToContent(img);
             }
         };
     }
@@ -142,7 +142,7 @@ public class GalleryPane extends ViewOwner {
 
         // If completion available, set completion text
         if (item != null) {
-            _epane.getEditor().addView(item.getContent().getClass());
+            _epane.getEditor().addViewToContentForViewClass(item.getContent().getClass());
         }
 
         // Clear SearchTextField

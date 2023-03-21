@@ -89,7 +89,7 @@ public class GalleryView extends ParentView {
         protected void processEvent(ViewEvent anEvent)
         {
             if (anEvent.isMousePress())
-                _galleryPane._epane.getEditor().addView(getContent().getClass());
+                _galleryPane._epane.getEditor().addViewToContentForViewClass(getContent().getClass());
         }
     }
 }

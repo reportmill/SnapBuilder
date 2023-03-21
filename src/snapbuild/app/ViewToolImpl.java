@@ -43,7 +43,7 @@ public class ViewToolImpl<T extends View> extends ViewTool<T> {
         _inspBox.addChild(_subInsp.getUI(), 0);
 
         // Set label
-        Editor editor = _epane.getEditor();
+        Editor editor = _editorPane.getEditor();
         View selView = editor.getSelView();
         String text = selView.getClass().getSimpleName() + " Settings";
         setViewValue("SubclassLabel", text);
@@ -92,7 +92,7 @@ public class ViewToolImpl<T extends View> extends ViewTool<T> {
     protected void resetUI()
     {
         // Get Editor and SelView
-        Editor editor = _epane.getEditor();
+        Editor editor = _editorPane.getEditor();
         View selView = editor.getSelView();
 
         // Update NameText, TextText, ToolTipText
@@ -153,7 +153,7 @@ public class ViewToolImpl<T extends View> extends ViewTool<T> {
         setViewValue("Align" + align.ordinal(), true);
 
         // Make sure that SubclassContainer has child tool
-        ViewTool tool = _epane.getToolForView(selView);
+        ViewTool tool = _editorPane.getToolForView(selView);
         setInspector(tool);
         tool.resetLater();
     }
@@ -164,7 +164,7 @@ public class ViewToolImpl<T extends View> extends ViewTool<T> {
     protected void respondUI(ViewEvent anEvent)
     {
         // Get Editor and SelView
-        Editor editor = _epane.getEditor();
+        Editor editor = _editorPane.getEditor();
         View selView = editor.getSelView();
 
         // Handle NameText, TextText, ToolTipText

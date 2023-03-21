@@ -203,10 +203,10 @@ public class WelcomePanel extends ViewOwner {
      */
     protected void openSamples()
     {
-        EditorPane dpane = new EditorPane().newDocument();
-        dpane.setWindowVisible(true);
+        EditorPane editorPane = new EditorPane().newDocument();
+        editorPane.setWindowVisible(true);
         hide();
-        runLaterDelayed(300, () -> dpane.showSamples());
+        runLaterDelayed(300, () -> editorPane.showSamples());
     }
 
     /**
@@ -215,16 +215,16 @@ public class WelcomePanel extends ViewOwner {
     public void showOpenPanel()
     {
         // Have editor run open panel (if no document opened, just return)
-        EditorPane epane = new EditorPane().showOpenPanel(getUI());
-        if (epane == null)
+        EditorPane editorPane = new EditorPane().showOpenPanel(getUI());
+        if (editorPane == null)
             return;
 
         // Make editor window visible and hide welcome panel
-        epane.setWindowVisible(true);
+        editorPane.setWindowVisible(true);
         hide();
 
         // Add URL to RecentFiles
-        WebURL sourceURL = epane.getSourceURL();
+        WebURL sourceURL = editorPane.getSourceURL();
         RecentFiles.addURL(sourceURL);
     }
 
@@ -234,15 +234,16 @@ public class WelcomePanel extends ViewOwner {
     public void openFile(Object aSource)
     {
         // Have editor run open panel (if no document opened, just return)
-        EditorPane epane = new EditorPane().open(aSource);
-        if (epane == null) return;
+        EditorPane editorPane = new EditorPane().openSource(aSource);
+        if (editorPane == null)
+            return;
 
         // Make editor window visible and hide welcome panel
-        epane.setWindowVisible(true);
+        editorPane.setWindowVisible(true);
         hide();
 
         // Add URL to RecentFiles
-        WebURL sourceURL = epane.getSourceURL();
+        WebURL sourceURL = editorPane.getSourceURL();
         RecentFiles.addURL(sourceURL);
     }
 

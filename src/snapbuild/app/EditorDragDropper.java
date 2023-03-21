@@ -174,7 +174,7 @@ public class EditorDragDropper {
 
         // Create ImageView and add at point
         ImageView iview = new ImageView(image);
-        _editor.addViewAtPoint(iview, aPoint);
+        _editor.addViewToContentAtPoint(iview, aPoint);
     }
 
     /**
@@ -189,7 +189,7 @@ public class EditorDragDropper {
 
         // Get file source and open
         Object fileSrc = aFile.getSourceURL() != null ? aFile.getSourceURL() : aFile.getBytes();
-        editorPane.open(fileSrc);
+        editorPane.openSource(fileSrc);
     }
 
     /**

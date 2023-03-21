@@ -17,54 +17,54 @@ import snapbuild.apptools.*;
 public class EditorPane extends ViewOwner {
 
     // The menu bar owner
-    EditorPaneMenuBar _menuBar;
+    private EditorPaneMenuBar  _menuBar;
 
     // The Transform Pane
-    TransitionPane _transPane;
+    private TransitionPane  _transPane;
 
     // The Editor SplitView (holds Editor and ViewTree)
-    SplitView _editorSplit;
+    private SplitView  _editorSplitView;
 
     // The SplitView that holds inner SplitView and Gallery
-    SplitView _gallerySplit;
+    private SplitView  _gallerySplitView;
 
     // The Editor
-    Editor _editor, _realEditor;
+    private Editor  _editor, _realEditor;
 
     // A box to hold selection path
-    RowView _selPathBox;
+    private RowView  _selPathBox;
 
     // The deepest view to show in the SelPathBox
-    View _selPathDeep;
+    private View  _selPathDeep;
 
     // The InspectorPane
-    InspectorPane _inspPane;
+    private InspectorPane  _inspPane;
 
     // The ViewTree
-    TreeView<View> _viewTree;
+    private TreeView<View>  _viewTree;
 
     // The GalleryPane
-    GalleryPane _gallery = new GalleryPane(this);
+    private GalleryPane  _gallery = new GalleryPane(this);
 
     // The ViewTool
-    ViewTool _viewTool = new ViewToolImpl();
+    protected ViewTool<?>  _viewTool = new ViewToolImpl<>();
 
     // The XML TextView
-    XMLText _xmlText = new XMLText(this);
+    private XMLText  _xmlText = new XMLText(this);
 
     // Map of tools
-    Map<Class, ViewTool> _tools = new HashMap<>();
+    private Map<Class<? extends View>,ViewTool<?>>  _tools = new HashMap<>();
 
     // The Editor listener
-    PropChangeListener _editorLsnr = pce -> editorSelViewChange();
+    private PropChangeListener  _editorLsnr = pce -> editorSelViewChange();
 
     /**
-     * Creates a new EditorPane.
+     * Constructor.
      */
     public EditorPane()
     {
-        //getUI();
-        _viewTool._epane = this;
+        super();
+        _viewTool._editorPane = this;
     }
 
     /**
@@ -190,32 +190,32 @@ public class EditorPane extends ViewOwner {
      */
     public EditorPane showOpenPanel(View aView)
     {
-        // Get path from open panel for supported file extensions
-        String path = FilePanel.showOpenPanel(aView, "Snap UI File", "snp");
-        return open(path);
+        // Get file from open panel for supported file extensions
+        WebFile file = FilePanel.showOpenFilePanel(aView, "Snap UI File", "snp");
+        if (file == null)
+            return null;
+
+        // Open file and return
+        return openSource(file);
     }
 
     /**
      * Creates a new editor window by opening the document from the given source.
      */
-    public EditorPane open(Object aSource)
+    public EditorPane openSource(Object aSource)
     {
-        // If source is already opened, return editor pane
-        WebURL url = WebURL.getURL(aSource);
-        //if(!SnapUtils.equals(url, getSourceURL())) {
-        //    EditorPane epanes[] = WindowView.getOpenWindowOwners(EditorPane.class);
-        //    for(EditorPane epane : epanes) if(SnapUtils.equals(url, epane.getSourceURL())) return epane; }
+        // Get source URL
+        WebURL sourceURL = WebURL.getURL(aSource);
 
         // Load document (if not found, just return)
-        ParentView view = getParentView(aSource);
-        if (view == null) return null;
+        ParentView parentView = getParentView(aSource);
+        if (parentView == null)
+            return null;
 
         // Set document
-        getEditor().setContent(view);
-        getEditor()._url = url;
-
-        // If source is string, add to recent files menu
-        //if(url!=null) RecentFilesPanel.addRecentFile(url.getString());
+        Editor editor = getEditor();
+        editor.setContent(parentView);
+        editor._url = sourceURL;
 
         // Return the editor
         return this;
@@ -235,9 +235,9 @@ public class EditorPane extends ViewOwner {
         ViewArchiver.setUseRealClass(false);
 
         // Load document
-        ParentView view = null;
+        ParentView parentView = null;
         try {
-            view = (ParentView) archiver.getViewForSource(aSource);
+            parentView = (ParentView) archiver.getViewForSource(aSource);
         }
 
         // If there was an XML parse error loading aSource, show error dialog
@@ -245,9 +245,9 @@ public class EditorPane extends ViewOwner {
             e.printStackTrace();
             String msg = StringUtils.wrap("Error reading file:\n" + e.getMessage(), 40);
             runLater(() -> {
-                DialogBox dbox = new DialogBox("Error Reading File");
-                dbox.setErrorMessage(msg);
-                dbox.showMessageDialog(getUI());
+                DialogBox dialogBox = new DialogBox("Error Reading File");
+                dialogBox.setErrorMessage(msg);
+                dialogBox.showMessageDialog(getUI());
             });
         }
 
@@ -255,7 +255,7 @@ public class EditorPane extends ViewOwner {
         ViewArchiver.setUseRealClass(true);
 
         // Return
-        return view;
+        return parentView;
     }
 
     /**
@@ -267,16 +267,18 @@ public class EditorPane extends ViewOwner {
         //setEditing(true);
 
         // Get extensions - if there is an existing extension, make sure it's first in the exts array
-        String exts[] = {"snp"};
-        if (getSourceURL() != null && FilePathUtils.getExtension(getSourceURL().getPath()) != null) {
-            List<String> ex = new ArrayList<>(Arrays.asList(exts));
-            ex.add(0, "." + FilePathUtils.getExtension(getSourceURL().getPath()));
-            exts = ex.toArray(new String[0]);
-        }
+        String[] extensions = { "snp" };
+        WebURL sourceURL = getSourceURL();
+        String extension = sourceURL != null ? sourceURL.getType() : null;
+        if (extension != null)
+            extensions = ArrayUtils.add(extensions, '.' + extension, 0);
 
         // Run save panel, set Document.Source to path and re-save (or just return if cancelled)
-        WebFile file = FilePanel.showSaveFilePanel(getEditor(), "SnapKit UI file", exts);
-        if (file == null) return;
+        WebFile file = FilePanel.showSaveFilePanel(getEditor(), "SnapKit UI file", extensions);
+        if (file == null)
+            return;
+
+        // Set SourceURL and save
         setSourceURL(file.getURL());
         save();
     }
@@ -287,7 +289,8 @@ public class EditorPane extends ViewOwner {
     public void save()
     {
         // If can't save to current source, do SaveAs instead
-        if (getSourceURL() == null) {
+        WebURL sourceURL = getSourceURL();
+        if (sourceURL == null) {
             saveAs();
             return;
         }
@@ -301,10 +304,10 @@ public class EditorPane extends ViewOwner {
         }
         catch (Throwable e) {
             e.printStackTrace();
-            String msg = "The file " + getSourceURL().getPath() + " could not be saved (" + e + ").";
-            DialogBox dbox = new DialogBox("Error on Save");
-            dbox.setErrorMessage(msg);
-            dbox.showMessageDialog(getUI());
+            String msg = "The file " + sourceURL.getPath() + " could not be saved (" + e + ").";
+            DialogBox dialogBox = new DialogBox("Error on Save");
+            dialogBox.setErrorMessage(msg);
+            dialogBox.showMessageDialog(getUI());
             return;
         }
 
@@ -319,18 +322,21 @@ public class EditorPane extends ViewOwner {
     public void revert()
     {
         // Get filename (just return if null)
-        WebURL surl = getSourceURL();
-        if (surl == null) return;
+        WebURL sourceURL = getSourceURL();
+        if (sourceURL == null)
+            return;
 
         // Run option panel for revert confirmation (just return if denied)
-        String msg = "Revert to saved version of " + surl.getPathName() + "?";
-        DialogBox dbox = new DialogBox("Revert to Saved");
-        dbox.setQuestionMessage(msg);
-        if (!dbox.showConfirmDialog(getUI())) return;
+        String msg = "Revert to saved version of " + sourceURL.getPathName() + "?";
+        DialogBox dialogBox = new DialogBox("Revert to Saved");
+        dialogBox.setQuestionMessage(msg);
+        if (!dialogBox.showConfirmDialog(getUI()))
+            return;
 
         // Re-open filename
-        getSourceURL().getFile().reload();
-        open(getSourceURL());
+        WebFile sourceFile = sourceURL.getFile();
+        sourceFile.resetContent();
+        openSource(sourceURL);
     }
 
     /**
@@ -338,24 +344,6 @@ public class EditorPane extends ViewOwner {
      */
     public boolean close()
     {
-        // Make sure editor isn't previewing
-        //setEditing(true);
-
-        // If unsaved changes, run panel to request save
-        /*if (getEditor().undoerHasUndos()) {
-            String filename = getSourceURL()==null? "untitled document" : getSourceURL().getPathName();
-            DialogBox dbox = new DialogBox("Unsaved Changes");
-            dbox.setWarningMessage("Save changes to " + filename + "?"); dbox.setOptions("Save", "Don't Save", "Cancel");
-            switch(dbox.showOptionDialog(getUI(), "Save")) {
-                case 0: save();
-                case 1: break;
-                default: return false;
-            }
-        }*/
-
-        // Deactive current tool, so it doesn't reference this editor
-        //getEditor().getCurrentTool().deactivateTool();
-
         // Close window, called EditorClosed and return true to indicate we closed the window
         getWindow().hide();
         editorClosed();
@@ -368,19 +356,16 @@ public class EditorPane extends ViewOwner {
     protected void editorClosed()
     {
         // If another open editor is available focus on it, otherwise run WelcomePanel
-        EditorPane epane = WindowView.getOpenWindowOwner(EditorPane.class);
-        if (epane != null)
-            epane.getEditor().requestFocus();
+        EditorPane editorPane = WindowView.getOpenWindowOwner(EditorPane.class);
+        if (editorPane != null)
+            editorPane.getEditor().requestFocus();
         else WelcomePanel.getShared().showPanel();
     }
 
     /**
      * Returns whether editor is really doing editing.
      */
-    public boolean isEditing()
-    {
-        return _realEditor == null;
-    } //getEditor().isEditing(); }
+    public boolean isEditing()  { return _realEditor == null; }
 
     /**
      * Sets whether editor is really doing editing.
@@ -397,12 +382,13 @@ public class EditorPane extends ViewOwner {
             _realEditor = getEditor(); //_realEditor.flushEditingChanges();
 
             // Reload content
-            View content = new ViewArchiver().copy(getContent());
+            View content = getContent();
+            View contentCopy = new ViewArchiver().copy(content);
 
             // Create new editor, set editing to false and set report document
             Editor editor = new Editor();
             editor.setEditing(false);
-            editor.setContent(content);
+            editor.setContent(contentCopy);
             editor.setSize(_realEditor.getSize());
 
             // Set new editor
@@ -423,46 +409,51 @@ public class EditorPane extends ViewOwner {
     /**
      * Returns the tool for given View.
      */
-    public ViewTool getToolForView(View aView)
+    public ViewTool<?> getToolForView(View aView)
     {
-        Class cls = aView.getClass();
+        Class<? extends View> cls = aView.getClass();
         return getToolForClass(cls);
     }
 
     /**
      * Returns the tool for given class.
      */
-    public ViewTool getToolForClass(Class aClass)
+    public ViewTool<?> getToolForClass(Class<? extends View> viewClass)
     {
-        ViewTool tool = _tools.get(aClass);
-        if (tool == null) {
-            tool = createTool(aClass);
-            tool._epane = this;
-            _tools.put(aClass, tool);
-        }
-        return tool;
+        // Get from Tools cache, just return if found
+        ViewTool<?> viewTool = _tools.get(viewClass);
+        if (viewTool != null)
+            return viewTool;
+
+        // Create ViewTool and add to Tools cache
+        viewTool = createToolForViewClass(viewClass);
+        viewTool._editorPane = this;
+        _tools.put(viewClass, viewTool);
+
+        // Return
+        return viewTool;
     }
 
     /**
      * Creates the tool for given class.
      */
-    protected ViewTool createTool(Class aClass)
+    protected ViewTool<?> createToolForViewClass(Class<?> viewClass)
     {
         // Handle known classes
-        if (aClass == ButtonBase.class) return new ButtonBaseTool();
-        if (aClass == ColView.class) return new ColViewTool();
-        if (aClass == ImageView.class) return new ImageViewTool();
-        if (aClass == Label.class) return new LabelTool();
-        if (aClass == RowView.class) return new RowViewTool();
-        if (aClass == TabView.class) return new TabViewTool();
-        if (aClass == TextField.class) return new TextFieldTool();
-        if (aClass == ThumbWheel.class) return new ThumbWheelTool();
-        if (aClass == TitleView.class) return new TitleViewTool();
-        if (aClass == View.class || aClass == null) return new ViewTool();
+        if (viewClass == ButtonBase.class) return new ButtonBaseTool<>();
+        if (viewClass == ColView.class) return new ColViewTool<>();
+        if (viewClass == ImageView.class) return new ImageViewTool<>();
+        if (viewClass == Label.class) return new LabelTool<>();
+        if (viewClass == RowView.class) return new RowViewTool<>();
+        if (viewClass == TabView.class) return new TabViewTool<>();
+        if (viewClass == TextField.class) return new TextFieldTool<>();
+        if (viewClass == ThumbWheel.class) return new ThumbWheelTool<>();
+        if (viewClass == TitleView.class) return new TitleViewTool<>();
+        if (viewClass == View.class || viewClass == null) return new ViewTool<>();
 
         // Try again with superclass
-        Class scls = aClass.getSuperclass();
-        return createTool(scls);
+        Class<?> superclass = viewClass.getSuperclass();
+        return createToolForViewClass(superclass);
     }
 
     /**
@@ -474,8 +465,8 @@ public class EditorPane extends ViewOwner {
         View mainView = super.createUI();
 
         // Create ColView holding MenuBar and EditorPane UI (with key listener so MenuBar catches shortcut keys)
-        View mbarView = MenuBar.createMenuBarView(getMenuBar().getUI(), mainView);
-        return mbarView;
+        MenuBar menuBar = getMenuBar().getUI();
+        return MenuBar.createMenuBarView(menuBar, mainView);
     }
 
     /**
@@ -484,15 +475,16 @@ public class EditorPane extends ViewOwner {
     protected void initUI()
     {
         // Get GallerySplitView (holds SplitView and Gallery)
-        _gallerySplit = getView("GallerySplitView", SplitView.class);
+        _gallerySplitView = getView("GallerySplitView", SplitView.class);
         getView("GalleryButton").setVisible(false);
 
         // Get TransPane and add GallerySplitView
         _transPane = getView("TransPane", TransitionPane.class);
-        _transPane.setContent(_gallerySplit);
+        _transPane.setContent(_gallerySplitView);
 
         // Get editor
         _editor = createEditor();
+        setFirstFocus(_editor);
         _editor.addPropChangeListener(_editorLsnr, Editor.SelView_Prop);
 
         // Add to EditorScrollView
@@ -500,15 +492,15 @@ public class EditorPane extends ViewOwner {
         scrollView.setContent(_editor);
 
         // Get Editor SplitView
-        _editorSplit = getView("SplitView", SplitView.class);
-        _editorSplit.setBorder(null);
+        _editorSplitView = getView("SplitView", SplitView.class);
+        _editorSplitView.setBorder(null);
 
         // Get/configure ViewTree
         _viewTree = getView("ViewTree", TreeView.class);
         _viewTree.getCol(0).setAltPaint(Editor.BACK_FILL.blend(Color.WHITE, .9));
         _viewTree.setResolver(new ViewTreeResolver());
         _viewTree.setOwner(this);
-        _editorSplit.removeItem(_viewTree);
+        _editorSplitView.removeItem(_viewTree);
 
         // Get EditorRowView and add Inspector UI
         RowView editorRowView = getView("EditorRowView", RowView.class);
@@ -570,7 +562,8 @@ public class EditorPane extends ViewOwner {
 
         // Reset Inspector, MenuBar
         getInspector().resetLater();
-        if (!ViewUtils.isMouseDown()) getMenuBar().resetLater();
+        if (!ViewUtils.isMouseDown())
+            getMenuBar().resetLater();
     }
 
     /**
@@ -601,34 +594,40 @@ public class EditorPane extends ViewOwner {
             toggleShowViewTree();
 
         // Handle GalleryButton
-        if (anEvent.equals("GalleryButton")) toggleShowGallery();
+        if (anEvent.equals("GalleryButton"))
+            toggleShowGallery();
 
         // Handle AddRowButton, AddColButton
-        if (anEvent.equals("AddRowButton")) addRowView();
-        if (anEvent.equals("AddColButton")) addColView();
+        if (anEvent.equals("AddRowButton"))
+            addRowView();
+        if (anEvent.equals("AddColButton"))
+            addColView();
 
         // Handle ViewTree
-        if (anEvent.equals(_viewTree)) {
+        if (anEvent.getView() == _viewTree) {
             View view = _viewTree.getSelItem();
             _editor.setSelView(view);
         }
 
         // Handle EscapeAction
         if (anEvent.equals("EscapeAction")) {
-            View sview = _editor.getSelView();
-            View par = sview.getParent();
-            if (sview != getContent())
-                _editor.setSelView(par);
+            View selView = _editor.getSelView();
+            View selViewParent = selView.getParent();
+            if (selView != getContent())
+                _editor.setSelView(selViewParent);
             else {
-                getEditor().getCopyPaster().copy(); // This is for me - quick top level copy
+                _editor.getCopyPaster().copy(); // This is for me - quick top level copy
                 beep();
             }
         }
 
         // Handle SaveMenuItem, SaveButton, SaveAsMenuItem, SaveAsPDFMenuItem, RevertMenuItem
-        if (anEvent.equals("SaveMenuItem") || anEvent.equals("SaveButton")) save();
-        if (anEvent.equals("SaveAsMenuItem")) saveAs();
-        if (anEvent.equals("RevertMenuItem")) revert();
+        if (anEvent.equals("SaveMenuItem") || anEvent.equals("SaveButton"))
+            save();
+        if (anEvent.equals("SaveAsMenuItem"))
+            saveAs();
+        if (anEvent.equals("RevertMenuItem"))
+            revert();
 
         // Handle WinClosing
         if (anEvent.isWinClose()) {
@@ -643,7 +642,7 @@ public class EditorPane extends ViewOwner {
     public void showEditor()
     {
         _transPane.setTransition(TransitionPane.MoveLeft);
-        _transPane.setContent(_gallerySplit);
+        _transPane.setContent(_gallerySplitView);
     }
 
     /**
@@ -652,7 +651,8 @@ public class EditorPane extends ViewOwner {
     public void showXMLEditor()
     {
         // Configure TransPane to slide in appropriate direction based on current mode
-        if (_transPane.getContent() == _gallerySplit) _transPane.setTransition(TransitionPane.MoveRight);
+        if (_transPane.getContent() == _gallerySplitView)
+            _transPane.setTransition(TransitionPane.MoveRight);
         else _transPane.setTransition(TransitionPane.MoveLeft);
 
         // Set TransPane.Content to XMLText.UI
@@ -666,15 +666,16 @@ public class EditorPane extends ViewOwner {
     public void showPreview()
     {
         // Create copy of content
-        View content = new ViewArchiver().copy(getContent());
-        content.setGrowWidth(false);
-        content.setGrowHeight(false);
-        if (content.getFill() == null)
-            content.setFill(ViewUtils.getBackFill());
-        content.setEffect(new ShadowEffect());
+        View content = getContent();
+        View contentCopy = new ViewArchiver().copy(content);
+        contentCopy.setGrowWidth(false);
+        contentCopy.setGrowHeight(false);
+        if (contentCopy.getFill() == null)
+            contentCopy.setFill(ViewUtils.getBackFill());
+        contentCopy.setEffect(new ShadowEffect());
 
         // Create BoxView to hold UI
-        BoxView box = new BoxView(content, false, false);
+        BoxView box = new BoxView(contentCopy, false, false);
         box.setFill(Editor.BACK_FILL.brighter());
 
         // Add to TransPane
@@ -691,7 +692,7 @@ public class EditorPane extends ViewOwner {
         if (_gallery.isShowing()) return;
 
         // Add item
-        _gallerySplit.addItemWithAnim(_gallery.getUI(), 220, 1);
+        _gallerySplitView.addItemWithAnim(_gallery.getUI(), 220, 1);
 
         // Update GalleryButton.Text
         getView("GalleryButton").setText("Hide Gallery");
@@ -706,7 +707,7 @@ public class EditorPane extends ViewOwner {
         if (!_gallery.isShowing()) return;
 
         // Remove item
-        _gallerySplit.removeItemWithAnim(_gallery.getUI());
+        _gallerySplitView.removeItemWithAnim(_gallery.getUI());
 
         // Update GalleryButton.Text
         getView("GalleryButton").setText("Show Gallery");
@@ -717,7 +718,8 @@ public class EditorPane extends ViewOwner {
      */
     public void toggleShowGallery()
     {
-        if (_gallery.isShowing()) hideGallery();
+        if (_gallery.isShowing())
+            hideGallery();
         else showGallery();
     }
 
@@ -736,8 +738,8 @@ public class EditorPane extends ViewOwner {
     protected void toggleShowViewTree()
     {
         if (_viewTree.getParent() == null)
-            _editorSplit.addItemWithAnim(_viewTree, 160, 0);
-        else _editorSplit.removeItemWithAnim(_viewTree);
+            _editorSplitView.addItemWithAnim(_viewTree, 160, 0);
+        else _editorSplitView.removeItemWithAnim(_viewTree);
     }
 
     /**
@@ -746,21 +748,25 @@ public class EditorPane extends ViewOwner {
     protected void updateSelPathBox()
     {
         _selPathBox.removeChildren();
-        if (_selPathDeep == null) _selPathDeep = _editor.getSelView();
-        View sview = _editor.getSelView();
-        View cview = getContent();
-        View view = _selPathDeep;
-        while (view != null) {
+        if (_selPathDeep == null)
+            _selPathDeep = _editor.getSelView();
+
+        View selView = _editor.getSelView();
+        View contentView = getContent();
+
+        // Iterate from SelPathDeepView to parent
+        for (View view = _selPathDeep; view != null; view = view.getParent()) {
             View view2 = view;
             Label label = new Label(view.getClass().getSimpleName());
             label.setPadding(2, 2, 2, 2);
-            if (view == sview) label.setFill(Color.LIGHTGRAY);
+            if (view == selView)
+                label.setFill(Color.LIGHTGRAY);
             label.addEventHandler(e -> selPathItemClicked(view2), MouseRelease);
             _selPathBox.addChild(label, 0);
             if (_selPathBox.getChildCount() > 1)
                 _selPathBox.addChild(new Label(" \u2022 "), 1);
-            if (view == cview) break;
-            view = view.getParent();
+            if (view == contentView)
+                break;
         }
     }
 
@@ -805,13 +811,14 @@ public class EditorPane extends ViewOwner {
         // Get parent ColView
         ColView colView = null;
         while (colView == null) {
-            if (view.getParent() instanceof ColView) colView = (ColView) view.getParent();
+            if (view.getParent() instanceof ColView)
+                colView = (ColView) view.getParent();
             else if (view == getContent()) return;
             else view = view.getParent();
         }
 
         // Add new row to ColView and select it
-        colView.addChild(newRow, view != null ? view.indexInParent() + 1 : colView.getChildCount());
+        colView.addChild(newRow, view.indexInParent() + 1);
         _editor.setSelView(newRow);
     }
 
@@ -836,13 +843,15 @@ public class EditorPane extends ViewOwner {
         // Get parent RowView
         RowView rowView = null;
         while (rowView == null) {
-            if (view == getContent()) return;
-            if (view.getParent() instanceof RowView) rowView = (RowView) view.getParent();
+            if (view == getContent())
+                return;
+            if (view.getParent() instanceof RowView)
+                rowView = (RowView) view.getParent();
             else view = view.getParent();
         }
 
         // Add new col to RowView and select it
-        rowView.addChild(newCol, view != null ? view.indexInParent() + 1 : rowView.getChildCount());
+        rowView.addChild(newCol, view.indexInParent() + 1);
         _editor.setSelView(newCol);
     }
 
@@ -853,11 +862,14 @@ public class EditorPane extends ViewOwner {
     {
         // Get window title: Basic filename + optional "Doc edited asterisk + optional "Doc Scaled"
         String title = getSourceURL() != null ? getSourceURL().getPath() : null;
-        if (title == null) title = "Untitled";
+        if (title == null)
+            title = "Untitled";
 
         // If has undos, add asterisk. If zoomed, add ZoomFactor
-        if (!isEditing()) title += "(preview)";
-        else if (getEditor().getUndoer() != null && getEditor().getUndoer().hasUndos()) title = "* " + title;
+        if (!isEditing())
+            title += "(preview)";
+        else if (getEditor().getUndoer() != null && getEditor().getUndoer().hasUndos())
+            title = "* " + title;
         return title;
     }
 
@@ -896,7 +908,8 @@ public class EditorPane extends ViewOwner {
          */
         public boolean isParent(View anItem)
         {
-            if (!(anItem instanceof ParentView)) return false;
+            if (!(anItem instanceof ParentView))
+                return false;
             if (anItem instanceof Label || anItem instanceof ButtonBase || anItem instanceof Spinner ||
                     anItem instanceof ArrowView || anItem instanceof TextField) return false;
             if (anItem instanceof ComboBox || anItem instanceof ListView) return false;
@@ -908,12 +921,12 @@ public class EditorPane extends ViewOwner {
          */
         public View[] getChildren(View aParent)
         {
-            ParentView par = (ParentView) aParent;
-            if (par instanceof ScrollView) {
-                ScrollView sp = (ScrollView) par;
-                return sp.getContent() != null ? new View[]{sp.getContent()} : new View[0];
+            ParentView parentView = (ParentView) aParent;
+            if (parentView instanceof ScrollView) {
+                ScrollView scrollView = (ScrollView) parentView;
+                return scrollView.getContent() != null ? new View[] { scrollView.getContent() } : new View[0];
             }
-            return par.getChildren();
+            return parentView.getChildren();
         }
 
         /**

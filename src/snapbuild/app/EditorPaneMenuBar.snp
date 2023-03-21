@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <MenuBar Padding="0,10,0,10">
-    <Menu Name="FileMenu" text="File">
+    <Menu Name="FileMenu" MinHeight="30" text="File">
         <MenuItem Name="NewMenuItem" text="New" key="meta N"/>
         <MenuItem Name="OpenMenuItem" text="Open..." key="meta O"/>
         <MenuItem Name="OpenRecentMenuItem" text="Open Recent..."/>

@@ -4,12 +4,12 @@ import snap.gfx.*;
 import snap.view.*;
 
 /**
- * An class to manage UI editing of a View.
+ * A class to manage UI editing of a View.
  */
 public class ViewTool<T extends View> extends ViewOwner {
 
     // The EditorPane
-    EditorPane _epane;
+    protected EditorPane  _editorPane;
 
     /**
      * Returns the name.
@@ -24,18 +24,12 @@ public class ViewTool<T extends View> extends ViewOwner {
     /**
      * Returns the editor pane.
      */
-    public EditorPane getEditorPane()
-    {
-        return _epane;
-    }
+    public EditorPane getEditorPane()  { return _editorPane; }
 
     /**
      * Returns the editor.
      */
-    public Editor getEditor()
-    {
-        return _epane.getEditor();
-    }
+    public Editor getEditor()  { return _editorPane.getEditor(); }
 
     /**
      * Returns the selected view.

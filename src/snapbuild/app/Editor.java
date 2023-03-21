@@ -17,11 +17,8 @@ public class Editor extends ParentView {
     // The Source URL
     protected WebURL _url;
 
-    // The content
-    private View _content;
-
     // The context box
-    private BoxView _cbox;
+    private BoxView _contentBox;
 
     // The undoer
     private Undoer _undoer = new Undoer();
@@ -40,6 +37,9 @@ public class Editor extends ParentView {
 
     // The DeepChangeListener
     DeepChangeListener _contentDeepChangeLsnr = (src, pce) -> contentDidDeepChange(src, pce);
+
+    // A Shared updater to kick off save
+    private WebFile.Updater _fileUpdater = file -> updateFile();
 
     // Constants for properties
     public static final String SelView_Prop = "SelView";
@@ -64,17 +64,17 @@ public class Editor extends ParentView {
         setFocusWhenPressed(true);
 
         // Configure ContentBox
-        _cbox = new BoxView();
-        _cbox.setFillWidth(true);
-        _cbox.setFillHeight(true);
-        _cbox.setFill(ViewUtils.getBackFill());
-        _cbox.setFill(BACK_FILL.blend(Color.WHITE, .8));
-        _cbox.setBorder(new Color("#99"), 1);
-        _cbox.setEffect(new ShadowEffect());
-        _cbox.setPickable(false);
-        _cbox.setMinSize(200, 200);
-        _cbox.addDeepChangeListener(_contentDeepChangeLsnr);
-        addChild(_cbox);
+        _contentBox = new BoxView();
+        _contentBox.setFillWidth(true);
+        _contentBox.setFillHeight(true);
+        _contentBox.setFill(ViewUtils.getBackFill());
+        _contentBox.setFill(BACK_FILL.blend(Color.WHITE, .8));
+        _contentBox.setBorder(new Color("#99"), 1);
+        _contentBox.setEffect(new ShadowEffect());
+        _contentBox.setPickable(false);
+        _contentBox.setMinSize(200, 200);
+        _contentBox.addDeepChangeListener(_contentDeepChangeLsnr);
+        addChild(_contentBox);
 
         // Set default content
         setContent(new ColView());
@@ -107,19 +107,19 @@ public class Editor extends ParentView {
     /**
      * Returns the content box.
      */
-    public View getContentBox()  { return _cbox; }
+    public View getContentBox()  { return _contentBox; }
 
     /**
      * Returns the content view.
      */
-    public View getContent()  { return _cbox.getContent(); }
+    public View getContent()  { return _contentBox.getContent(); }
 
     /**
      * Sets the content view.
      */
     public void setContent(View aView)
     {
-        _cbox.setContent(aView);
+        _contentBox.setContent(aView);
         setSelView(aView);
     }
 
@@ -152,20 +152,20 @@ public class Editor extends ParentView {
     /**
      * Adds a view to content.
      */
-    public void addView(Class<? extends View> aCls)
+    public void addViewToContentForViewClass(Class<? extends View> aCls)
     {
         // Create view from class, configure, add
         View view = null;
         try { view = aCls.newInstance(); }
         catch (Exception e) { }
         ViewHpr.getHpr(view).configure(view);
-        addView(view);
+        addViewToContent(view);
     }
 
     /**
      * Adds a view to content.
      */
-    public void addView(View aView)
+    public void addViewToContent(View aView)
     {
         // Get AddView and index
         EditorSel.Tuple<View, Integer> addViewAndIndex = _sel.getSelHostViewAndIndex();
@@ -189,7 +189,7 @@ public class Editor extends ParentView {
     /**
      * Adds a given view at given point.
      */
-    public void addViewAtPoint(View aView, Point aPoint)
+    public void addViewToContentAtPoint(View aView, Point aPoint)
     {
         EditorSel.Tuple<View, Integer> viewIndex = getSel().getHostViewAndIndexForPoint(aPoint);
         View hostView = viewIndex.getA();
@@ -202,7 +202,7 @@ public class Editor extends ParentView {
     /**
      * Adds an image.
      */
-    public void addImage(Image anImage)
+    public void addImageToContent(Image anImage)
     {
         View selView = getSelView();
         if (selView instanceof ButtonBase)
@@ -210,8 +210,8 @@ public class Editor extends ParentView {
         else if (selView instanceof Label)
             ((Label) selView).setImage(anImage);
         else {
-            ImageView iview = new ImageView(anImage);
-            addView(iview);
+            ImageView imageView = new ImageView(anImage);
+            addViewToContent(imageView);
         }
     }
 
@@ -283,9 +283,9 @@ public class Editor extends ParentView {
      */
     public void setEditing(boolean aValue)
     {
-        _cbox.setPickable(true);
+        _contentBox.setPickable(true);
         disableEvents(MouseRelease);
-        _cbox.removeDeepChangeListener(_contentDeepChangeLsnr);
+        _contentBox.removeDeepChangeListener(_contentDeepChangeLsnr);
     }
 
     /**
@@ -316,10 +316,10 @@ public class Editor extends ParentView {
      */
     public void updateFile()
     {
-        WebFile file = getSourceFile(true);
+        WebFile sourceFile = getSourceFile(true);
         XMLElement xml = getContentXML();
         byte[] bytes = xml.getBytes();
-        file.setBytes(bytes);
+        sourceFile.setBytes(bytes);
     }
 
     /**
@@ -327,8 +327,7 @@ public class Editor extends ParentView {
      */
     protected double getPrefWidthImpl(double aH)
     {
-        double pw = BoxView.getPrefWidth(this, _cbox, aH);
-        return pw;
+        return BoxView.getPrefWidth(this, _contentBox, aH);
     }
 
     /**
@@ -336,8 +335,7 @@ public class Editor extends ParentView {
      */
     protected double getPrefHeightImpl(double aW)
     {
-        double ph = BoxView.getPrefHeight(this, _cbox, aW);
-        return ph;
+        return BoxView.getPrefHeight(this, _contentBox, aW);
     }
 
     /**
@@ -345,7 +343,7 @@ public class Editor extends ParentView {
      */
     protected void layoutImpl()
     {
-        BoxView.layout(this, _cbox, false, false);
+        BoxView.layout(this, _contentBox, false, false);
     }
 
     /**
@@ -376,12 +374,12 @@ public class Editor extends ParentView {
     protected void paintAbove(Painter aPntr)
     {
         // Get round rect for selected view
-        View sview = getSelView();
-        Rect bnds = sview.localToParent(sview.getBoundsShape(), this).getBounds();
+        View selView = getSelView();
+        Rect bnds = selView.localToParent(selView.getBoundsShape(), this).getBounds();
         RoundRect rrect = new RoundRect(bnds.x - 1, bnds.y - 1, bnds.width + 2, bnds.height + 2, 3);
 
         // Paint selection for SelView
-        if (sview != getContent()) {
+        if (selView != getContent()) {
             aPntr.setColor(SEL_COLOR);
             aPntr.setStroke(SEL_STROKE);
             aPntr.draw(rrect);
@@ -389,11 +387,11 @@ public class Editor extends ParentView {
         }
 
         // Repaint SelView so selection is behind
-        if (sview.getRotate() == 0) {
-            Point pnt = sview.getParent().localToParent(sview.getX(), sview.getY(), this);
-            aPntr.translate(pnt.x, pnt.y);
-            ViewUtils.paintAll(sview, aPntr);
-            aPntr.translate(-pnt.x, -pnt.y);
+        if (selView.getRotate() == 0) {
+            Point selViewXYInParent = selView.getParent().localToParent(selView.getX(), selView.getY(), this);
+            aPntr.translate(selViewXYInParent.x, selViewXYInParent.y);
+            ViewUtils.paintAll(selView, aPntr);
+            aPntr.translate(-selViewXYInParent.x, -selViewXYInParent.y);
         }
 
         // Paint SelSpot caret (if needed)
@@ -414,8 +412,9 @@ public class Editor extends ParentView {
     public void undo()
     {
         // If undoer exists, do undo, select views and repaint
-        if (getUndoer() != null && getUndoer().getUndoSetLast() != null) {
-            UndoSet undoSet = getUndoer().undo();
+        Undoer undoer = getUndoer();
+        if (undoer != null && undoer.getUndoSetLast() != null) {
+            UndoSet undoSet = undoer.undo();
             setUndoSelection(undoSet.getUndoSelection());
             repaint();
         }
@@ -430,8 +429,9 @@ public class Editor extends ParentView {
     public void redo()
     {
         // If undoer exists, do undo, select views and repaint
-        if (getUndoer() != null && getUndoer().getRedoSetLast() != null) {
-            UndoSet redoSet = getUndoer().redo();
+        Undoer undoer = getUndoer();
+        if (undoer != null && undoer.getRedoSetLast() != null) {
+            UndoSet redoSet = undoer.redo();
             setUndoSelection(redoSet.getRedoSelection());
             repaint();
         }
@@ -458,22 +458,26 @@ public class Editor extends ParentView {
     {
         // Get source and prop name (if not View, just return)
         Object src = aPC.getSource();
-        View view = (View) aView, sview = src instanceof View ? (View) src : null;
-        if (view == null) return;
-        String pname = aPC.getPropertyName();
+        View propChangeView = src instanceof View ? (View) src : null;
+        View view = (View) aView;
+        if (view == null)
+            return;
+        String propName = aPC.getPropName();
 
         // Ignore properties: Showing, NeedsLayout
-        if (pname == Parent_Prop) return;
-        if (pname == Showing_Prop) return;
-        if (pname == NeedsLayout_Prop) return;
-        if (pname == ParentView.Child_Prop) {
+        if (propName == Parent_Prop) return;
+        if (propName == Showing_Prop) return;
+        if (propName == NeedsLayout_Prop) return;
+        if (propName == ParentView.Child_Prop) {
             if (!(view instanceof ViewHost))
                 return;
         }
 
         // Ignore layout changes
-        if (view instanceof ParentView && ((ParentView) view).isInLayout()) return;
-        if (sview instanceof ParentView && ((ParentView) sview).isInLayout()) return;
+        if (view instanceof ParentView && ((ParentView) view).isInLayout())
+            return;
+        if (propChangeView instanceof ParentView && ((ParentView) propChangeView).isInLayout())
+            return;
 
         // If undoer exists, set selected objects and add property change
         Undoer undoer = getUndoer();
@@ -492,16 +496,13 @@ public class Editor extends ParentView {
             // Set updator
             WebFile file = getSourceFile(false);
             if (file != null)
-                file.setUpdater(undoer.hasUndos() ? _updr : null);
+                file.setUpdater(undoer.hasUndos() ? _fileUpdater : null);
         }
 
         // Forward DeepChanges to EditorPane. Should have add/removeDeepChagneLister methods for this.
         //EditorPane ep = getEditorPane(); if(ep!=null) ep.resetLater();
         repaint();
     }
-
-    // A Shared updater to kick off save
-    private WebFile.Updater _updr = file -> updateFile();
 
     /**
      * Saves Undo Changes.
