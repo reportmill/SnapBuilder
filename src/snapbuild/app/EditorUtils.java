@@ -1,4 +1,5 @@
 package snapbuild.app;
+import snap.util.ArrayUtils;
 import snap.view.*;
 import snap.viewx.*;
 
@@ -12,20 +13,24 @@ public class EditorUtils {
      */
     public static void moveViewUp(Editor anEditor)
     {
-        View sview = anEditor.getSelView();
-        ViewHost host = sview.getHost();
-        if (host == null) {
+        // Get SelView and ParentView
+        View selView = anEditor.getSelView();
+        ParentView parentView = selView.getParent();
+        if (parentView == null) {
             ViewUtils.beep();
             return;
         }
 
-        int ind = sview.indexInParent();
-        if (ind == 0) {
+        // Get index in parent
+        int indexInParent = selView.indexInParent();
+        if (indexInParent == 0) {
             ViewUtils.beep();
             return;
         }
-        host.removeGuest(sview);
-        host.addGuest(sview, ind - 1);
+
+        // Remove/add child at new index
+        ViewUtils.removeChild(parentView, selView);
+        ViewUtils.addChild(parentView, selView, indexInParent - 1);
     }
 
     /**
@@ -33,20 +38,24 @@ public class EditorUtils {
      */
     public static void moveViewDown(Editor anEditor)
     {
-        View sview = anEditor.getSelView();
-        ViewHost host = sview.getHost();
-        if (host == null) {
+        // Get SelView and ParentView
+        View selView = anEditor.getSelView();
+        ParentView parentView = selView.getParent();
+        if (parentView == null) {
             ViewUtils.beep();
             return;
         }
 
-        int ind = sview.indexInHost();
-        if (ind + 1 >= host.getGuestCount()) {
+        // Get index in parent
+        int indexInParent = selView.indexInParent();
+        if (indexInParent + 1 >= parentView.getChildCount()) {
             ViewUtils.beep();
             return;
         }
-        host.removeGuest(sview);
-        host.addGuest(sview, ind + 1);
+
+        // Remove/add child at new index
+        ViewUtils.removeChild(parentView, selView);
+        ViewUtils.addChild(parentView, selView, indexInParent + 1);
     }
 
     /**
@@ -54,22 +63,25 @@ public class EditorUtils {
      */
     public static void moveViewOut(Editor anEditor)
     {
-        View sview = anEditor.getSelView();
-        ViewHost host = sview.getHost();
-        if (host == null) {
-            ViewUtils.beep();
-            return;
-        }
-        ViewHost hostHost = ((View) host).getHost();
-        if (hostHost == null) {
+        // Get SelView and ParentView
+        View selView = anEditor.getSelView();
+        ParentView parentView = selView.getParent();
+        if (parentView == null) {
             ViewUtils.beep();
             return;
         }
 
-        int ind = sview.indexInParent();
-        int ind2 = hostHost.indexOfGuest((View) host);
-        host.removeGuest(sview);
-        hostHost.addGuest(sview, ind2 + 1);
+        // Get index in parent
+        ParentView grandparentView = parentView.getParent();
+        if (grandparentView == null) {
+            ViewUtils.beep();
+            return;
+        }
+
+        // Remove/add child to new parent
+        int indexInGrandparent = parentView.indexInParent();
+        ViewUtils.removeChild(parentView, selView);
+        ViewUtils.addChild(grandparentView, selView, indexInGrandparent + 1);
     }
 
     /**
@@ -84,28 +96,28 @@ public class EditorUtils {
         form.addLabel("Select group view class:").setFont(new snap.gfx.Font("Arial", 24));
 
         // Define options
-        Class opts[] = {TitleView.class, TabView.class, SplitView.class, ScrollView.class, BoxView.class,
-                ColView.class, RowView.class, BorderView.class};
+        Class<?>[] viewClasses = new Class[] {
+            ColView.class, RowView.class, BoxView.class, TitleView.class, CollapseView.class,
+            TabView.class, SplitView.class, ScrollView.class, BorderView.class
+        };
 
         // Add and configure radio buttons
-        for (int i = 0; i < opts.length; i++) {
-            Class opt = opts[i];
-            form.addRadioButton("ViewClass", opt.getSimpleName(), i == 0);
+        for (int i = 0; i < viewClasses.length; i++) {
+            Class<?> viewClass = viewClasses[i];
+            form.addRadioButton("ViewClass", viewClass.getSimpleName(), i == 0);
         }
 
         // Run dialog panel (just return if cancelled)
         if (!form.showPanel(anEditor, "Group in View", DialogBox.infoImage)) return;
 
         // Get select class string, and class
-        String cstr = form.getStringValue("ViewClass");
-        int ind = 0;
-        for (int i = 0; i < opts.length; i++) if (cstr.equals(opts[i].getSimpleName())) ind = i;
-        Class cls = opts[ind];
+        String className = form.getStringValue("ViewClass");
+        Class<?> viewClass = ArrayUtils.findMatch(viewClasses, cls -> className.equals(cls.getSimpleName()));
 
         // Create group view
         ParentView groupView;
         try {
-            groupView = (ParentView) cls.newInstance();
+            groupView = (ParentView) viewClass.newInstance();
         }
         catch (Exception e) {
             throw new RuntimeException(e);
@@ -113,17 +125,20 @@ public class EditorUtils {
         ViewHpr.getHpr(groupView).configure(groupView);
 
         // Add group view to view parent
-        View sview = anEditor.getSelView();
-        ViewHost par = sview.getHost();
-        if (par == null) {
+        View selView = anEditor.getSelView();
+        ViewHost parentView = selView.getHost();
+        if (parentView == null) {
             ViewUtils.beep();
             return;
         }
-        par.addGuest(groupView, sview.indexInHost());
 
-        ViewHost groupHost = groupView instanceof ViewHost ? (ViewHost) groupView : null;
-        if (groupHost == null) return;
-        groupHost.addGuest(sview);
+        // Add GroupView at SelView index
+        parentView.addGuest(groupView, selView.indexInHost());
+
+        // Replace SelView with GroupView, add SelView to GroupView, select GroupView
+        ViewHost grandparentView = groupView instanceof ViewHost ? (ViewHost) groupView : null;
+        if (grandparentView != null)
+            grandparentView.addGuest(selView);
         anEditor.setSelView(groupView);
     }
 
@@ -133,13 +148,15 @@ public class EditorUtils {
     public static void ungroupView(Editor anEditor)
     {
         // Get View
-        View view = anEditor.getSelView();
-        ViewHost par = view.getHost();
-        if (par == null) {
+        View selView = anEditor.getSelView();
+        ViewHost parentView = selView.getHost();
+        if (parentView == null) {
             ViewUtils.beep();
             return;
         }
-        ViewHost groupHost = view instanceof ViewHost ? (ViewHost) view : null;
+
+        // Get GroupHost
+        ViewHost groupHost = selView instanceof ViewHost ? (ViewHost) selView : null;
         if (groupHost == null) {
             ViewUtils.beep();
             return;
@@ -147,11 +164,11 @@ public class EditorUtils {
 
         // Add view guests to host view and remove old host
         for (View child : groupHost.getGuests())
-            par.addGuest(child);
-        par.removeGuest(view);
+            parentView.addGuest(child);
+        parentView.removeGuest(selView);
 
         // Select host
-        anEditor.setSelView((View) par);
+        anEditor.setSelView((View) parentView);
     }
 
     /**
@@ -166,57 +183,81 @@ public class EditorUtils {
         form.addLabel("Select new host view class:").setFont(new snap.gfx.Font("Arial", 24));
 
         // Define options
-        Class opts[] = {TitleView.class, TabView.class, SplitView.class, ScrollView.class, BoxView.class,
-                ColView.class, RowView.class, BorderView.class};
+        Class<?>[] viewClasses = {
+            ColView.class, RowView.class, BoxView.class, TitleView.class, CollapseView.class,
+            TabView.class, SplitView.class, ScrollView.class, BorderView.class
+        };
 
         // Add and configure radio buttons
-        for (int i = 0; i < opts.length; i++) {
-            Class opt = opts[i];
+        for (int i = 0; i < viewClasses.length; i++) {
+            Class<?> opt = viewClasses[i];
             form.addRadioButton("ViewClass", opt.getSimpleName(), i == 0);
         }
 
         // Run dialog panel (just return if cancelled)
-        if (!form.showPanel(anEditor, "Group in View", DialogBox.infoImage)) return;
+        if (!form.showPanel(anEditor, "Group in View", DialogBox.infoImage))
+            return;
 
         // Get select class string, and class
-        String cstr = form.getStringValue("ViewClass");
-        int ind = 0;
-        for (int i = 0; i < opts.length; i++) if (cstr.equals(opts[i].getSimpleName())) ind = i;
-        Class cls = opts[ind];
+        String className = form.getStringValue("ViewClass");
+        Class<?> viewClass = ArrayUtils.findMatch(viewClasses, cls -> className.equals(cls.getSimpleName()));
 
         // Create new parent view
-        ParentView parNew;
+        ParentView groupView;
         try {
-            parNew = (ParentView) cls.newInstance();
+            groupView = (ParentView) viewClass.newInstance();
         }
         catch (Exception e) {
             throw new RuntimeException(e);
         }
-        ViewHpr.getHpr(parNew).configure(parNew);
-        ViewHost hostNew = parNew instanceof ViewHost ? (ViewHost) parNew : null;
+        ViewHpr.getHpr(groupView).configure(groupView);
+        ViewHost hostNew = groupView instanceof ViewHost ? (ViewHost) groupView : null;
         if (hostNew == null) {
             ViewUtils.beep();
             return;
         }
 
         // Get old host and parent
-        View sview = anEditor.getSelView();
-        ViewHost hostOld = sview instanceof ViewHost ? (ViewHost) sview : null;
+        View selView = anEditor.getSelView();
+        ViewHost hostOld = selView instanceof ViewHost ? (ViewHost) selView : null;
         if (hostOld == null) {
             ViewUtils.beep();
             return;
         }
-        ViewHost par = sview.getHost();
-        if (par == null) {
+        ViewHost parentView = selView.getHost();
+        if (parentView == null) {
             ViewUtils.beep();
             return;
         }
 
         // Add new host
-        par.addGuest(parNew, sview.indexInHost());
+        parentView.addGuest(groupView, selView.indexInHost());
         for (View guest : hostOld.getGuests())
             hostNew.addGuest(guest);
-        par.removeGuest(sview);
-        anEditor.setSelView(parNew);
+        parentView.removeGuest(selView);
+        anEditor.setSelView(groupView);
+    }
+
+    /**
+     * Creates a new default editor pane.
+     */
+    public static ParentView createNewDocView()
+    {
+        // Create ColView as root view
+        ColView colView = new ColView();
+        colView.setPrefSize(400, 400);
+        colView.setPadding(20, 20, 20, 20);
+        colView.setSpacing(4);
+
+        // Create default RowView as default child
+        RowView rowView = new RowView();
+        rowView.setName("FirstFocus");
+        rowView.setPadding(4, 4, 4, 4);
+        rowView.setSpacing(4);
+        rowView.setGrowWidth(true);
+        colView.addChild(rowView);
+
+        // Return
+        return colView;
     }
 }

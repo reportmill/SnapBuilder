@@ -167,21 +167,14 @@ public class EditorPane extends ViewOwner {
     public EditorPane newDocument()
     {
         // Create ColView as root view
-        ColView col = new ColView();
-        col.setPadding(20, 20, 20, 20);
-        col.setSpacing(4);
-
-        // Create default RowView as default child
-        RowView row = new RowView();
-        row.setPadding(4, 4, 4, 4);
-        row.setSpacing(4);
-        row.setGrowWidth(true);
-        col.addChild(row);
+        ParentView newDocView = EditorUtils.createNewDocView();
+        View selView = newDocView.getChildForName("FirstFocus");
+        selView.setName(null);
 
         // Set ColView as Editor content, select row and return
         Editor editor = getEditor();
-        editor.setContent(col);
-        editor.setSelView(row);
+        editor.setContent(newDocView);
+        editor.setSelView(selView);
         return this;
     }
 
@@ -216,6 +209,13 @@ public class EditorPane extends ViewOwner {
         Editor editor = getEditor();
         editor.setContent(parentView);
         editor._url = sourceURL;
+
+        // Hack for opening new doc in SnapCode
+        View selView = parentView.getChildForName("FirstFocus");
+        if (selView != null) {
+            selView.setName(null);
+            editor.setSelView(selView);
+        }
 
         // Return the editor
         return this;

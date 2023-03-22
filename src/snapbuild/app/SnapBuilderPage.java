@@ -39,12 +39,15 @@ public class SnapBuilderPage extends WebPage {
     protected WebFile createNewFile(String aPath)
     {
         // Create file
-        WebFile file = super.createNewFile(aPath);
+        WebFile newFile = super.createNewFile(aPath);
 
         // Create text
-        String sb = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + "<ColView PrefWidth=\"400\" PrefHeight=\"400\">\n" +
-                "</ColView>\n";
-        file.setText(sb);
-        return file;
+        ParentView newDocView = EditorUtils.createNewDocView();
+        ViewArchiver viewArchiver = new ViewArchiver();
+        String fileText = viewArchiver.writeToXML(newDocView).getString();
+        newFile.setText(fileText);
+
+        // Return
+        return newFile;
     }
 }
