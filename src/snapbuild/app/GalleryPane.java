@@ -1,10 +1,8 @@
 package snapbuild.app;
 import snap.gfx.Image;
-import snap.styler.Collapser;
 import snap.util.URLUtils;
 import snap.view.*;
 import snap.viewx.TextPane;
-
 import java.util.*;
 
 /**
@@ -52,12 +50,12 @@ public class GalleryPane extends ViewOwner {
     {
         // Add Collapser with label for ArrangeBox
         View arrangeBox = getView("ArrangeBox");
-        Collapser arrangeCollapser = Collapser.createCollapserAndLabel(arrangeBox, "Arrange Views");
+        CollapseView arrangeCollapser = CollapseView.replaceViewWithCollapseView(arrangeBox, "Arrange Views");
         arrangeCollapser.setCollapsed(true);
 
         // Add Collapser with label for ViewsBox
         View viewsBox = getView("ViewsBox");
-        Collapser viewCollapser = Collapser.createCollapserAndLabel(viewsBox, "Select View");
+        CollapseView viewCollapser = CollapseView.replaceViewWithCollapseView(viewsBox, "Select View");
         viewCollapser.setGroupForName("GalleryPane");
         viewCollapser.setFirstFocus(getView("SearchTextField"));
 
@@ -77,7 +75,7 @@ public class GalleryPane extends ViewOwner {
         ColView flatIconView = _flatIcon.getUI(ColView.class);
         flatIconView.setGrowHeight(true);
         colView.addChild(flatIconView);
-        Collapser imageSearchCollapse = Collapser.createCollapserAndLabel(flatIconView, "Select Image");
+        CollapseView imageSearchCollapse = CollapseView.replaceViewWithCollapseView(flatIconView, "Select Image");
         imageSearchCollapse.setCollapsed(true);
         imageSearchCollapse.setGroupForName("GalleryPane");
         imageSearchCollapse.setFirstFocus(_flatIcon.getView("SearchTextField"));

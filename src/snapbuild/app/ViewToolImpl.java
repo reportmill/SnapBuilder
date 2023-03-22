@@ -1,10 +1,8 @@
 package snapbuild.app;
 import java.text.DecimalFormat;
-
 import snap.geom.*;
 import snap.gfx.*;
 import snap.props.PropChange;
-import snap.styler.Collapser;
 import snap.util.*;
 import snap.view.*;
 
@@ -46,8 +44,8 @@ public class ViewToolImpl<T extends View> extends ViewTool<T> {
         // Set label
         Editor editor = _editorPane.getEditor();
         View selView = editor.getSelView();
-        String text = selView.getClass().getSimpleName() + " Settings";
-        setViewValue("SubclassLabel", text);
+        String subclassCollapseViewTitle = selView.getClass().getSimpleName() + " Settings";
+        setViewText("SubclassCollapseView", subclassCollapseViewTitle);
     }
 
     /**
@@ -57,11 +55,11 @@ public class ViewToolImpl<T extends View> extends ViewTool<T> {
     {
         // Add Collapser for ViewLabel and ViewPropsView
         View viewPropsView = getView("ViewPropsView");
-        Collapser.createCollapserAndLabel(viewPropsView, "View Settings");
+        CollapseView.replaceViewWithCollapseView(viewPropsView, "View Settings");
 
         // Add Collapser for SubclassLabel and SubclassPropsView
         View subclassPropsView = getView("SubclassPropsView");
-        Collapser.createCollapserAndLabel(subclassPropsView, "Subclass");
+        CollapseView.replaceViewWithCollapseView(subclassPropsView, "Subclass");
 
         // Add Collapser for ViewLabel and ViewPropsView
         //Label viewLabel = getView("ViewLabel", Label.class);
