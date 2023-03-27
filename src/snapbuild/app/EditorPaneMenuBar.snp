@@ -3,7 +3,6 @@
     <Menu Name="FileMenu" MinHeight="30" text="File">
         <MenuItem Name="NewMenuItem" text="New" key="meta N"/>
         <MenuItem Name="OpenMenuItem" text="Open..." key="meta O"/>
-        <MenuItem Name="OpenRecentMenuItem" text="Open Recent..."/>
         <MenuItem/>
         <MenuItem Name="CloseMenuItem" text="Close" key="meta W"/>
         <MenuItem Name="SaveMenuItem" text="Save" key="meta S"/>

@@ -102,13 +102,6 @@ public class EditorPaneMenuBar extends ViewOwner {
                 editorPane2.setWindowVisible(true);
         }
 
-        // Handle OpenRecentMenuItem
-        if (anEvent.equals("OpenRecentMenuItem")) {
-            String path = RecentFiles.showPathsPanel(editorPane.getUI());
-            if (path == null) return;
-            WelcomePanel.getShared().openFile(path); //file.getAbsolutePath());
-        }
-
         // Handle CloseMenuItem
         if (anEvent.equals("CloseMenuItem")) editorPane.close();
 
