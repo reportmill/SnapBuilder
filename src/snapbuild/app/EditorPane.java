@@ -327,7 +327,7 @@ public class EditorPane extends ViewOwner {
             return;
 
         // Run option panel for revert confirmation (just return if denied)
-        String msg = "Revert to saved version of " + sourceURL.getPathName() + "?";
+        String msg = "Revert to saved version of " + sourceURL.getFilename() + "?";
         DialogBox dialogBox = new DialogBox("Revert to Saved");
         dialogBox.setQuestionMessage(msg);
         if (!dialogBox.showConfirmDialog(getUI()))
