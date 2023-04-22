@@ -1,5 +1,5 @@
 package snapbuild.apptools;
-import snap.util.SnapUtils;
+import snap.util.Convert;
 import snapbuild.app.ViewTool;
 import snap.geom.Pos;
 import snap.view.*;
@@ -50,7 +50,7 @@ public class ButtonBaseTool<T extends ButtonBase> extends ViewTool<T> {
 
         // Respond to Pos buttons
         if (anEvent.getName().startsWith("Pos")) {
-            int pval = SnapUtils.intValue(anEvent.getName());
+            int pval = Convert.intValue(anEvent.getName());
             Pos pos = Pos.values()[pval];
             selView.setPosition(pos);
         }

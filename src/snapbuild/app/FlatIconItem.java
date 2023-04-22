@@ -1,15 +1,13 @@
 package snapbuild.app;
-
 import snap.geom.Pos;
 import snap.gfx.Color;
 import snap.gfx.Font;
 import snap.gfx.Image;
+import snap.util.Convert;
 import snap.util.JSValue;
 import snap.util.JSObject;
-import snap.util.SnapUtils;
 import snap.view.TextArea;
 import snap.view.ViewUtils;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -45,7 +43,7 @@ public class FlatIconItem {
 
         // Get Id
         String idStr = _itemNode.getStringValue("id");
-        _id = SnapUtils.intValue(idStr);
+        _id = Convert.intValue(idStr);
 
         // Get description
         _desc = _itemNode.getStringValue("description");
@@ -59,7 +57,7 @@ public class FlatIconItem {
         for (Map.Entry<String, JSValue> entry : keyValues.entrySet()) {
             String key = entry.getKey();
             JSValue sizeNode = entry.getValue();
-            int size = SnapUtils.intValue(key);
+            int size = Convert.intValue(key);
             String urls = sizeNode.getValueAsString();
             _pngURLs.put(size, urls);
         }

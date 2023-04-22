@@ -1,11 +1,9 @@
 package snapbuild.app;
-
 import snap.gfx.Image;
+import snap.util.Convert;
 import snap.util.JSArray;
 import snap.util.JSObject;
-import snap.util.SnapUtils;
 import snap.web.*;
-
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -106,8 +104,8 @@ public class FlatIcon {
 
         // Get metadata, count, total
         JSObject metaNode = (JSObject) json.getValue("metadata");
-        int count = SnapUtils.intValue(metaNode.getNativeValue("count"));
-        int total = SnapUtils.intValue(metaNode.getNativeValue("total"));
+        int count = Convert.intValue(metaNode.getNativeValue("count"));
+        int total = Convert.intValue(metaNode.getNativeValue("total"));
         System.out.println("Found " + count + " of " + total);
 
         // Get data

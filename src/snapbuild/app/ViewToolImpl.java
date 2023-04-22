@@ -132,7 +132,7 @@ public class ViewToolImpl<T extends View> extends ViewTool<T> {
         setViewValue("PadText", getInsetsString(selView.getPadding()));
 
         // Update SpaceText
-        setViewValue("SpaceText", SnapUtils.stringValue(selView.getSpacing()));
+        setViewValue("SpaceText", Convert.stringValue(selView.getSpacing()));
 
         // Update LeanX, LeanY
         setViewValue("LeanX0", selView.getLeanX() == HPos.LEFT);

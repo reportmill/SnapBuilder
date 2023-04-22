@@ -4,7 +4,7 @@ import snap.parse.*;
 import snap.text.RichText;
 import snap.text.TextDoc;
 import snap.text.TextStyle;
-import snap.util.SnapUtils;
+import snap.util.Convert;
 import snap.view.*;
 
 /**
@@ -95,7 +95,7 @@ public class XMLText extends ViewOwner {
      */
     public int getCharStart(View aView)
     {
-        return SnapUtils.intValue(aView.getProp("CharStart"));
+        return Convert.intValue(aView.getProp("CharStart"));
     }
 
     /**
@@ -111,7 +111,7 @@ public class XMLText extends ViewOwner {
      */
     public int getCharEnd(View aView)
     {
-        return SnapUtils.intValue(aView.getProp("CharEnd"));
+        return Convert.intValue(aView.getProp("CharEnd"));
     }
 
     /**
