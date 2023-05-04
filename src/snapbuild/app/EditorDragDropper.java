@@ -170,7 +170,7 @@ public class EditorDragDropper {
     {
         // Get image source and image
         Object imgSrc = aFile.getSourceURL() != null ? aFile.getSourceURL() : aFile.getBytes();
-        Image image = Image.get(imgSrc);
+        Image image = Image.getImageForSource(imgSrc);
 
         // Create ImageView and add at point
         ImageView iview = new ImageView(image);

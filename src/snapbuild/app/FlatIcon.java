@@ -145,7 +145,7 @@ public class FlatIcon {
         }
 
         byte bytes[] = resp.getBytes();
-        Image img = Image.get(bytes);
+        Image img = Image.getImageForSource(bytes);
         return img;
     }
 

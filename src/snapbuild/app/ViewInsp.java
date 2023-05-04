@@ -32,8 +32,8 @@ public class ViewInsp extends ViewOwner {
         // Set Font button images
         setViewItems("FontCombo", new String[]{"Arial", "ArialBold"});
         setViewSelItem("FontCombo", "Arial");
-        getView("FontPlusButton", ButtonBase.class).setImage(Image.get(TextPane.class, "pkg.images/Font_Increase.png"));
-        getView("FontMinusButton", ButtonBase.class).setImage(Image.get(TextPane.class, "pkg.images/Font_Decrease.png"));
+        getView("FontPlusButton", ButtonBase.class).setImage(Image.getImageForClassResource(TextPane.class, "pkg.images/Font_Increase.png"));
+        getView("FontMinusButton", ButtonBase.class).setImage(Image.getImageForClassResource(TextPane.class, "pkg.images/Font_Decrease.png"));
 
         // Configure Borders
         Label l0 = getView("NoBdrButton", ButtonBase.class).getLabel();

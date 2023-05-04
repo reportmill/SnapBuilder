@@ -98,7 +98,7 @@ public class FlatIconItem {
             return _sample = getFailImage();
 
 
-        _sample = url != null ? Image.get(url) : getFailImage();
+        _sample = url != null ? Image.getImageForSource(url) : getFailImage();
 
         if (_sample.isLoaded())
             sampleImageLoaded();

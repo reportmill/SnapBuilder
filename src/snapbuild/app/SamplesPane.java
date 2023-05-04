@@ -339,7 +339,7 @@ public class SamplesPane extends ViewOwner {
         WebURL imgURL = WebURL.getURL(urls);
 
         // Create Image. Then make sure image is loaded by requesting Image.Native.
-        img = _docImages[anIndex] = Image.get(imgURL);
+        img = _docImages[anIndex] = Image.getImageForSource(imgURL);
         img.getNative();
         return img;
     }
@@ -425,7 +425,7 @@ public class SamplesPane extends ViewOwner {
             if (path != null) {
                 String urls = SAMPLES_ROOT + "images/" + path;
                 WebURL url = WebURL.getURL(urls);
-                return Image.get(url);
+                return Image.getImageForSource(url);
             }
 
             // Do normal version
