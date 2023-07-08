@@ -1,4 +1,6 @@
 package snapbuild.app;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.function.Consumer;
 
 import snap.geom.Insets;
@@ -162,7 +164,7 @@ public class ViewHprs {
         public void configureGallery(T aView)
         {
             aView.setMinSize(80, 22);
-            aView.setItems("ComboBox");
+            aView.setItemsList(Collections.singletonList("ComboBox"));
             aView.setSelItem("ComboBox");
         }
     }
@@ -451,7 +453,7 @@ public class ViewHprs {
             aView.getScrollView().setShowVBar(true);
             aView.getScrollView().setBarSize(10);
 
-            aView.setItems("ListView", "Item two", "Item three");
+            aView.setItemsList(Arrays.asList("ListView", "Item two", "Item three"));
             aView.setCellConfigure(c -> configureCell(c));
         }
 
@@ -489,7 +491,7 @@ public class ViewHprs {
             aView.getScrollView().setShowVBar(true);
             aView.getScrollView().setBarSize(10);
 
-            aView.setItems("TableView", "Item two", "Item three");
+            aView.setItemsList(Arrays.asList("TableView", "Item two", "Item three"));
             aView.setCellConfigure(c -> configureCell(c));
         }
 
@@ -524,7 +526,7 @@ public class ViewHprs {
             aView.getScrollView().setShowVBar(true);
             aView.getScrollView().setBarSize(10);
 
-            aView.setItems("TreeView");
+            aView.setItemsList(Collections.singletonList("TreeView"));
             aView.setResolver(new TR());
             aView.setCellConfigure(c -> configureCell(c));
             aView.expandAll();
@@ -586,7 +588,7 @@ public class ViewHprs {
             aView.setPrefSize(160, 50);
 
             aView.setResolver(new BR());
-            aView.setItems("BrowserView");
+            aView.setItemsList(Collections.singletonList("BrowserView"));
             aView.setCellConfigure((Consumer<ListCell>) c -> configureCell(c));
             aView.setSelItem("BrowserView");
 
