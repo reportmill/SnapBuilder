@@ -1,8 +1,7 @@
 package snapbuild.app;
 import snap.gfx.*;
 import snap.parse.*;
-import snap.text.RichText;
-import snap.text.TextDoc;
+import snap.text.TextBlock;
 import snap.text.TextStyle;
 import snap.util.Convert;
 import snap.view.*;
@@ -163,12 +162,11 @@ public class XMLText extends ViewOwner {
         _xmlText = new TextView();
 
         // Create/set RichText
-        RichText richText = new RichText();
+        TextBlock richText = _xmlText.getTextBox();
         richText.setStyleValue(Font.Arial14.deriveFont(15), 0, 0);
 
         // Get/config TextArea
         TextArea textArea = _xmlText.getTextArea();
-        textArea.setTextDoc(richText);
         textArea.addPropChangeListener(pc -> xmlTextSelDidChange(), TextView.Selection_Prop);
 
         // Return
@@ -228,7 +226,8 @@ public class XMLText extends ViewOwner {
      */
     static void setColor(Color aColor, int aStart, int aEnd)
     {
-        TextDoc textDoc = _xmlText.getTextDoc();
+        TextArea textArea = _xmlText.getTextArea();
+        TextBlock textDoc = textArea.getTextDoc();
         textDoc.setStyleValue(TextStyle.COLOR_KEY, aColor, aStart, aEnd);
     }
 
