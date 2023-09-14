@@ -167,7 +167,7 @@ public class XMLText extends ViewOwner {
 
         // Get/config TextArea
         TextArea textArea = _xmlText.getTextArea();
-        textArea.addPropChangeListener(pc -> xmlTextSelDidChange(), TextView.Selection_Prop);
+        textArea.addPropChangeListener(pc -> xmlTextSelDidChange(), TextArea.Selection_Prop);
 
         // Return
         return _xmlText;
@@ -227,8 +227,8 @@ public class XMLText extends ViewOwner {
     static void setColor(Color aColor, int aStart, int aEnd)
     {
         TextArea textArea = _xmlText.getTextArea();
-        TextBlock textDoc = textArea.getTextDoc();
-        textDoc.setStyleValue(TextStyle.COLOR_KEY, aColor, aStart, aEnd);
+        TextBlock textBlock = textArea.getTextBlock();
+        textBlock.setStyleValue(TextStyle.COLOR_KEY, aColor, aStart, aEnd);
     }
 
     /**
