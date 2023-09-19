@@ -21,7 +21,7 @@
         </ColView>
     </BoxView>
     <ColView Name="ViewsBox" GrowHeight="true" FillWidth="true">
-        <TextField Name="SearchTextField" Margin="4,8,4,8"/>
+        <TextField Name="SearchTextField" Margin="4,8,4,8" PromptText="Search" BorderRadius="10"/>
         <ScrollView GrowHeight="true" BarSize="14">
             <View Name="GalleryView" Class="snapbuild.app.GalleryView"/>
         </ScrollView>
