@@ -206,7 +206,7 @@ public class WelcomePanel extends ViewOwner {
         EditorPane editorPane = new EditorPane().newDocument();
         editorPane.setWindowVisible(true);
         hide();
-        runLaterDelayed(300, () -> editorPane.showSamples());
+        runDelayed(300, () -> editorPane.showSamples());
     }
 
     /**

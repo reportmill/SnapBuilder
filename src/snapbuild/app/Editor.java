@@ -534,7 +534,7 @@ public class Editor extends ParentView {
     protected void saveUndoerChangesLater()
     {
         if (_saveChangesRun == null)
-            getEnv().runDelayed(_saveChangesRun = _scrShared, 400, true);
+            getEnv().runDelayed(_saveChangesRun = _scrShared, 400);
     }
 
     // Support for delayed saveUnderChanges()
