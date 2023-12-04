@@ -25,14 +25,11 @@ public class GalleryPane extends ViewOwner {
     public GalleryPane(EditorPane anEP)
     {
         _epane = anEP;
-        _flatIcon = new FlatIconPanel() {
-            @Override
-            protected void itemWasClicked(FlatIconItem anItem)
-            {
-                Image img = anItem.getSample();
+        _flatIcon = new FlatIconPanel();
+        _flatIcon.setItemSelectedHandler(item -> {
+                Image img = item.getSample();
                 _epane.getEditor().addImageToContent(img);
-            }
-        };
+        });
     }
 
     /**

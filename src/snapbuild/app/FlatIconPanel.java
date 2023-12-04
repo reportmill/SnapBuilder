@@ -6,6 +6,7 @@ import snap.gfx.Font;
 import snap.gfx.Image;
 import snap.view.*;
 import snap.viewx.TextPane;
+import java.util.function.Consumer;
 
 /**
  * A ViewOwner subclass to provide UI to search and select images.
@@ -20,6 +21,9 @@ public class FlatIconPanel extends ViewOwner {
 
     // The view to show items
     private GridView _itemsView;
+
+    // A consumer to handle item selected
+    Consumer<FlatIconItem> _itemSelectedHandler;
 
     // Constants
     private static Color ITEM_VIEW_MOUSE_OVER_COLOR = Color.CYAN.blend(ViewUtils.getBackFill().getColor(), .6);
@@ -123,11 +127,22 @@ public class FlatIconPanel extends ViewOwner {
     }
 
     /**
+     * Returns the handler called when item is selected.
+     */
+    public Consumer<FlatIconItem> getItemSelectedHandler()  { return _itemSelectedHandler; }
+
+    /**
+     * Sets the handler called when item is selected.
+     */
+    public void setItemSelectedHandler(Consumer<FlatIconItem> aHandler)  { _itemSelectedHandler = aHandler; }
+
+    /**
      * Called when an item view is clicked.
      */
     protected void itemWasClicked(FlatIconItem anItem)
     {
-
+        if (getItemSelectedHandler() != null)
+            _itemSelectedHandler.accept(anItem);
     }
 
     /**
