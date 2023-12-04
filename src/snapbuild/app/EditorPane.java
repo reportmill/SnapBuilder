@@ -521,14 +521,19 @@ public class EditorPane extends ViewOwner {
         getView("DeleteButton", ButtonBase.class).setImage(Image.getImageForClassResource(TextPane.class, "pkg.images/Edit_Delete.png"));
         getView("UndoButton", ButtonBase.class).setImage(Image.getImageForClassResource(TextPane.class, "pkg.images/Edit_Undo.png"));
         getView("RedoButton", ButtonBase.class).setImage(Image.getImageForClassResource(TextPane.class, "pkg.images/Edit_Redo.png"));
+    }
 
-        // Configure window
-        WindowView win = getWindow();
-        enableEvents(win, WinClose);
+    /**
+     * Initialize window.
+     */
+    @Override
+    protected void initWindow(WindowView aWindow)
+    {
+        enableEvents(aWindow, WinClose);
 
-        // If TeaVM, go full window
-        if (SnapUtils.isTeaVM)
-            getWindow().setMaximized(true);
+        // If WebVM, go full window
+        if (SnapUtils.isWebVM)
+            aWindow.setMaximized(true);
     }
 
     /**
@@ -556,9 +561,12 @@ public class EditorPane extends ViewOwner {
         }
 
         // If title has changed, update window title
-        String title = getWindowTitle();
-        getWindow().setTitle(title);
-        getWindow().setDocURL(getSourceURL());
+        if (isWindowSet()) {
+            WindowView window = getWindow();
+            String title = getWindowTitle();
+            window.setTitle(title);
+            window.setDocURL(getSourceURL());
+        }
 
         // Reset Inspector, MenuBar
         getInspector().resetLater();
