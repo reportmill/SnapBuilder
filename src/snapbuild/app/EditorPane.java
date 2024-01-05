@@ -335,7 +335,7 @@ public class EditorPane extends ViewOwner {
 
         // Re-open filename
         WebFile sourceFile = sourceURL.getFile();
-        sourceFile.resetContent();
+        sourceFile.reset();
         openSource(sourceURL);
     }
 
