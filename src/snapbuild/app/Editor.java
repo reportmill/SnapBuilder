@@ -21,7 +21,7 @@ public class Editor extends ParentView {
     private BoxView _contentBox;
 
     // The undoer
-    private Undoer _undoer = new Undoer();
+    private Undoer _undoer;
 
     // The editor selection
     private EditorSel _sel = new EditorSel(this);
@@ -78,6 +78,10 @@ public class Editor extends ParentView {
 
         // Set default content
         setContent(new ColView());
+
+        // Create undoer
+        _undoer = new Undoer();
+        _undoer.setAutoSave(true);
     }
 
     /**
@@ -484,14 +488,11 @@ public class Editor extends ParentView {
         if (undoer != null) {
 
             // If no changes yet, set selected objects
-            if (undoer.getActiveUndoSet().getChangeCount() == 0)
+            if (undoer.getActiveUndoSet().isEmpty())
                 undoer.setUndoSelection(getSelView()); //new ArrayList(getSelectedOrSuperSelectedViews())
 
             // Add property change
             undoer.addPropChange(aPC);
-
-            // Save UndoerChanges after delay
-            saveUndoerChangesLater();
 
             // Set updator
             WebFile file = getSourceFile(false);
@@ -503,42 +504,6 @@ public class Editor extends ParentView {
         //EditorPane ep = getEditorPane(); if(ep!=null) ep.resetLater();
         repaint();
     }
-
-    /**
-     * Saves Undo Changes.
-     */
-    protected void saveUndoerChanges()
-    {
-        // If MouseIsDown, come back later
-        _saveChangesRun = null;
-        if (ViewUtils.isMouseDown()) {
-            saveUndoerChangesLater();
-            return;
-        }
-
-        // Get undoer
-        Undoer undoer = getUndoer();
-        if (undoer == null || !undoer.isEnabled()) return;
-
-        // Set undo selected-views
-        //List views = getSelectedViewCount()>0? getSelectedViews() : getSuperSelectedViews();
-        //if(undoer.getRedoSelection()==null) undoer.setRedoSelection(new ArrayList(views));
-
-        // Save undo changes
-        undoer.saveChanges();
-    }
-
-    /**
-     * Saves undo changes after a delay.
-     */
-    protected void saveUndoerChangesLater()
-    {
-        if (_saveChangesRun == null)
-            getEnv().runDelayed(_saveChangesRun = _scrShared, 400);
-    }
-
-    // Support for delayed saveUnderChanges()
-    private Runnable _saveChangesRun, _scrShared = () -> saveUndoerChanges();
 
     /**
      * ContentBox.
