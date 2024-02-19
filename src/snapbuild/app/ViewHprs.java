@@ -767,7 +767,7 @@ public class ViewHprs {
         public void configureGallery(T aView)
         {
             aView.setBorder(Color.LIGHTGRAY, 1);
-            aView.setFont(Font.Arial10.deriveFont(7));
+            aView.setFont(Font.Arial10.copyForSize(7));
 
             Label label = new Label("BorderView");
             label.setTextFill(Color.GRAY);

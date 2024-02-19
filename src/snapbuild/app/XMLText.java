@@ -163,7 +163,7 @@ public class XMLText extends ViewOwner {
 
         // Create/set RichText
         TextBlock richText = _xmlText.getTextBlock();
-        richText.setStyleValue(Font.Arial14.deriveFont(15), 0, 0);
+        richText.setStyleValue(Font.Arial14.copyForSize(15), 0, 0);
 
         // Get/config TextArea
         TextArea textArea = _xmlText.getTextArea();

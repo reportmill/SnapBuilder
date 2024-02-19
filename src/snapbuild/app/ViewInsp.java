@@ -185,15 +185,15 @@ public class ViewInsp extends ViewOwner {
         // Handle FontSizeText, FontPlusButton, FontMinusButton
         if (anEvent.equals("FontSizeText")) {
             Font font = selView.getFont();
-            selView.setFont(font.deriveFont(anEvent.getFloatValue()));
+            selView.setFont(font.copyForSize(anEvent.getFloatValue()));
         }
         if (anEvent.equals("FontPlusButton")) {
             Font font = selView.getFont();
-            selView.setFont(font.deriveFont(font.getSize() + 1));
+            selView.setFont(font.copyForSize(font.getSize() + 1));
         }
         if (anEvent.equals("FontMinusButton")) {
             Font font = selView.getFont();
-            selView.setFont(font.deriveFont(font.getSize() - 1));
+            selView.setFont(font.copyForSize(font.getSize() - 1));
         }
         if (anEvent.equals("FontResetButton")) selView.setFont(null);
 
