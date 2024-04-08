@@ -341,7 +341,7 @@ public class EditorSel {
 
         // Turn timer on
         if (aValue) {
-            _spotTimer = new ViewTimer(500, t -> toggleShowSpot());
+            _spotTimer = new ViewTimer(this::toggleShowSpot, 500);
             _spotTimer.start();
         }
 
