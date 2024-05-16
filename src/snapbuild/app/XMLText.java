@@ -185,7 +185,7 @@ public class XMLText extends ViewOwner {
         String text = getXMLString(false);
         _xmlText.setText(text);
         new XMLParser().parse(text);
-        runDelayed(200, () -> updateXMLTextSel());
+        runDelayed(() -> updateXMLTextSel(), 200);
     }
 
     /**
