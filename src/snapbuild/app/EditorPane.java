@@ -269,7 +269,7 @@ public class EditorPane extends ViewOwner {
         // Get extensions - if there is an existing extension, make sure it's first in the exts array
         String[] extensions = { "snp" };
         WebURL sourceURL = getSourceURL();
-        String extension = sourceURL != null ? sourceURL.getType() : null;
+        String extension = sourceURL != null ? sourceURL.getFileType() : null;
         if (extension != null)
             extensions = ArrayUtils.add(extensions, '.' + extension, 0);
 
