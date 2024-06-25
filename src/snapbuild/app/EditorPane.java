@@ -529,7 +529,7 @@ public class EditorPane extends ViewOwner {
     @Override
     protected void initWindow(WindowView aWindow)
     {
-        enableEvents(aWindow, WinClose);
+        aWindow.addEventHandler(e -> { close(); e.consume(); }, WinClose);
 
         // If WebVM, go full window
         if (SnapUtils.isWebVM)
@@ -636,12 +636,6 @@ public class EditorPane extends ViewOwner {
             saveAs();
         if (anEvent.equals("RevertMenuItem"))
             revert();
-
-        // Handle WinClosing
-        if (anEvent.isWinClose()) {
-            close();
-            anEvent.consume();
-        }
     }
 
     /**

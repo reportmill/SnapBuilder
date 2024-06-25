@@ -124,16 +124,16 @@ public class WelcomePanel extends ViewOwner {
         WebFile[] recentFiles = getRecentFiles();
         if (recentFiles.length > 0)
             _selFile = recentFiles[0];
-        enableEvents(sitesTable, MouseRelease);
+        sitesTable.addEventHandler(this::handleSitesTableMouseRelease, MouseRelease);
 
         // Hide ProgressBar
         getView("ProgressBar").setVisible(false);
 
         // Configure Window: Add WindowListener to indicate app should exit when close button clicked
-        WindowView win = getWindow();
-        win.setTitle("Welcome");
-        win.setResizable(false);
-        enableEvents(win, WinClose);
+        WindowView window = getWindow();
+        window.setTitle("Welcome");
+        window.setResizable(false);
+        window.addEventHandler(e -> { _exit = true; hide(); }, WinClose);
         getView("OpenButton", Button.class).setDefaultButton(true);
     }
 
@@ -180,11 +180,14 @@ public class WelcomePanel extends ViewOwner {
             _exit = true;
             hide();
         }
+    }
 
-        // Handle WinClosing
-        if (anEvent.isWinClose()) {
-            _exit = true;
-            hide();
+    private void handleSitesTableMouseRelease(ViewEvent anEvent)
+    {
+        if (anEvent.getClickCount() > 1) {
+            TableView<WebFile> sitesTable = getView("SitesTable", TableView.class);
+            WebFile file = sitesTable.getSelItem();
+            openFile(file);
         }
     }
 
