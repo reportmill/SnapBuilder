@@ -159,7 +159,7 @@ public class XMLText extends ViewOwner {
     protected View createUI()
     {
         // Create XMLText TextView
-        _xmlText = new TextView();
+        _xmlText = new TextView(true);
 
         // Create/set RichText
         TextBlock richText = _xmlText.getTextBlock();
