@@ -267,7 +267,7 @@ public class ViewHprs {
             aView.getTextArea().setMinHeight(300);
 
             aView.setText("TextView");
-            aView.getTextArea().setTextFill(Color.GRAY);
+            aView.getTextArea().setTextColor(Color.GRAY);
         }
 
         /**
@@ -275,7 +275,7 @@ public class ViewHprs {
          */
         public void setTextFill(T aView, Paint aPaint)
         {
-            aView.getTextArea().setTextFill(aPaint);
+            aView.getTextArea().setTextColor(aPaint != null ? aPaint.getColor() : Color.BLACK);
         }
     }
 
