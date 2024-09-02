@@ -50,7 +50,7 @@ public class FlatIconPanel extends ViewOwner {
         _scrollView.getScroller().addPropChangeListener(pc -> scrollBoundsDidChange(),
                 Scroller.ScrollX_Prop, Scroller.ScrollY_Prop, View.Width_Prop, View.Height_Prop);
 
-        getView("FlatIconLabel", Label.class).setTextFill(Color.DARKGRAY);
+        getView("FlatIconLabel", Label.class).setTextColor(Color.DARKGRAY);
     }
 
     /**

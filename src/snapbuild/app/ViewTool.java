@@ -52,7 +52,7 @@ public class ViewTool<T extends View> extends ViewOwner {
         Label label = new Label(getName());
         label.setAlign(Pos.CENTER);
         label.setFont(Font.Arial14);
-        label.setTextFill(Color.LIGHTGRAY);
+        label.setTextColor(Color.LIGHTGRAY);
         return label;
     }
 }

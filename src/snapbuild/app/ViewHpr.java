@@ -1,7 +1,7 @@
 package snapbuild.app;
 import java.util.*;
 
-import snap.gfx.Paint;
+import snap.gfx.Color;
 import snap.view.*;
 import snapbuild.app.ViewHprs.*;
 
@@ -38,9 +38,9 @@ public class ViewHpr<T extends View> {
     }
 
     /**
-     * Sets the text fill.
+     * Sets the text color.
      */
-    public void setTextFill(T aView, Paint aPaint)
+    public void setTextColor(T aView, Color aColor)
     {
     }
 

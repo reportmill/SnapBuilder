@@ -78,7 +78,7 @@ public class InspectorPane extends ViewOwner {
     {
         // Get/configure TitleLabel
         _titleLabel = getView("TitleLabel", Label.class);
-        _titleLabel.setTextFill(Color.GRAY);
+        _titleLabel.setTextColor(Color.GRAY);
 
         // Get/configure ContentBox
         _inspBox = getView("ContentBox", ScrollView.class);

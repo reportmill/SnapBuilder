@@ -66,14 +66,14 @@ public class ViewToolImpl<T extends View> extends ViewTool<T> {
         //View viewPropsView = getView("ViewPropsView");
         //new Collapser(viewPropsView, viewLabel);
         //viewLabel.getStringView().setGrowWidth(true);
-        //viewLabel.setTextFill(Color.GRAY);
+        //viewLabel.setTextColor(Color.GRAY);
 
         // Add Collapser for SubclassLabel and SubclassPropsView
         //Label subclassLabel = getView("SubclassLabel", Label.class);
         //View subclassPropsView = getView("SubclassPropsView");
         //new Collapser(subclassPropsView, subclassLabel);
         //subclassLabel.getStringView().setGrowWidth(true);
-        //subclassLabel.setTextFill(Color.GRAY);
+        //subclassLabel.setTextColor(Color.GRAY);
 
         // Register MarginText, PadText to update
         getView("MarginText").addPropChangeListener(pc -> insetsTextFieldChanged(pc),
@@ -104,8 +104,8 @@ public class ViewToolImpl<T extends View> extends ViewTool<T> {
         Spinner phs = getView("PrefHeightSpinner", Spinner.class);
         pws.setValue(selView.getPrefWidth());
         phs.setValue(selView.getPrefHeight());
-        pws.getTextField().setTextFill(selView.isPrefWidthSet() ? Color.BLACK : Color.GRAY);
-        phs.getTextField().setTextFill(selView.isPrefHeightSet() ? Color.BLACK : Color.GRAY);
+        pws.getTextField().setTextColor(selView.isPrefWidthSet() ? Color.BLACK : Color.GRAY);
+        phs.getTextField().setTextColor(selView.isPrefHeightSet() ? Color.BLACK : Color.GRAY);
         setViewValue("PrefWidthThumb", selView.getPrefWidth());
         setViewValue("PrefHeightThumb", selView.getPrefHeight());
 
@@ -114,8 +114,8 @@ public class ViewToolImpl<T extends View> extends ViewTool<T> {
         Spinner mhs = getView("MinHeightSpinner", Spinner.class);
         mws.setValue(selView.getMinWidth());
         mhs.setValue(selView.getMinHeight());
-        mws.getTextField().setTextFill(selView.isMinWidthSet() ? Color.BLACK : Color.GRAY);
-        mhs.getTextField().setTextFill(selView.isMinHeightSet() ? Color.BLACK : Color.GRAY);
+        mws.getTextField().setTextColor(selView.isMinWidthSet() ? Color.BLACK : Color.GRAY);
+        mhs.getTextField().setTextColor(selView.isMinHeightSet() ? Color.BLACK : Color.GRAY);
         setViewValue("MinWidthThumb", selView.getMinWidth());
         setViewValue("MinHeightThumb", selView.getMinHeight());
 

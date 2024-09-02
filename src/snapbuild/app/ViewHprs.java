@@ -27,11 +27,12 @@ public class ViewHprs {
         }
 
         /**
-         * Sets the text fill.
+         * Sets the text color.
          */
-        public void setTextFill(T aView, Paint aPaint)
+        @Override
+        public void setTextColor(T aView, Color aColor)
         {
-            aView.setTextFill(aPaint);
+            aView.setTextColor(aColor);
         }
     }
 
@@ -49,11 +50,12 @@ public class ViewHprs {
         }
 
         /**
-         * Sets the text fill.
+         * Sets the text color.
          */
-        public void setTextFill(T aView, Paint aPaint)
+        @Override
+        public void setTextColor(T aView, Color aColor)
         {
-            aView.getLabel().setTextFill(aPaint);
+            aView.getLabel().setTextColor(aColor);
         }
     }
 
@@ -137,11 +139,12 @@ public class ViewHprs {
         }
 
         /**
-         * Sets the text fill.
+         * Sets the text color.
          */
-        public void setTextFill(T aView, Paint aPaint)
+        @Override
+        public void setTextColor(T aView, Color aColor)
         {
-            aView.setTextFill(aPaint);
+            aView.setTextColor(aColor);
         }
     }
 
@@ -271,11 +274,12 @@ public class ViewHprs {
         }
 
         /**
-         * Sets the text fill.
+         * Sets the text color.
          */
-        public void setTextFill(T aView, Paint aPaint)
+        @Override
+        public void setTextColor(T aView, Color aColor)
         {
-            aView.getTextArea().setTextColor(aPaint != null ? aPaint.getColor() : Color.BLACK);
+            aView.getTextArea().setTextColor(aColor != null ? aColor.getColor() : Color.BLACK);
         }
     }
 
@@ -302,7 +306,7 @@ public class ViewHprs {
             aView.setFont(Font.Arial10);
             Label label = new Label("TitleView");
             label.setPadding(0, 40, 8, 40);
-            label.setTextFill(Color.GRAY);
+            label.setTextColor(Color.GRAY);
             aView.setContent(label);
         }
 
@@ -337,7 +341,7 @@ public class ViewHprs {
             aView.setFont(Font.Arial10);
             Label label = new Label("TabView");
             label.setPadding(4, 40, 4, 40);
-            label.setTextFill(Color.GRAY);
+            label.setTextColor(Color.GRAY);
             aView.addTab("  One  ", label);
             aView.addTab("  Two  ", new BoxView());
         }
@@ -376,7 +380,7 @@ public class ViewHprs {
             aView.setBarSize(10);
             Label label = new Label("ScrollView");
             label.setPadding(8, 35, 8, 45);
-            label.setTextFill(Color.GRAY);
+            label.setTextColor(Color.GRAY);
             label.setAlign(Pos.TOP_LEFT);
             aView.setContent(label);
             label.setFill(Color.WHITE);
@@ -414,10 +418,10 @@ public class ViewHprs {
             aView.setBorder(new Borders.BevelBorder(0));
             Label label0 = new Label("Split");
             label0.setPadding(10, 20, 10, 20);
-            label0.setTextFill(Color.GRAY);
+            label0.setTextColor(Color.GRAY);
             Label label1 = new Label("View");
             label1.setPadding(10, 20, 10, 20);
-            label1.setTextFill(Color.GRAY);
+            label1.setTextColor(Color.GRAY);
             aView.setItems(label0, label1);
         }
 
@@ -459,7 +463,7 @@ public class ViewHprs {
 
         void configureCell(Object lc)
         {
-            ((ListCell) lc).setTextFill(Color.GRAY);
+            ((ListCell) lc).setTextColor(Color.GRAY);
         }
     }
 
@@ -497,7 +501,7 @@ public class ViewHprs {
 
         void configureCell(Object lc)
         {
-            ((ListCell) lc).setTextFill(Color.GRAY);
+            ((ListCell) lc).setTextColor(Color.GRAY);
         }
     }
 
@@ -534,7 +538,7 @@ public class ViewHprs {
 
         void configureCell(Object lc)
         {
-            ((ListCell) lc).setTextFill(Color.GRAY);
+            ((ListCell) lc).setTextColor(Color.GRAY);
         }
 
         private static class TR extends TreeResolver<String> {
@@ -602,10 +606,10 @@ public class ViewHprs {
 
         void configureCell(ListCell lc)
         {
-            lc.setTextFill(Color.GRAY);
+            lc.setTextColor(Color.GRAY);
             if (lc.isSelected()) {
                 lc.setFill(Color.GRAY);
-                lc.setTextFill(Color.WHITE);
+                lc.setTextColor(Color.WHITE);
             }
         }
 
@@ -660,7 +664,7 @@ public class ViewHprs {
             aView.setPadding(8, 30, 8, 30);
             aView.setBorder(Color.LIGHTGRAY, 1);
             Label label = new Label("BoxView");
-            label.setTextFill(Color.GRAY);
+            label.setTextColor(Color.GRAY);
             label.setFont(Font.Arial11);
             aView.setContent(label);
         }
@@ -697,7 +701,7 @@ public class ViewHprs {
             aView.setPadding(8, 30, 8, 30);
             aView.setBorder(Color.LIGHTGRAY, 1);
             Label label = new Label("ColView");
-            label.setTextFill(Color.GRAY);
+            label.setTextColor(Color.GRAY);
             label.setFont(Font.Arial11);
             aView.addChild(label);
         }
@@ -734,7 +738,7 @@ public class ViewHprs {
             aView.setPadding(8, 30, 8, 30);
             aView.setBorder(Color.LIGHTGRAY, 1);
             Label label = new Label("RowView");
-            label.setTextFill(Color.GRAY);
+            label.setTextColor(Color.GRAY);
             label.setFont(Font.Arial11);
             aView.addChild(label);
         }
@@ -770,7 +774,7 @@ public class ViewHprs {
             aView.setFont(Font.Arial10.copyForSize(7));
 
             Label label = new Label("BorderView");
-            label.setTextFill(Color.GRAY);
+            label.setTextColor(Color.GRAY);
             label.setFont(Font.Arial11);
             label.setFont(Font.Arial11);
             label.setPadding(5, 5, 5, 5);
@@ -790,7 +794,7 @@ public class ViewHprs {
             Insets i = new Insets(3);
             for (Label lb : new Label[]{tl, bl, ll, rl}) {
                 lb.setAlign(Pos.CENTER);
-                lb.setTextFill(c);
+                lb.setTextColor(c);
                 lb.setPadding(i);
             }
         }
