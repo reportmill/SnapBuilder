@@ -497,7 +497,7 @@ public class EditorPane extends ViewOwner {
 
         // Get/configure ViewTree
         _viewTree = getView("ViewTree", TreeView.class);
-        _viewTree.getCol(0).setAltPaint(Editor.BACK_FILL.blend(Color.WHITE, .9));
+        _viewTree.getCol(0).setAltRowColor(Editor.BACK_FILL.blend(Color.WHITE, .9));
         _viewTree.setResolver(new ViewTreeResolver());
         _viewTree.setOwner(this);
         _editorSplitView.removeItem(_viewTree);
