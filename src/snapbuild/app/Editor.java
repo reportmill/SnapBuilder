@@ -472,7 +472,7 @@ public class Editor extends ParentView {
         if (propName == Parent_Prop) return;
         if (propName == Showing_Prop) return;
         if (propName == NeedsLayout_Prop) return;
-        if (propName == ParentView.Child_Prop) {
+        if (propName == ParentView.Children_Prop) {
             if (!(view instanceof ViewHost))
                 return;
         }
