@@ -111,7 +111,7 @@ public class WelcomePanel extends ViewOwner {
     protected void initUI()
     {
         // Add WelcomePaneAnim view
-        DocView anim = getAnimView();
+        ChildView anim = getAnimView();
         getUI(ChildView.class).addChild(anim, 0);
         anim.playAnimDeep();
 
@@ -265,20 +265,15 @@ public class WelcomePanel extends ViewOwner {
     /**
      * Loads the WelcomePaneAnim.snp DocView.
      */
-    DocView getAnimView()
+    ChildView getAnimView()
     {
         // Unarchive WelcomePaneAnim.snp as DocView
         WebURL url = WebURL.getURL(getClass(), "WelcomePanelAnim.snp");
-        DocView doc = (DocView) new ViewArchiver().getViewForSource(url);
-
-        // Get page and clear border/shadow
-        PageView page = doc.getPage();
-        page.setBorder(null);
-        page.setEffect(null);
+        ChildView doc = (ChildView) new ViewArchiver().getViewForSource(url);
 
         // Set BuildText and JavaText
-        View bt = page.getChildForName("BuildText");
-        View jt = page.getChildForName("JVMText");
+        View bt = doc.getChildForName("BuildText");
+        View jt = doc.getChildForName("JVMText");
         bt.setText("Build: " + SnapUtils.getBuildInfo());
         jt.setText("JVM: " + System.getProperty("java.runtime.version"));
 
