@@ -21,6 +21,9 @@ public class WelcomePanel extends ViewOwner {
     // The RecentFiles
     private WebFile[] _recentFiles;
 
+    // The WelcomePanelAnim
+    private WelcomePanelAnim _welcomePanelAnim;
+
     // The shared instance
     private static WelcomePanel _shared;
 
@@ -30,6 +33,7 @@ public class WelcomePanel extends ViewOwner {
     private WelcomePanel()
     {
         super();
+        _welcomePanelAnim = new WelcomePanelAnim();
     }
 
     /**
@@ -111,9 +115,9 @@ public class WelcomePanel extends ViewOwner {
     protected void initUI()
     {
         // Add WelcomePaneAnim view
-        ChildView anim = getAnimView();
-        getUI(ChildView.class).addChild(anim, 0);
-        anim.playAnimDeep();
+        View animView = _welcomePanelAnim.getUI();
+        getUI(ChildView.class).addChild(animView, 0);
+        animView.playAnimDeep();
 
         // Configure SitesTable
         TableView<WebFile> sitesTable = getView("SitesTable", TableView.class);
@@ -260,24 +264,5 @@ public class WelcomePanel extends ViewOwner {
 
         WebFile[] recentFiles = RecentFiles.getFiles();
         return _recentFiles = recentFiles;
-    }
-
-    /**
-     * Loads the WelcomePaneAnim.snp DocView.
-     */
-    ChildView getAnimView()
-    {
-        // Unarchive WelcomePaneAnim.snp as DocView
-        WebURL url = WebURL.getURL(getClass(), "WelcomePanelAnim.snp");
-        ChildView doc = (ChildView) new ViewArchiver().getViewForSource(url);
-
-        // Set BuildText and JavaText
-        View bt = doc.getChildForName("BuildText");
-        View jt = doc.getChildForName("JVMText");
-        bt.setText("Build: " + SnapUtils.getBuildInfo());
-        jt.setText("JVM: " + System.getProperty("java.runtime.version"));
-
-        // Return doc
-        return doc;
     }
 }
