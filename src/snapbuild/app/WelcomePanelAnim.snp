@@ -13,12 +13,6 @@
         <LineBorder/>
         <fill color="#e0e0f5"/>
         <EmbossEffect Radius="5"/>
-        <Anim LoopCount="999">
-            <KeyValue Time="1000" key="Rotate" value="40"/>
-            <KeyValue Time="1320" key="Rotate" value="-6"/>
-            <KeyValue Time="1640" key="Rotate" value="40"/>
-            <KeyValue Time="5000" />
-        </Anim>
     </PathView>
     <TextArea Name="TagLineText" x="73" y="145" width="264" height="38">
         <BlurEffect Radius="5"/>
@@ -30,23 +24,5 @@
         <LineBorder/>
         <fill color="#e0e0f5"/>
         <EmbossEffect Radius="5"/>
-        <Anim LoopCount="999">
-            <KeyValue Time="1760" key="Rotate" value="-35"/>
-            <KeyValue Time="1760" key="X" value="36"/>
-            <KeyValue Time="1760" key="Y" value="130"/>
-            <KeyValue Time="2080" key="Rotate" value="0"/>
-            <KeyValue Time="2080" key="X" value="27"/>
-            <KeyValue Time="2080" key="Y" value="116"/>
-            <KeyValue Time="2400" key="X" value="27"/>
-            <KeyValue Time="2400" key="Y" value="146"/>
-            <KeyValue Time="2640" key="Y" value="146"/>
-            <KeyValue Time="2960" key="Rotate" value="0"/>
-            <KeyValue Time="2960" key="X" value="27"/>
-            <KeyValue Time="2960" key="Y" value="129"/>
-            <KeyValue Time="3280" key="Rotate" value="-35"/>
-            <KeyValue Time="3280" key="X" value="36"/>
-            <KeyValue Time="3280" key="Y" value="130"/>
-            <KeyValue Time="5000" />
-        </Anim>
     </PathView>
 </SpringView>
