@@ -6,7 +6,7 @@
     <TextArea Name="MainTitleText" x="11" y="1" width="380" height="140" Align="CENTER">
         <BlurEffect Radius="12"/>
     </TextArea>
-    <TextArea Name="MainTitleText2" x="11" y="-1" width="380" height="140" Align="CENTER" Rich="true">
+    <TextArea Name="MainTitleText2" x="11" y="-1" width="380" height="140" Align="CENTER">
         <EmbossEffect Radius="5"/>
     </TextArea>
     <PathView Name="Hammer" x="333" y="147" width="45" height="66" Rotate="40" SvgString="M 49 0 L 49 0 C 49 0 49 0 49 0 L 49 0 L 49 0 Z M -12 -11 C -18 -11 -23 -6 -23 0 L -23 44 C -23 50 -18 55 -12 55 L 4 55 C 9 55 13 52 14 48 L 14 48 C 28 47 39 47 49 46 L 49 46 L 49 204 L 49 204 C 46 205 43 208 43 212 L 43 326 C 43 330 46 333 49 334 L 49 334 L 49 335 L 84 335 L 84 334 L 84 334 C 87 333 90 330 90 326 L 90 212 C 90 208 87 205 84 204 L 84 204 L 84 43 L 84 43 C 91 42 98 41 105 41 C 112 41 121 42 132 44 C 147 47 173 83 187 83 C 189 83 190 82 192 81 C 216 60 104 4 103 3 C 103 2 95 2 84 1 L 84 1 L 84 -8 L 49 -8 L 49 0 L 49 0 C 37 0 24 0 15 0 L 15 0 L 15 0 C 15 -6 10 -11 4 -11 Z">

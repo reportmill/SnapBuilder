@@ -43,6 +43,7 @@ public class WelcomePanelAnim extends ViewOwner {
         tagLineTextArea.setDefaultLineStyle(tagLineTextArea.getDefaultLineStyle().copyFor(HPos.CENTER));
         tagLineTextArea.addChars("A SnapKit UI Builder");
         TextArea tagLineTextArea2 = getView("TagLineText2", TextArea.class);
+        tagLineTextArea2.setRichText(true);
         tagLineTextArea2.setDefaultTextStyleString("Font: Arial Bold 14; Color: #FF");
         tagLineTextArea2.setDefaultLineStyle(tagLineTextArea2.getDefaultLineStyle().copyFor(HPos.CENTER));
         tagLineTextArea2.addChars("A SnapKit UI Builder");
