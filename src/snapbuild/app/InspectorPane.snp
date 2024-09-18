@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ColView Padding="3,0,0,0" FillWidth="true">
-    <LineBorder Color="#c0c0c0"/>
-    <Label Name="TitleLabel" PrefWidth="275" PrefHeight="24" Align="CENTER" text="Inspector">
-        <font name="Arial" size="14"/>
-    </Label>
-    <RowView PrefWidth="269" Align="CENTER" Padding="4,8,3,8">
-        <ToggleButton Name="GalleryButton" PrefWidth="50" PrefHeight="42" GrowWidth="true" ToolTip="View Gallery"
-                      image="Gallery.png" Position="CENTER_LEFT" Selected="true" Group="InspTG"/>
-        <ToggleButton Name="ViewGeneralButton" PrefWidth="50" PrefHeight="42" GrowWidth="true" ToolTip="View Inspector"
-                      image="ViewGeneral.png" Position="CENTER" Group="InspTG"/>
-        <ToggleButton Name="ViewStyleButton" PrefWidth="50" PrefHeight="42" GrowWidth="true"
-                      ToolTip="View Style Inspector" image="ViewFills.png" Position="CENTER_RIGHT" Group="InspTG"/>
-    </RowView>
-    <ScrollView Name="ContentBox" GrowHeight="true"/>
+<ColView Padding="3,0,0,0" Border="#C0 1" FillWidth="true">
+  <Label Name="TitleLabel" PrefWidth="275" PrefHeight="24" Align="CENTER" Font="Arial 14" Text="Inspector" />
+  <RowView PrefWidth="269" Align="CENTER" Padding="4,8,3,8">
+    <ToggleButton Name="GalleryButton" PrefWidth="50" PrefHeight="42" GrowWidth="true" ToolTip="View Gallery" ImageName="Gallery.png" Position="CENTER_LEFT" Selected="true" GroupName="InspTG" />
+    <ToggleButton Name="ViewGeneralButton" PrefWidth="50" PrefHeight="42" GrowWidth="true" ToolTip="View Inspector" ImageName="ViewGeneral.png" Position="CENTER" GroupName="InspTG" />
+    <ToggleButton Name="ViewStyleButton" PrefWidth="50" PrefHeight="42" GrowWidth="true" ToolTip="View Style Inspector" ImageName="ViewFills.png" Position="CENTER_RIGHT" GroupName="InspTG" />
+  </RowView>
+  <ScrollView Name="ContentBox" GrowHeight="true" />
 </ColView>

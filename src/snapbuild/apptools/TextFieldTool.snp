@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ColView PrefWidth="275" Padding="8" FillWidth="true">
-    <RowView Padding="4" Spacing="4">
-        <Label PrefWidth="60" text="Prompt:"/>
-        <TextField Name="PromptText" GrowWidth="true"/>
-    </RowView>
-    <RowView Padding="4" Spacing="4">
-        <Label PrefWidth="60" text="Rounding:"/>
-        <Spinner Name="RoundingSpinner" PrefWidth="75" Align="CENTER"/>
-    </RowView>
-    <RowView Padding="4" Spacing="4">
-        <Label PrefWidth="60" text="Columns:"/>
-        <Spinner Name="ColCountSpinner" PrefWidth="75" Align="CENTER"/>
-    </RowView>
+  <RowView Padding="4" Spacing="4">
+    <Label PrefWidth="60" Text="Prompt:" />
+    <TextField Name="PromptText" GrowWidth="true" />
+  </RowView>
+  <RowView Padding="4" Spacing="4">
+    <Label PrefWidth="60" Text="Rounding:" />
+    <Spinner Name="RoundingSpinner" PrefWidth="75" Align="CENTER" />
+  </RowView>
+  <RowView Padding="4" Spacing="4">
+    <Label PrefWidth="60" Text="Columns:" />
+    <Spinner Name="ColCountSpinner" PrefWidth="75" Align="CENTER" />
+  </RowView>
 </ColView>

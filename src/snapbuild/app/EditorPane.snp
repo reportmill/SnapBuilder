@@ -1,51 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ColView PrefWidth="1000" PrefHeight="800" GrowWidth="true" FillWidth="true">
-    <RowView Padding="8,8,8,6" Spacing="4">
-        <Button Name="SaveButton" PrefWidth="22" PrefHeight="22" ToolTip="Save" image="File_Save.png" ShowArea="false"/>
-        <Separator PrefHeight="18" Vertical="true"/>
-        <Button Name="CutButton" PrefWidth="22" PrefHeight="22" ToolTip="Cut" image="Edit_Cut.png" ShowArea="false"/>
-        <Button Name="CopyButton" PrefWidth="22" PrefHeight="22" ToolTip="Copy" image="Edit_Copy.png" ShowArea="false"/>
-        <Button Name="PasteButton" PrefWidth="22" PrefHeight="22" ToolTip="Paste" image="Edit_Paste.png"
-                ShowArea="false"/>
-        <Button Name="DeleteButton" PrefWidth="22" PrefHeight="22" ToolTip="Delete" image="Edit_Delete.png"
-                ShowArea="false"/>
-        <Separator PrefHeight="18" Vertical="true"/>
-        <Button Name="UndoButton" PrefWidth="22" PrefHeight="22" ToolTip="Undo" image="Edit_Undo.png" ShowArea="false"/>
-        <Button Name="RedoButton" PrefWidth="22" PrefHeight="22" ToolTip="Redo" image="Edit_Redo.png" ShowArea="false"/>
-        <RowView Margin="0,0,0,120">
-            <ToggleButton Name="EditButton" PrefWidth="52" PrefHeight="20" text="Edit" Position="CENTER_LEFT"
-                          Selected="true" Group="tge"/>
-            <ToggleButton Name="XMLButton" PrefWidth="52" PrefHeight="20" LeanX="RIGHT" text="XML" Position="CENTER"
-                          Group="tge"/>
-            <ToggleButton Name="PreviewButton" PrefWidth="52" PrefHeight="20" text="Run" Position="CENTER_RIGHT"
-                          Group="tge"/>
-        </RowView>
-        <RowView PrefWidth="300" LeanX="RIGHT">
-            <Button Name="SamplesButton" PrefWidth="72" PrefHeight="22" Margin="0,8,0,0" Padding="0,4,0,4" LeanX="RIGHT"
-                    text="Samples"/>
-        </RowView>
+  <RowView Padding="8,8,8,6" Spacing="4">
+    <Button Name="SaveButton" PrefWidth="22" PrefHeight="22" ToolTip="Save" ImageName="File_Save.png" ShowArea="false" />
+    <Separator PrefHeight="18" Vertical="true" />
+    <Button Name="CutButton" PrefWidth="22" PrefHeight="22" ToolTip="Cut" ImageName="Edit_Cut.png" ShowArea="false" />
+    <Button Name="CopyButton" PrefWidth="22" PrefHeight="22" ToolTip="Copy" ImageName="Edit_Copy.png" ShowArea="false" />
+    <Button Name="PasteButton" PrefWidth="22" PrefHeight="22" ToolTip="Paste" ImageName="Edit_Paste.png" ShowArea="false" />
+    <Button Name="DeleteButton" PrefWidth="22" PrefHeight="22" ToolTip="Delete" ImageName="Edit_Delete.png" ShowArea="false" />
+    <Separator PrefHeight="18" Vertical="true" />
+    <Button Name="UndoButton" PrefWidth="22" PrefHeight="22" ToolTip="Undo" ImageName="Edit_Undo.png" ShowArea="false" />
+    <Button Name="RedoButton" PrefWidth="22" PrefHeight="22" ToolTip="Redo" ImageName="Edit_Redo.png" ShowArea="false" />
+    <RowView Margin="0,0,0,120">
+      <ToggleButton Name="EditButton" PrefWidth="52" PrefHeight="20" Text="Edit" Position="CENTER_LEFT" Selected="true" GroupName="tge" />
+      <ToggleButton Name="XMLButton" PrefWidth="52" PrefHeight="20" LeanX="RIGHT" Text="XML" Position="CENTER" GroupName="tge" />
+      <ToggleButton Name="PreviewButton" PrefWidth="52" PrefHeight="20" Text="Run" Position="CENTER_RIGHT" GroupName="tge" />
     </RowView>
-    <RowView Name="EditorRowView" GrowHeight="true" FillHeight="true">
-        <View Name="TransPane" GrowWidth="true" Class="snap.viewx.TransitionPane"/>
-        <SplitView Name="GallerySplitView" Vertical="true">
-            <ColView GrowHeight="true" FillWidth="true">
-                <SplitView Name="SplitView" GrowWidth="true" GrowHeight="true">
-                    <TreeView Name="ViewTree"/>
-                    <ScrollView Name="EditorScrollView" GrowWidth="true">
-                        <LineBorder Color="#aaaaaa"/>
-                    </ScrollView>
-                </SplitView>
-                <RowView Padding="3,5,3,4" Spacing="4">
-                    <Button Name="ShowViewTreeButton" PrefWidth="22" PrefHeight="22" ToolTip="Show View Tree"
-                            image="pkg.images/FilesTree.png"/>
-                    <RowView Name="SelPathBox" Padding="0,2,0,0">
-                        <font name="Arial" size="12"/>
-                    </RowView>
-                    <Button Name="GalleryButton" PrefWidth="72" Padding="2" LeanX="CENTER" text="Show Gallery"/>
-                    <Button Name="AddRowButton" PrefWidth="38" Padding="2" LeanX="RIGHT" text="+Row"/>
-                    <Button Name="AddColButton" PrefWidth="38" Padding="2" text="+Col"/>
-                </RowView>
-            </ColView>
+    <RowView PrefWidth="300" LeanX="RIGHT">
+      <Button Name="SamplesButton" PrefWidth="72" PrefHeight="22" Margin="0,8,0,0" Padding="0,4,0,4" LeanX="RIGHT" Text="Samples" />
+    </RowView>
+  </RowView>
+  <RowView Name="EditorRowView" GrowHeight="true" FillHeight="true">
+    <View Name="TransPane" GrowWidth="true" Class="snap.viewx.TransitionPane" />
+    <SplitView Name="GallerySplitView" Vertical="true">
+      <ColView GrowHeight="true" FillWidth="true">
+        <SplitView Name="SplitView" GrowWidth="true" GrowHeight="true">
+          <TreeView Name="ViewTree" />
+          <ScrollView Name="EditorScrollView" Border="#AA 1" GrowWidth="true" />
         </SplitView>
-    </RowView>
+        <RowView Padding="3,5,3,4" Spacing="4">
+          <Button Name="ShowViewTreeButton" PrefWidth="22" PrefHeight="22" ToolTip="Show View Tree" ImageName="pkg.images/FilesTree.png" />
+          <RowView Name="SelPathBox" Padding="0,2,0,0" Font="Arial 12" />
+          <Button Name="GalleryButton" PrefWidth="72" Padding="2" LeanX="CENTER" Text="Show Gallery" />
+          <Button Name="AddRowButton" PrefWidth="38" Padding="2" LeanX="RIGHT" Text="+Row" />
+          <Button Name="AddColButton" PrefWidth="38" Padding="2" Text="+Col" />
+        </RowView>
+      </ColView>
+    </SplitView>
+  </RowView>
 </ColView>

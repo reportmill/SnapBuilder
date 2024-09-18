@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ColView PrefWidth="275" Padding="8" Spacing="4" FillWidth="true">
-    <RowView Padding="4" Spacing="4">
-        <Label PrefWidth="40" text="Image:"/>
-        <TextField Name="ImageNameText" PrefWidth="300" GrowWidth="true"/>
-    </RowView>
-    <RowView Padding="4" GrowWidth="true">
-        <Label PrefWidth="85" text="Image storage:"/>
-        <ToggleButton Name="ExternalButton" PrefWidth="70" Padding="2" text="External" Position="CENTER_LEFT"/>
-        <ToggleButton Name="EmbeddedButton" PrefWidth="70" Padding="2" text="Embedded" Position="CENTER_RIGHT"
-                      Selected="true"/>
-    </RowView>
-    <CheckBox Name="FillWidthCheckBox" Margin="4" text="Fill Width"/>
-    <CheckBox Name="FillHeightCheckBox" Margin="4" text="Fill Height"/>
-    <CheckBox Name="KeepAspectCheckBox" Margin="4" text="Keep Aspect"/>
+  <RowView Padding="4" Spacing="4">
+    <Label PrefWidth="40" Text="Image:" />
+    <TextField Name="ImageNameText" PrefWidth="300" GrowWidth="true" />
+  </RowView>
+  <RowView Padding="4" GrowWidth="true">
+    <Label PrefWidth="85" Text="Image storage:" />
+    <ToggleButton Name="ExternalButton" PrefWidth="70" Padding="2" Text="External" Position="CENTER_LEFT" />
+    <ToggleButton Name="EmbeddedButton" PrefWidth="70" Padding="2" Text="Embedded" Position="CENTER_RIGHT" Selected="true" />
+  </RowView>
+  <CheckBox Name="FillWidthCheckBox" Margin="4" Text="Fill Width" />
+  <CheckBox Name="FillHeightCheckBox" Margin="4" Text="Fill Height" />
+  <CheckBox Name="KeepAspectCheckBox" Margin="4" Text="Keep Aspect" />
 </ColView>

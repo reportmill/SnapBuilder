@@ -1,29 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ColView PrefWidth="275" GrowHeight="true" FillWidth="true">
-    <font name="Arial" size="12"/>
-    <BoxView Name="ArrangeBox" FillWidth="true">
-        <ColView Padding="3,7,5,7" FillWidth="true">
-            <RowView Padding="8" Spacing="20">
-                <ColView Align="CENTER" GrowWidth="true" Spacing="8">
-                    <Button Name="MoveUpButton" PrefWidth="90" Padding="2" text="Move Up"/>
-                    <Button Name="MoveDownButton" PrefWidth="90" Padding="2" text="Move Down"/>
-                    <Button Name="MoveOutButton" PrefWidth="90" Padding="2" text="Move Out"/>
-                </ColView>
-                <ColView Align="CENTER" GrowWidth="true" Spacing="8">
-                    <Button Name="GroupInButton" PrefWidth="90" Padding="2" text="Group..."/>
-                    <Button Name="UngroupButton" PrefWidth="90" Padding="2" text="Ungroup"/>
-                    <Button Name="ChangeHostButton" PrefWidth="90" Padding="2" LeanX="CENTER" text="Change to..."/>
-                </ColView>
-            </RowView>
-            <RowView Padding="4,4,8,4">
-                <Button Name="DocButton" PrefHeight="20" Padding="4,8,4,8" LeanX="CENTER" text="SnapKit Doc"/>
-            </RowView>
+<ColView PrefWidth="275" Font="Arial 12" GrowHeight="true" FillWidth="true">
+  <BoxView Name="ArrangeBox" FillWidth="true">
+    <ColView Padding="3,7,5,7" FillWidth="true">
+      <RowView Padding="8" Spacing="20">
+        <ColView Align="CENTER" Spacing="8" GrowWidth="true">
+          <Button Name="MoveUpButton" PrefWidth="90" Padding="2" Text="Move Up" />
+          <Button Name="MoveDownButton" PrefWidth="90" Padding="2" Text="Move Down" />
+          <Button Name="MoveOutButton" PrefWidth="90" Padding="2" Text="Move Out" />
         </ColView>
-    </BoxView>
-    <ColView Name="ViewsBox" GrowHeight="true" FillWidth="true">
-        <TextField Name="SearchTextField" Margin="4,8,4,8" PromptText="Search" BorderRadius="10"/>
-        <ScrollView GrowHeight="true" BarSize="14">
-            <View Name="GalleryView" Class="snapbuild.app.GalleryView"/>
-        </ScrollView>
+        <ColView Align="CENTER" Spacing="8" GrowWidth="true">
+          <Button Name="GroupInButton" PrefWidth="90" Padding="2" Text="Group..." />
+          <Button Name="UngroupButton" PrefWidth="90" Padding="2" Text="Ungroup" />
+          <Button Name="ChangeHostButton" PrefWidth="90" Padding="2" LeanX="CENTER" Text="Change to..." />
+        </ColView>
+      </RowView>
+      <RowView Padding="4,4,8,4">
+        <Button Name="DocButton" PrefHeight="20" Padding="4,8,4,8" LeanX="CENTER" Text="SnapKit Doc" />
+      </RowView>
     </ColView>
+  </BoxView>
+  <ColView Name="ViewsBox" GrowHeight="true" FillWidth="true">
+    <TextField Name="SearchTextField" Margin="4,8,4,8" BorderRadius="10" PromptText="Search" />
+    <ScrollView GrowHeight="true" BarSize="14">
+      <View Name="GalleryView" Class="snapbuild.app.GalleryView" />
+    </ScrollView>
+  </ColView>
 </ColView>
