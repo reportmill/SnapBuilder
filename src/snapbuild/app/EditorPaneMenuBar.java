@@ -3,16 +3,10 @@
  */
 package snapbuild.app;
 import snap.gfx.Border;
-import snap.text.TextEditor;
-import snap.util.ClassUtils;
 import snap.util.Prefs;
 import snap.util.URLUtils;
 import snap.props.Undoer;
-import snap.view.MenuBar;
-import snap.view.ViewEvent;
-import snap.view.ViewOwner;
-import snap.view.ViewTheme;
-import snap.web.RecentFiles;
+import snap.view.*;
 
 /**
  * Menu bar for Editor pane.
@@ -133,14 +127,14 @@ public class EditorPaneMenuBar extends ViewOwner {
 
         // Edit -> CheckSpellingAsYouTypeMenuItem
         if (anEvent.equals("CheckSpellingAsYouTypeMenuItem")) {
-            TextEditor.isSpellChecking = anEvent.getBooleanValue();
-            Prefs.getDefaultPrefs().setValue("SpellChecking", TextEditor.isSpellChecking);
+            TextArea.isSpellChecking = anEvent.getBooleanValue();
+            Prefs.getDefaultPrefs().setValue("SpellChecking", TextArea.isSpellChecking);
             editor.repaint();
         }
 
         // Edit -> HyphenateTextMenuItem
         if (anEvent.equals("HyphenateTextMenuItem")) {
-            TextEditor.setHyphenating(anEvent.getBooleanValue());
+            TextArea.setHyphenating(anEvent.getBooleanValue());
             editor.repaint();
         }
 
