@@ -77,9 +77,9 @@ public class ViewToolImpl<T extends View> extends ViewTool<T> {
 
         // Register MarginText, PadText to update
         getView("MarginText").addPropChangeListener(pc -> insetsTextFieldChanged(pc),
-                TextField.Sel_Prop, View.Focused_Prop);
+                TextField.Selection_Prop, View.Focused_Prop);
         getView("PadText").addPropChangeListener(pc -> insetsTextFieldChanged(pc),
-                TextField.Sel_Prop, View.Focused_Prop);
+                TextField.Selection_Prop, View.Focused_Prop);
 
         // Get SubclassContainer
         _inspBox = getView("SubclassContainer", ColView.class);
