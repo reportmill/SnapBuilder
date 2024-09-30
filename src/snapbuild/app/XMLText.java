@@ -166,8 +166,7 @@ public class XMLText extends ViewOwner {
         richText.setTextStyleValue(TextStyle.Font_Prop, Font.Arial14.copyForSize(15), 0, 0);
 
         // Get/config TextArea
-        TextArea textArea = _xmlText.getTextArea();
-        textArea.addPropChangeListener(pc -> xmlTextSelDidChange(), TextArea.Selection_Prop);
+        _xmlText.addPropChangeListener(pc -> xmlTextSelDidChange(), TextArea.Selection_Prop);
 
         // Return
         return _xmlText;
@@ -226,8 +225,7 @@ public class XMLText extends ViewOwner {
      */
     static void setColor(Color aColor, int aStart, int aEnd)
     {
-        TextArea textArea = _xmlText.getTextArea();
-        TextBlock textBlock = textArea.getTextBlock();
+        TextBlock textBlock = _xmlText.getTextBlock();
         textBlock.setTextStyleValue(TextStyle.COLOR_KEY, aColor, aStart, aEnd);
     }
 

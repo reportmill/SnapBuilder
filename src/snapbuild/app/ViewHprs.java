@@ -262,15 +262,12 @@ public class ViewHprs {
          */
         public void configureGallery(T aView)
         {
-            aView.getTextArea().setFont(Font.Arial10);
+            aView.setFont(Font.Arial10);
             aView.setMinSize(140, 40);
             aView.setMaxSize(140, 40);
-            aView.getScrollView().setShowVBar(true);
-            aView.getScrollView().setBarSize(10);
-            aView.getTextArea().setMinHeight(300);
-
+            aView.setMinHeight(300);
             aView.setText("TextView");
-            aView.getTextArea().setTextColor(Color.GRAY);
+            aView.setTextColor(Color.GRAY);
         }
 
         /**
@@ -279,7 +276,7 @@ public class ViewHprs {
         @Override
         public void setTextColor(T aView, Color aColor)
         {
-            aView.getTextArea().setTextColor(aColor != null ? aColor.getColor() : Color.BLACK);
+            aView.setTextColor(aColor != null ? aColor.getColor() : Color.BLACK);
         }
     }
 
