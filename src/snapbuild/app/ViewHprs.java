@@ -451,8 +451,6 @@ public class ViewHprs {
         {
             aView.setFont(Font.Arial10);
             aView.setMinWidth(120);
-            aView.getScrollView().setShowVBar(true);
-            aView.getScrollView().setBarSize(10);
 
             aView.setItemsList(Arrays.asList("ListView", "Item two", "Item three"));
             aView.setCellConfigure(c -> configureCell(c));
@@ -595,10 +593,6 @@ public class ViewHprs {
 
             aView.getScrollView().setShowHBar(true);
             aView.getScrollView().setBarSize(10);
-            aView.getCol(0).getScrollView().setShowVBar(true);
-            aView.getCol(0).getScrollView().setBarSize(10);
-            aView.getCol(1).getScrollView().setShowVBar(true);
-            aView.getCol(1).getScrollView().setBarSize(10);
         }
 
         void configureCell(ListCell lc)
