@@ -15,7 +15,7 @@ public class GalleryView extends ParentView {
     public GalleryView()
     {
         // Basic Classes
-        Class<? extends View> classes[] = new Class[]{Label.class, Button.class, ToggleButton.class, CheckBox.class,
+        Class<? extends View>[] classes = new Class[]{Label.class, Button.class, ToggleButton.class, CheckBox.class,
                 RadioButton.class, TextField.class, ComboBox.class, Slider.class, ThumbWheel.class,
                 ProgressBar.class, Spinner.class, ArrowView.class,
 
@@ -32,7 +32,7 @@ public class GalleryView extends ParentView {
                 //ImageView.class, RectView.class, PathView.class, ArcView.class, StringView.class DocView.class, PageView.class
         };
 
-        for (Class cls : classes)
+        for (Class<? extends View> cls : classes)
             addChild(new ItemView(cls));
     }
 
@@ -41,7 +41,7 @@ public class GalleryView extends ParentView {
      */
     protected double getPrefHeightImpl(double aW)
     {
-        return ColView.getPrefHeight(this, aW);
+        return ColView.getPrefHeight(this, aW, true);
     }
 
     /**
@@ -72,11 +72,8 @@ public class GalleryView extends ParentView {
 
             // Create item view, configure and add
             View view = null;
-            try {
-                view = aCls.newInstance();
-            }
-            catch (Exception e) {
-            }
+            try { view = aCls.newInstance(); }
+            catch (Exception e) { throw new RuntimeException(e); }
             view.setMinSize(24, 12);
             view.setPickable(false);
             ViewHpr.getHpr(view).configureGallery(view);
