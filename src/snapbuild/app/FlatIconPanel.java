@@ -118,7 +118,7 @@ public class FlatIconPanel extends ViewOwner {
     private void scrollBoundsDidChange()
     {
         // Get visible rect and extend down
-        Rect bounds = _itemsView.getVisRect();
+        Rect bounds = _itemsView.getVisibleBounds();
         bounds.height += 500;
 
         ItemView children[] = _itemsView.getViewList().getViewsIntersectingShape(bounds, ItemView.class);
