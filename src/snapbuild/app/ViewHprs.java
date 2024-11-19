@@ -522,9 +522,6 @@ public class ViewHprs {
             aView.setRowHeight(15);
             aView.setPrefWidth(120);
 
-            aView.getScrollView().setShowVBar(true);
-            aView.getScrollView().setBarSize(10);
-
             aView.setItemsList(Collections.singletonList("TreeView"));
             aView.setResolver(new TR());
             aView.setCellConfigure(c -> configureCell(c));
