@@ -1,8 +1,8 @@
 package snapbuild.app;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.function.Consumer;
-
 import snap.geom.Insets;
 import snap.geom.Pos;
 import snap.gfx.*;
@@ -554,9 +554,9 @@ public class ViewHprs {
             /**
              * Returns the children.
              */
-            public String[] getChildren(String aParent)
+            public List<String> getChildren(String aParent)
             {
-                return new String[]{"     Item two", "     Item three"};
+                return Arrays.asList("     Item two", "     Item three");
             }
         }
     }
@@ -622,9 +622,9 @@ public class ViewHprs {
             /**
              * Returns the children.
              */
-            public String[] getChildren(String aParent)
+            public List<String> getChildren(String aParent)
             {
-                return new String[]{"Item two", "Item three"};
+                return Arrays.asList("Item two", "Item three");
             }
         }
     }
