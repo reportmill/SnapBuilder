@@ -239,17 +239,17 @@ public class XMLText extends ViewOwner {
          */
         public XMLParser()
         {
-            getRule("Element").setHandler(new ElementHandler());
-            getRule("Attribute").setHandler(new AttributeHandler());
+            getRuleForName("Element").setHandler(new ElementHandler());
+            getRuleForName("Attribute").setHandler(new AttributeHandler());
         }
 
         /**
          * Override to load rules from /snap/util/XMLParser.txt.
          */
-        protected ParseRule createRule()
+        @Override
+        protected Grammar createGrammar()
         {
-            Grammar grammar = Grammar.createGrammarForParserClass(snap.util.XMLParser.class);
-            return grammar.getPrimaryRule();
+            return Grammar.createGrammarForParserClass(snap.util.XMLParser.class);
         }
 
         /**
