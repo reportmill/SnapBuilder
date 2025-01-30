@@ -248,7 +248,8 @@ public class XMLText extends ViewOwner {
          */
         protected ParseRule createRule()
         {
-            return ParseUtils.loadRule(snap.util.XMLParser.class, null);
+            Grammar grammar = Grammar.createGrammarForParserClass(snap.util.XMLParser.class);
+            return grammar.getPrimaryRule();
         }
 
         /**
