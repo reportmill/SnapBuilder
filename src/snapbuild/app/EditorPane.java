@@ -928,7 +928,7 @@ public class EditorPane extends ViewOwner {
                 ScrollView scrollView = (ScrollView) parentView;
                 return scrollView.getContent() != null ? Collections.singletonList(scrollView.getContent()) : Collections.emptyList();
             }
-            return Arrays.asList(parentView.getChildren());
+            return parentView.getChildren();
         }
 
         /**

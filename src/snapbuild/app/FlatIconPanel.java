@@ -121,7 +121,7 @@ public class FlatIconPanel extends ViewOwner {
         Rect bounds = _itemsView.getVisibleBounds();
         bounds.height += 500;
 
-        ItemView children[] = _itemsView.getViewList().getViewsIntersectingShape(bounds, ItemView.class);
+        ItemView children[] = _itemsView.getChildren().getViewsIntersectingShape(bounds, ItemView.class);
         for (ItemView child : children)
             child.setActive(true);
     }

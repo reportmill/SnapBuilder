@@ -164,7 +164,7 @@ public class GalleryPane extends ViewOwner {
     private List<GalleryView.ItemView> getItemsForPrefix(String aPfx)
     {
         String pfx = aPfx.toLowerCase();
-        List<GalleryView.ItemView> items = new ArrayList(Arrays.asList(_galleryView.getChildren()));
+        List<GalleryView.ItemView> items = new ArrayList(_galleryView.getChildren());
         if (pfx.length() == 0) {
             for (GalleryView.ItemView item : items) {
                 item.setVisible(true);
