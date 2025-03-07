@@ -1,31 +1,29 @@
 {
-  "bin": { "SnapCharts": "jdeploy-bundle/jdeploy.js"},
-  "author": "ReportMill",
-  "description": "A UI Builder for the SnapKit Java UI toolkit",
-  "main": "index.js",
-  "preferGlobal": true,
-  "repository": "https://github.com/reportmill/SnapBuilder",
-  "version": "1.0.1",
-  "jdeploy": {
-    "jdk": false,
-    "javaVersion": "11",
-    "jar": "build/libs/SnapBuilderAll-1.0.0.jar",
-    "javafx": false,
-    "title": "SnapBuilder",
-    "documentTypes" : [
-      {
-        "extension" : "snp",
-        "mimetype" : "text/xml",
-        "editor" : true
-      }
-    ]
-  },
-  "dependencies": {
-    "njre": "^0.2.0",
-    "shelljs": "^0.8.4"
-  },
-  "license": "ISC",
-  "name": "snapbuilder",
-  "files": ["jdeploy-bundle"],
-  "scripts": {"test": "echo \"Error: no test specified\" && exit 1"}
+    "bin": {"SnapCharts": "jdeploy-bundle/jdeploy.js"},
+    "author": "ReportMill",
+    "description": "A UI Builder for the SnapKit Java UI toolkit",
+    "main": "index.js",
+    "preferGlobal": true,
+    "repository": "https://github.com/reportmill/SnapBuilder",
+    "version": "2025.3.7",
+    "jdeploy": {
+        "jdk": false,
+        "javaVersion": "21",
+        "documentTypes": [{
+            "editor": true,
+            "extension": "snp",
+            "mimetype": "text/xml"
+        }],
+        "jar": "build/libs/SnapBuilderAll-2025.03.jar",
+        "javafx": false,
+        "title": "SnapBuilder"
+    },
+    "dependencies": {
+        "njre": "^0.2.0",
+        "shelljs": "^0.8.4"
+    },
+    "license": "ISC",
+    "name": "snapbuilder",
+    "files": ["jdeploy-bundle"],
+    "scripts": {"test": "echo \"Error: no test specified\" && exit 1"}
 }
