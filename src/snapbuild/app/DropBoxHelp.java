@@ -2,5 +2,5 @@ package snapbuild.app;
 
 public class DropBoxHelp {
 
-    public static String str = "Nothing-to-see-here-folks";
+    public static String flaticon = "<add_flaticon_key_here>";
 }
