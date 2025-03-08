@@ -7,7 +7,7 @@ import snap.util.*;
 import snap.view.*;
 
 /**
- * An class to manage UI editing of a View.
+ * A class to manage UI editing of a View.
  */
 public class ViewToolImpl<T extends View> extends ViewTool<T> {
 
@@ -18,12 +18,17 @@ public class ViewToolImpl<T extends View> extends ViewTool<T> {
     private ViewOwner _subInsp;
 
     /**
+     * Constructor.
+     */
+    public ViewToolImpl()
+    {
+        super();
+    }
+
+    /**
      * Returns the inspector (owner) of the inspector pane.
      */
-    protected ViewOwner getInspector()
-    {
-        return _subInsp;
-    }
+    protected ViewOwner getInspector()  { return _subInsp; }
 
     /**
      * Sets the inspector in the inspector pane.
@@ -31,7 +36,7 @@ public class ViewToolImpl<T extends View> extends ViewTool<T> {
     protected void setInspector(ViewOwner anOwner)
     {
         // If already set, just return
-        if (anOwner == _subInsp) return;
+        if (anOwner == getInspector()) return;
 
         // Set new inspector
         _subInsp = anOwner;
@@ -76,10 +81,8 @@ public class ViewToolImpl<T extends View> extends ViewTool<T> {
         //subclassLabel.setTextColor(Color.GRAY);
 
         // Register MarginText, PadText to update
-        getView("MarginText").addPropChangeListener(pc -> insetsTextFieldChanged(pc),
-                TextField.Selection_Prop, View.Focused_Prop);
-        getView("PadText").addPropChangeListener(pc -> insetsTextFieldChanged(pc),
-                TextField.Selection_Prop, View.Focused_Prop);
+        getView("MarginText").addPropChangeListener(this::handleInsetsTextFieldPropChange, TextField.Selection_Prop, View.Focused_Prop);
+        getView("PadText").addPropChangeListener(this::handleInsetsTextFieldPropChange, TextField.Selection_Prop, View.Focused_Prop);
 
         // Get SubclassContainer
         _inspBox = getView("SubclassContainer", ColView.class);
@@ -294,12 +297,13 @@ public class ViewToolImpl<T extends View> extends ViewTool<T> {
     private Range getInsetsSelRangeForTextFieldName(String aName)
     {
         // Get text field (just return null if not focused)
-        TextField text = getView(aName, TextField.class);
-        if (!text.isFocused()) return null;
+        TextField textField = getView(aName, TextField.class);
+        if (!textField.isFocused())
+            return null;
 
         // Get string and textfield sel start/end
-        String str = text.getText();
-        int selStart = text.getSelStart(), selEnd = text.getSelEnd();
+        String str = textField.getText();
+        int selStart = textField.getSelStart(), selEnd = textField.getSelEnd();
 
         // Using commas as landmarks for insets fields return range of selection
         int start = countCommas(str, selStart);
@@ -314,21 +318,13 @@ public class ViewToolImpl<T extends View> extends ViewTool<T> {
     {
         Range range = getInsetsSelRangeForTextFieldName(aName);
         if (range == null) return "";
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int i = range.start; i <= range.end; i++) {
             switch (i) {
-                case 0:
-                    sb.append("top, ");
-                    break;
-                case 1:
-                    sb.append("right, ");
-                    break;
-                case 2:
-                    sb.append("bottom, ");
-                    break;
-                case 3:
-                    sb.append("left, ");
-                    break;
+                case 0: sb.append("top, "); break;
+                case 1: sb.append("right, "); break;
+                case 2: sb.append("bottom, "); break;
+                case 3: sb.append("left, "); break;
             }
         }
         sb.delete(sb.length() - 2, sb.length());
@@ -348,7 +344,7 @@ public class ViewToolImpl<T extends View> extends ViewTool<T> {
     /**
      * Called when MarginText or PadText change focus or selection to update mini-label.
      */
-    private void insetsTextFieldChanged(PropChange aPC)
+    private void handleInsetsTextFieldPropChange(PropChange aPC)
     {
         TextField text = (TextField) aPC.getSource();
         String name = text.getName(), name2 = name.replace("Text", "Label");

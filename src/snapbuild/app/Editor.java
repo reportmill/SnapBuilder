@@ -161,7 +161,7 @@ public class Editor extends ParentView {
         // Create view from class, configure, add
         View view = null;
         try { view = aCls.newInstance(); }
-        catch (Exception e) { }
+        catch (Exception ignored) { }
         ViewHpr.getHpr(view).configure(view);
         addViewToContent(view);
     }
@@ -172,9 +172,9 @@ public class Editor extends ParentView {
     public void addViewToContent(View aView)
     {
         // Get AddView and index
-        EditorSel.Tuple<View, Integer> addViewAndIndex = _sel.getSelHostViewAndIndex();
-        View host = addViewAndIndex.getA();
-        int index = addViewAndIndex.getB();
+        EditorSel.ViewIndex addViewAndIndex = _sel.getSelHostViewAndIndex();
+        View host = addViewAndIndex.view();
+        int index = addViewAndIndex.index();
 
         // If selected view parent is host, add to it
         if (host != null)
@@ -195,9 +195,9 @@ public class Editor extends ParentView {
      */
     public void addViewToContentAtPoint(View aView, Point aPoint)
     {
-        EditorSel.Tuple<View, Integer> viewIndex = getSel().getHostViewAndIndexForPoint(aPoint);
-        View hostView = viewIndex.getA();
-        int index = viewIndex.getB();
+        EditorSel.ViewIndex viewIndex = getSel().getHostViewAndIndexForPoint(aPoint);
+        View hostView = viewIndex.view();
+        int index = viewIndex.index();
         ViewHost host = (ViewHost) hostView;
         host.addGuest(aView, index);
         setSelView(aView);

@@ -76,9 +76,9 @@ public class EditorDragDropper {
         anEvent.acceptDrag(); //DnDConstants.ACTION_COPY);
 
         // Get view at drag point - if new DragOverView, update and request repaint
-        EditorSel.Tuple<View, Integer> viewIndex = _editor.getSel().getHostViewAndIndexForPoint(anEvent.getPoint());
-        View view = viewIndex.getA();
-        int index = viewIndex.getB();
+        EditorSel.ViewIndex viewIndex = _editor.getSel().getHostViewAndIndexForPoint(anEvent.getPoint());
+        View view = viewIndex.view();
+        int index = viewIndex.index();
         if (view != _dragOverView || index != _dragOverViewIndex) {
             _dragOverView = view;
             _dragOverViewIndex = index;
@@ -218,21 +218,12 @@ public class EditorDragDropper {
     public void processDragEvent(ViewEvent anEvent)
     {
         switch (anEvent.getType()) {
-            case DragEnter:
-                dragEnter(anEvent);
-                break;
-            case DragOver:
-                dragOver(anEvent);
-                break;
-            case DragExit:
-                dragExit(anEvent);
-                break;
-            case DragDrop:
-                dragDrop(anEvent);
-                break;
-            default:
-                throw new RuntimeException("DragDropper.processDragEvent: Unknown event type: " + anEvent.getType());
-                //case DragActionChanged: anEvent.acceptDrag(DnDConstants.ACTION_COPY);
+            case DragEnter: dragEnter(anEvent); break;
+            case DragOver: dragOver(anEvent); break;
+            case DragExit: dragExit(anEvent); break;
+            case DragDrop: dragDrop(anEvent); break;
+            default: throw new RuntimeException("DragDropper.processDragEvent: Unknown event type: " + anEvent.getType());
+            //case DragActionChanged: anEvent.acceptDrag(DnDConstants.ACTION_COPY);
         }
     }
 }

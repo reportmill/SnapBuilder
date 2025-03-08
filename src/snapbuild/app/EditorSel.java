@@ -41,7 +41,7 @@ public class EditorSel {
     {
         _editor = anEditor;
         _editor.addPropChangeListener(pc -> setSpotAnim(), View.Focused_Prop);
-        _editor.addPropChangeListener(pc -> editorShowingChanged(), View.Showing_Prop);
+        _editor.addPropChangeListener(pc -> handleEditorShowingChange(), View.Showing_Prop);
     }
 
     /**
@@ -122,7 +122,7 @@ public class EditorSel {
     public Shape getViewIndexShape(View aHostView, int anIndex)
     {
         // Get view for index
-        Tuple<View, View> indexViews = getViewIndexViews(aHostView, anIndex);
+        ViewPair indexViews = getViewIndexViews(aHostView, anIndex);
         View viewBefore = indexViews.getA();
         View viewAfter = indexViews.getB();
         View indexView = viewBefore != null ? viewBefore : viewAfter != null ? viewAfter : aHostView;
@@ -144,18 +144,18 @@ public class EditorSel {
     /**
      * Returns the views before and after the SelIndex.
      */
-    private Tuple<View, View> getViewIndexViews(View aHostView, int anIndex)
+    private ViewPair getViewIndexViews(View aHostView, int anIndex)
     {
         ViewHost host = (ViewHost) aHostView;
         View viewBefore = anIndex > 0 && anIndex - 1 < host.getGuestCount() ? host.getGuest(anIndex - 1) : null;
         View viewAfter = anIndex < host.getGuestCount() ? host.getGuest(anIndex) : null;
-        return new Tuple<>(viewBefore, viewAfter);
+        return new ViewPair(viewBefore, viewAfter);
     }
 
     /**
      * Returns the view and index that any new view should be added to.
      */
-    public Tuple<View, Integer> getSelHostViewAndIndex()
+    public ViewIndex getSelHostViewAndIndex()
     {
         // If SelView is host, return SelView and insertion index
         View selView = getSelView();
@@ -164,14 +164,14 @@ public class EditorSel {
             int ind = getSelIndex();
             int gcount = host.getGuestCount();
             int ind2 = ind >= 0 && ind < gcount ? ind : gcount;
-            return new Tuple<>(selView, ind2);
+            return new ViewIndex(selView, ind2);
         }
 
         // Otherwise get host and return end
         ViewHost host = selView.getHost();
         if (host != null) {
             int ind = selView.indexInHost() + 1;
-            return new Tuple<>((View) host, ind);
+            return new ViewIndex((View) host, ind);
         }
 
         // Return null (can this happen?)
@@ -181,38 +181,38 @@ public class EditorSel {
     /**
      * Returns the guest view closest to given point.
      */
-    public Tuple<View, Integer> getViewAndIndexForPoint(Point aPnt)
+    public ViewIndex getViewAndIndexForPoint(Point aPnt)
     {
         // Get event point in ContentBox
-        View cbox = _editor.getContentBox();
+        View contentBox = _editor.getContentBox();
         View content = _editor.getContent();
-        Point pnt = cbox.parentToLocal(aPnt.x, aPnt.y, _editor);
-        View view = ViewUtils.getDeepestChildAt(cbox, pnt.x, pnt.y);
+        Point pointInContentBox = contentBox.parentToLocal(aPnt.x, aPnt.y, _editor);
+        View hitView = ViewUtils.getDeepestChildAt(contentBox, pointInContentBox.x, pointInContentBox.y);
 
         // If not found, constrain to Editor.Content
-        if (view == null || view == cbox) {
+        if (hitView == null || hitView == contentBox) {
             ViewHost host = (ViewHost) content;
-            return new Tuple<>(content, host.getGuestCount());
+            return new ViewIndex(content, host.getGuestCount());
         }
 
         // Get deepest guest view (child of ViewHost)
-        view = getViewOrParentThatIsGuest(view, content);
+        hitView = getViewOrParentThatIsGuest(hitView, content);
 
-        ViewHost host = view instanceof ViewHost ? (ViewHost) view : view.getHost();
+        ViewHost host = hitView instanceof ViewHost ? (ViewHost) hitView : hitView.getHost();
         View hostView = (View) host;
-        Point pnt2 = hostView.parentToLocal(pnt.x, pnt.y, cbox);
-        return getViewAndIndexForHostPoint(host, pnt2);
+        Point pointInHostView = hostView.parentToLocal(pointInContentBox.x, pointInContentBox.y, contentBox);
+        return getViewAndIndexForHostPoint(host, pointInHostView);
     }
 
     /**
      * Returns the guest view closest to given point.
      */
-    private Tuple<View, Integer> getViewAndIndexForHostPoint(ViewHost aHost, Point aPnt)
+    private ViewIndex getViewAndIndexForHostPoint(ViewHost aHost, Point aPnt)
     {
         // If no children, just return index 0
         View hostView = (View) aHost;
         if (aHost.getGuestCount() == 0)
-            return new Tuple<>(hostView, 0);
+            return new ViewIndex(hostView, 0);
 
         // Iterate over children
         for (int i = 0, iMax = aHost.getGuestCount(); i < iMax; i++) {
@@ -224,26 +224,26 @@ public class EditorSel {
             // Handle horizontal: Check before first, On first, or before second
             if (hostView.isHorizontal()) {
                 if (aPnt.x < v1.getX() + v1Marg)
-                    return new Tuple<>(hostView, i);
+                    return new ViewIndex(hostView, i);
                 if (aPnt.x < v1.getMaxX() - v1Marg)
-                    return new Tuple<>(v1, null);
+                    return new ViewIndex(v1, null);
                 if (v2 == null || aPnt.x < v2.getX() + v2Marg)
-                    return new Tuple<>(hostView, i + 1);
+                    return new ViewIndex(hostView, i + 1);
             }
 
             // Handle vertical: Check before first, On first, or before second
             else {
                 if (aPnt.y < v1.getY() + v1Marg)
-                    return new Tuple<>(hostView, i);
+                    return new ViewIndex(hostView, i);
                 if (aPnt.y < v1.getMaxY() - v1Marg)
-                    return new Tuple<>(v1, null);
+                    return new ViewIndex(v1, null);
                 if (v2 == null || aPnt.y < v2.getY() + v2Marg)
-                    return new Tuple<>(hostView, i + 1);
+                    return new ViewIndex(hostView, i + 1);
             }
         }
 
         // Otherwise it's after last view
-        return new Tuple<>(hostView, aHost.getGuestCount());
+        return new ViewIndex(hostView, aHost.getGuestCount());
     }
 
     /**
@@ -251,35 +251,35 @@ public class EditorSel {
      */
     public View getHostViewForPoint(Point aPoint)
     {
-        Tuple<View, Integer> viewIndex = getHostViewAndIndexForPoint(aPoint);
-        return viewIndex.getA();
+        ViewIndex viewIndex = getHostViewAndIndexForPoint(aPoint);
+        return viewIndex.view();
     }
 
     /**
      * Returns a HostView for point.
      */
-    public Tuple<View, Integer> getHostViewAndIndexForPoint(Point aPoint)
+    public ViewIndex getHostViewAndIndexForPoint(Point aPoint)
     {
         // Get normal view+index for point
-        Tuple<View, Integer> viewIndex = getViewAndIndexForPoint(aPoint);
+        ViewIndex viewIndex = getViewAndIndexForPoint(aPoint);
 
         //  If View is ViewHost, just return
-        View view = viewIndex.getA();
+        View view = viewIndex.view();
         if (view instanceof ViewHost) {
 
             // If index if valid, just return
-            if (viewIndex.getB() != null)
+            if (viewIndex.index() != null)
                 return viewIndex;
 
             // Otherwise, use View.Host and View.indexInHost (adjusted if needed)
             ViewHost host = (ViewHost) view;
-            return new Tuple<>(view, host.getGuestCount());
+            return new ViewIndex(view, host.getGuestCount());
         }
 
         // Otherwise get ViewHost
         int index = view.indexInHost();
         view = (View) view.getHost();
-        return new Tuple<>(view, index);
+        return new ViewIndex(view, index);
     }
 
     /**
@@ -288,7 +288,7 @@ public class EditorSel {
     public void setSelForPoint(Point aPnt)
     {
         // Get view/order for selection at point
-        Tuple<View, Integer> viewIndex = getViewAndIndexForPoint(aPnt);
+        ViewIndex viewIndex = getViewAndIndexForPoint(aPnt);
         if (viewIndex == null) {
             View hostView = _editor.getContent();
             ViewHost host = (ViewHost) _editor.getContent();
@@ -297,8 +297,8 @@ public class EditorSel {
         }
 
         // Get SelView, SelIndex
-        View selView = viewIndex.getA();
-        Integer index = viewIndex.getB();
+        View selView = viewIndex.view();
+        Integer index = viewIndex.index();
 
         // Either select view or spot
         if (index == null)
@@ -366,7 +366,7 @@ public class EditorSel {
     /**
      * Called when Editor.Showing changes.
      */
-    private void editorShowingChanged()
+    private void handleEditorShowingChange()
     {
         // Update anim
         setSpotAnim();
@@ -422,34 +422,35 @@ public class EditorSel {
     }
 
     /**
-     * A tuple to hold a pair of values of two different types.
+     * A class to hold a view and index for a point.
      */
-    public static class Tuple<A, B> {
+    public static class ViewIndex {
 
-        // The A/B components
-        A _a;
-        B _b;
+        View _a;
+        Integer _b;
 
-        /**
-         * Constructor.
-         */
-        public Tuple(A anA, B aB)
+        /** Constructor. */
+        public ViewIndex(View anA, Integer aB)
         {
             _a = anA;
             _b = aB;
         }
 
-        /**
-         * Returns the A/B components.
-         */
-        public A getA()
-        {
-            return _a;
-        }
+        public View view()  { return _a; }
+        public Integer index()  { return _b; }
+    }
 
-        public B getB()
-        {
-            return _b;
-        }
+    /**
+     * A class to hold a pair of views.
+     */
+    public static class ViewPair {
+
+        View _a, _b;
+
+        /** Constructor. */
+        public ViewPair(View anA, View aB)  { _a = anA; _b = aB; }
+
+        public View getA()  { return _a; }
+        public View getB()  { return _b; }
     }
 }

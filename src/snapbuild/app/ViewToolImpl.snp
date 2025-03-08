@@ -45,7 +45,7 @@
       <ColView FillWidth="true">
         <RowView Spacing="2">
           <Label PrefWidth="50" Text="Margin:" />
-          <TextField Name="MarginText" PrefWidth="80" Align="CENTER" />
+          <TextField Name="MarginText" PrefWidth="100" Align="CENTER" />
           <Button Name="MarginAdd1Button" PrefWidth="20" PrefHeight="20" Padding="2" Font="Arial 13" Text="+1" ShowArea="false" />
           <Button Name="MarginSub1Button" PrefWidth="20" PrefHeight="20" Padding="2" Font="Arial 11" Text="-1" ShowArea="false" />
           <Button Name="MarginResetButton" PrefWidth="20" PrefHeight="20" ToolTip="Clear Font Size" Text="&#10226;" ShowArea="false" />
@@ -57,7 +57,7 @@
       <ColView FillWidth="true">
         <RowView Spacing="2">
           <Label PrefWidth="50" Text="Padding:" />
-          <TextField Name="PadText" PrefWidth="80" Align="CENTER" />
+          <TextField Name="PadText" PrefWidth="100" Align="CENTER" />
           <Button Name="PadAdd1Button" PrefWidth="20" PrefHeight="20" Padding="2" Font="Arial 13" Text="+1" ShowArea="false" />
           <Button Name="PadSub1Button" PrefWidth="20" PrefHeight="20" Padding="2" Font="Arial 11" Text="-1" ShowArea="false" />
           <Button Name="PadResetButton" PrefWidth="20" PrefHeight="20" ToolTip="Clear Font Size" Text="&#10226;" ShowArea="false" />
