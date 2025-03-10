@@ -314,7 +314,7 @@ public class EditorPane extends ViewOwner {
 
         // Set TransPane.Content to XMLText.UI
         _transPane.setContent(_xmlTextPane.getUI());
-        _xmlTextPane.updateXMLText();
+        _xmlTextPane.resetXML();
     }
 
     /**

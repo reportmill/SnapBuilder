@@ -36,32 +36,32 @@ public class ViewXML {
     /**
      * Sets the char indexes for HTML text.
      */
-    int setCharIndexes(View aView, String aStr, int aStart)
+    private int setCharIndexes(View aView, String aStr, int aStart)
     {
         // Get tag name for view and find/set element open char index
-        String tag = aView.getClass().getSimpleName();
-        int start2 = aStr.indexOf('<' + tag, aStart);
-        setCharStart(aView, start2);
-        start2 += tag.length() + 1;
+        String tagName = aView.getClass().getSimpleName();
+        int startCharIndex = aStr.indexOf('<' + tagName, aStart);
+        setStartCharIndexForView(aView, startCharIndex);
+        startCharIndex += tagName.length() + 1;
 
         // If view is ViewHost, recurse
         if (aView instanceof ViewHost) {
             ViewHost host = (ViewHost) aView;
             for (View child : host.getGuests())
-                start2 = setCharIndexes(child, aStr, start2);
+                startCharIndex = setCharIndexes(child, aStr, startCharIndex);
         }
 
         // Find/set element close char index and return
-        start2 = aStr.indexOf('>', start2);
-        start2++;
-        setCharEnd(aView, start2);
-        return start2;
+        int endCharIndex = aStr.indexOf('>', startCharIndex);
+        endCharIndex++;
+        setEndCharIndexForView(aView, endCharIndex);
+        return endCharIndex;
     }
 
     /**
      * Returns the Char start index for a view.
      */
-    public int getCharStart(View aView)
+    public int getStartCharIndexForView(View aView)
     {
         return Convert.intValue(aView.getProp("CharStart"));
     }
@@ -69,15 +69,12 @@ public class ViewXML {
     /**
      * Sets the Char start index for a view.
      */
-    public void setCharStart(View aView, int aStart)
-    {
-        aView.setProp("CharStart", aStart);
-    }
+    private void setStartCharIndexForView(View aView, int aStart)  { aView.setProp("CharStart", aStart); }
 
     /**
      * Returns the Char end index for a view.
      */
-    public int getCharEnd(View aView)
+    public int getEndCharIndexForView(View aView)
     {
         return Convert.intValue(aView.getProp("CharEnd"));
     }
@@ -85,37 +82,35 @@ public class ViewXML {
     /**
      * Sets the Char end index for a view.
      */
-    public void setCharEnd(View aView, int aStart)
-    {
-        aView.setProp("CharEnd", aStart);
-    }
+    private void setEndCharIndexForView(View aView, int aStart)  { aView.setProp("CharEnd", aStart); }
 
     /**
      * Returns the View in given char range.
      */
     public View getViewInCharRange(int aStart, int aEnd)
     {
-        return getViewInCharRange(aStart, aEnd, _rootView);
+        return getViewInCharRangeImpl(aStart, aEnd, _rootView);
     }
 
     /**
      * Returns the View in given char range.
      */
-    View getViewInCharRange(int aStart, int aEnd, View aView)
+    private View getViewInCharRangeImpl(int aStart, int aEnd, View aView)
     {
         // If view is host view, recurse to see if any Guests contain range (if so, return them)
         if (aView instanceof ViewHost) {
             ViewHost host = (ViewHost) aView;
             for (View child : host.getGuests()) {
-                View c2 = getViewInCharRange(aStart, aEnd, child);
-                if (c2 != null)
-                    return c2;
+                View childInRange = getViewInCharRangeImpl(aStart, aEnd, child);
+                if (childInRange != null)
+                    return childInRange;
             }
         }
 
         // If View contains range, return it
-        int cstart = getCharStart(aView), cend = getCharEnd(aView);
-        if (cstart <= aStart && aEnd <= cend)
+        int startCharIndex = getStartCharIndexForView(aView);
+        int endCharIndex = getEndCharIndexForView(aView);
+        if (startCharIndex <= aStart && aEnd <= endCharIndex)
             return aView;
 
         // Return null
