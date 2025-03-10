@@ -11,9 +11,9 @@
     <Button Name="UndoButton" PrefWidth="22" PrefHeight="22" ToolTip="Undo" ImageName="Edit_Undo.png" ShowArea="false" />
     <Button Name="RedoButton" PrefWidth="22" PrefHeight="22" ToolTip="Redo" ImageName="Edit_Redo.png" ShowArea="false" />
     <RowView Margin="0,0,0,120">
-      <ToggleButton Name="EditButton" PrefWidth="52" PrefHeight="20" Text="Edit" Position="CENTER_LEFT" Selected="true" GroupName="tge" />
-      <ToggleButton Name="XMLButton" PrefWidth="52" PrefHeight="20" LeanX="RIGHT" Text="XML" Position="CENTER" GroupName="tge" />
-      <ToggleButton Name="PreviewButton" PrefWidth="52" PrefHeight="20" Text="Run" Position="CENTER_RIGHT" GroupName="tge" />
+      <ToggleButton Name="EditButton" PrefWidth="60" Text="Edit" Position="CENTER_LEFT" Selected="true" GroupName="tge" />
+      <ToggleButton Name="XMLButton" PrefWidth="60" LeanX="RIGHT" Text="XML" Position="CENTER" GroupName="tge" />
+      <ToggleButton Name="PreviewButton" PrefWidth="60" Text="Run" Position="CENTER_RIGHT" GroupName="tge" />
     </RowView>
     <RowView PrefWidth="300" LeanX="RIGHT">
       <Button Name="SamplesButton" PrefWidth="72" PrefHeight="22" Margin="0,8,0,0" Padding="0,4,0,4" LeanX="RIGHT" Text="Samples" />

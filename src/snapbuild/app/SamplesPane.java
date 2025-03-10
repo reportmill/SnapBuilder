@@ -48,7 +48,6 @@ public class SamplesPane extends ViewOwner {
      */
     public void showSamples(EditorPane anEP)
     {
-        anEP.setEditing(true);
         _editorPane = anEP;
         ChildView aView = (ChildView) anEP.getUI();
 
