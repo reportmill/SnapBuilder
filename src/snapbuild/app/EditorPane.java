@@ -56,7 +56,7 @@ public class EditorPane extends ViewOwner {
     private Map<Class<? extends View>,ViewTool<?>>  _tools = new HashMap<>();
 
     // The Editor listener
-    private PropChangeListener  _editorLsnr = pce -> editorSelViewChange();
+    private PropChangeListener  _editorLsnr = pc -> editorSelViewChange();
 
     /**
      * Constructor.
@@ -579,63 +579,61 @@ public class EditorPane extends ViewOwner {
      */
     protected void respondUI(ViewEvent anEvent)
     {
-        // Handle Edit CutButton, CopyButton, PasteButton, DeleteButton
-        if (anEvent.equals("CutButton")) _editor.cut();
-        if (anEvent.equals("CopyButton")) _editor.copy();
-        if (anEvent.equals("PasteButton")) _editor.paste();
-        if (anEvent.equals("DeleteButton")) _editor.delete();
+        String eventName = anEvent.getName();
 
-        // Handle Edit UndoButton, RedoButton
-        if (anEvent.equals("UndoButton")) _editor.undo();
-        if (anEvent.equals("RedoButton")) _editor.redo();
+        switch (eventName) {
 
-        // Handle SamplesButton
-        if (anEvent.equals("SamplesButton")) showSamples();
+            // Handle Edit CutButton, CopyButton, PasteButton, DeleteButton
+            case "CutButton": _editor.cut(); break;
+            case "CopyButton": _editor.copy(); break;
+            case "PasteButton": _editor.paste(); break;
+            case "DeleteButton": _editor.delete(); break;
 
-        // Handle EditButton, XMLButton, PreviewButton
-        if (anEvent.equals("EditButton")) showEditor();
-        if (anEvent.equals("XMLButton")) showXMLEditor();
-        if (anEvent.equals("PreviewButton")) showPreview();
+            // Handle Edit UndoButton, RedoButton
+            case "UndoButton": _editor.undo(); break;
+            case "RedoButton": _editor.redo(); break;
 
-        // Handle ShowViewTreeButton
-        if (anEvent.equals("ShowViewTreeButton"))
-            toggleShowViewTree();
+            // Handle SamplesButton
+            case "SamplesButton": showSamples(); break;
 
-        // Handle GalleryButton
-        if (anEvent.equals("GalleryButton"))
-            toggleShowGallery();
+            // Handle EditButton, XMLButton, PreviewButton
+            case "EditButton": showEditor(); break;
+            case "XMLButton": showXMLEditor(); break;
+            case "PreviewButton": showPreview(); break;
 
-        // Handle AddRowButton, AddColButton
-        if (anEvent.equals("AddRowButton"))
-            addRowView();
-        if (anEvent.equals("AddColButton"))
-            addColView();
+            // Handle ShowViewTreeButton
+            case "ShowViewTreeButton": toggleShowViewTree(); break;
 
-        // Handle ViewTree
-        if (anEvent.getView() == _viewTree) {
-            View view = _viewTree.getSelItem();
-            _editor.setSelView(view);
+            // Handle GalleryButton
+            case "GalleryButton": toggleShowGallery(); break;
+
+            // Handle AddRowButton, AddColButton
+            case "AddRowButton": addRowView(); break;
+            case "AddColButton": addColView(); break;
+
+            // Handle ViewTree
+            case "ViewTree":
+                View view = _viewTree.getSelItem();
+                _editor.setSelView(view);
+                break;
+
+            // Handle EscapeAction
+            case "EscapeAction":
+                View selView = _editor.getSelView();
+                View selViewParent = selView.getParent();
+                if (selView != getContent())
+                    _editor.setSelView(selViewParent);
+                else {
+                    _editor.getCopyPaster().copy(); // This is for me - quick top level copy
+                    beep();
+                }
+                break;
+
+            // Handle SaveMenuItem, SaveButton, SaveAsMenuItem, SaveAsPDFMenuItem, RevertMenuItem
+            case "SaveMenuItem": case "SaveButton": save(); break;
+            case "SaveAsMenuItem": saveAs(); break;
+            case "RevertMenuItem": revert(); break;
         }
-
-        // Handle EscapeAction
-        if (anEvent.equals("EscapeAction")) {
-            View selView = _editor.getSelView();
-            View selViewParent = selView.getParent();
-            if (selView != getContent())
-                _editor.setSelView(selViewParent);
-            else {
-                _editor.getCopyPaster().copy(); // This is for me - quick top level copy
-                beep();
-            }
-        }
-
-        // Handle SaveMenuItem, SaveButton, SaveAsMenuItem, SaveAsPDFMenuItem, RevertMenuItem
-        if (anEvent.equals("SaveMenuItem") || anEvent.equals("SaveButton"))
-            save();
-        if (anEvent.equals("SaveAsMenuItem"))
-            saveAs();
-        if (anEvent.equals("RevertMenuItem"))
-            revert();
     }
 
     /**
