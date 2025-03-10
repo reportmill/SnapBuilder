@@ -3,7 +3,6 @@ import snap.gfx.*;
 import snap.parse.*;
 import snap.text.TextBlock;
 import snap.text.TextStyle;
-import snap.util.Convert;
 import snap.view.*;
 
 /**
@@ -14,11 +13,8 @@ public class XMLText extends ViewOwner {
     // The EditorPane
     private EditorPane _epane;
 
-    // The View
-    private View _content;
-
-    // The XML string
-    private String _xmlStr;
+    // The ViewXML
+    private ViewXML _viewXML;
 
     // The TextView
     private static TextView _xmlText;
@@ -37,120 +33,6 @@ public class XMLText extends ViewOwner {
     public XMLText(EditorPane anEP)
     {
         _epane = anEP;
-    }
-
-    /**
-     * Returns the XML string.
-     */
-    public String getXMLString()
-    {
-        return getXMLString(true);
-    }
-
-    /**
-     * Returns the XML string.
-     */
-    public String getXMLString(boolean useCache)
-    {
-        // If already set, just return
-        if (_xmlStr != null && useCache) return _xmlStr;
-
-        // Get text for content
-        _content = _epane.getContent();
-        _xmlStr = new ViewArchiver().toXML(_content).getString();
-
-        // Set char indexes for all views and return string
-        setCharIndexes(_content, _xmlStr, 0);
-        return _xmlStr;
-    }
-
-    /**
-     * Sets the char indexes for HTML text.
-     */
-    int setCharIndexes(View aView, String aStr, int aStart)
-    {
-        // Get tag name for view and find/set element open char index
-        String tag = aView.getClass().getSimpleName();
-        int start2 = aStr.indexOf('<' + tag, aStart);
-        setCharStart(aView, start2);
-        start2 += tag.length() + 1;
-
-        // If view is ViewHost, recurse
-        if (aView instanceof ViewHost) {
-            ViewHost host = (ViewHost) aView;
-            for (View child : host.getGuests())
-                start2 = setCharIndexes(child, aStr, start2);
-        }
-
-        // Find/set element close char index and return
-        start2 = aStr.indexOf('>', start2);
-        start2++;
-        setCharEnd(aView, start2);
-        return start2;
-    }
-
-    /**
-     * Returns the Char start index for a view.
-     */
-    public int getCharStart(View aView)
-    {
-        return Convert.intValue(aView.getProp("CharStart"));
-    }
-
-    /**
-     * Sets the Char start index for a view.
-     */
-    public void setCharStart(View aView, int aStart)
-    {
-        aView.setProp("CharStart", aStart);
-    }
-
-    /**
-     * Returns the Char end index for a view.
-     */
-    public int getCharEnd(View aView)
-    {
-        return Convert.intValue(aView.getProp("CharEnd"));
-    }
-
-    /**
-     * Sets the Char end index for a view.
-     */
-    public void setCharEnd(View aView, int aStart)
-    {
-        aView.setProp("CharEnd", aStart);
-    }
-
-    /**
-     * Returns the View in given char range.
-     */
-    public View getViewInCharRange(int aStart, int aEnd)
-    {
-        return getViewInCharRange(aStart, aEnd, _content);
-    }
-
-    /**
-     * Returns the View in given char range.
-     */
-    View getViewInCharRange(int aStart, int aEnd, View aView)
-    {
-        // If view is host view, recurse to see if any Guests contain range (if so, return them)
-        if (aView instanceof ViewHost) {
-            ViewHost host = (ViewHost) aView;
-            for (View child : host.getGuests()) {
-                View c2 = getViewInCharRange(aStart, aEnd, child);
-                if (c2 != null)
-                    return c2;
-            }
-        }
-
-        // If View contains range, return it
-        int cstart = getCharStart(aView), cend = getCharEnd(aView);
-        if (cstart <= aStart && aEnd <= cend)
-            return aView;
-
-        // Return null
-        return null;
     }
 
     /**
@@ -180,8 +62,12 @@ public class XMLText extends ViewOwner {
         // If not showing, just return
         if (_xmlText == null || !_xmlText.isShowing()) return;
 
+        // Get ViewXML
+        View rootView = _epane.getContent();
+        _viewXML = new ViewXML(rootView);
+
         // Get View
-        String text = getXMLString(false);
+        String text = _viewXML.getXmlString();
         _xmlText.setText(text);
         new XMLParser().parse(text);
         runDelayed(() -> updateXMLTextSel(), 200);
@@ -198,8 +84,8 @@ public class XMLText extends ViewOwner {
         // Get View
         Editor editor = _epane.getEditor();
         View sview = editor.getSelView();
-        int start = getCharStart(sview);
-        int end = getCharEnd(sview);
+        int start = _viewXML.getCharStart(sview);
+        int end = _viewXML.getCharEnd(sview);
         _xmlText.setSel(start, end);
     }
 
@@ -211,7 +97,7 @@ public class XMLText extends ViewOwner {
         // Get View that fully contains selection (just return if none)
         int start = _xmlText.getSelStart();
         int end = _xmlText.getSelEnd();
-        View view = getViewInCharRange(start, end);
+        View view = _viewXML.getViewInCharRange(start, end);
         if (view == null) return;
 
         // Set SelView to view with suppression so that we don't update text selection
