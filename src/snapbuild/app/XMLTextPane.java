@@ -6,21 +6,21 @@ import snap.text.TextStyle;
 import snap.view.*;
 
 /**
- * A class to manage XMLText view.
+ * This class displays the editor content as XML and allows for editing.
  */
-public class XMLText extends ViewOwner {
+public class XMLTextPane extends ViewOwner {
 
     // The EditorPane
-    private EditorPane _epane;
+    private EditorPane _editorPane;
 
     // The ViewXML
     private ViewXML _viewXML;
 
     // The TextView
-    private static TextView _xmlText;
+    private static TextView _textView;
 
-    // Indicates that XMLText changed selection (so we know resulting editor selection isn't externa)
-    private boolean _xmlTextSelChanging;
+    // Indicates TextView selection changed in this pane (as opposed to externally)
+    private boolean _textViewSelChanging;
 
     // Colors
     private static Color NAME_COLOR = new Color("#7D1F7C"); //336633
@@ -28,11 +28,12 @@ public class XMLText extends ViewOwner {
     private static Color VALUE_COLOR = new Color("#5E1B9F"); // CC0000
 
     /**
-     * Creates new XMLText for EditorPane.
+     * Constructor.
      */
-    public XMLText(EditorPane anEP)
+    public XMLTextPane(EditorPane editorPane)
     {
-        _epane = anEP;
+        super();
+        _editorPane = editorPane;
     }
 
     /**
@@ -40,70 +41,76 @@ public class XMLText extends ViewOwner {
      */
     protected View createUI()
     {
-        // Create XMLText TextView
-        _xmlText = new TextView(true);
+        // Create TextView for xml
+        _textView = new TextView(true);
 
         // Create/set RichText
-        TextBlock richText = _xmlText.getTextBlock();
-        richText.setTextStyleValue(TextStyle.Font_Prop, Font.Arial14.copyForSize(15), 0, 0);
+        TextBlock textBlock = _textView.getTextBlock();
+        textBlock.setTextStyleValue(TextStyle.Font_Prop, Font.Arial14.copyForSize(15), 0, 0);
 
         // Get/config TextArea
-        _xmlText.addPropChangeListener(pc -> xmlTextSelDidChange(), TextArea.Selection_Prop);
+        _textView.addPropChangeListener(pc -> handleTextViewSelChange(), TextArea.Selection_Prop);
 
         // Return
-        return _xmlText;
+        return _textView;
     }
 
     /**
-     * Updates the XMLText TextView.
+     * Updates the XML TextView.
      */
     protected void updateXMLText()
     {
         // If not showing, just return
-        if (_xmlText == null || !_xmlText.isShowing()) return;
+        if (_textView == null || !_textView.isShowing())
+            return;
 
         // Get ViewXML
-        View rootView = _epane.getContent();
+        View rootView = _editorPane.getContent();
         _viewXML = new ViewXML(rootView);
 
-        // Get View
+        // Reset TextView text
         String text = _viewXML.getXmlString();
-        _xmlText.setText(text);
+        _textView.setText(text);
+
+        // Reset colors
         new XMLParser().parse(text);
-        runDelayed(() -> updateXMLTextSel(), 200);
+
+        // Reset textview selection
+        runDelayed(() -> handleEditorSelViewChange(), 200);
     }
 
     /**
-     * Updates the XMLText TextView.
+     * Called when Editor.SelView property changes.
      */
-    protected void updateXMLTextSel()
+    protected void handleEditorSelViewChange()
     {
         // If not showing, just return
-        if (_xmlText == null || !_xmlText.isShowing() || _xmlTextSelChanging) return;
+        if (_textView == null || !_textView.isShowing() || _textViewSelChanging)
+            return;
 
         // Get View
-        Editor editor = _epane.getEditor();
+        Editor editor = _editorPane.getEditor();
         View sview = editor.getSelView();
         int start = _viewXML.getCharStart(sview);
         int end = _viewXML.getCharEnd(sview);
-        _xmlText.setSel(start, end);
+        _textView.setSel(start, end);
     }
 
     /**
-     * Updates the XMLText TextView.
+     * Called when TextView.Selection property changes to update EditorPane SelView.
      */
-    protected void xmlTextSelDidChange()
+    protected void handleTextViewSelChange()
     {
         // Get View that fully contains selection (just return if none)
-        int start = _xmlText.getSelStart();
-        int end = _xmlText.getSelEnd();
+        int start = _textView.getSelStart();
+        int end = _textView.getSelEnd();
         View view = _viewXML.getViewInCharRange(start, end);
         if (view == null) return;
 
         // Set SelView to view with suppression so that we don't update text selection
-        _xmlTextSelChanging = true;
-        _epane.setSelViewKeepPath(view);
-        _xmlTextSelChanging = false;
+        _textViewSelChanging = true;
+        _editorPane.setSelViewKeepPath(view);
+        _textViewSelChanging = false;
     }
 
     /**
@@ -111,14 +118,14 @@ public class XMLText extends ViewOwner {
      */
     static void setColor(Color aColor, int aStart, int aEnd)
     {
-        TextBlock textBlock = _xmlText.getTextBlock();
+        TextBlock textBlock = _textView.getTextBlock();
         textBlock.setTextStyleValue(TextStyle.COLOR_KEY, aColor, aStart, aEnd);
     }
 
     /**
      * A class to parse XML.
      */
-    public class XMLParser extends Parser {
+    private static class XMLParser extends Parser {
 
         /**
          * Override to set simple rule handlers.
@@ -157,13 +164,16 @@ public class XMLText extends ViewOwner {
          */
         public void parsedOne(ParseNode aNode, String anId)
         {
-            // Handle Name
-            if (anId == "Name")
-                setColor(NAME_COLOR, aNode.getStart(), aNode.getEnd());
+            switch (anId) {
+
+                // Handle Name
+                case "Name": setColor(NAME_COLOR, aNode.getStart(), aNode.getEnd()); break;
 
                 // Handle close: On first close, check for content
-            else if (anId == "<" || anId == ">" || anId == "</" || anId == "/>")
-                setColor(NAME_COLOR, aNode.getStart(), aNode.getEnd());
+                case "<": case ">": case "</": case "/>":
+                    setColor(NAME_COLOR, aNode.getStart(), aNode.getEnd());
+                    break;
+            }
         }
     }
 
@@ -177,17 +187,17 @@ public class XMLText extends ViewOwner {
          */
         public void parsedOne(ParseNode aNode, String anId)
         {
-            // Handle Name
-            if (anId == "Name")
-                setColor(KEY_COLOR, aNode.getStart(), aNode.getEnd());
+            switch (anId) {
+
+                // Handle Name
+                case "Name": setColor(KEY_COLOR, aNode.getStart(), aNode.getEnd()); break;
 
                 // Handle String
-            else if (anId == "String")
-                setColor(VALUE_COLOR, aNode.getStart(), aNode.getEnd());
+                case "String": setColor(VALUE_COLOR, aNode.getStart(), aNode.getEnd()); break;
 
                 // Handle "="
-            else if (anId == "=")
-                setColor(NAME_COLOR, aNode.getStart(), aNode.getEnd());
+                case "=": setColor(NAME_COLOR, aNode.getStart(), aNode.getEnd()); break;
+            }
         }
     }
 }

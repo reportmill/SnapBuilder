@@ -49,7 +49,7 @@ public class EditorPane extends ViewOwner {
     protected ViewTool<?>  _viewTool = new ViewToolImpl<>();
 
     // The XML TextView
-    private XMLText  _xmlText = new XMLText(this);
+    private XMLTextPane _xmlTextPane = new XMLTextPane(this);
 
     // Map of tools
     private Map<Class<? extends View>,ViewTool<?>>  _tools = new HashMap<>();
@@ -313,8 +313,8 @@ public class EditorPane extends ViewOwner {
         else _transPane.setTransition(TransitionPane.MoveLeft);
 
         // Set TransPane.Content to XMLText.UI
-        _transPane.setContent(_xmlText.getUI());
-        _xmlText.updateXMLText();
+        _transPane.setContent(_xmlTextPane.getUI());
+        _xmlTextPane.updateXMLText();
     }
 
     /**
@@ -761,7 +761,7 @@ public class EditorPane extends ViewOwner {
     {
         _selPathDeep = _editor.getSelView();
         resetLater();
-        _xmlText.updateXMLTextSel();
+        _xmlTextPane.handleEditorSelViewChange();
     }
 
     /**
