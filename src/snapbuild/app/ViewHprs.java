@@ -167,7 +167,7 @@ public class ViewHprs {
         public void configureGallery(T aView)
         {
             aView.setMinSize(80, 22);
-            aView.setItemsList(Collections.singletonList("ComboBox"));
+            aView.setItems(Collections.singletonList("ComboBox"));
             aView.setSelItem("ComboBox");
         }
     }
@@ -452,7 +452,7 @@ public class ViewHprs {
             aView.setFont(Font.Arial10);
             aView.setMinWidth(120);
 
-            aView.setItemsList(Arrays.asList("ListView", "Item two", "Item three"));
+            aView.setItems(Arrays.asList("ListView", "Item two", "Item three"));
             aView.setCellConfigure(c -> configureCell(c));
         }
 
@@ -490,7 +490,7 @@ public class ViewHprs {
             aView.getScrollView().setShowVBar(true);
             aView.getScrollView().setBarSize(10);
 
-            aView.setItemsList(Arrays.asList("TableView", "Item two", "Item three"));
+            aView.setItems(Arrays.asList("TableView", "Item two", "Item three"));
             aView.setCellConfigure(c -> configureCell(c));
         }
 
@@ -522,7 +522,7 @@ public class ViewHprs {
             aView.setRowHeight(15);
             aView.setPrefWidth(120);
 
-            aView.setItemsList(Collections.singletonList("TreeView"));
+            aView.setItems(Collections.singletonList("TreeView"));
             aView.setResolver(new TR());
             aView.setCellConfigure(c -> configureCell(c));
             aView.expandAll();
@@ -584,7 +584,7 @@ public class ViewHprs {
             aView.setPrefSize(160, 50);
 
             aView.setResolver(new BR());
-            aView.setItemsList(Collections.singletonList("BrowserView"));
+            aView.setItems(Collections.singletonList("BrowserView"));
             aView.setCellConfigure((Consumer<ListCell>) c -> configureCell(c));
             aView.setSelItem("BrowserView");
 

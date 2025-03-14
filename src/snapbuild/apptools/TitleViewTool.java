@@ -13,9 +13,9 @@ public class TitleViewTool<T extends TitleView> extends ViewTool<T> {
     protected void initUI()
     {
         // Set StyleComboBox values
-        ComboBox styleComboBox = getView("StyleComboBox", ComboBox.class);
-        TitleView.TitleStyle vals[] = TitleView.TitleStyle.values();
-        styleComboBox.setItems((Object[]) vals);
+        ComboBox<TitleView.TitleStyle> styleComboBox = getView("StyleComboBox", ComboBox.class);
+        TitleView.TitleStyle[] vals = TitleView.TitleStyle.values();
+        styleComboBox.setItems(vals);
     }
 
     /**

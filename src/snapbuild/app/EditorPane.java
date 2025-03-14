@@ -641,7 +641,7 @@ public class EditorPane extends ViewOwner {
 
         // Update ViewTree
         if (_viewTree.isShowing()) {
-            _viewTree.setItems(new View[] { getContent() });
+            _viewTree.setItems(ListUtils.of(getContent()));
             _viewTree.setSelItem(null);
             _viewTree.collapseItem(getContent());
             _viewTree.expandItem(getContent());
