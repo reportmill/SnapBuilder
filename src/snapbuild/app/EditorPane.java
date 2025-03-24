@@ -622,7 +622,7 @@ public class EditorPane extends ViewOwner {
         aWindow.addEventHandler(e -> { close(); e.consume(); }, WinClose);
 
         // If WebVM, go full window
-        if (SnapUtils.isWebVM)
+        if (SnapEnv.isWebVM)
             aWindow.setMaximized(true);
     }
 

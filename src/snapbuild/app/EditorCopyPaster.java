@@ -1,6 +1,6 @@
 package snapbuild.app;
 import snap.gfx.Image;
-import snap.util.SnapUtils;
+import snap.util.SnapEnv;
 import snap.util.XMLElement;
 import snap.view.*;
 
@@ -52,7 +52,7 @@ public class EditorCopyPaster {
         Clipboard cb = Clipboard.getCleared();
 
         // If browser, just copy XML as text
-        if (SnapUtils.isTeaVM) {
+        if (SnapEnv.isTeaVM) {
             XMLElement xml = new ViewArchiver().writeToXML(selView);
             String xmlStr = xml.getString();
             cb.addData(xmlStr);
@@ -86,7 +86,7 @@ public class EditorCopyPaster {
         }
 
         // If browser, just try for XML string
-        if (SnapUtils.isTeaVM) {
+        if (SnapEnv.isTeaVM) {
             if (cb.hasString()) {
                 String str = cb.getString();
                 byte[] bytes = str.getBytes();
