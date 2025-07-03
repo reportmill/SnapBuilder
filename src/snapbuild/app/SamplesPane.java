@@ -127,7 +127,7 @@ public class SamplesPane extends ViewOwner {
      */
     private void loadIndexFile()
     {
-        WebURL url = WebURL.getURL(SAMPLES_ROOT + "index.txt");
+        WebURL url = WebURL.getUrl(SAMPLES_ROOT + "index.txt");
         url.getResponseAndCall(resp -> indexFileLoaded(resp));
     }
 
@@ -307,7 +307,7 @@ public class SamplesPane extends ViewOwner {
         // Get document name, URL string and URL
         String name = getDocName(anIndex);
         String urls = SAMPLES_ROOT + name + '/' + name + SAMPLES_EXT;
-        WebURL url = WebURL.getURL(urls);
+        WebURL url = WebURL.getUrl(urls);
 
         // Get bytes (complain if not found)
         byte[] bytes = url.getBytes();
@@ -335,7 +335,7 @@ public class SamplesPane extends ViewOwner {
         // Get image name, URL string, and URL
         String name = getDocName(anIndex);
         String urls = SAMPLES_ROOT + name + '/' + name + ".png";
-        WebURL imgURL = WebURL.getURL(urls);
+        WebURL imgURL = WebURL.getUrl(urls);
 
         // Create Image. Then make sure image is loaded by requesting Image.Native.
         img = _docImages[anIndex] = Image.getImageForSource(imgURL);
@@ -382,7 +382,7 @@ public class SamplesPane extends ViewOwner {
     {
         if (_imagePaths != null) return _imagePaths;
 
-        WebURL url = WebURL.getURL(SAMPLES_ROOT + "images/index.txt");
+        WebURL url = WebURL.getUrl(SAMPLES_ROOT + "images/index.txt");
         String pathsStr = url.getText();
         String[] pathLines = pathsStr.split("\\s*\n\\s*");
         List<String> pathsList = new ArrayList<>();
@@ -423,7 +423,7 @@ public class SamplesPane extends ViewOwner {
             String path = getImagePathForName(aPath);
             if (path != null) {
                 String urls = SAMPLES_ROOT + "images/" + path;
-                WebURL url = WebURL.getURL(urls);
+                WebURL url = WebURL.getUrl(urls);
                 return Image.getImageForSource(url);
             }
 

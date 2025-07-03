@@ -151,7 +151,7 @@ public class EditorPane extends ViewOwner {
     public EditorPane openSource(Object aSource)
     {
         // Get source URL
-        WebURL sourceURL = WebURL.getURL(aSource);
+        WebURL sourceURL = WebURL.getUrl(aSource);
 
         // Load document (if not found, just return)
         ParentView parentView = getParentView(aSource);
@@ -227,7 +227,7 @@ public class EditorPane extends ViewOwner {
             return;
 
         // Set SourceURL and save
-        setSourceURL(file.getURL());
+        setSourceURL(file.getUrl());
         save();
     }
 

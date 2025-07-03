@@ -77,7 +77,7 @@ public class App {
                 else {
                     byte[] xmlBytes = xmlStr.getBytes();
                     System.out.println("Process XMLString: Write bytes: " + xmlFilename + ", size=" + xmlBytes.length);
-                    WebURL webURL = WebURL.getURL('/' + xmlFilename);
+                    WebURL webURL = WebURL.getUrl('/' + xmlFilename);
                     _openOnLaunchFile = webURL.createFile(false);
                     _openOnLaunchFile.setBytes(xmlBytes);
                 }
