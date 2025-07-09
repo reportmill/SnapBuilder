@@ -1,7 +1,7 @@
 package snapbuild.app;
 import snap.gfx.Color;
 import snap.parse.*;
-import snap.text.TextBlock;
+import snap.text.TextModel;
 import snap.text.TextStyle;
 import snap.view.TextView;
 
@@ -34,8 +34,8 @@ public class XMLTextColorizer {
      */
     private static void setColor(Color aColor, int aStart, int aEnd)
     {
-        TextBlock textBlock = _textView.getTextBlock();
-        textBlock.setTextStyleValue(TextStyle.COLOR_KEY, aColor, aStart, aEnd);
+        TextModel textModel = _textView.getTextModel();
+        textModel.setTextStyleValue(TextStyle.COLOR_KEY, aColor, aStart, aEnd);
     }
 
     /**
