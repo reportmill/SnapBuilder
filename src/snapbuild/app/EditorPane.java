@@ -633,8 +633,8 @@ public class EditorPane extends ViewOwner {
     {
         // Update UndoButton, RedoButton
         Undoer undoer = _editor.getUndoer();
-        setViewEnabled("UndoButton", undoer != null && undoer.hasUndos()); //undoer.getUndoSetLast()!=null
-        setViewEnabled("RedoButton", undoer != null && undoer.hasRedos()); //undoer.getRedoSetLast()!=null
+        setViewEnabled("UndoButton", undoer != null && undoer.hasUndos());
+        setViewEnabled("RedoButton", undoer != null && undoer.hasRedos());
 
         // Update SelPathBox
         updateSelPathBox();

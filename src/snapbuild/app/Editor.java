@@ -417,7 +417,7 @@ public class Editor extends ParentView {
     {
         // If undoer exists, do undo, select views and repaint
         Undoer undoer = getUndoer();
-        if (undoer != null && undoer.getUndoSetLast() != null) {
+        if (undoer != null && undoer.getLastUndoSet() != null) {
             UndoSet undoSet = undoer.undo();
             setUndoSelection(undoSet.getUndoSelection());
             repaint();
@@ -434,7 +434,7 @@ public class Editor extends ParentView {
     {
         // If undoer exists, do undo, select views and repaint
         Undoer undoer = getUndoer();
-        if (undoer != null && undoer.getRedoSetLast() != null) {
+        if (undoer != null && undoer.getLastRedoSet() != null) {
             UndoSet redoSet = undoer.redo();
             setUndoSelection(redoSet.getRedoSelection());
             repaint();
