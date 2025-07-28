@@ -238,10 +238,10 @@ public class WelcomePanel extends ViewOwner {
     /**
      * Opens selected file.
      */
-    public void openFile(Object aSource)
+    public void openFile(WebFile snapFile)
     {
         // Have editor run open panel (if no document opened, just return)
-        EditorPane editorPane = new EditorPane().openSource(aSource);
+        EditorPane editorPane = new EditorPane().openEditorForFile(snapFile);
         if (editorPane == null)
             return;
 

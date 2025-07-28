@@ -91,7 +91,7 @@ public class EditorPaneMenuBar extends ViewOwner {
 
         // Handle OpenMenuItem, OpenButton: Get new editor pane from open panel and make visible (if created)
         if (anEvent.equals("OpenMenuItem") || anEvent.equals("OpenButton")) {
-            EditorPane editorPane2 = new EditorPane().openSource(editorPane.getUI());
+            EditorPane editorPane2 = new EditorPane().showOpenPanel(editorPane.getUI());
             if (editorPane2 != null)
                 editorPane2.setWindowVisible(true);
         }

@@ -9,6 +9,7 @@ import snap.gfx.Color;
 import snap.gfx.Image;
 import snap.gfx.Painter;
 import snap.view.*;
+import snap.web.WebURL;
 
 import java.util.List;
 
@@ -187,9 +188,14 @@ public class EditorDragDropper {
         if (editorPane == null)
             return;
 
-        // Get file source and open
-        Object fileSrc = aFile.getSourceURL() != null ? aFile.getSourceURL() : aFile.getBytes();
-        editorPane.openSource(fileSrc);
+        // If Url, try that
+        WebURL sourceUrl = aFile.getSourceURL();
+        if (sourceUrl != null)
+            editorPane.openEditorForUrl(sourceUrl);
+
+        // Try clipboard bytes
+        byte[] fileBytes = aFile.getBytes();
+        editorPane.openEditorForBytes(fileBytes);
     }
 
     /**

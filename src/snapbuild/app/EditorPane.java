@@ -142,19 +142,25 @@ public class EditorPane extends ViewOwner {
             return null;
 
         // Open file and return
-        return openSource(file);
+        return openEditorForFile(file);
     }
 
     /**
      * Creates a new editor window by opening the document from the given source.
      */
-    public EditorPane openSource(Object aSource)
+    public EditorPane openEditorForFile(WebFile sourceFile)
     {
-        // Get source URL
-        WebURL sourceURL = WebURL.getUrl(aSource);
+        WebURL sourceUrl = sourceFile.getUrl();
+        return openEditorForUrl(sourceUrl);
+    }
 
+    /**
+     * Creates a new editor window by opening the document from the given source.
+     */
+    public EditorPane openEditorForUrl(WebURL sourceURL)
+    {
         // Load document (if not found, just return)
-        ParentView parentView = getParentView(aSource);
+        ParentView parentView = getParentViewForUrl(sourceURL);
         if (parentView == null)
             return null;
 
@@ -177,19 +183,13 @@ public class EditorPane extends ViewOwner {
     /**
      * Creates a ParentView from given source.
      */
-    protected ParentView getParentView(Object aSource)
+    protected ParentView getParentViewForUrl(WebURL sourceURL)
     {
-        // If document source is null, just return null
-        if (aSource == null || aSource instanceof ParentView)
-            return (ParentView) aSource;
-
         // Get archiver and clear UseRealClass
-        ViewArchiver archiver = new ViewArchiver();
         ViewArchiver.setUseRealClass(false);
 
         // Load document
-        ParentView parentView = null;
-        try { parentView = (ParentView) archiver.getViewForSource(aSource); }
+        try { return UILoader.loadViewForUrl(sourceURL); }
 
         // If there was an XML parse error loading aSource, show error dialog
         catch (Exception e) {
@@ -200,13 +200,52 @@ public class EditorPane extends ViewOwner {
                 dialogBox.setErrorMessage(msg);
                 dialogBox.showMessageDialog(getUI());
             });
+            return null;
         }
 
+        // Reset UseRealClass
+        finally { ViewArchiver.setUseRealClass(true); }
+    }
+
+    /**
+     * Creates a new editor window by opening snap file for given bytes.
+     */
+    public void openEditorForBytes(byte[] fileBytes)
+    {
+        // Load document (if not found, just return)
+        ParentView parentView = getParentViewForBytes(fileBytes);
+        if (parentView == null)
+            return;
+
+        // Set document
+        Editor editor = getEditor();
+        editor.setContent(parentView);
+
+        // Hack for opening new doc in SnapCode
+        View selView = parentView.getChildForName("FirstFocus");
+        if (selView != null) {
+            selView.setName(null);
+            editor.setSelView(selView);
+        }
+    }
+
+    /**
+     * Creates a ParentView from given file bytes.
+     */
+    private ParentView getParentViewForBytes(byte[] fileBytes)
+    {
+        // Get archiver and clear UseRealClass
+        ViewArchiver.setUseRealClass(false);
+
+        // Load document
+        try { return (ParentView) UILoader.loadViewForBytes(fileBytes); }
+        catch (Exception e) { e.printStackTrace(); }
+
         // Restore UseRealClass
-        ViewArchiver.setUseRealClass(true);
+        finally { ViewArchiver.setUseRealClass(true); }
 
         // Return
-        return parentView;
+        return null;
     }
 
     /**
@@ -279,7 +318,7 @@ public class EditorPane extends ViewOwner {
         // Re-open filename
         WebFile sourceFile = sourceURL.getFile();
         sourceFile.reset();
-        openSource(sourceURL);
+        openEditorForUrl(sourceURL);
     }
 
     /**
