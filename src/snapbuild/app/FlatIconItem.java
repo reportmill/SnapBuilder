@@ -113,7 +113,7 @@ public class FlatIconItem {
     private void sampleImageLoaded()
     {
         if (_sample.getPixWidth() != SAMPLE_SIZE)
-            _sample = _sample.cloneForSize(SAMPLE_SIZE, SAMPLE_SIZE);
+            _sample = _sample.copyForSize(SAMPLE_SIZE, SAMPLE_SIZE);
     }
 
     /**
