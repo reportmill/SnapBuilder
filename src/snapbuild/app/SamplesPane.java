@@ -1,6 +1,6 @@
 package snapbuild.app;
 import java.util.*;
-
+import java.util.concurrent.CompletableFuture;
 import snap.geom.Pos;
 import snap.geom.Size;
 import snap.geom.VPos;
@@ -127,8 +127,8 @@ public class SamplesPane extends ViewOwner {
      */
     private void loadIndexFile()
     {
-        WebURL url = WebURL.getUrl(SAMPLES_ROOT + "index.txt");
-        url.getResponseAndCall(resp -> indexFileLoaded(resp));
+        WebURL url = WebURL.getUrl(SAMPLES_ROOT + "index.txt"); assert url != null;
+        CompletableFuture.supplyAsync(url::getResponse).thenAccept(this::indexFileLoaded);
     }
 
     /**
@@ -150,7 +150,7 @@ public class SamplesPane extends ViewOwner {
         List<String> docNamesList = new ArrayList<>();
         for (String line : lines) {
             line = line.trim();
-            if (line.length() > 0)
+            if (!line.isEmpty())
                 docNamesList.add(line);
         }
 
@@ -191,7 +191,6 @@ public class SamplesPane extends ViewOwner {
         // Create RowViews
         RowView rowView = null;
         for (int i = 0; i < _docNames.length; i++) {
-            String name = _docNames[i];
 
             // Create/add new RowView for every three samples
             if (i % 3 == 0) {
@@ -307,7 +306,7 @@ public class SamplesPane extends ViewOwner {
         // Get document name, URL string and URL
         String name = getDocName(anIndex);
         String urls = SAMPLES_ROOT + name + '/' + name + SAMPLES_EXT;
-        WebURL url = WebURL.getUrl(urls);
+        WebURL url = WebURL.getUrl(urls); assert url != null;
 
         // Get bytes (complain if not found)
         byte[] bytes = url.getBytes();
@@ -382,12 +381,12 @@ public class SamplesPane extends ViewOwner {
     {
         if (_imagePaths != null) return _imagePaths;
 
-        WebURL url = WebURL.getUrl(SAMPLES_ROOT + "images/index.txt");
+        WebURL url = WebURL.getUrl(SAMPLES_ROOT + "images/index.txt"); assert url != null;
         String pathsStr = url.getText();
         String[] pathLines = pathsStr.split("\\s*\n\\s*");
         List<String> pathsList = new ArrayList<>();
         for (String line : pathLines) {
-            if (line.length() > 0)
+            if (!line.isEmpty())
                 pathsList.add(line);
         }
         String[] paths = pathsList.toArray(new String[0]);
