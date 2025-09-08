@@ -132,7 +132,7 @@ public class GalleryPane extends ViewOwner {
 
         // Look for possible completion
         List<GalleryView.ItemView> items = getItemsForPrefix(text);
-        GalleryView.ItemView item = items.size() > 0 ? items.get(0) : null;
+        GalleryView.ItemView item = !items.isEmpty() ? items.get(0) : null;
 
         // If completion available, set completion text
         if (item != null) {
@@ -154,7 +154,7 @@ public class GalleryPane extends ViewOwner {
 
         // Look for possible completion
         List<GalleryView.ItemView> items = getItemsForPrefix(text);
-        String item = items.size() > 0 ? items.get(0).getName() : null;
+        String item = !items.isEmpty() ? items.get(0).getName() : null;
 
         // If completion available, set completion text
         if (item != null)
@@ -165,7 +165,7 @@ public class GalleryPane extends ViewOwner {
     {
         String pfx = aPfx.toLowerCase();
         List<GalleryView.ItemView> items = new ArrayList(_galleryView.getChildren());
-        if (pfx.length() == 0) {
+        if (pfx.isEmpty()) {
             for (GalleryView.ItemView item : items) {
                 item.setVisible(true);
                 item.setManaged(true);
@@ -174,7 +174,7 @@ public class GalleryPane extends ViewOwner {
         }
 
         for (GalleryView.ItemView item : items.toArray(new GalleryView.ItemView[0])) {
-            if (pfx.length() > 0 && !item.getName().toLowerCase().contains(pfx)) {
+            if (!item.getName().toLowerCase().contains(pfx)) {
                 items.remove(item);
                 item.setVisible(false);
             }
