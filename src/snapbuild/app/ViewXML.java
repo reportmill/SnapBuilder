@@ -63,26 +63,26 @@ public class ViewXML {
      */
     public int getStartCharIndexForView(View aView)
     {
-        return Convert.intValue(aView.getProp("CharStart"));
+        return Convert.intValue(aView.getMetadataForKey("CharStart"));
     }
 
     /**
      * Sets the Char start index for a view.
      */
-    private void setStartCharIndexForView(View aView, int aStart)  { aView.setProp("CharStart", aStart); }
+    private void setStartCharIndexForView(View aView, int aStart)  { aView.setMetadataForKey("CharStart", aStart); }
 
     /**
      * Returns the Char end index for a view.
      */
     public int getEndCharIndexForView(View aView)
     {
-        return Convert.intValue(aView.getProp("CharEnd"));
+        return Convert.intValue(aView.getMetadataForKey("CharEnd"));
     }
 
     /**
      * Sets the Char end index for a view.
      */
-    private void setEndCharIndexForView(View aView, int aStart)  { aView.setProp("CharEnd", aStart); }
+    private void setEndCharIndexForView(View aView, int aStart)  { aView.setMetadataForKey("CharEnd", aStart); }
 
     /**
      * Returns the View in given char range.
