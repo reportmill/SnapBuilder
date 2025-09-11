@@ -694,7 +694,7 @@ public class EditorPane extends ViewOwner {
             WindowView window = getWindow();
             String title = getWindowTitle();
             window.setTitle(title);
-            window.setDocURL(getSourceURL());
+            window.setDocumentUrl(getSourceURL());
         }
 
         // Reset Inspector, MenuBar
