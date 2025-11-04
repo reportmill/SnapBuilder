@@ -3,6 +3,7 @@ import snap.util.*;
 import snap.view.*;
 import snap.web.RecentFiles;
 import snap.web.*;
+import java.util.List;
 
 /**
  * An implementation of a panel to manage/open user Snap sites (projects).
@@ -19,7 +20,7 @@ public class WelcomePanel extends ViewOwner {
     private Runnable _onQuit;
 
     // The RecentFiles
-    private WebFile[] _recentFiles;
+    private List<WebFile> _recentFiles;
 
     // The WelcomePanelAnim
     private WelcomePanelAnim _welcomePanelAnim;
@@ -125,9 +126,9 @@ public class WelcomePanel extends ViewOwner {
         sitesTable.getCol(0).setItemTextFunction(i -> i.getName());
 
         // Enable SitesTable MouseReleased
-        WebFile[] recentFiles = getRecentFiles();
-        if (recentFiles.length > 0)
-            _selFile = recentFiles[0];
+        List<WebFile> recentFiles = getRecentFiles();
+        if (!recentFiles.isEmpty())
+            _selFile = recentFiles.get(0);
         sitesTable.addEventHandler(this::handleSitesTableMouseRelease, MouseRelease);
 
         // Hide ProgressBar
@@ -257,12 +258,9 @@ public class WelcomePanel extends ViewOwner {
     /**
      * Returns the list of the recent documents as a list of strings.
      */
-    public WebFile[] getRecentFiles()
+    public List<WebFile> getRecentFiles()
     {
-        // If already set, just return
         if (_recentFiles != null) return _recentFiles;
-
-        WebFile[] recentFiles = RecentFiles.getFiles();
-        return _recentFiles = recentFiles;
+        return _recentFiles = RecentFiles.getFiles();
     }
 }
