@@ -874,13 +874,5 @@ public class EditorPane extends ViewOwner {
             //String text = anItem.getText(); if(text!=null) str += " \"" + text + "\" ";
             return str;
         }
-
-        /**
-         * Return the image to be used for given item.
-         */
-        public View getGraphic(View anItem)
-        {
-            return null;
-        }
     }
 }
