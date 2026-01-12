@@ -327,27 +327,12 @@ public class Editor extends ParentView {
     }
 
     /**
-     * Layout method: Override.
+     * Override to return box layout.
      */
-    protected double getPrefWidthImpl(double aH)
+    @Override
+    protected ViewLayout<?> getViewLayoutImpl()
     {
-        return BoxView.getPrefWidth(this, _contentBox, aH);
-    }
-
-    /**
-     * Layout method: Override.
-     */
-    protected double getPrefHeightImpl(double aW)
-    {
-        return BoxView.getPrefHeight(this, _contentBox, aW);
-    }
-
-    /**
-     * Layout method: Override.
-     */
-    protected void layoutImpl()
-    {
-        BoxView.layout(this, _contentBox, false, false);
+        return new BoxViewLayout<>(this, _contentBox, false, false);
     }
 
     /**

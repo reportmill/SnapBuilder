@@ -37,20 +37,10 @@ public class GalleryView extends ParentView {
     }
 
     /**
-     * Override to return preferred height of content.
+     * Override to return column layout.
      */
-    protected double getPrefHeightImpl(double aW)
-    {
-        return ColView.getPrefHeight(this, aW, true);
-    }
-
-    /**
-     * Actual method to layout children.
-     */
-    protected void layoutImpl()
-    {
-        ColView.layout(this, true);
-    }
+    @Override
+    protected ViewLayout<?> getViewLayoutImpl()  { return new ColViewLayout<>(this, true); }
 
     /**
      * A class to show individual item.
