@@ -40,7 +40,7 @@ public class GalleryView extends ParentView {
      * Override to return column layout.
      */
     @Override
-    protected ViewLayout<?> getViewLayoutImpl()  { return new ColViewLayout<>(this, true); }
+    protected ViewLayout getViewLayoutImpl()  { return new ColViewLayout(this, true); }
 
     /**
      * A class to show individual item.

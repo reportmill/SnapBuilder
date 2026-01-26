@@ -330,9 +330,9 @@ public class Editor extends ParentView {
      * Override to return box layout.
      */
     @Override
-    protected ViewLayout<?> getViewLayoutImpl()
+    protected ViewLayout getViewLayoutImpl()
     {
-        return new BoxViewLayout<>(this, _contentBox, false, false);
+        return new BoxViewLayout(this, _contentBox, false, false);
     }
 
     /**
