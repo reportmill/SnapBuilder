@@ -456,16 +456,15 @@ public class Editor extends ParentView {
         // Ignore properties: Showing, NeedsLayout
         if (propName == Parent_Prop) return;
         if (propName == Showing_Prop) return;
-        if (propName == NeedsLayout_Prop) return;
         if (propName == ParentView.Children_Prop) {
             if (!(view instanceof ViewHost))
                 return;
         }
 
         // Ignore layout changes
-        if (view instanceof ParentView && ((ParentView) view).isInLayout())
+        if (view instanceof ParentView parentView && parentView.isInLayout())
             return;
-        if (propChangeView instanceof ParentView && ((ParentView) propChangeView).isInLayout())
+        if (propChangeView instanceof ParentView parentView && parentView.isInLayout())
             return;
 
         // If undoer exists, set selected objects and add property change
