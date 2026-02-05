@@ -6,6 +6,7 @@ import snap.gfx.Font;
 import snap.gfx.Image;
 import snap.view.*;
 import snap.viewx.TextPane;
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -14,7 +15,7 @@ import java.util.function.Consumer;
 public class FlatIconPanel extends ViewOwner {
 
     // The ImageItems
-    private FlatIconItem _items[];
+    private List<FlatIconItem> _items;
 
     // The ScrollView to show items
     private ScrollView _scrollView;
@@ -39,15 +40,13 @@ public class FlatIconPanel extends ViewOwner {
         searchText.setPromptText("Search");
         searchText.getLabel().setImage(Image.getImageForClassResource(TextPane.class, "Find.png"));
         TextField.setBackLabelAlignAnimatedOnFocused(searchText, true);
-        //searchText.addEventFilter(e -> ViewUtils.runLater(() -> textFieldKeyTyped(e)), KeyPress);
 
         _itemsView = new GridView();
-        _itemsView.setPrefHeight(256);
 
         _scrollView = getView("ScrollView", ScrollView.class);
         _scrollView.setFillWidth(true);
         _scrollView.setContent(_itemsView);
-        _scrollView.getScroller().addPropChangeListener(pc -> scrollBoundsDidChange(),
+        _scrollView.getScroller().addPropChangeListener(pc -> handleScrollBoundsChange(),
                 Scroller.ScrollX_Prop, Scroller.ScrollY_Prop, View.Width_Prop, View.Height_Prop);
 
         getView("FlatIconLabel", Label.class).setTextColor(Color.DARKGRAY);
@@ -74,29 +73,26 @@ public class FlatIconPanel extends ViewOwner {
         _itemsView.removeChildren();
 
         // Add ProgressBar
-        ProgressBar pbar = new ProgressBar();
-        pbar.setPrefSize(100, 20);
-        _itemsView.addChild(pbar);
-        pbar.setIndeterminate(true);
+        ProgressBar progressBar = new ProgressBar();
+        progressBar.setIndeterminate(true);
+        progressBar.setPrefSize(100, 20);
+        _itemsView.addChild(progressBar);
 
         // Get items in background thread
         new Thread(() -> {
             System.out.println("Image search start: " + aString);
-            FlatIconItem[] items = FlatIcon.SHARED.getImageItemsForSearchString(aString);
-            int itemCount = items != null ? items.length : -1;
+            List<FlatIconItem> items = FlatIcon.SHARED.getImageItemsForSearchString(aString);
+            int itemCount = items != null ? items.size() : -1;
             System.out.println("Image search completed: " + itemCount + " items found");
-            runLater(() -> imageSearchGotItems(items));
+            runLater(() -> handleImageSearchFinished(items));
         }).start();
     }
 
     /**
      * Called on app thread when items are loaded.
      */
-    private void imageSearchGotItems(FlatIconItem[] theItems)
+    private void handleImageSearchFinished(List<FlatIconItem> theItems)
     {
-        // Cap items at 10 for now
-        //if (theItems.length>10) theItems = Arrays.copyOf(theItems, 10);
-
         // Remove items (ProgressBar)
         _itemsView.removeChildren();
 
@@ -105,23 +101,21 @@ public class FlatIconPanel extends ViewOwner {
 
         // Iterate over items and create/add ImageItem
         for (FlatIconItem item : _items) {
-            ItemView iview = new ItemView(item);
-            _itemsView.addChild(iview);
+            ItemView itemView = new ItemView(item);
+            _itemsView.addChild(itemView);
         }
-
-        runLater(() -> scrollBoundsDidChange());
     }
 
     /**
      * Called when the ScrollView scroll bounds change to activate items that need sample images.
      */
-    private void scrollBoundsDidChange()
+    private void handleScrollBoundsChange()
     {
         // Get visible rect and extend down
         Rect bounds = _itemsView.getVisibleBounds();
         bounds.height += 500;
 
-        ItemView children[] = _itemsView.getChildren().getViewsIntersectingShape(bounds, ItemView.class);
+        ItemView[] children = _itemsView.getChildren().getViewsIntersectingShape(bounds, ItemView.class);
         for (ItemView child : children)
             child.setActive(true);
     }
@@ -163,10 +157,10 @@ public class FlatIconPanel extends ViewOwner {
         {
             _item = anItem;
             setAlign(Pos.CENTER);
-            Image img = getLoadingImage();
-            ImageView iview = new ImageView(img);
-            iview.setPrefSize(64, 64);
-            setGraphic(iview);
+            Image loadingImage = getLoadingImage();
+            ImageView imageView = new ImageView(loadingImage);
+            imageView.setPrefSize(64, 64);
+            setGraphic(imageView);
             setPrefSize(96, 96);
             addEventHandler(e -> itemViewMouseEnteredOrExited(e), View.MouseEnter, View.MouseExit);
             addEventHandler(e -> itemViewMouseClicked(e), View.MouseRelease);
@@ -182,18 +176,18 @@ public class FlatIconPanel extends ViewOwner {
 
             // Load image
             new Thread(() -> {
-                Image img = _item.getSample();
-                if (img.isLoaded())
-                    ViewUtils.runLater(() -> setSampleImage(img));
-                else img.addLoadListener(() -> setSampleImage(_item.getSample()));
+                Image sampleImage = _item.getSample();
+                if (sampleImage.isLoaded())
+                    ViewUtils.runLater(() -> setSampleImage(sampleImage));
+                else sampleImage.addLoadListener(() -> setSampleImage(_item.getSample()));
             }).start();
         }
 
         protected void setSampleImage(Image anImage)
         {
-            ImageView iview = new ImageView(anImage);
-            iview.setPrefSize(64, 64);
-            setGraphic(iview);
+            ImageView imageView = new ImageView(anImage);
+            imageView.setPrefSize(64, 64);
+            setGraphic(imageView);
         }
 
         private void itemViewMouseEnteredOrExited(ViewEvent anEvent)

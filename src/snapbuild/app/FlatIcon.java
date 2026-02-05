@@ -32,7 +32,7 @@ public class FlatIcon {
     /**
      * Returns the token.
      */
-    public FlatIconItem[] getImageItemsForSearchString(String aSearchString)
+    public List<FlatIconItem> getImageItemsForSearchString(String aSearchString)
     {
         // Get search string with escaped spaces
         String searchString = aSearchString.replace(" ", "%20");
@@ -70,7 +70,7 @@ public class FlatIcon {
             imageItems.add(imgItem);
         }
 
-        return imageItems.toArray(new FlatIconItem[0]);
+        return imageItems;
     }
 
     /**
