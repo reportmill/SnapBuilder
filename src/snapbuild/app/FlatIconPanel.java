@@ -39,7 +39,7 @@ public class FlatIconPanel extends ViewOwner {
         searchText.setBorderRadius(10);
         searchText.setPromptText("Search");
         searchText.getLabel().setImage(Image.getImageForClassResource(TextPane.class, "Find.png"));
-        TextField.setBackLabelAlignAnimatedOnFocused(searchText, true);
+        ViewAnimUtils.configureTextFieldImageToAnimateLeftOnFocused(searchText);
 
         _itemsView = new GridView();
 
