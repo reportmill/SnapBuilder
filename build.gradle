@@ -4,8 +4,8 @@ plugins {
     id 'application'
 }
 
-group 'com.reportmill'
-version new SimpleDateFormat("yyyy.MM").format(new Date())
+group = 'com.reportmill'
+version = new SimpleDateFormat("yyyy.MM").format(new Date())
 
 sourceSets.main.java.srcDirs = ['src']
 sourceSets.main.resources.srcDirs = ['src']
@@ -15,12 +15,9 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
-repositories {
-}
+repositories { }
 
 dependencies {
-
-    // SnapKit project
     implementation project(':SnapKit')
 }
 
