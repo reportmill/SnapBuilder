@@ -24,7 +24,9 @@ dependencies {
     implementation project(':SnapKit')
 }
 
-mainClassName = 'snapbuild.app.App'
+application {
+    mainClass = 'snapbuild.app.App'
+}
 
 /**
  * Build executable jar SnapBuilderAll.jar.
