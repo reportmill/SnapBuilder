@@ -6,7 +6,7 @@ import snap.view.*;
 /**
  * A class to manage inspector.
  */
-public class InspectorPane extends ViewOwner {
+public class InspectorPane extends ViewController {
 
     // The EditorPane
     protected EditorPane _epane;
@@ -18,7 +18,7 @@ public class InspectorPane extends ViewOwner {
     private ScrollView _inspBox;
 
     // The child inspector current installed in inspector panel
-    private ViewOwner _childInspector;
+    private ViewController _childInspector;
 
     // The Gallery pane
     private GalleryPane _gallery;
@@ -123,7 +123,7 @@ public class InspectorPane extends ViewOwner {
             setInspector(_stylerPane);
 
         // Get the inspector (owner)
-        ViewOwner owner = getInspector();
+        ViewController owner = getInspector();
 
         // Get inspector title from owner and set
         String title = "Inspector";
@@ -158,7 +158,7 @@ public class InspectorPane extends ViewOwner {
     /**
      * Returns the inspector (owner) of the inspector pane.
      */
-    protected ViewOwner getInspector()
+    protected ViewController getInspector()
     {
         return _childInspector;
     }
@@ -166,7 +166,7 @@ public class InspectorPane extends ViewOwner {
     /**
      * Sets the inspector in the inspector pane.
      */
-    protected void setInspector(ViewOwner anOwner)
+    protected void setInspector(ViewController anOwner)
     {
         // Set new inspector
         _childInspector = anOwner;

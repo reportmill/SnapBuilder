@@ -4,12 +4,12 @@ import snap.util.SnapEnv;
 import snap.util.SnapUtils;
 import snap.view.TextArea;
 import snap.view.View;
-import snap.view.ViewOwner;
+import snap.view.ViewController;
 
 /**
  * Manages WelcomePanelAnim view.
  */
-public class WelcomePanelAnim extends ViewOwner {
+public class WelcomePanelAnim extends ViewController {
 
     /**
      * Constructor.

@@ -15,7 +15,7 @@ public class ViewToolImpl<T extends View> extends ViewTool<T> {
     private ColView _inspBox;
 
     // The child inspector current installed in inspector panel
-    private ViewOwner _subInsp;
+    private ViewController _subInsp;
 
     /**
      * Constructor.
@@ -28,12 +28,12 @@ public class ViewToolImpl<T extends View> extends ViewTool<T> {
     /**
      * Returns the inspector (owner) of the inspector pane.
      */
-    protected ViewOwner getInspector()  { return _subInsp; }
+    protected ViewController getInspector()  { return _subInsp; }
 
     /**
      * Sets the inspector in the inspector pane.
      */
-    protected void setInspector(ViewOwner anOwner)
+    protected void setInspector(ViewController anOwner)
     {
         // If already set, just return
         if (anOwner == getInspector()) return;

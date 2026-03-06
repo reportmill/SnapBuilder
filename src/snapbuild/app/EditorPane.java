@@ -13,7 +13,7 @@ import snapbuild.apptools.*;
 /**
  * A class to manage the Editor and controls.
  */
-public class EditorPane extends ViewOwner {
+public class EditorPane extends ViewController {
 
     // The menu bar owner
     private EditorPaneMenuBar  _menuBar;
@@ -532,7 +532,7 @@ public class EditorPane extends ViewOwner {
      */
     public static EditorPane getEditorPane(Editor anEditor)
     {
-        ViewOwner owner = anEditor.getOwner();
+        ViewController owner = anEditor.getController();
         return owner instanceof EditorPane ? (EditorPane) owner : null;
     }
 
@@ -628,7 +628,7 @@ public class EditorPane extends ViewOwner {
         _viewTree = getView("ViewTree", TreeView.class);
         _viewTree.getCol(0).setAltRowColor(Editor.BACK_FILL.blend(Color.WHITE, .9));
         _viewTree.setResolver(new ViewTreeResolver());
-        _viewTree.setOwner(this);
+        _viewTree.setController(this);
         _editorSplitView.removeItem(_viewTree);
 
         // Get EditorRowView and add Inspector UI

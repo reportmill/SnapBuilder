@@ -15,7 +15,7 @@ import snap.web.WebURL;
 /**
  * A class to show samples.
  */
-public class SamplesPane extends ViewOwner {
+public class SamplesPane extends ViewController {
 
     // The editor pane
     private EditorPane _editorPane;
@@ -206,7 +206,7 @@ public class SamplesPane extends ViewOwner {
 
         // Make sure all row views and image boxes are owned by ui
         for (View child : colView.getChildren())
-            child.setOwner(this);
+            child.setController(this);
 
         // Load images in background
         CompletableFuture.runAsync(this::loadImages);

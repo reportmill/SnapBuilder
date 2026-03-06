@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.function.Consumer;
 
 /**
- * A ViewOwner subclass to provide UI to search and select images.
+ * A view controller subclass to provide UI to search and select images.
  */
-public class FlatIconPanel extends ViewOwner {
+public class FlatIconPanel extends ViewController {
 
     // The ImageItems
     private List<FlatIconItem> _items;
