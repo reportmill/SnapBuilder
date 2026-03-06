@@ -819,7 +819,7 @@ public class EditorPane extends ViewController {
     protected void handleEditorClosed()
     {
         // If another open editor is available focus on it, otherwise run WelcomePanel
-        EditorPane editorPane = WindowView.getOpenWindowOwner(EditorPane.class);
+        EditorPane editorPane = WindowView.getOpenWindowController(EditorPane.class);
         if (editorPane != null)
             editorPane.getEditor().requestFocus();
         else WelcomePanel.getShared().showPanel();
