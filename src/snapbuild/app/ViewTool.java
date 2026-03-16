@@ -6,7 +6,7 @@ import snap.view.*;
 /**
  * A class to manage UI editing of a View.
  */
-public class ViewTool<T extends View> extends ViewController {
+public class ViewTool<T extends View> extends DefaultViewController {
 
     // The EditorPane
     protected EditorPane  _editorPane;

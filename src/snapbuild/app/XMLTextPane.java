@@ -4,7 +4,7 @@ import snap.view.*;
 /**
  * This class displays the editor content as XML and allows for editing.
  */
-public class XMLTextPane extends ViewController {
+public class XMLTextPane extends DefaultViewController {
 
     // The EditorPane
     private EditorPane _editorPane;

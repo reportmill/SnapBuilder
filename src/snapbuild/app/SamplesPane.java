@@ -15,7 +15,7 @@ import snap.web.WebURL;
 /**
  * A class to show samples.
  */
-public class SamplesPane extends ViewController {
+public class SamplesPane extends DefaultViewController {
 
     // The editor pane
     private EditorPane _editorPane;
