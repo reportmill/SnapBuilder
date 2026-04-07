@@ -44,12 +44,6 @@
     <MenuItem Name="ViewPaneMenuItem" Text="View Inspector..." Shortcut="meta shift C" />
     <MenuItem Name="StylePaneMenuItem" Text="Styler Inspector..." />
   </Menu>
-  <Menu Name="ThemeMenu" Text="Theme">
-    <MenuItem Name="StandardThemeMenuItem" Text="Standard" />
-    <MenuItem Name="LightThemeMenuItem" Text="Light" />
-    <MenuItem Name="DarkThemeMenuItem" Text="Dark" />
-    <MenuItem Name="BlackAndWhiteThemeMenuItem" Text="Black &amp; White" />
-  </Menu>
   <Menu Name="HelpMenu" Text="Help">
     <MenuItem Name="SupportPageMenuItem" Text="Support Page" />
     <MenuItem Name="TutorialMenuItem" Text="Tutorial" />

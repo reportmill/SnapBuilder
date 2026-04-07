@@ -180,11 +180,5 @@ public class EditorPaneMenuBar extends ViewController {
             URLUtils.openURL("https://reportmill.com/support");
         if (anEvent.equals("TutorialMenuItem"))
             URLUtils.openURL("https://reportmill.com/support/tutorial.pdf");
-
-        // Handle Theme menus: StandardThemeMenuItem, LightThemeMenuItem, DarkThemeMenuItem, BlackAndWhiteThemeMenuItem
-        if (anEvent.equals("StandardThemeMenuItem")) ViewTheme.setThemeForName("Standard");
-        if (anEvent.equals("LightThemeMenuItem")) ViewTheme.setThemeForName("Light");
-        if (anEvent.equals("DarkThemeMenuItem")) ViewTheme.setThemeForName("Dark");
-        if (anEvent.equals("BlackAndWhiteThemeMenuItem")) ViewTheme.setThemeForName("BlackAndWhite");
     }
 }
