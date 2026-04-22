@@ -367,7 +367,7 @@ public class EditorPane extends ViewController {
         contentCopy.setGrowWidth(false);
         contentCopy.setGrowHeight(false);
         if (contentCopy.getFill() == null)
-            contentCopy.setFill(ViewUtils.getBackFill());
+            contentCopy.setFill(ViewThemeUtils.getBackFill());
         contentCopy.setEffect(new ShadowEffect());
 
         // Create BoxView to hold UI

@@ -27,7 +27,7 @@ public class FlatIconPanel extends ViewController {
     Consumer<FlatIconItem> _itemSelectedHandler;
 
     // Constants
-    private static Color ITEM_VIEW_MOUSE_OVER_COLOR = Color.CYAN.blend(ViewUtils.getBackFill().getColor(), .6);
+    private static Color ITEM_VIEW_MOUSE_OVER_COLOR = Color.CYAN.blend(ViewThemeUtils.getBackFill().getColor(), .6);
 
     /**
      * Initialize UI.
