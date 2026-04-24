@@ -4,8 +4,8 @@ import snap.gfx.Color;
 import snap.gfx.Font;
 import snap.gfx.Image;
 import snap.util.Convert;
-import snap.util.JSValue;
-import snap.util.JSObject;
+import snap.util.JsonNode;
+import snap.util.JsonObject;
 import snap.view.TextArea;
 import snap.view.ViewUtils;
 import java.util.LinkedHashMap;
@@ -17,7 +17,7 @@ import java.util.Map;
 public class FlatIconItem {
 
     // The image item node
-    private JSObject _itemNode;
+    private JsonObject _itemNode;
 
     // The Id
     private int _id;
@@ -37,7 +37,7 @@ public class FlatIconItem {
     /**
      * Constructor.
      */
-    public FlatIconItem(JSObject aNode)
+    public FlatIconItem(JsonObject aNode)
     {
         _itemNode = aNode;
 
@@ -49,14 +49,14 @@ public class FlatIconItem {
         _desc = _itemNode.getStringValue("description");
 
         // Get images.png node and pngCount
-        JSObject imagesNode = (JSObject) _itemNode.getValue("images");
-        JSObject pngNode = imagesNode; //(JSObject) imagesNode.getValue("png");
-        Map<String, JSValue> keyValues = pngNode.getKeyValues();
+        JsonObject imagesNode = (JsonObject) _itemNode.getValue("images");
+        JsonObject pngNode = imagesNode; //(JSObject) imagesNode.getValue("png");
+        Map<String, JsonNode> keyValues = pngNode.getKeyValues();
 
         // Iterate over PNGs and add to PNG_URLs
-        for (Map.Entry<String, JSValue> entry : keyValues.entrySet()) {
+        for (Map.Entry<String, JsonNode> entry : keyValues.entrySet()) {
             String key = entry.getKey();
-            JSValue sizeNode = entry.getValue();
+            JsonNode sizeNode = entry.getValue();
             int size = Convert.intValue(key);
             String urls = sizeNode.getValueAsString();
             _pngURLs.put(size, urls);
