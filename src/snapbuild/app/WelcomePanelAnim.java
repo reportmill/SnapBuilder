@@ -2,6 +2,7 @@ package snapbuild.app;
 import snap.geom.HPos;
 import snap.util.SnapEnv;
 import snap.util.SnapUtils;
+import snap.view.DefaultViewController;
 import snap.view.TextArea;
 import snap.view.View;
 import snap.view.ViewController;
@@ -9,7 +10,7 @@ import snap.view.ViewController;
 /**
  * Manages WelcomePanelAnim view.
  */
-public class WelcomePanelAnim extends ViewController {
+public class WelcomePanelAnim extends DefaultViewController {
 
     /**
      * Constructor.

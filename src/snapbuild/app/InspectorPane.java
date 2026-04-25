@@ -6,7 +6,7 @@ import snap.view.*;
 /**
  * A class to manage inspector.
  */
-public class InspectorPane extends ViewController {
+public class InspectorPane extends DefaultViewController {
 
     // The EditorPane
     protected EditorPane _epane;

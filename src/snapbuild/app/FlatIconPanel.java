@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 /**
  * A view controller subclass to provide UI to search and select images.
  */
-public class FlatIconPanel extends ViewController {
+public class FlatIconPanel extends DefaultViewController {
 
     // The ImageItems
     private List<FlatIconItem> _items;

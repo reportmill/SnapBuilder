@@ -11,7 +11,7 @@ import snap.view.*;
 /**
  * Menu bar for Editor pane.
  */
-public class EditorPaneMenuBar extends ViewController {
+public class EditorPaneMenuBar extends DefaultViewController {
 
     // The EditorPane
     private EditorPane  _editorPane;

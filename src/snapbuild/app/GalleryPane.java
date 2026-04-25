@@ -8,7 +8,7 @@ import java.util.*;
 /**
  * Manages the UI for Gallery of views and arrange controls (move up/down, group/ungroup).
  */
-public class GalleryPane extends ViewController {
+public class GalleryPane extends DefaultViewController {
 
     // The editor pane
     protected EditorPane _epane;
