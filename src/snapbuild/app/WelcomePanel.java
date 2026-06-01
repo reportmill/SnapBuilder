@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * An implementation of a panel to manage/open user Snap sites (projects).
  */
-public class WelcomePanel extends DefaultViewController {
+public class WelcomePanel extends SNPViewController {
 
     // The selected file
     private WebFile _selFile;

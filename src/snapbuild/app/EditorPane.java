@@ -13,7 +13,7 @@ import snapbuild.apptools.*;
 /**
  * A class to manage the Editor and controls.
  */
-public class EditorPane extends DefaultViewController {
+public class EditorPane extends SNPViewController {
 
     // The menu bar owner
     private EditorPaneMenuBar  _menuBar;

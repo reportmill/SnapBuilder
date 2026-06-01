@@ -2,15 +2,15 @@ package snapbuild.app;
 import snap.geom.HPos;
 import snap.util.SnapEnv;
 import snap.util.SnapUtils;
-import snap.view.DefaultViewController;
+import snap.view.SNPViewController;
 import snap.view.TextArea;
 import snap.view.View;
-import snap.view.ViewController;
+import snap.view.ViewEvent;
 
 /**
  * Manages WelcomePanelAnim view.
  */
-public class WelcomePanelAnim extends DefaultViewController {
+public class WelcomePanelAnim extends SNPViewController {
 
     /**
      * Constructor.
@@ -71,5 +71,15 @@ public class WelcomePanelAnim extends DefaultViewController {
         screwdriver.setAnimString("T:1760; R:-35; TX:0; TY:0; T:2080; R:0; TX:-9; TY:-14; T:2400; TX:-9; TY:16; R:0; " +
             "T:2640; TY:16; R:0; TX:-9; T:2960; R:0; TX:-9; TY:0; T:3280; R:-35; TX:0; TY:0; T:5000;");
         screwdriver.getAnim(0).setLoops();
+    }
+
+    @Override
+    protected void resetUI() {
+
+    }
+
+    @Override
+    protected void respondUI(ViewEvent anEvent) {
+
     }
 }

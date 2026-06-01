@@ -15,7 +15,7 @@ import snap.web.WebURL;
 /**
  * A class to show samples.
  */
-public class SamplesPane extends DefaultViewController {
+public class SamplesPane extends SNPViewController {
 
     // The editor pane
     private EditorPane _editorPane;
@@ -120,6 +120,16 @@ public class SamplesPane extends DefaultViewController {
         if (_docNames == null)
             loadIndexFile();
         else buildUI();
+    }
+
+    @Override
+    protected void resetUI() {
+
+    }
+
+    @Override
+    protected void respondUI(ViewEvent anEvent) {
+
     }
 
     /**
