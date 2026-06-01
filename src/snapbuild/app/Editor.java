@@ -67,7 +67,7 @@ public class Editor extends ParentView {
         _contentBox = new BoxView();
         _contentBox.setFillWidth(true);
         _contentBox.setFillHeight(true);
-        _contentBox.setFill(ViewUtils.getBackFill());
+        _contentBox.setFill(ViewThemeUtils.getBackFill());
         _contentBox.setFill(BACK_FILL.blend(Color.WHITE, .8));
         _contentBox.setBorder(new Color("#99"), 1);
         _contentBox.setEffect(new ShadowEffect());

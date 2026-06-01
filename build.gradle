@@ -15,10 +15,13 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
-repositories { }
+repositories {
+    mavenLocal()
+}
 
 dependencies {
-    implementation project(':SnapKit')
+    // SnapKit project
+    implementation 'com.reportmill:snapkit:2026.06'
 }
 
 application {

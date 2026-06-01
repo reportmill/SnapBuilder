@@ -1,8 +1,8 @@
 package snapbuild.app;
 import snap.gfx.Image;
 import snap.util.Convert;
-import snap.util.JSArray;
-import snap.util.JSObject;
+import snap.util.JsonArray;
+import snap.util.JsonObject;
 import snap.web.*;
 import java.util.*;
 
@@ -50,22 +50,22 @@ public class FlatIcon {
             return null;
 
         // Get JSON response
-        JSObject json = (JSObject) httpResp.getJSON();
+        JsonObject json = (JsonObject) httpResp.getJSON();
         if (json == null)
             return null;
 
         // Get metadata, count, total
-        JSObject metaNode = (JSObject) json.getValue("metadata");
+        JsonObject metaNode = (JsonObject) json.getValue("metadata");
         int count = Convert.intValue(metaNode.getNativeValue("count"));
         int total = Convert.intValue(metaNode.getNativeValue("total"));
         System.out.println("Found " + count + " of " + total);
 
         // Get data
-        JSArray dataArrayJS = (JSArray) json.getValue("data");
+        JsonArray dataArrayJS = (JsonArray) json.getValue("data");
 
         List<FlatIconItem> imageItems = new ArrayList<>();
         for (int i = 0; i < count; i++) {
-            JSObject imageNode = (JSObject) dataArrayJS.getValue(i);
+            JsonObject imageNode = (JsonObject) dataArrayJS.getValue(i);
             FlatIconItem imgItem = new FlatIconItem(imageNode);
             imageItems.add(imgItem);
         }
@@ -119,12 +119,12 @@ public class FlatIcon {
             return null;
 
         // Get JSON response
-        JSObject json = (JSObject) httpResp.getJSON();
+        JsonObject json = (JsonObject) httpResp.getJSON();
         if (json == null)
             return null;
 
         // Get data
-        JSObject dataNode = (JSObject) json.getValue("data");
+        JsonObject dataNode = (JsonObject) json.getValue("data");
         String token = dataNode.getStringValue("token");
         //String expires = dataNode.getStringValue("expires");
 
@@ -137,7 +137,7 @@ public class FlatIcon {
     private static void addParamsToRequestAsJSON(HTTPRequest httpReq, String... thePairs)
     {
         // Create JSON Request and add pairs
-        JSObject jsonReq = new JSObject();
+        JsonObject jsonReq = new JsonObject();
         for (int i = 0; i < thePairs.length; i += 2)
             jsonReq.setNativeValue(thePairs[i], thePairs[i + 1]);
 
