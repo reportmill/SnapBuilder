@@ -25,7 +25,7 @@
       <ColView GrowHeight="true" FillWidth="true">
         <SplitView Name="SplitView" GrowWidth="true" GrowHeight="true">
           <TreeView Name="ViewTree" />
-          <ScrollView Name="EditorScrollView" Border="#AA 1" GrowWidth="true" />
+          <ScrollView Name="EditorScrollView" Border="#AA" GrowWidth="true" />
         </SplitView>
         <RowView Padding="3,5,3,4" Spacing="4">
           <Button Name="ShowViewTreeButton" PrefWidth="26" PrefHeight="26" ToolTip="Show View Tree" ImageName="pkg.images/FilesTree.png" />
