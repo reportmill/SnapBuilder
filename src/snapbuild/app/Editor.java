@@ -298,7 +298,7 @@ public class Editor extends ParentView {
     public XMLElement getContentXML()
     {
         ViewArchiver varch = new ViewArchiver();
-        return varch.writeToXML(getContent());
+        return varch.writeObjectToXml(getContent());
     }
 
     /**

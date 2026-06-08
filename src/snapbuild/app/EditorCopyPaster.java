@@ -53,7 +53,7 @@ public class EditorCopyPaster {
 
         // If browser, just copy XML as text
         if (SnapEnv.isTeaVM) {
-            XMLElement xml = new ViewArchiver().writeToXML(selView);
+            XMLElement xml = new ViewArchiver().writeObjectToXml(selView);
             String xmlStr = xml.getString();
             cb.addData(xmlStr);
             return;
@@ -65,7 +65,7 @@ public class EditorCopyPaster {
         cb.addData(image);
 
         // Get xml string for selected shapes and add to clipboard as SNAP_XML
-        XMLElement xml = new ViewArchiver().writeToXML(selView);
+        XMLElement xml = new ViewArchiver().writeObjectToXml(selView);
         String xmlStr = xml.getString();
         cb.addData(SNAP_XML_TYPE, xmlStr);
 
@@ -89,8 +89,7 @@ public class EditorCopyPaster {
         if (SnapEnv.isTeaVM) {
             if (cb.hasString()) {
                 String str = cb.getString();
-                byte[] bytes = str.getBytes();
-                View view = new ViewArchiver().getViewForBytes(bytes);
+                View view = (View) new ViewArchiver().readObjectFromXmlString(str);
                 _editor.addViewToContent(view);
             }
             return;
@@ -99,7 +98,7 @@ public class EditorCopyPaster {
         // Handle SNAP_XML: Get bytes, unarchive view and add
         if (cb.hasData(SNAP_XML_TYPE)) {
             byte[] bytes = cb.getDataBytes(SNAP_XML_TYPE);
-            View view = new ViewArchiver().getViewForBytes(bytes);
+            View view = UILoader.loadViewForBytes(bytes);
             _editor.addViewToContent(view);
         }
 

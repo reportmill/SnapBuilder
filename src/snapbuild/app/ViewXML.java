@@ -22,7 +22,7 @@ public class ViewXML {
     {
         _rootView = aView;
 
-        _xmlStr = new ViewArchiver().toXML(aView).getString();
+        _xmlStr = new ViewArchiver().writeObjectToXml(aView).getString();
 
         // Set char indexes for all views and return string
         setCharIndexes(_rootView, _xmlStr, 0);

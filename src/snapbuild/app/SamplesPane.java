@@ -318,7 +318,7 @@ public class SamplesPane extends ViewController {
         // Return document
         ViewArchiver arch = new SamplesViewArchiver();
         arch.setSourceURL(url);
-        View doc = arch.getViewForBytes(bytes);
+        View doc = (View) arch.readObjectFromXmlBytes(bytes);
         return doc;
     }
 

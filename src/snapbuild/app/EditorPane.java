@@ -186,7 +186,7 @@ public class EditorPane extends ViewController {
     protected ParentView getParentViewForUrl(WebURL sourceURL)
     {
         // Get archiver and clear UseRealClass
-        ViewArchiver.setUseRealClass(false);
+        UILoader.setUseRealClassDefault(false);
 
         // Load document
         try { return UILoader.loadViewForUrl(sourceURL); }
@@ -204,7 +204,7 @@ public class EditorPane extends ViewController {
         }
 
         // Reset UseRealClass
-        finally { ViewArchiver.setUseRealClass(true); }
+        finally { UILoader.setUseRealClassDefault(true); }
     }
 
     /**
@@ -235,14 +235,14 @@ public class EditorPane extends ViewController {
     private ParentView getParentViewForBytes(byte[] fileBytes)
     {
         // Get archiver and clear UseRealClass
-        ViewArchiver.setUseRealClass(false);
+        UILoader.setUseRealClassDefault(false);
 
         // Load document
         try { return (ParentView) UILoader.loadViewForBytes(fileBytes); }
         catch (Exception e) { e.printStackTrace(); }
 
         // Restore UseRealClass
-        finally { ViewArchiver.setUseRealClass(true); }
+        finally { UILoader.setUseRealClassDefault(true); }
 
         // Return
         return null;
@@ -363,7 +363,7 @@ public class EditorPane extends ViewController {
     {
         // Create copy of content
         View content = getContent();
-        View contentCopy = new ViewArchiver().copy(content);
+        View contentCopy = new ViewArchiver().copyPropObject(content);
         contentCopy.setGrowWidth(false);
         contentCopy.setGrowHeight(false);
         if (contentCopy.getFill() == null)
