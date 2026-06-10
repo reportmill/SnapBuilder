@@ -6,7 +6,7 @@ import snap.view.*;
 /**
  * A class to manage UI editing of a View.
  */
-public class ViewTool<T extends View> extends ViewController {
+public class ViewTool<T extends View> extends SNPViewController {
 
     // The EditorPane
     protected EditorPane  _editorPane;
@@ -54,5 +54,20 @@ public class ViewTool<T extends View> extends ViewController {
         label.setFont(Font.Arial14);
         label.setTextColor(Color.LIGHTGRAY);
         return label;
+    }
+
+    @Override
+    protected void initUI() {
+
+    }
+
+    @Override
+    protected void resetUI() {
+
+    }
+
+    @Override
+    protected void respondUI(ViewEvent anEvent) {
+
     }
 }
