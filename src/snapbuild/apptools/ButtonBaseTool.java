@@ -19,7 +19,7 @@ public class ButtonBaseTool<T extends ButtonBase> extends ViewTool<T> {
 
         // Update ImageNameText, ShowAreaCheckBox
         setViewValue("ImageNameText", selView.getImageName());
-        setViewValue("ShowAreaCheckBox", selView.isShowArea());
+        setViewValue("ShowAreaCheckBox", !selView.isPlain());
 
         // Update SelectedCheckBox
         ToggleButton tbtn = selView instanceof ToggleButton ? (ToggleButton) selView : null;
@@ -42,7 +42,7 @@ public class ButtonBaseTool<T extends ButtonBase> extends ViewTool<T> {
 
         // Handle ImageNameText, ShowAreaCheckBox
         if (anEvent.equals("ImageNameText")) selView.setImageName(anEvent.getStringValue());
-        if (anEvent.equals("ShowAreaCheckBox")) selView.setShowArea(anEvent.getBoolValue());
+        if (anEvent.equals("ShowAreaCheckBox")) selView.setPlain(!anEvent.getBoolValue());
 
         // Handle SelectedCheckBox
         if (anEvent.equals("SelectedCheckBox") && selView instanceof ToggleButton)
