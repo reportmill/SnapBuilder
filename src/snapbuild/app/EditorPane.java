@@ -658,7 +658,7 @@ public class EditorPane extends ViewController {
     @Override
     protected void initWindow(WindowView aWindow)
     {
-        aWindow.addEventHandler(e -> { close(); e.consume(); }, WinClose);
+        aWindow.setCloseHandler(e -> { close(); e.consume(); });
 
         // If WebVM, go full window
         if (SnapEnv.isWebVM)

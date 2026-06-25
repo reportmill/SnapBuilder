@@ -138,7 +138,7 @@ public class WelcomePanel extends ViewController {
         WindowView window = getWindow();
         window.setTitle("Welcome");
         window.setResizable(false);
-        window.addEventHandler(e -> { _exit = true; hide(); }, WinClose);
+        window.setCloseHandler(e -> { _exit = true; hide(); });
         getView("OpenButton", Button.class).setDefaultButton(true);
     }
 
