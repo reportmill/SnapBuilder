@@ -54,7 +54,7 @@ public class GalleryView extends ParentView {
         {
             // Configure this view
             //setBorder(Color.LIGHTGRAY,1);
-            enableEvents(MousePress);
+            addEventHandler(this::handleMousePressEvent, MousePress);
 
             setName(aCls.getSimpleName());
             setPadding(10, 10, 10, 10);
@@ -73,10 +73,9 @@ public class GalleryView extends ParentView {
         /**
          * Handle events.
          */
-        protected void processEvent(ViewEvent anEvent)
+        private void handleMousePressEvent(ViewEvent anEvent)
         {
-            if (anEvent.isMousePress())
-                _galleryPane._epane.getEditor().addViewToContentForViewClass(getContent().getClass());
+            _galleryPane._epane.getEditor().addViewToContentForViewClass(getContent().getClass());
         }
     }
 }

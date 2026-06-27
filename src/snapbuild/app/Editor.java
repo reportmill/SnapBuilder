@@ -58,8 +58,8 @@ public class Editor extends ParentView {
         setAlign(Pos.CENTER);
         setPadding(15, 15, 15, 15);
         setFill(BACK_FILL);
-        enableEvents(MouseRelease);
-        enableEvents(DragEvents);
+        addEventHandler(this::handleMouseReleaseEvent, MouseRelease);
+        addEventHandler(getDragDropper()::processDragEvent, DragEvents);
         setFocusable(true);
         setFocusWhenPressed(true);
 
@@ -283,16 +283,6 @@ public class Editor extends ParentView {
     }
 
     /**
-     * Sets whether editor is really doing editing.
-     */
-    public void setEditing(boolean aValue)
-    {
-        _contentBox.setPickable(true);
-        disableEvents(MouseRelease);
-        _contentBox.removeDeepChangeListener(_contentDeepChangeLsnr);
-    }
-
-    /**
      * Returns the content XML.
      */
     public XMLElement getContentXML()
@@ -336,23 +326,9 @@ public class Editor extends ParentView {
     }
 
     /**
-     * Override to handle events.
-     */
-    protected void processEvent(ViewEvent anEvent)
-    {
-        // Handle MouseEvent
-        if (anEvent.isMouseRelease())
-            mouseRelease(anEvent);
-
-            // Handle DragEvent
-        else if (anEvent.isDragEvent())
-            getDragDropper().processDragEvent(anEvent);
-    }
-
-    /**
      * Called when there is a MouseRelease.
      */
-    protected void mouseRelease(ViewEvent anEvent)
+    private void handleMouseReleaseEvent(ViewEvent anEvent)
     {
         _sel.setSelForPoint(anEvent.getPoint());
     }
