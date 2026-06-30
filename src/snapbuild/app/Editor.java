@@ -59,7 +59,7 @@ public class Editor extends ParentView {
         setPadding(15, 15, 15, 15);
         setFill(BACK_FILL);
         addEventHandler(this::handleMouseReleaseEvent, MouseRelease);
-        addEventHandler(getDragDropper()::processDragEvent, DragEvents);
+        addEventHandler(getDragDropper()::handleDragEvent, DragEvents);
         setFocusable(true);
         setFocusWhenPressed(true);
 

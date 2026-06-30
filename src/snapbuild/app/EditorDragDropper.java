@@ -221,7 +221,7 @@ public class EditorDragDropper {
     /**
      * Dispatches event to appropriate drag method.
      */
-    public void processDragEvent(ViewEvent anEvent)
+    public void handleDragEvent(ViewEvent anEvent)
     {
         switch (anEvent.getType()) {
             case DragEnter: dragEnter(anEvent); break;

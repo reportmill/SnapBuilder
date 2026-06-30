@@ -60,7 +60,7 @@ public class GalleryPane extends ViewController {
         TextField searchText = getView("SearchTextField", TextField.class);
         searchText.getLabel().setImage(Image.getImageForClassResource(TextPane.class, "Find.png"));
         ViewAnimUtils.configureTextFieldImageToAnimateLeftOnFocused(searchText);
-        searchText.addEventFilter(e -> ViewUtils.runLater(() -> textFieldKeyTyped(e)), KeyPress);
+        searchText.addEventFilter(this::handleSearchTextKeyPressEvent, KeyPress);
 
         _galleryView = getView("GalleryView", GalleryView.class);
         _galleryView._galleryPane = this;
@@ -144,9 +144,14 @@ public class GalleryPane extends ViewController {
     }
 
     /**
-     * Called after TextField has KeyType.
+     * Called after SearchText has KeyType.
      */
-    protected void textFieldKeyTyped(ViewEvent anEvent)
+    private void handleSearchTextKeyPressEvent(ViewEvent anEvent)  { runLater(() -> handleSearchTextKeyPressEventImpl(anEvent)); }
+
+    /**
+     * Called after SearchText has KeyType.
+     */
+    private void handleSearchTextKeyPressEventImpl(ViewEvent anEvent)
     {
         // Get prefix text and current selection
         TextField searchText = getView("SearchTextField", TextField.class);

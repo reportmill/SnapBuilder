@@ -162,8 +162,8 @@ public class FlatIconPanel extends ViewController {
             imageView.setPrefSize(64, 64);
             setGraphic(imageView);
             setPrefSize(96, 96);
-            addEventHandler(e -> itemViewMouseEnteredOrExited(e), View.MouseEnter, View.MouseExit);
-            addEventHandler(e -> itemViewMouseClicked(e), View.MouseRelease);
+            addEventHandler(this::handleItemViewMouseEnterOrExitEvent, View.MouseEnter, View.MouseExit);
+            addEventHandler(this::handleItemViewMouseReleaseEvent, View.MouseRelease);
         }
 
         /**
@@ -190,7 +190,7 @@ public class FlatIconPanel extends ViewController {
             setGraphic(imageView);
         }
 
-        private void itemViewMouseEnteredOrExited(ViewEvent anEvent)
+        private void handleItemViewMouseEnterOrExitEvent(ViewEvent anEvent)
         {
             if (anEvent.isMouseEnter())
                 setFill(ITEM_VIEW_MOUSE_OVER_COLOR);
@@ -198,7 +198,7 @@ public class FlatIconPanel extends ViewController {
                 setFill(null);
         }
 
-        private void itemViewMouseClicked(ViewEvent anEvent)
+        private void handleItemViewMouseReleaseEvent(ViewEvent anEvent)
         {
             if (anEvent.isMouseClick() && anEvent.getClickCount() == 2) {
                 itemWasClicked(_item);
