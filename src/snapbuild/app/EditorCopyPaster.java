@@ -67,7 +67,7 @@ public class EditorCopyPaster {
         // Get xml string for selected shapes and add to clipboard as SNAP_XML
         XMLElement xml = new ViewArchiver().writeObjectToXml(selView);
         String xmlStr = xml.getString();
-        cb.addData(SNAP_XML_TYPE, xmlStr);
+        cb.addDataForMimeType(xmlStr, SNAP_XML_TYPE);
 
         // Add xml as String
         cb.addData(xmlStr);
@@ -96,7 +96,7 @@ public class EditorCopyPaster {
         }
 
         // Handle SNAP_XML: Get bytes, unarchive view and add
-        if (cb.hasData(SNAP_XML_TYPE)) {
+        if (cb.hasDataForMimeType(SNAP_XML_TYPE)) {
             byte[] bytes = cb.getDataBytes(SNAP_XML_TYPE);
             View view = UILoader.loadViewForBytes(bytes);
             _editor.addViewToContent(view);
