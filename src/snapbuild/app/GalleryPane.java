@@ -60,7 +60,7 @@ public class GalleryPane extends ViewController {
         TextField searchText = getView("SearchTextField", TextField.class);
         searchText.getLabel().setImage(Image.getImageForClassResource(TextPane.class, "Find.png"));
         ViewAnimUtils.configureTextFieldImageToAnimateLeftOnFocused(searchText);
-        searchText.addEventFilter(this::handleSearchTextKeyPressEvent, KeyPress);
+        searchText.addEventHandler(this::handleSearchTextKeyTypeEvent, KeyType);
 
         _galleryView = getView("GalleryView", GalleryView.class);
         _galleryView._galleryPane = this;
@@ -146,12 +146,7 @@ public class GalleryPane extends ViewController {
     /**
      * Called after SearchText has KeyType.
      */
-    private void handleSearchTextKeyPressEvent(ViewEvent anEvent)  { runLater(() -> handleSearchTextKeyPressEventImpl(anEvent)); }
-
-    /**
-     * Called after SearchText has KeyType.
-     */
-    private void handleSearchTextKeyPressEventImpl(ViewEvent anEvent)
+    private void handleSearchTextKeyTypeEvent(ViewEvent anEvent)
     {
         // Get prefix text and current selection
         TextField searchText = getView("SearchTextField", TextField.class);
@@ -166,34 +161,38 @@ public class GalleryPane extends ViewController {
             searchText.setCompletionText(item);
     }
 
-    private List<GalleryView.ItemView> getItemsForPrefix(String aPfx)
+    private List<GalleryView.ItemView> getItemsForPrefix(String prefixStr)
     {
-        String pfx = aPfx.toLowerCase();
-        List<GalleryView.ItemView> items = new ArrayList(_galleryView.getChildren());
-        if (pfx.isEmpty()) {
-            for (GalleryView.ItemView item : items) {
+        List<GalleryView.ItemView> galleryItems = (List<GalleryView.ItemView>) (List<?>) _galleryView.getChildren();
+        if (prefixStr.isEmpty()) {
+            for (GalleryView.ItemView item : galleryItems) {
                 item.setVisible(true);
                 item.setManaged(true);
             }
             return Collections.EMPTY_LIST;
         }
 
-        for (GalleryView.ItemView item : items.toArray(new GalleryView.ItemView[0])) {
-            if (!item.getName().toLowerCase().contains(pfx)) {
-                items.remove(item);
-                item.setVisible(false);
+        String prefixLC = prefixStr.toLowerCase();
+        List<GalleryView.ItemView> prefixGalleryItems = new ArrayList<>();
+
+        for (GalleryView.ItemView galleryItem : galleryItems) {
+            if (galleryItem.getName().toLowerCase().contains(prefixLC)) {
+                prefixGalleryItems.add(galleryItem);
+                galleryItem.setVisible(true);
             }
-            else item.setVisible(true);
-            item.setManaged(item.isVisible());
+            else galleryItem.setVisible(false);
+            galleryItem.setManaged(galleryItem.isVisible());
         }
-        Collections.sort(items, (o1, o2) -> compareForPrefix(o1.getName(), o2.getName(), pfx));
-        return items;
+
+        // Sort and return
+        prefixGalleryItems.sort((o1, o2) -> compareForPrefix(o1.getName(), o2.getName(), prefixLC));
+        return prefixGalleryItems;
     }
 
-    private int compareForPrefix(String o1, String o2, String aPfx)
+    private int compareForPrefix(String o1, String o2, String prefixStr)
     {
-        boolean b1 = o1.toLowerCase().startsWith(aPfx);
-        boolean b2 = o2.toLowerCase().startsWith(aPfx);
+        boolean b1 = o1.toLowerCase().startsWith(prefixStr);
+        boolean b2 = o2.toLowerCase().startsWith(prefixStr);
         if (b1 ^ b2)
             return b1 ? -1 : 1;
         return o1.compareToIgnoreCase(o2);
