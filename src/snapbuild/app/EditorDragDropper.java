@@ -156,7 +156,7 @@ public class EditorDragDropper {
         ext = ext.toLowerCase();
 
         // If image file, add image view
-        if (Image.canRead(ext))
+        if (Image.canReadImageType(ext))
             dropImageFile(aFile, aPoint);
 
             // Handle .snp file

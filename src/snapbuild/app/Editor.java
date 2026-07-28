@@ -355,7 +355,7 @@ public class Editor extends ParentView {
         if (selView.getRotate() == 0) {
             Point selViewXYInParent = selView.getParent().localToParent(selView.getX(), selView.getY(), this);
             aPntr.translate(selViewXYInParent.x, selViewXYInParent.y);
-            ViewUtils.paintAll(selView, aPntr);
+            ViewUtils.paintView(selView, aPntr);
             aPntr.translate(-selViewXYInParent.x, -selViewXYInParent.y);
         }
 
