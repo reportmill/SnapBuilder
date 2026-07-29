@@ -144,6 +144,6 @@ public class FlatIconItem {
         text.setText("Image not found: " + _desc);
         text.setSize(128, 128);
         text.setFont(Font.Arial10);
-        return ViewUtils.getImageForScale(text, 1);
+        return ViewUtils.getImageForDpiScale(text, 1);
     }
 }

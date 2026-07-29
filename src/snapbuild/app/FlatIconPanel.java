@@ -221,7 +221,7 @@ public class FlatIconPanel extends ViewController {
         text.setText("Image loading...");
         text.setSize(64, 64);
         text.setFont(Font.Arial10);
-        Image img = ViewUtils.getImageForScale(text, 1);
+        Image img = ViewUtils.getImageForDpiScale(text, 1);
         return _loadingImage = img;
     }
 

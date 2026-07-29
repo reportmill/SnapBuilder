@@ -61,7 +61,7 @@ public class EditorCopyPaster {
 
         // Get image and add to clipbard
         int scale = ViewUtils.isAltDown() ? 1 : 0;
-        Image image = ViewUtils.getImageForScale(selView, scale);
+        Image image = ViewUtils.getImageForDpiScale(selView, scale);
         cb.addData(image);
 
         // Get xml string for selected shapes and add to clipboard as SNAP_XML
